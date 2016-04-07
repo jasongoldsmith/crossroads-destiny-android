@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/out"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        tools:context=".ListActivity">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/img_background_map"
+            android:scaleType="fitXY"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:id="@+id/error_layout"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/black"
+            android:visibility="gone">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/error"
+                android:src="@drawable/icon_error"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="22dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/error_text"
+                android:text="MISADVENTURE"
+                android:textSize="12sp"
+                android:textColor="#ff0000"
+                android:layout_toRightOf="@+id/error"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="13dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/error_sub"
+                android:text="Your Username or Password do not match"
+                android:textSize="12sp"
+                android:textColor="@color/trimbe_white"
+                android:layout_toRightOf="@+id/error"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="14dp"
+                android:layout_marginLeft="13dp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/err_close"
+                android:src="@drawable/icon_close_sm"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="9dp"
+                android:layout_marginEnd="7dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:id="@+id/event_top_layout"
+            android:background="@drawable/img_header_bg"
+            android:layout_alignParentTop="true">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/img_traveler_badge_icon"
+                android:layout_marginLeft="0dp"
+                android:layout_marginBottom="78dp"/>
+
+            <com.example.sharmha.travelerfordestiny.utils.CircularImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/userProfile"
+                android:src="@drawable/img_avatar_you"
+                android:layout_marginEnd="11dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="86dp"
+                android:layout_alignParentRight="true" />
+
+            <RelativeLayout
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CURRENT"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:padding="9dp"
+                    android:layout_marginStart="47dp"
+                    android:layout_alignParentBottom="true"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginLeft="14dp"
+                    android:background="#0086d0"
+                    android:layout_alignParentBottom="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="UPCOMING"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:padding="9dp"
+                    android:layout_marginEnd="47dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="#0086d0"
+                    android:layout_marginRight="14dp"
+                    android:layout_alignParentBottom="true"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:id="@+id/notification_bar"
+            android:background="@color/app_theme_color"
+            android:layout_below="@+id/event_top_layout"
+            android:visibility="gone">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/noti_icon"
+                android:src="@drawable/icon_alert"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="15dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/noti_toptext"
+                android:layout_toRightOf="@+id/noti_icon"
+                android:fontFamily="sans-serif"
+                android:textStyle="bold"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="12dp"
+                android:text="YOUR FIRETEAM IS READY"
+                android:textColor="#ffc600"
+                android:textSize="12sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/noti_text"
+                android:layout_toRightOf="@+id/noti_icon"
+                android:text="missing event type"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/trimbe_white"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="30dp"
+                android:textSize="12sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/noti_subtext"
+                android:layout_toRightOf="@+id/noti_icon"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/trimbe_white"
+                android:layout_marginLeft="15dp"
+                android:maxLines = "10"
+                android:scrollbars = "vertical"
+                android:layout_marginTop="47dp"
+                android:textSize="12sp"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/noti_close"
+                android:src="@drawable/icon_close_sm"
+                android:layout_alignParentRight="true"
+                android:paddingRight="17dp"
+                android:paddingTop="9dp"/>
+
+        </RelativeLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:background="@android:color/transparent"
+            android:layout_below="@+id/notification_bar"
+            android:id="@+id/empty_img"/>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/empty_img"
+            android:layout_above="@+id/create_new_event">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/event_view"
+                android:background="@android:color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/create_new_event"
+            android:background="#0086d0"
+            android:text="CREATE NEW EVENT"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"/>
+
+    </RelativeLayout>
+
+    <!-- The navigation drawer -->
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end|bottom"
+        android:background="@drawable/profile_bg_image"
+        android:clickable="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:padding="10dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/watchat_version_name"
+                android:textColor="@color/trimbe_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+            <TextView
+                android:id="@+id/watchat_server"
+                android:textColor="@color/trimbe_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/profile_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true">
+
+            <!--<ImageView-->
+                <!--android:id="@+id/profile_avatar"-->
+                <!--android:layout_width="35dp"-->
+                <!--android:layout_height="35dp"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:layout_marginBottom="14dp"-->
+                <!--android:layout_marginTop="64dp"-->
+                <!--android:onClick="updateProfileAvatar"-->
+                <!--android:src="@drawable/img_i_c_o_n_r_a_i_d" />-->
+
+            <com.example.sharmha.travelerfordestiny.utils.CircularImageView
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:id="@+id/profile_avatar"
+                android:src="@drawable/profile_image"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="81dp"
+                android:onClick="updateProfileAvatar" />
+
+            <TextView
+                android:id="@+id/profile_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:layout_below="@+id/profile_avatar"
+                android:layout_gravity="bottom"
+                android:gravity="center_horizontal"/>
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/travelerid"-->
+                <!--android:layout_below="@+id/profile_name"-->
+                <!--android:textSize="10sp"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:text="TRAVELER ID"-->
+                <!--android:layout_centerHorizontal="true" />-->
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profile_header"
+            android:id="@+id/reset"
+            android:src="@drawable/btn_reset_password"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="44dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/logout_btn"
+            android:layout_below="@+id/reset"
+            android:src="@drawable/btn_logout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:id="@+id/crash_btn"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="20dp"
+            android:layout_centerInParent="true"
+            android:text="Report Crash"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:background="#2b4249"/>
+
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/profile_drawer"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_below="@+id/profile_header"-->
+            <!--android:layout_gravity="start"-->
+            <!--android:choiceMode="singleChoice"-->
+            <!--android:divider="@drawable/profile_divider"-->
+            <!--android:dividerHeight="2dp" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/logout_btn"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:textColor="@color/profile_logout"-->
+            <!--android:gravity="center_horizontal"-->
+            <!--android:text="Logout"-->
+            <!--android:textAppearance="?android:attr/textAppearanceListItemSmall" />-->
+    </RelativeLayout>
+
+</android.support.v4.widget.DrawerLayout>

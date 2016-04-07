@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        xmlns:conversation="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:id="@+id/activity_card"
+        android:layout_marginTop="15dp"
+        conversation:cardBackgroundColor="@android:color/transparent"
+        conversation:cardElevation="0dp"
+        conversation:cardUseCompatPadding="false">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:elevation="0dp">
+
+            <com.example.sharmha.travelerfordestiny.utils.CircularImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:id="@+id/event_detail_player_profile"
+                android:src="@drawable/img_avatar_you"
+                android:layout_alignParentLeft="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/player_name"
+                android:text="MISSING String"
+                android:textSize="12sp"
+                android:textColor="@android:color/white"
+                android:layout_toRightOf="@+id/event_detail_player_profile"
+                android:layout_marginLeft="18dp"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/event_detail_message"
+                android:src="@drawable/icon_chat_detailscreen"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"/>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

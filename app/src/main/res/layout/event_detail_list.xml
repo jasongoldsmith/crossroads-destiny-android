@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/error_layout"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/black"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/error"
+            android:src="@drawable/icon_error"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="22dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/error_text"
+            android:text="MISADVENTURE"
+            android:textSize="12sp"
+            android:textColor="#ff0000"
+            android:layout_toRightOf="@+id/error"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="13dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/error_sub"
+            android:text="Your Username or Password do not match"
+            android:textSize="12sp"
+            android:textColor="@color/trimbe_white"
+            android:layout_toRightOf="@+id/error"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="14dp"
+            android:layout_marginLeft="13dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/err_close"
+            android:src="@drawable/icon_close_sm"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="9dp"
+            android:layout_marginEnd="7dp"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/img_background_map"
+        android:scaleType="fitXY"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_alignParentTop="true"
+        android:id="@+id/eventdetail_top_layout"
+        android:background="@drawable/img_header_bg_eventdetail">
+        <!--<ImageView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/eventdetail_top"-->
+            <!--android:src="@drawable/img_header_bg_eventdetail"/>-->
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/eventdetail_backbtn"
+            android:src="@drawable/icon_back_arrow"
+            android:paddingLeft="13dp"
+            android:paddingTop="17dp"
+            android:layout_alignParentLeft="true"/>
+        <com.example.sharmha.travelerfordestiny.utils.CircularImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/userProfile_event"
+            android:src="@drawable/img_avatar_you"
+            android:layout_marginEnd="11dp"
+            android:layout_marginTop="14dp"
+            android:layout_alignParentRight="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="11dp"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:text="EVENT DETAILS"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/event_detail_top_frag"
+        android:orientation="horizontal"
+        android:layout_below="@+id/eventdetail_top_layout"
+        android:layout_margin="22dp">
+
+        <com.example.sharmha.travelerfordestiny.utils.CircularImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/event_detail_icon"
+            android:src="@drawable/img_i_c_o_n_r_a_i_d"
+            android:layout_alignParentLeft="true"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/activity_name_layout_detail"
+            android:layout_toRightOf="@+id/event_detail_icon"
+            android:layout_marginLeft="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/activity_name_detail"
+                android:fontFamily="sans-serif"
+                android:text="Missing Event Name"
+                android:textColor="@android:color/white"
+                android:textSize="20sp">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/activity_name_detail"
+                android:id="@+id/activity_player_name_detail"
+                android:fontFamily="sans-serif"
+                android:textColor="@android:color/white"
+                android:text="Missing player names"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="12sp">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/activity_player_name_lf_detail"
+                android:layout_below="@+id/activity_name_detail"
+                android:textColor="#ffc600"
+                android:layout_toRightOf="@+id/activity_player_name_detail"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/activity_aLight_detail"
+            android:textSize="20sp"
+            android:textColor="#f8e71c"
+            android:layout_alignParentRight="true">
+        </TextView>
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Currently Going"
+        android:id="@+id/currentgoing"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/event_detail_top_frag"/>
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:id="@+id/bar"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginRight="15dp"
+        android:background="#979797"
+        android:layout_below="@+id/currentgoing"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/event_player"
+        android:layout_below="@+id/bar"
+        android:background="@android:color/transparent"
+        android:layout_marginLeft="17dp"
+        android:layout_marginRight="9dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:id="@+id/eventdetail_jointeam_layout"
+        android:layout_below="@+id/event_player"
+        android:layout_marginLeft="17dp"
+        android:layout_marginRight="9dp"
+        android:layout_marginTop="15dp"
+        android:visibility="gone">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/image_join">
+            <ImageView
+                android:layout_width="@dimen/eventdetail_player_profile_width"
+                android:layout_height="@dimen/eventdetail_player_profile_hgt"
+                android:src="@drawable/img_avatar_empty"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="+"
+                android:textSize="28sp"/>
+        </RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:layout_toRightOf="@+id/image_join"
+            android:text="JOIN TEAM"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/sendmsg_background"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:id="@+id/send_message_layout"
+            android:background="#273a41"
+            android:layout_marginLeft="17dp"
+            android:layout_marginRight="16dp"
+            android:layout_centerInParent="true">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/to_layout"
+                android:layout_marginTop="17dp"
+                android:layout_marginLeft="30dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/to"
+                    android:text="To:"
+                    android:textSize="13sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textmsg_player"
+                    android:layout_toRightOf="@+id/to"
+                    android:layout_marginLeft="2dp"
+                    android:textSize="13sp"
+                    android:textColor="@android:color/white"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/to_layout"
+                android:id="@+id/edittext_layout"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="11dp"
+                android:layout_marginLeft="13dp">
+                <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/bubble"-->
+                <!--android:src="@drawable/bubble" />-->
+                <EditText
+                    android:layout_width="260dp"
+                    android:layout_height="32dp"
+                    android:id="@+id/edittext"
+                    android:layout_alignParentStart="true"
+                    android:background="@drawable/rounded_edittext"
+                    android:hint="Send message"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:textSize="13sp"
+                    android:inputType="textMultiLine"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/send_btn"
+                    android:src="@drawable/img_send_btn"
+                    android:layout_toRightOf="@+id/edittext"
+                    android:layout_marginLeft="6dp"/>
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>
