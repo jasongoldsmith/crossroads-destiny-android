@@ -23,6 +23,7 @@ import com.squareup.picasso.Picasso;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -105,31 +106,6 @@ public class Util {
         return version;
     }
 
-//    public static String getGCMBodyRequest() {
-//        JSONObject jo = new JSONObject();
-//        String token = getGCMToken();
-//        if (token != null) {
-//            try {
-//                String version = "APP_VERSION_NOT_DEFINED";
-////                PackageInfo tmpInfo = Utils.getPackageInfo();
-////                if (tmpInfo != null) {
-////                    version = tmpInfo.versionName;
-////                }
-//                String os_version = (Build.VERSION.RELEASE != null ? Build.VERSION.RELEASE : "OS_VERSION_NOT_DEFINED");
-//                String model = (Build.MODEL != null ? Build.MODEL : "MODEL_NOT_DEFINED");
-//                jo.put("token", token);
-//                jo.put("senderId", Constants.GCM_SENDER_ID);
-//                jo.put("deviceId", getDeviceID());
-//                jo.put("appversion", version);
-//                jo.put("osversion", os_version);
-//                jo.put("devicemodel", model);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        return jo.toString();
-//    }
-
     private static String getDeviceID() {
         // get the AndroidId
 //        String deviceID = getDeviceSHA256Hash(Settings.Secure.getString(c.getContentResolver(), Settings.Secure.ANDROID_ID));
@@ -160,13 +136,6 @@ public class Util {
             return "Exception_when_trying_to_generate_hash";
         }
     }
-
-//    public static boolean checkForNull(Object ob) {
-//        if (ob == null) {
-//            throw new TrimbleException(TrimbleException.TRIMBLE_NULL_POINTER_DETECTED, "An object was detected to be null. internal error...");
-//        }
-//        return false;
-//    }
 
     public static void clearDefaults(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

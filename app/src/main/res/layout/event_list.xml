@@ -83,13 +83,12 @@
                 android:layout_marginBottom="78dp"/>
 
             <com.example.sharmha.travelerfordestiny.utils.CircularImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/player_profile_width"
+                android:layout_height="@dimen/player_profile_hgt"
                 android:id="@+id/userProfile"
                 android:src="@drawable/img_avatar_you"
                 android:layout_marginEnd="11dp"
                 android:layout_marginTop="14dp"
-                android:layout_marginBottom="86dp"
                 android:layout_alignParentRight="true" />
 
             <RelativeLayout

@@ -11,8 +11,8 @@
         android:background="#19282c">
 
         <com.example.sharmha.travelerfordestiny.utils.CircularImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/player_profile_width"
+            android:layout_height="@dimen/player_profile_hgt"
             android:id="@+id/userCreatePageProfile"
             android:src="@drawable/img_avatar_you"
             android:layout_marginEnd="11dp"
@@ -135,11 +135,16 @@
                 android:layout_marginTop="25dp"
                 android:layout_centerHorizontal="true">
 
-                <RelativeLayout
+                <android.support.v7.widget.CardView
+                    xmlns:conversation="http://schemas.android.com/apk/res-auto"
                     android:layout_width="94dp"
                     android:layout_height="96dp"
-                    android:id="@+id/first_img_layout"
-                    android:background="#0086d0">
+                    android:id="@+id/new_event_card"
+                    conversation:cardBackgroundColor="#0086d0">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/first_img_layout">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -164,14 +169,21 @@
                         android:textSize="12sp"/>
 
                 </RelativeLayout>
+                </android.support.v7.widget.CardView>
 
-                <RelativeLayout
+                <android.support.v7.widget.CardView
+                    xmlns:conversation="http://schemas.android.com/apk/res-auto"
                     android:layout_width="94dp"
                     android:layout_height="96dp"
-                    android:id="@+id/second_img_layout"
-                    android:layout_toRightOf="@+id/first_img_layout"
+                    android:id="@+id/new_event_card2"
+                    android:layout_toRightOf="@+id/new_event_card"
                     android:layout_marginLeft="10dp"
-                    android:background="#0086d0">
+                    conversation:cardBackgroundColor="#0086d0">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/second_img_layout">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -195,14 +207,20 @@
                         android:textColor="@android:color/white"
                         android:textSize="12sp"/>
                 </RelativeLayout>
+                </android.support.v7.widget.CardView>
 
-                <RelativeLayout
+                <android.support.v7.widget.CardView
+                    xmlns:conversation="http://schemas.android.com/apk/res-auto"
                     android:layout_width="94dp"
                     android:layout_height="96dp"
-                    android:id="@+id/third_img_layout"
-                    android:layout_toRightOf="@+id/second_img_layout"
+                    android:id="@+id/new_event_card3"
+                    android:layout_toRightOf="@+id/new_event_card2"
                     android:layout_marginLeft="10dp"
-                    android:background="#0086d0">
+                    conversation:cardBackgroundColor="#0086d0">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/third_img_layout">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -225,6 +243,7 @@
                         android:textColor="@android:color/white"
                         android:textSize="12sp"/>
                 </RelativeLayout>
+                </android.support.v7.widget.CardView>
 
             </RelativeLayout>
 
@@ -415,7 +434,7 @@
             </RelativeLayout>
 
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
@@ -423,9 +442,10 @@
                 android:layout_marginRight="33dp"
                 android:layout_below="@id/event_creation_checkpoint_layout">
                 <RelativeLayout
-                    android:layout_width="143dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="#0086d0"
+                    android:layout_weight="1"
                     android:id="@+id/date">
                     <TextView
                         android:layout_width="wrap_content"
@@ -448,9 +468,10 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:layout_width="143dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:id="@+id/time"
+                    android:layout_weight="1"
                     android:layout_toRightOf="@+id/date"
                     android:background="#0086d0"
                     android:layout_marginLeft="8dp">
@@ -475,7 +496,7 @@
 
                 </RelativeLayout>
 
-            </RelativeLayout>
+            </LinearLayout>
             <!--<TextView-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="50dp"-->

@@ -76,8 +76,8 @@
             android:paddingTop="17dp"
             android:layout_alignParentLeft="true"/>
         <com.example.sharmha.travelerfordestiny.utils.CircularImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/player_profile_width"
+            android:layout_height="@dimen/player_profile_hgt"
             android:id="@+id/userProfile_event"
             android:src="@drawable/img_avatar_you"
             android:layout_marginEnd="11dp"
@@ -103,14 +103,15 @@
         android:id="@+id/event_detail_top_frag"
         android:orientation="horizontal"
         android:layout_below="@+id/eventdetail_top_layout"
-        android:layout_margin="22dp">
+        android:layout_marginTop="22dp">
 
         <com.example.sharmha.travelerfordestiny.utils.CircularImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/event_detail_icon"
             android:src="@drawable/img_i_c_o_n_r_a_i_d"
-            android:layout_alignParentLeft="true"/>
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="11dp"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -159,7 +160,8 @@
             android:id="@+id/activity_aLight_detail"
             android:textSize="20sp"
             android:textColor="#f8e71c"
-            android:layout_alignParentRight="true">
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="14dp">
         </TextView>
 
     </RelativeLayout>
@@ -172,7 +174,7 @@
         android:textColor="@android:color/white"
         android:textSize="14sp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         android:layout_below="@+id/event_detail_top_frag"/>
 
     <ProgressBar
