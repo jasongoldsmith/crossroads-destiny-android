@@ -9,9 +9,12 @@ import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.media.Image;
 import android.os.Bundle;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -53,7 +56,7 @@ import cz.msebera.android.httpclient.Header;
 /**
  * Created by sharmha on 2/25/16.
  */
-public class ListActivity extends Activity implements Observer{
+public class ListActivity extends AppCompatActivity implements Observer{
 
 
     private RecyclerView mRecyclerView;
@@ -102,6 +105,12 @@ public class ListActivity extends Activity implements Observer{
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_list);
+
+//        // Get the ViewPager and set it's PagerAdapter so that it can display items
+//        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+//        PagerAdapter pagerAdapter =
+//                new PagerAdapter(getSupportFragmentManager(), ListActivity.this);
+//        viewPager.setAdapter(pagerAdapter);
 
         //set orientation portrait
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

@@ -108,7 +108,7 @@
             android:layout_marginTop="13dp"
             android:textSize="10sp"
             android:fontFamily="sans-serif"
-            android:text="NAME"/>
+            android:text="USERNAME"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
