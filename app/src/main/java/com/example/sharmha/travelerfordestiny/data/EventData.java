@@ -1,5 +1,7 @@
 package com.example.sharmha.travelerfordestiny.data;
 
+import com.example.sharmha.travelerfordestiny.utils.Util;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +20,8 @@ public class EventData {
     private ActivityData activityData;
     private ArrayList<PlayerData> playerDataList;
     private CreatorData creatorData;
+    private String launchDate;
+    private long _timeInMilliseconds;
     //private PlayerData playerData;
 
     public EventData () {
@@ -30,8 +34,33 @@ public class EventData {
         eventId = id;
     }
 
+    public void setTimeInMilliseconds(long timeInMilliseconds) {
+        this._timeInMilliseconds = timeInMilliseconds;
+    }
+
+    public long getTimeInMilliseconds() {
+        ensureTimeInMilliseconds();
+        return this._timeInMilliseconds;
+    }
+
+    private void ensureTimeInMilliseconds() {
+        if (this._timeInMilliseconds == 0) {
+            this._timeInMilliseconds = -Util.parseDate(getLaunchDate());
+        }
+    }
+
     public String getEventId() {
         return this.eventId;
+    }
+
+    public void setLaunchDate(String date){
+        if(date!=null){
+            this.launchDate = date;
+        }
+    }
+
+    public String getLaunchDate() {
+        return launchDate;
     }
 
     public void setEventStatus(String status) {
@@ -100,6 +129,9 @@ public class EventData {
                 setEventStatus(status);
                 setMinPlayer(minPlayers);
                 setMaxPlayer(maxPlayers);
+                if(json.has("launchDate")){
+                    setLaunchDate(json.getString("launchDate"));
+                }
 
                 activityData.toJson(actData);
                 creatorData.toJson(creator);

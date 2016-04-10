@@ -41,7 +41,7 @@
 
     <color name="app_theme_color">#0086d0</color>
 
-    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryLocal">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 

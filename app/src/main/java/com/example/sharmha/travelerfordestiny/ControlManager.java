@@ -11,6 +11,7 @@ import com.example.sharmha.travelerfordestiny.data.ActivityData;
 import com.example.sharmha.travelerfordestiny.data.ActivityList;
 import com.example.sharmha.travelerfordestiny.data.AppVersion;
 import com.example.sharmha.travelerfordestiny.data.EventData;
+import com.example.sharmha.travelerfordestiny.data.UserData;
 import com.example.sharmha.travelerfordestiny.network.ActivityListNetwork;
 import com.example.sharmha.travelerfordestiny.network.EventListNetwork;
 import com.example.sharmha.travelerfordestiny.network.EventRelationshipHandlerNetwork;
@@ -49,6 +50,7 @@ public class ControlManager implements Observer{
     private GetVersion getVersionNetwork;
     private EventSendMessageNetwork eventSendMsgNetwork;
     private ReportCrashNetwork crashReportNetwork;
+    private UserData user;
 
     private Version checkVersion;
 
@@ -76,6 +78,19 @@ public class ControlManager implements Observer{
         }
     }
 
+    public void setUserdata(UserData ud) {
+        if(user!=null && user.getUser()!=null){
+
+        }else {
+            user = new UserData();
+        }
+        user = ud;
+    }
+
+    public UserData getUserData(){
+        return user;
+    }
+
     public ArrayList<EventData> getEventListCurrent() {
         if (eData!= null && !eData.isEmpty()) {
             return eData;
@@ -83,13 +98,25 @@ public class ControlManager implements Observer{
         return null;
     }
 
-    public void getEventList(ListActivity activity) {
+//    public void getEventList(ListActivity activity) {
+//        try {
+//            eventListNtwrk = new EventListNetwork(activity);
+//            eventListNtwrk.addObserver(activity);
+//            eventListNtwrk.addObserver(this);
+//            eventListNtwrk.getEvents();
+//            getAndroidVersion(activity);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    public void getEventList(ListActivityFragment activity) {
         try {
             eventListNtwrk = new EventListNetwork(activity);
             eventListNtwrk.addObserver(activity);
             eventListNtwrk.addObserver(this);
             eventListNtwrk.getEvents();
-            getAndroidVersion(activity);
+            //getAndroidVersion(activity);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -98,10 +125,10 @@ public class ControlManager implements Observer{
     public void postJoinEvent(Activity activity, RequestParams params) {
         try {
             eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(activity);
-            if (activity instanceof ListActivity) {
-                eventRelationshipNtwrk.addObserver((ListActivity)activity);
-            } else if (activity instanceof EventDetailActivity){
+            if (activity instanceof EventDetailActivity){
                 eventRelationshipNtwrk.addObserver((EventDetailActivity)activity);
+            } else if (activity instanceof ListActivityFragment){
+                eventRelationshipNtwrk.addObserver((ListActivityFragment)activity);
             }
             eventRelationshipNtwrk.addObserver(this);
             eventRelationshipNtwrk.postJoin(params);
@@ -136,7 +163,18 @@ public class ControlManager implements Observer{
         }
     }
 
-    public void postUnJoinEvent(ListActivity activity, RequestParams params) {
+//    public void postUnJoinEvent(ListActivity activity, RequestParams params) {
+//        try {
+//            eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(activity);
+//            eventRelationshipNtwrk.addObserver(activity);
+//            eventRelationshipNtwrk.addObserver(this);
+//            eventRelationshipNtwrk.postUnJoin(params);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    public void postUnJoinEvent(ListActivityFragment activity, RequestParams params) {
         try {
             eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(activity);
             eventRelationshipNtwrk.addObserver(activity);
@@ -194,7 +232,7 @@ public class ControlManager implements Observer{
         }
     }
 
-    public void postLogout(ListActivity act, RequestParams params) {
+    public void postLogout(ListActivityFragment act, RequestParams params) {
         try {
             logoutNetwork = new LogoutNetwork(act);
             logoutNetwork.addObserver(this);
@@ -212,8 +250,8 @@ public class ControlManager implements Observer{
                 ((LoginActivity) mCurrentAct).showError(err);
             } else if(mCurrentAct instanceof RegisterActivity) {
                 ((RegisterActivity) mCurrentAct).showError(err);
-            } else if(mCurrentAct instanceof ListActivity) {
-                ((ListActivity) mCurrentAct).showError(err);
+            } else if(mCurrentAct instanceof ListActivityFragment) {
+                ((ListActivityFragment) mCurrentAct).showError(err);
             } else if(mCurrentAct instanceof CreateNewEvent){
                 ((CreateNewEvent) mCurrentAct).dismissProgressBar();
                 ((CreateNewEvent) mCurrentAct).showError(err);
@@ -221,15 +259,15 @@ public class ControlManager implements Observer{
         }
     }
 
-    public void getAndroidVersion(ListActivity activity) {
-        getVersionNetwork = new GetVersion(activity);
-        getVersionNetwork.addObserver(this);
-        try {
-            getVersionNetwork.getAppVer();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+//    public void getAndroidVersion(ListActivity activity) {
+//        getVersionNetwork = new GetVersion(activity);
+//        getVersionNetwork.addObserver(this);
+//        try {
+//            getVersionNetwork.getAppVer();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public void setCurrentActivity(Activity act) {
         this.mCurrentAct = act;

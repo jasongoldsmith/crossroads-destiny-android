@@ -82,8 +82,14 @@
 
         <activity android:name="com.example.sharmha.travelerfordestiny.ListActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar">
-            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name="com.example.sharmha.travelerfordestiny.ListActivityFragment"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait">
         </activity>
 
         <activity android:name="com.example.sharmha.travelerfordestiny.CreateNewEvent"

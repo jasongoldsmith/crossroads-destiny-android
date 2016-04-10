@@ -201,9 +201,12 @@ public class MainActivity extends Activity implements Observer {
 //            Util.setDefaults("password", password, getApplicationContext());
 
             ud.setPassword(p);
+            mManager.setUserdata(ud);
             // go to logout page
+//            Intent regIntent = new Intent(getApplicationContext(),
+//                    ListActivity.class);
             Intent regIntent = new Intent(getApplicationContext(),
-                    ListActivity.class);
+                    ListActivityFragment.class);
             regIntent.putExtra("userdata", ud);
             startActivity(regIntent);
             finish();

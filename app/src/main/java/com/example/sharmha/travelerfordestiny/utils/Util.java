@@ -7,10 +7,13 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.example.sharmha.travelerfordestiny.ControlManager;
@@ -22,9 +25,12 @@ import com.squareup.picasso.Picasso;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by sharmha on 2/23/16.
@@ -32,6 +38,8 @@ import java.util.Date;
 public class Util {
 
     private static final String TAG = Util.class.getName();
+    public static final String trimbleDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    static SimpleDateFormat formatter = new SimpleDateFormat(trimbleDateFormat);
 
     public static boolean isNetworkAvailable(Context c) {
         ConnectivityManager connectivityManager
@@ -147,7 +155,7 @@ public class Util {
     public static String changeTimeFormat(String args, String argsDate) throws Exception {
         SimpleDateFormat displayFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         SimpleDateFormat parseFormat = new SimpleDateFormat("MM-dd-yyyy hh:mm a");
-        Date date = parseFormat.parse(argsDate + " "+args);
+        Date date = parseFormat.parse(argsDate + " " + args);
         return displayFormat.format(date);
         //System.out.println(parseFormat.format(date) + " = " + displayFormat.format(date));
     }
@@ -202,6 +210,85 @@ public class Util {
 
         // show it
         alertDialog.show();
+    }
+
+    public static String createServerFormatedDate() {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return sdf.format(cal.getTime());
+    }
+
+    public static long parseDate(String dateString) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        if (dateString != null) {
+            try {
+                format.setTimeZone(TimeZone.getTimeZone("GMT"));
+                Date date = format.parse(dateString);
+                return date.getTime();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return 0;
+    }
+
+    public static Calendar getCalendar(String dateString) {
+        try {
+            Calendar cal1 = Calendar.getInstance();
+            TimeZone tz = cal1.getTimeZone();
+            long msFromEpochGmt = cal1.getTimeInMillis();
+            long offsetFromUTC = tz.getOffset(msFromEpochGmt);
+            Date date = formatter.parse(dateString);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.setTimeInMillis(cal.getTimeInMillis() + offsetFromUTC);
+            return cal;
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static boolean updateCurrEventOnTime(final String date) {
+        String mTemp = null;
+        Calendar cal = getCalendar(date);
+        if (cal == null) {
+            return false;
+        }
+        long timeDif = cal.getTimeInMillis() - System.currentTimeMillis();
+        if (timeDif<10*60*1000){
+            return true;
+        }
+
+        return false;
+    }
+
+    public static void getCurrentTime(String utcDate) {
+        Calendar cal = Calendar.getInstance();
+        TimeZone tz = cal.getTimeZone();
+        Date a = cal.getTime();
+        long b = cal.getTimeInMillis();
+        TimeZone c = cal.getTimeZone();
+        Date x;
+
+        long msFromEpochGmt = cal.getTimeInMillis();
+        long offsetFromUTC = tz.getOffset(msFromEpochGmt);
+
+        DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        DateFormat pstFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        pstFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+        try {
+            Date date = utcFormat.parse(utcDate);
+            x = pstFormat.parse(utcDate);
+            System.out.println("Hardik" + "time is "+ x);
+            System.out.println("Hardik current time  " + a);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void picassoLoadIcon(Context c, ImageView eventIcon, String url, int height, int width, int avatar) {

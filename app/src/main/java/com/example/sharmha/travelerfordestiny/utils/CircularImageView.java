@@ -43,7 +43,7 @@ public class CircularImageView extends ImageView {
     private boolean hasBorder;
     private boolean hasSelector;
     private boolean isSelected;
-    private int borderWidth;
+    private int circularBorderWidth;
     private int canvasSize;
     private int selectorStrokeWidth;
 
@@ -112,7 +112,7 @@ public class CircularImageView extends ImageView {
         // Set border properties, if enabled
         if(hasBorder) {
             int defaultBorderSize = (int) (2 * context.getResources().getDisplayMetrics().density + 0.5f);
-            setBorderWidth(attributes.getDimensionPixelOffset(R.styleable.CircularImageView_borderWidth, defaultBorderSize));
+            setBorderWidth(attributes.getDimensionPixelOffset(R.styleable.CircularImageView_circularBorderWidth, defaultBorderSize));
             setBorderColor(attributes.getColor(R.styleable.CircularImageView_borderColor, Color.WHITE));
         }
 
@@ -139,12 +139,12 @@ public class CircularImageView extends ImageView {
 
     /**
      * Sets the CircularImageView's border width in pixels.
-     * @param borderWidth Width in pixels for the border.
+     * @param circularBorderWidth Width in pixels for the border.
      */
-    public void setBorderWidth(int borderWidth) {
-        this.borderWidth = borderWidth;
+    public void setBorderWidth(int circularBorderWidth) {
+        this.circularBorderWidth = circularBorderWidth;
         if(paintBorder != null)
-            paintBorder.setStrokeWidth(borderWidth);
+            paintBorder.setStrokeWidth(circularBorderWidth);
         requestLayout();
         invalidate();
     }
@@ -250,7 +250,7 @@ public class CircularImageView extends ImageView {
             canvas.drawCircle(center + outerWidth, center + outerWidth, ((canvasSize - (outerWidth * 2)) / 2) + outerWidth - 4.0f, paintSelectorBorder);
         }
         else if(hasBorder) { // If no selector was drawn, draw a border and clear the filter instead... if enabled
-            outerWidth = borderWidth;
+            outerWidth = circularBorderWidth;
             center = (canvasSize - (outerWidth * 2)) / 2;
 
             paint.setColorFilter(null);

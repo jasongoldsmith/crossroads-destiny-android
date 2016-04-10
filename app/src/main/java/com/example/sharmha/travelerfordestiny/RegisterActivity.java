@@ -212,11 +212,12 @@ public class RegisterActivity extends Activity implements Observer {
             Util.setDefaults("user", username, getApplicationContext());
             Util.setDefaults("password", password, getApplicationContext());
 
+            mManager.setUserdata(ud);
             //dismiss dialog
             dialog.dismiss();
             // go to logout page
             Intent regIntent = new Intent(getApplicationContext(),
-                    ListActivity.class);
+                    ListActivityFragment.class);
             regIntent.putExtra("userdata", ud);
             startActivity(regIntent);
             finish();

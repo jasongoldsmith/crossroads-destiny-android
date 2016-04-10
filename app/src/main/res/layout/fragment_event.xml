@@ -115,7 +115,7 @@
                 android:layout_marginLeft="60dp"
                 app:border="false"
                 app:borderColor="#EEEEEE"
-                app:borderWidth="0dp"
+                app:circularBorderWidth="0dp"
                 app:shadow="true"/>
 
             <com.example.sharmha.travelerfordestiny.utils.CircularImageView
@@ -128,7 +128,7 @@
                 app:border="false"
                 android:padding="6dp"
                 app:borderColor="#EEEEEE"
-                app:borderWidth="0dp"
+                app:circularBorderWidth="0dp"
                 app:shadow="true"
                 android:visibility="gone"/>
 
@@ -148,7 +148,7 @@
                     android:layout_centerInParent="true"
                     app:border="false"
                     app:borderColor="#EEEEEE"
-                    app:borderWidth="0dp"
+                    app:circularBorderWidth="0dp"
                     app:shadow="true"
                     android:visibility="gone"/>
 

@@ -5,6 +5,9 @@
       <config />
     </shared>
   </component>
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="Hardik" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="6b810106-f75f-4552-bf8e-e9e0a75095ec" name="Default" comment="" />
     <ignored path="traveler-android.iws" />
@@ -26,73 +29,72 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ListActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/ListActivity.java">
+      <file leaf-file-name="BlankFragment.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/BlankFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="106" column="20" selection-start-line="106" selection-start-column="20" selection-end-line="106" selection-end-column="20" />
+            <state vertical-scroll-proportion="-7.597194">
+              <caret line="86" column="78" selection-start-line="86" selection-start-column="10" selection-end-line="86" selection-end-column="78" />
               <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#4506#4532#0" expanded="false" />
-                <element signature="e#4534#4562#0" expanded="false" />
-                <element signature="e#4662#4688#0" expanded="false" />
-                <element signature="e#4690#4718#0" expanded="false" />
-                <element signature="e#5006#5354#0" expanded="false" />
-                <element signature="e#5353#5354#0" expanded="false" />
-                <element signature="e#8948#9114#0" expanded="false" />
-                <element signature="e#9113#9114#0" expanded="false" />
-                <element signature="e#9562#9728#0" expanded="false" />
-                <element signature="e#9727#9728#0" expanded="false" />
-                <element signature="e#9961#10129#0" expanded="false" />
-                <element signature="e#10128#10129#0" expanded="false" />
-                <element signature="e#10255#10632#0" expanded="false" />
-                <element signature="e#10631#10632#0" expanded="false" />
-                <element signature="e#11294#11487#0" expanded="false" />
-                <element signature="e#11486#11487#0" expanded="false" />
-                <element signature="e#11531#11858#0" expanded="false" />
-                <element signature="e#11857#11858#0" expanded="false" />
-                <element signature="e#12481#12482#0" expanded="false" />
-                <element signature="e#12534#12535#0" expanded="false" />
-                <element signature="e#12586#12587#0" expanded="false" />
-                <element signature="e#12640#12641#0" expanded="false" />
-                <element signature="e#13256#13257#0" expanded="false" />
-                <element signature="e#13287#13288#0" expanded="false" />
-                <element signature="e#14068#14707#0" expanded="false" />
-                <element signature="e#14706#14707#0" expanded="false" />
-                <element signature="e#18554#18555#0" expanded="false" />
-                <element signature="e#18617#18618#0" expanded="false" />
-                <element signature="e#18675#18676#0" expanded="false" />
-                <element signature="e#18724#18725#0" expanded="false" />
-                <element signature="e#25318#25837#0" expanded="false" />
-                <element signature="e#25836#25837#0" expanded="false" />
-                <element signature="e#25943#26466#0" expanded="false" />
-                <element signature="e#26465#26466#0" expanded="false" />
-                <element signature="e#26921#27888#0" expanded="false" />
-                <element signature="e#27887#27888#0" expanded="false" />
-                <element signature="e#28292#28317#0" expanded="false" />
-                <element signature="e#28319#28346#0" expanded="false" />
-                <element signature="e#31652#31675#0" expanded="false" />
-                <element signature="e#31677#31702#0" expanded="false" />
-                <element signature="e#32022#32045#0" expanded="false" />
-                <element signature="e#32047#32072#0" expanded="false" />
-                <element signature="e#32456#32479#0" expanded="false" />
-                <element signature="e#32481#32506#0" expanded="false" />
-                <element signature="e#32974#32975#0" expanded="false" />
-                <element signature="e#33027#33028#0" expanded="false" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#11698#11723#0" expanded="true" />
+                <element signature="e#11725#11752#0" expanded="true" />
+                <element signature="e#15053#15076#0" expanded="true" />
+                <element signature="e#15078#15103#0" expanded="true" />
+                <element signature="e#15414#15437#0" expanded="true" />
+                <element signature="e#15439#15464#0" expanded="true" />
+                <element signature="e#15843#15866#0" expanded="true" />
+                <element signature="e#15868#15893#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="new_event.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/new_event.xml">
-          <provider editor-type-id="android-designer">
-            <state />
-          </provider>
+      <file leaf-file-name="ListActivityFragment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/ListActivityFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.0">
-              <caret line="228" column="13" selection-start-line="228" selection-start-column="13" selection-end-line="228" selection-end-column="13" />
-              <folding />
+            <state vertical-scroll-proportion="74.40741">
+              <caret line="220" column="34" selection-start-line="220" selection-start-column="34" selection-end-line="220" selection-end-column="34" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#3632#3658#0" expanded="true" />
+                <element signature="e#3660#3688#0" expanded="true" />
+                <element signature="e#3788#3814#0" expanded="true" />
+                <element signature="e#3816#3844#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EventData.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/data/EventData.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="47" column="70" selection-start-line="47" selection-start-column="70" selection-end-line="47" selection-end-column="70" />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#1624#1625#0" expanded="false" />
+                <element signature="e#1660#1661#0" expanded="false" />
+                <element signature="e#1698#1699#0" expanded="false" />
+                <element signature="e#1737#1738#0" expanded="false" />
+                <element signature="e#1778#1779#0" expanded="false" />
+                <element signature="e#1809#1810#0" expanded="false" />
+                <element signature="e#1842#1843#0" expanded="false" />
+                <element signature="e#1879#1880#0" expanded="false" />
+                <element signature="e#1920#1921#0" expanded="false" />
+                <element signature="e#1951#1952#0" expanded="false" />
+                <element signature="e#1984#1985#0" expanded="false" />
+                <element signature="e#2021#2022#0" expanded="false" />
+                <element signature="e#2076#2077#0" expanded="false" />
+                <element signature="e#2113#2114#0" expanded="false" />
+                <element signature="e#2156#2157#0" expanded="false" />
+                <element signature="e#2195#2196#0" expanded="false" />
+                <element signature="e#2250#2251#0" expanded="false" />
+                <element signature="e#2286#2287#0" expanded="false" />
+                <element signature="e#2331#2332#0" expanded="false" />
+                <element signature="e#2371#2372#0" expanded="false" />
+                <element signature="e#2567#2568#0" expanded="false" />
+                <element signature="e#2609#2610#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -103,56 +105,76 @@
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-12.0">
-              <caret line="225" column="63" selection-start-line="225" selection-start-column="63" selection-end-line="225" selection-end-column="63" />
-              <folding>
-                <element signature="e#3645#3674#0" expanded="true" />
-                <element signature="e#3713#3740#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BlankFragment.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/BlankFragment.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#2190#2191#0" expanded="false" />
-                <element signature="e#2234#2235#0" expanded="false" />
-                <element signature="e#2997#2998#0" expanded="false" />
-                <element signature="e#3043#3044#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/build.gradle">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="25" column="5" selection-start-line="25" selection-start-column="5" selection-end-line="25" selection-end-column="5" />
+            <state vertical-scroll-proportion="-11.379311">
+              <caret line="92" column="43" selection-start-line="92" selection-start-column="43" selection-end-line="92" selection-end-column="43" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="register.xml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/register.xml">
+      <file leaf-file-name="ControlManager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/ControlManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="261" column="6" selection-start-line="261" selection-start-column="6" selection-end-line="269" selection-end-column="7" />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#3269#3270#0" expanded="false" />
+                <element signature="e#3296#3297#0" expanded="false" />
+                <element signature="e#7448#7462#0" expanded="false" />
+                <element signature="e#10166#10167#0" expanded="false" />
+                <element signature="e#10204#10205#0" expanded="false" />
+                <element signature="e#12335#12356#0" expanded="false" />
+                <element signature="e#12358#12758#0" expanded="false" />
+                <element signature="e#12757#12758#0" expanded="false" />
+                <element signature="e#12780#13020#0" expanded="false" />
+                <element signature="e#13019#13020#0" expanded="false" />
+                <element signature="e#13365#13373#0" expanded="false" />
+                <marker date="1460303862000" expanded="true" signature="3941:4281" placeholder="{...}" />
+                <marker date="1460303862000" expanded="true" signature="6377:6728" placeholder="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="event_detail_list.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/event_detail_list.xml">
           <provider editor-type-id="android-designer">
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.50364965">
-              <caret line="112" column="34" selection-start-line="112" selection-start-column="34" selection-end-line="112" selection-end-column="34" />
+            <state vertical-scroll-proportion="-0.51724136">
+              <caret line="61" column="44" selection-start-line="61" selection-start-column="44" selection-end-line="61" selection-end-column="44" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EventDetailActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/EventDetailActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="73" column="10" selection-start-line="73" selection-start-column="10" selection-end-line="73" selection-end-column="10" />
+              <folding>
+                <element signature="e#4350#4375#0" expanded="true" />
+                <element signature="e#4377#4404#0" expanded="true" />
+                <element signature="e#4905#4931#0" expanded="true" />
+                <element signature="e#4933#4961#0" expanded="true" />
+                <element signature="e#10883#10921#0" expanded="true" />
+                <element signature="e#10923#10963#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="GradleLocalSettings">
     <option name="availableProjects">
@@ -558,9 +580,9 @@
                 <option name="name" value="preReleaseUnitTestBuild" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:appcompat-v7:23.1.1" />
+                <option name="description" value="Prepare com.android.support:appcompat-v7:23.1.0" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComAndroidSupportAppcompatV72311Library" />
+                <option name="name" value="prepareComAndroidSupportAppcompatV72310Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Prepare com.android.support:cardview-v7:21.0.3" />
@@ -568,9 +590,9 @@
                 <option name="name" value="prepareComAndroidSupportCardviewV72103Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:design:23.1.1" />
+                <option name="description" value="Prepare com.android.support:design:23.1.0" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComAndroidSupportDesign2311Library" />
+                <option name="name" value="prepareComAndroidSupportDesign2310Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Prepare com.android.support:recyclerview-v7:23.2.1" />
@@ -1094,9 +1116,9 @@
                 <option name="name" value="preReleaseUnitTestBuild" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:appcompat-v7:23.1.1" />
+                <option name="description" value="Prepare com.android.support:appcompat-v7:23.1.0" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareComAndroidSupportAppcompatV72311Library" />
+                <option name="name" value="prepareComAndroidSupportAppcompatV72310Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Prepare com.android.support:cardview-v7:21.0.3" />
@@ -1104,9 +1126,9 @@
                 <option name="name" value="prepareComAndroidSupportCardviewV72103Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:design:23.1.1" />
+                <option name="description" value="Prepare com.android.support:design:23.1.0" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareComAndroidSupportDesign2311Library" />
+                <option name="name" value="prepareComAndroidSupportDesign2310Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Prepare com.android.support:recyclerview-v7:23.2.1" />
@@ -1257,7 +1279,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="4371996448000" />
+        <entry key="$PROJECT_DIR$" value="4372168672000" />
         <entry key="$USER_HOME$/dlib-android-app" value="5823370836000" />
       </map>
     </option>
@@ -1433,14 +1455,14 @@
                             <option value="$USER_HOME$/Library/Android/sdk/extras/android/m2repository/com/android/support/support-v13/21.0.3/support-v13-21.0.3.aar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-android/1.4.0/cc174c559b5177982887bf6e1b76003aebad9516/bolts-android-1.4.0.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/fr.avianey.com.viewpagerindicator/library/2.4.1/24a54717419f810ee1a6d24a51a9ee98b9db3b12/library-2.4.1.aar" />
-                            <option value="$USER_HOME$/Library/Android/sdk/extras/android/m2repository/com/android/support/design/23.1.1/design-23.1.1.aar" />
+                            <option value="$USER_HOME$/Library/Android/sdk/extras/android/m2repository/com/android/support/appcompat-v7/23.1.0/appcompat-v7-23.1.0.aar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/cz.msebera.android/httpclient/4.3.6/526a9f794eab830eae4f23a62c572878b3f491ab/httpclient-4.3.6.jar" />
                             <option value="$USER_HOME$/Library/Android/sdk/extras/android/m2repository/com/android/support/support-v4/23.2.1/support-v4-23.2.1.aar" />
                             <option value="$USER_HOME$/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.2.1/support-annotations-23.2.1.jar" />
                             <option value="$USER_HOME$/Library/Android/sdk/extras/google/m2repository/com/google/android/gms/play-services-base/7.5.0/play-services-base-7.5.0.aar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-tasks/1.4.0/d85884acf6810a3bbbecb587f239005cbc846dc4/bolts-tasks-1.4.0.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-applinks/1.4.0/8ad21bf21784dacce5f2043afb97218cc377e835/bolts-applinks-1.4.0.jar" />
-                            <option value="$USER_HOME$/Library/Android/sdk/extras/android/m2repository/com/android/support/appcompat-v7/23.1.1/appcompat-v7-23.1.1.aar" />
+                            <option value="$USER_HOME$/Library/Android/sdk/extras/android/m2repository/com/android/support/design/23.1.0/design-23.1.0.aar" />
                           </list>
                         </option>
                         <option name="path" value="$PROJECT_DIR$/app" />
@@ -1571,20 +1593,34 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/CreateNewEvent.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/dimens.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/new_event.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/splash_loading.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/event_detail_list.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/utils/Util.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_blank.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/BlankFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/BlankFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/ListActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/event_list.xml" />
-        <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/login.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/register.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
+        <option value="$PROJECT_DIR$/app/build/intermediates/exploded-aar/fr.avianey.com.viewpagerindicator/library/2.4.1/res/values/vpi__colors.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_event.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values-v21/attrs.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/utils/CircularImageView.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/MainActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/LoginActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_blank.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/ListActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/network/EventListNetwork.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/RegisterActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/ControlManager.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/data/EventData.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/BlankFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/ListActivityFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/event_list.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/utils/Util.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/EventDetailActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/event_detail_list.xml" />
+        <option value="$PROJECT_DIR$/app/build.gradle" />
       </list>
     </option>
   </component>
@@ -1599,8 +1635,8 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="width" value="1920" />
-    <option name="height" value="1200" />
+    <option name="width" value="1440" />
+    <option name="height" value="900" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -1646,28 +1682,6 @@
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="traveler-android" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="layout" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -1699,16 +1713,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="travelerfordestiny" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="traveler-android" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -1819,6 +1823,9 @@
     <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_AVD" value="Nexus_5_API_22_x86" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="OverrideImplement.overriding.sorted" value="false" />
+    <property name="DEBUGGABLE_DEVICE" value="motorola-xt1096-TA99218LDK" />
+    <property name="DEBUGGABLE_PROCESS" value="com.example.sharmha.travellerdestiny" />
+    <property name="SHOW_ALL_PROCESSES" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -2026,13 +2033,14 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1920" height="1200" extended-state="0" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3287841" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3995037" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -2040,20 +2048,19 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32911393" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28481013" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4516129" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3126551" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24973376" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33547926" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3287841" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3287841" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -2071,135 +2078,61 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/MainActivity.java</url>
+          <line>207</line>
+          <properties />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/ListActivity.java</url>
+          <line>270</line>
+          <properties />
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/ListActivityFragment.java</url>
+          <line>78</line>
+          <properties />
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/utils/Util.java</url>
+          <line>285</line>
+          <properties />
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/utils/Util.java</url>
+          <line>260</line>
+          <properties />
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/utils/Util.java</url>
+          <line>254</line>
+          <properties />
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/ListActivityFragment.java</url>
+          <line>372</line>
+          <properties />
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/BlankFragment.java</url>
+          <line>89</line>
+          <properties />
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="12" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/CreateNewEvent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="133" column="52" selection-start-line="133" selection-start-column="52" selection-end-line="133" selection-end-column="52" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#5584#5585#0" expanded="false" />
-            <element signature="e#5650#5651#0" expanded="false" />
-            <element signature="e#6779#6780#0" expanded="false" />
-            <element signature="e#6826#6827#0" expanded="false" />
-            <element signature="e#12332#12333#0" expanded="false" />
-            <element signature="e#12379#12380#0" expanded="false" />
-            <element signature="e#15586#15587#0" expanded="false" />
-            <element signature="e#15658#15659#0" expanded="false" />
-            <element signature="e#16310#16311#0" expanded="false" />
-            <element signature="e#16378#16379#0" expanded="false" />
-            <element signature="e#21094#21095#0" expanded="false" />
-            <element signature="e#21138#21139#0" expanded="false" />
-            <element signature="e#23744#23745#0" expanded="false" />
-            <element signature="e#23792#23793#0" expanded="false" />
-            <element signature="e#27324#27325#0" expanded="false" />
-            <element signature="e#27373#27374#0" expanded="false" />
-            <element signature="e#27424#27425#0" expanded="false" />
-            <element signature="e#27472#27473#0" expanded="false" />
-            <element signature="e#27537#27538#0" expanded="false" />
-            <element signature="e#27592#27593#0" expanded="false" />
-            <element signature="e#27657#27658#0" expanded="false" />
-            <element signature="e#27689#27690#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/ListActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="108" column="19" selection-start-line="108" selection-start-column="8" selection-end-line="108" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#4506#4532#0" expanded="false" />
-            <element signature="e#4534#4562#0" expanded="false" />
-            <element signature="e#4662#4688#0" expanded="false" />
-            <element signature="e#4690#4718#0" expanded="false" />
-            <element signature="e#5006#5354#0" expanded="false" />
-            <element signature="e#5353#5354#0" expanded="false" />
-            <element signature="e#8948#9114#0" expanded="false" />
-            <element signature="e#9113#9114#0" expanded="false" />
-            <element signature="e#9562#9728#0" expanded="false" />
-            <element signature="e#9727#9728#0" expanded="false" />
-            <element signature="e#9961#10129#0" expanded="false" />
-            <element signature="e#10128#10129#0" expanded="false" />
-            <element signature="e#10255#10632#0" expanded="false" />
-            <element signature="e#10631#10632#0" expanded="false" />
-            <element signature="e#11294#11487#0" expanded="false" />
-            <element signature="e#11486#11487#0" expanded="false" />
-            <element signature="e#11531#11858#0" expanded="false" />
-            <element signature="e#11857#11858#0" expanded="false" />
-            <element signature="e#12481#12482#0" expanded="false" />
-            <element signature="e#12534#12535#0" expanded="false" />
-            <element signature="e#12586#12587#0" expanded="false" />
-            <element signature="e#12640#12641#0" expanded="false" />
-            <element signature="e#13256#13257#0" expanded="false" />
-            <element signature="e#13287#13288#0" expanded="false" />
-            <element signature="e#14068#14707#0" expanded="false" />
-            <element signature="e#14706#14707#0" expanded="false" />
-            <element signature="e#18554#18555#0" expanded="false" />
-            <element signature="e#18617#18618#0" expanded="false" />
-            <element signature="e#18675#18676#0" expanded="false" />
-            <element signature="e#18724#18725#0" expanded="false" />
-            <element signature="e#25318#25837#0" expanded="false" />
-            <element signature="e#25836#25837#0" expanded="false" />
-            <element signature="e#25943#26466#0" expanded="false" />
-            <element signature="e#26465#26466#0" expanded="false" />
-            <element signature="e#26921#27888#0" expanded="false" />
-            <element signature="e#27887#27888#0" expanded="false" />
-            <element signature="e#28292#28317#0" expanded="false" />
-            <element signature="e#28319#28346#0" expanded="false" />
-            <element signature="e#31652#31675#0" expanded="false" />
-            <element signature="e#31677#31702#0" expanded="false" />
-            <element signature="e#32022#32045#0" expanded="false" />
-            <element signature="e#32047#32072#0" expanded="false" />
-            <element signature="e#32456#32479#0" expanded="false" />
-            <element signature="e#32481#32506#0" expanded="false" />
-            <element signature="e#32974#32975#0" expanded="false" />
-            <element signature="e#33027#33028#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/new_event.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="228" column="13" selection-start-line="228" selection-start-column="13" selection-end-line="228" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_activity.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="52" column="4" selection-start-line="52" selection-start-column="4" selection-end-line="52" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/event_list.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="90" column="47" selection-start-line="90" selection-start-column="47" selection-end-line="90" selection-end-column="47" />
-          <folding>
-            <element signature="e#3645#3674#0" expanded="true" />
-            <element signature="e#3713#3740#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/network/NetworkEngine.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2247,20 +2180,20 @@
           <caret line="84" column="54" selection-start-line="84" selection-start-column="54" selection-end-line="84" selection-end-column="54" />
           <folding>
             <element signature="imports" expanded="false" />
-            <element signature="e#3348#3490#0" expanded="false" />
-            <element signature="e#3489#3490#0" expanded="false" />
-            <element signature="e#5150#5505#0" expanded="false" />
-            <element signature="e#5504#5505#0" expanded="false" />
-            <element signature="e#6199#6373#0" expanded="false" />
-            <element signature="e#6372#6373#0" expanded="false" />
-            <element signature="e#8572#8573#0" expanded="false" />
-            <element signature="e#8622#8623#0" expanded="false" />
-            <element signature="e#11549#12250#0" expanded="false" />
-            <element signature="e#11915#12182#0" expanded="false" />
-            <element signature="e#12181#12182#0" expanded="false" />
-            <element signature="e#12249#12250#0" expanded="false" />
-            <element signature="e#12330#12331#0" expanded="false" />
-            <element signature="e#12379#12380#0" expanded="false" />
+            <element signature="e#3417#3559#0" expanded="false" />
+            <element signature="e#3558#3559#0" expanded="false" />
+            <element signature="e#5219#5574#0" expanded="false" />
+            <element signature="e#5573#5574#0" expanded="false" />
+            <element signature="e#6268#6442#0" expanded="false" />
+            <element signature="e#6441#6442#0" expanded="false" />
+            <element signature="e#8925#8926#0" expanded="false" />
+            <element signature="e#8975#8976#0" expanded="false" />
+            <element signature="e#11902#12603#0" expanded="false" />
+            <element signature="e#12268#12535#0" expanded="false" />
+            <element signature="e#12534#12535#0" expanded="false" />
+            <element signature="e#12602#12603#0" expanded="false" />
+            <element signature="e#12683#12684#0" expanded="false" />
+            <element signature="e#12732#12733#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2269,16 +2202,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/network/LoginNetwork.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="50" column="22" selection-start-line="50" selection-start-column="22" selection-end-line="51" selection-end-column="56" />
           <folding>
             <element signature="imports" expanded="false" />
           </folding>
@@ -2297,67 +2220,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="127" column="6" selection-start-line="127" selection-start-column="6" selection-end-line="127" selection-end-column="6" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#3413#3414#0" expanded="false" />
-            <element signature="e#3444#3445#0" expanded="false" />
-            <element signature="e#4406#4407#0" expanded="false" />
-            <element signature="e#4438#4439#0" expanded="false" />
-            <element signature="e#4490#4491#0" expanded="false" />
-            <element signature="e#4520#4521#0" expanded="false" />
-            <element signature="e#6371#6372#0" expanded="false" />
-            <element signature="e#6395#6396#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_event.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="53.793102">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/CreateNewEvent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="133" column="52" selection-start-line="133" selection-start-column="52" selection-end-line="133" selection-end-column="52" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#5584#5585#0" expanded="false" />
-            <element signature="e#5650#5651#0" expanded="false" />
-            <element signature="e#6779#6780#0" expanded="false" />
-            <element signature="e#6826#6827#0" expanded="false" />
-            <element signature="e#12332#12333#0" expanded="false" />
-            <element signature="e#12379#12380#0" expanded="false" />
-            <element signature="e#15586#15587#0" expanded="false" />
-            <element signature="e#15658#15659#0" expanded="false" />
-            <element signature="e#16310#16311#0" expanded="false" />
-            <element signature="e#16378#16379#0" expanded="false" />
-            <element signature="e#21094#21095#0" expanded="false" />
-            <element signature="e#21138#21139#0" expanded="false" />
-            <element signature="e#23744#23745#0" expanded="false" />
-            <element signature="e#23792#23793#0" expanded="false" />
-            <element signature="e#27324#27325#0" expanded="false" />
-            <element signature="e#27373#27374#0" expanded="false" />
-            <element signature="e#27424#27425#0" expanded="false" />
-            <element signature="e#27472#27473#0" expanded="false" />
-            <element signature="e#27537#27538#0" expanded="false" />
-            <element signature="e#27592#27593#0" expanded="false" />
-            <element signature="e#27657#27658#0" expanded="false" />
-            <element signature="e#27689#27690#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2405,171 +2267,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/EventDetailActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="84" column="54" selection-start-line="84" selection-start-column="54" selection-end-line="84" selection-end-column="54" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#3348#3490#0" expanded="false" />
-            <element signature="e#3489#3490#0" expanded="false" />
-            <element signature="e#5150#5505#0" expanded="false" />
-            <element signature="e#5504#5505#0" expanded="false" />
-            <element signature="e#6199#6373#0" expanded="false" />
-            <element signature="e#6372#6373#0" expanded="false" />
-            <element signature="e#8572#8573#0" expanded="false" />
-            <element signature="e#8622#8623#0" expanded="false" />
-            <element signature="e#11549#12250#0" expanded="false" />
-            <element signature="e#11915#12182#0" expanded="false" />
-            <element signature="e#12181#12182#0" expanded="false" />
-            <element signature="e#12249#12250#0" expanded="false" />
-            <element signature="e#12330#12331#0" expanded="false" />
-            <element signature="e#12379#12380#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/event_detail_list.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="151" column="75" selection-start-line="151" selection-start-column="75" selection-end-line="151" selection-end-column="75" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/utils/Util.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.1821756">
-          <caret line="137" column="5" selection-start-line="137" selection-start-column="5" selection-end-line="137" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_blank.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.6551723">
-          <caret line="9" column="44" selection-start-line="9" selection-start-column="44" selection-end-line="9" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/BlankFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#2190#2191#0" expanded="false" />
-            <element signature="e#2234#2235#0" expanded="false" />
-            <element signature="e#2997#2998#0" expanded="false" />
-            <element signature="e#3043#3044#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/new_event.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="228" column="13" selection-start-line="228" selection-start-column="13" selection-end-line="228" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/ListActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="106" column="20" selection-start-line="106" selection-start-column="20" selection-end-line="106" selection-end-column="20" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#4506#4532#0" expanded="false" />
-            <element signature="e#4534#4562#0" expanded="false" />
-            <element signature="e#4662#4688#0" expanded="false" />
-            <element signature="e#4690#4718#0" expanded="false" />
-            <element signature="e#5006#5354#0" expanded="false" />
-            <element signature="e#5353#5354#0" expanded="false" />
-            <element signature="e#8948#9114#0" expanded="false" />
-            <element signature="e#9113#9114#0" expanded="false" />
-            <element signature="e#9562#9728#0" expanded="false" />
-            <element signature="e#9727#9728#0" expanded="false" />
-            <element signature="e#9961#10129#0" expanded="false" />
-            <element signature="e#10128#10129#0" expanded="false" />
-            <element signature="e#10255#10632#0" expanded="false" />
-            <element signature="e#10631#10632#0" expanded="false" />
-            <element signature="e#11294#11487#0" expanded="false" />
-            <element signature="e#11486#11487#0" expanded="false" />
-            <element signature="e#11531#11858#0" expanded="false" />
-            <element signature="e#11857#11858#0" expanded="false" />
-            <element signature="e#12481#12482#0" expanded="false" />
-            <element signature="e#12534#12535#0" expanded="false" />
-            <element signature="e#12586#12587#0" expanded="false" />
-            <element signature="e#12640#12641#0" expanded="false" />
-            <element signature="e#13256#13257#0" expanded="false" />
-            <element signature="e#13287#13288#0" expanded="false" />
-            <element signature="e#14068#14707#0" expanded="false" />
-            <element signature="e#14706#14707#0" expanded="false" />
-            <element signature="e#18554#18555#0" expanded="false" />
-            <element signature="e#18617#18618#0" expanded="false" />
-            <element signature="e#18675#18676#0" expanded="false" />
-            <element signature="e#18724#18725#0" expanded="false" />
-            <element signature="e#25318#25837#0" expanded="false" />
-            <element signature="e#25836#25837#0" expanded="false" />
-            <element signature="e#25943#26466#0" expanded="false" />
-            <element signature="e#26465#26466#0" expanded="false" />
-            <element signature="e#26921#27888#0" expanded="false" />
-            <element signature="e#27887#27888#0" expanded="false" />
-            <element signature="e#28292#28317#0" expanded="false" />
-            <element signature="e#28319#28346#0" expanded="false" />
-            <element signature="e#31652#31675#0" expanded="false" />
-            <element signature="e#31677#31702#0" expanded="false" />
-            <element signature="e#32022#32045#0" expanded="false" />
-            <element signature="e#32047#32072#0" expanded="false" />
-            <element signature="e#32456#32479#0" expanded="false" />
-            <element signature="e#32481#32506#0" expanded="false" />
-            <element signature="e#32974#32975#0" expanded="false" />
-            <element signature="e#33027#33028#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/fr.avianey.com.viewpagerindicator/library/2.4.1/res/values/vpi__colors.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/event_list.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-12.0">
-          <caret line="225" column="63" selection-start-line="225" selection-start-column="63" selection-end-line="225" selection-end-column="63" />
-          <folding>
-            <element signature="e#3645#3674#0" expanded="true" />
-            <element signature="e#3713#3740#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/login.xml">
       <provider editor-type-id="android-designer">
         <state />
@@ -2581,22 +2278,403 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="25" column="5" selection-start-line="25" selection-start-column="5" selection-end-line="25" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/register.xml">
       <provider editor-type-id="android-designer">
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.50364965">
-          <caret line="112" column="34" selection-start-line="112" selection-start-column="34" selection-end-line="112" selection-end-column="34" />
+        <state vertical-scroll-proportion="-13.448276">
+          <caret line="115" column="48" selection-start-line="115" selection-start-column="48" selection-end-line="115" selection-end-column="48" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/new_event.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.172414">
+          <caret line="228" column="13" selection-start-line="228" selection-start-column="13" selection-end-line="228" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.4615386">
+          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/fr.avianey.com.viewpagerindicator/library/2.4.1/res/values/vpi__colors.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-v21/attrs.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="39" column="29" selection-start-line="39" selection-start-column="29" selection-end-line="39" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/utils/CircularImageView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="157.18518">
+          <caret line="108" column="91" selection-start-line="108" selection-start-column="91" selection-end-line="108" selection-end-column="91" />
+          <folding>
+            <element signature="e#16656#16657#0" expanded="false" />
+            <element signature="e#16694#16695#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_event.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.6896553">
+          <caret line="11" column="30" selection-start-line="11" selection-start-column="25" selection-end-line="11" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-23/com/android/internal/os/RuntimeInit.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="71" column="0" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/network/LoginNetwork.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="95" column="0" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.39222616">
+          <caret line="107" column="1264" selection-start-line="107" selection-start-column="1264" selection-end-line="107" selection-end-column="1264" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-23/android/graphics/Typeface.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="77" column="28" selection-start-line="77" selection-start-column="28" selection-end-line="77" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/CreateNewEvent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="607" column="38" selection-start-line="607" selection-start-column="38" selection-end-line="608" selection-end-column="83" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/layout/abc_alert_dialog_material.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="3.064516">
+          <caret line="112" column="24" selection-start-line="112" selection-start-column="24" selection-end-line="112" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/custom_tab.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.34539473">
+          <caret line="7" column="43" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/styles.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="6" column="54" selection-start-line="6" selection-start-column="54" selection-end-line="6" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.31368822">
+          <caret line="11" column="40" selection-start-line="11" selection-start-column="40" selection-end-line="11" selection-end-column="40" />
+          <folding>
+            <element signature="e#3796#3814#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/data/UserData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/LoginActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="4.5912547">
+          <caret line="241" column="36" selection-start-line="241" selection-start-column="36" selection-end-line="241" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="203" column="28" selection-start-line="203" selection-start-column="28" selection-end-line="203" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/data/CurrentEventDataHolder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.14258555">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_blank.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.275862">
+          <caret line="16" column="4" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/ListActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.037037">
+          <caret line="762" column="7" selection-start-line="762" selection-start-column="7" selection-end-line="762" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/ControlManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="261" column="6" selection-start-line="261" selection-start-column="6" selection-end-line="269" selection-end-column="7" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#3269#3270#0" expanded="false" />
+            <element signature="e#3296#3297#0" expanded="false" />
+            <element signature="e#7448#7462#0" expanded="false" />
+            <element signature="e#10166#10167#0" expanded="false" />
+            <element signature="e#10204#10205#0" expanded="false" />
+            <element signature="e#12335#12356#0" expanded="false" />
+            <element signature="e#12358#12758#0" expanded="false" />
+            <element signature="e#12757#12758#0" expanded="false" />
+            <element signature="e#12780#13020#0" expanded="false" />
+            <element signature="e#13019#13020#0" expanded="false" />
+            <element signature="e#13365#13373#0" expanded="false" />
+            <marker date="1460303862000" expanded="true" signature="3941:4281" placeholder="{...}" />
+            <marker date="1460303862000" expanded="true" signature="6377:6728" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/RegisterActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="219" column="20" selection-start-line="219" selection-start-column="20" selection-end-line="219" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/network/EventListNetwork.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5263158">
+          <caret line="30" column="36" selection-start-line="30" selection-start-column="36" selection-end-line="30" selection-end-column="36" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-23/android/view/RenderNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="253" column="0" selection-start-line="253" selection-start-column="0" selection-end-line="253" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-23/android/view/View.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334">
+          <caret line="14846" column="0" selection-start-line="14846" selection-start-column="0" selection-end-line="14846" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-23/java/util/TimeZone.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.44676808">
+          <caret line="390" column="40" selection-start-line="390" selection-start-column="40" selection-end-line="390" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/data/EventData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="47" column="70" selection-start-line="47" selection-start-column="70" selection-end-line="47" selection-end-column="70" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#1624#1625#0" expanded="false" />
+            <element signature="e#1660#1661#0" expanded="false" />
+            <element signature="e#1698#1699#0" expanded="false" />
+            <element signature="e#1737#1738#0" expanded="false" />
+            <element signature="e#1778#1779#0" expanded="false" />
+            <element signature="e#1809#1810#0" expanded="false" />
+            <element signature="e#1842#1843#0" expanded="false" />
+            <element signature="e#1879#1880#0" expanded="false" />
+            <element signature="e#1920#1921#0" expanded="false" />
+            <element signature="e#1951#1952#0" expanded="false" />
+            <element signature="e#1984#1985#0" expanded="false" />
+            <element signature="e#2021#2022#0" expanded="false" />
+            <element signature="e#2076#2077#0" expanded="false" />
+            <element signature="e#2113#2114#0" expanded="false" />
+            <element signature="e#2156#2157#0" expanded="false" />
+            <element signature="e#2195#2196#0" expanded="false" />
+            <element signature="e#2250#2251#0" expanded="false" />
+            <element signature="e#2286#2287#0" expanded="false" />
+            <element signature="e#2331#2332#0" expanded="false" />
+            <element signature="e#2371#2372#0" expanded="false" />
+            <element signature="e#2567#2568#0" expanded="false" />
+            <element signature="e#2609#2610#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/Library/Android/sdk/extras/android/m2repository/com/android/support/support-v4/23.2.1/support-v4-23.2.1-sources.jar!/android/support/v4/view/ViewPager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="564" column="15" selection-start-line="564" selection-start-column="15" selection-end-line="564" selection-end-column="15" />
+          <folding>
+            <element signature="e#21658#21659#0" expanded="false" />
+            <element signature="e#21689#21690#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-23/android/widget/TextView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33269963">
+          <caret line="2681" column="16" selection-start-line="2681" selection-start-column="16" selection-end-line="2681" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/event_list.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-11.379311">
+          <caret line="92" column="43" selection-start-line="92" selection-start-column="43" selection-end-line="92" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/utils/Util.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.08555133">
+          <caret line="263" column="0" selection-start-line="263" selection-start-column="0" selection-end-line="263" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/event_detail_list.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.51724136">
+          <caret line="61" column="44" selection-start-line="61" selection-start-column="44" selection-end-line="61" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2851711">
+          <caret line="10" column="22" selection-start-line="10" selection-start-column="22" selection-end-line="10" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/EventDetailActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="73" column="10" selection-start-line="73" selection-start-column="10" selection-end-line="73" selection-end-column="10" />
+          <folding>
+            <element signature="e#4350#4375#0" expanded="true" />
+            <element signature="e#4377#4404#0" expanded="true" />
+            <element signature="e#4905#4931#0" expanded="true" />
+            <element signature="e#4933#4961#0" expanded="true" />
+            <element signature="e#10883#10921#0" expanded="true" />
+            <element signature="e#10923#10963#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/ListActivityFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="74.40741">
+          <caret line="220" column="34" selection-start-line="220" selection-start-column="34" selection-end-line="220" selection-end-column="34" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3632#3658#0" expanded="true" />
+            <element signature="e#3660#3688#0" expanded="true" />
+            <element signature="e#3788#3814#0" expanded="true" />
+            <element signature="e#3816#3844#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/sharmha/travelerfordestiny/BlankFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.597194">
+          <caret line="86" column="78" selection-start-line="86" selection-start-column="10" selection-end-line="86" selection-end-column="78" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#11698#11723#0" expanded="true" />
+            <element signature="e#11725#11752#0" expanded="true" />
+            <element signature="e#15053#15076#0" expanded="true" />
+            <element signature="e#15078#15103#0" expanded="true" />
+            <element signature="e#15414#15437#0" expanded="true" />
+            <element signature="e#15439#15464#0" expanded="true" />
+            <element signature="e#15843#15866#0" expanded="true" />
+            <element signature="e#15868#15893#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

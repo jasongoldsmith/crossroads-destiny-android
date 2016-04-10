@@ -80,8 +80,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/img_traveler_badge_icon"
+                android:layout_marginTop="24dp"
                 android:layout_marginLeft="0dp"
-                android:layout_marginBottom="78dp"/>
+                android:layout_marginBottom="54dp"/>
 
             <com.example.sharmha.travelerfordestiny.utils.CircularImageView
                 android:layout_width="@dimen/player_profile_width"
@@ -89,169 +90,182 @@
                 android:id="@+id/userProfile"
                 android:src="@drawable/img_avatar_you"
                 android:layout_marginEnd="11dp"
-                android:layout_marginTop="14dp"
+                android:layout_marginTop="28dp"
                 android:layout_alignParentRight="true" />
 
-            <RelativeLayout
-                android:layout_width="180dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true">
+            <!--<RelativeLayout-->
+                <!--android:layout_width="180dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_alignParentLeft="true">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="CURRENT"
-                    android:textSize="14sp"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/white"
-                    android:padding="9dp"
-                    android:layout_marginStart="47dp"
-                    android:layout_alignParentBottom="true"/>
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="CURRENT"-->
+                    <!--android:textSize="14sp"-->
+                    <!--android:fontFamily="sans-serif"-->
+                    <!--android:textStyle="bold"-->
+                    <!--android:textColor="@android:color/white"-->
+                    <!--android:padding="9dp"-->
+                    <!--android:layout_marginStart="47dp"-->
+                    <!--android:layout_alignParentBottom="true"/>-->
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginLeft="14dp"
-                    android:background="#0086d0"
-                    android:layout_alignParentBottom="true"/>
+                <!--<ImageView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="2dp"-->
+                    <!--android:layout_marginLeft="14dp"-->
+                    <!--android:background="#0086d0"-->
+                    <!--android:layout_alignParentBottom="true"/>-->
 
-            </RelativeLayout>
+            <!--</RelativeLayout>-->
 
-            <RelativeLayout
-                android:layout_width="180dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true">
+            <!--<RelativeLayout-->
+                <!--android:layout_width="180dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_alignParentRight="true">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="UPCOMING"
-                    android:textSize="14sp"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/white"
-                    android:padding="9dp"
-                    android:layout_marginEnd="47dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"/>
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="UPCOMING"-->
+                    <!--android:textSize="14sp"-->
+                    <!--android:fontFamily="sans-serif"-->
+                    <!--android:textStyle="bold"-->
+                    <!--android:textColor="@android:color/white"-->
+                    <!--android:padding="9dp"-->
+                    <!--android:layout_marginEnd="47dp"-->
+                    <!--android:layout_alignParentBottom="true"-->
+                    <!--android:layout_alignParentRight="true"/>-->
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="#0086d0"
-                    android:layout_marginRight="14dp"
-                    android:layout_alignParentBottom="true"
-                    android:visibility="gone"/>
+                <!--<ImageView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="2dp"-->
+                    <!--android:background="#0086d0"-->
+                    <!--android:layout_marginRight="14dp"-->
+                    <!--android:layout_alignParentBottom="true"-->
+                    <!--android:visibility="gone"/>-->
 
-            </RelativeLayout>
+            <!--</RelativeLayout>-->
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:id="@+id/notification_bar"
-            android:background="@color/app_theme_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/event_top_layout"
-            android:visibility="gone">
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:id="@+id/noti_icon"
-                android:src="@drawable/icon_alert"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="15dp"/>
-            <TextView
-                android:layout_width="wrap_content"
+            android:layout_above="@+id/create_new_event"
+            android:layout_marginTop="-48dp">
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab_layout"
+                app:tabMode="fixed"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/noti_toptext"
-                android:layout_toRightOf="@+id/noti_icon"
-                android:fontFamily="sans-serif"
-                android:textStyle="bold"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="12dp"
-                android:text="YOUR FIRETEAM IS READY"
-                android:textColor="#ffc600"
-                android:textSize="12sp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/noti_text"
-                android:layout_toRightOf="@+id/noti_icon"
-                android:text="missing event type"
-                android:fontFamily="sans-serif"
-                android:textColor="@color/trimbe_white"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="30dp"
-                android:textSize="12sp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/noti_subtext"
-                android:layout_toRightOf="@+id/noti_icon"
-                android:fontFamily="sans-serif"
-                android:textColor="@color/trimbe_white"
-                android:layout_marginLeft="15dp"
-                android:maxLines = "10"
-                android:scrollbars = "vertical"
-                android:layout_marginTop="47dp"
-                android:textSize="12sp"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/noti_close"
-                android:src="@drawable/icon_close_sm"
-                android:layout_alignParentRight="true"
-                android:paddingRight="17dp"
-                android:paddingTop="9dp"/>
+                android:layout_alignParentTop="true"
+                android:background="@android:color/transparent"
+                android:elevation="0dp"
+                app:tabTextColor="#d3d3d3"
+                app:tabSelectedTextColor="#ffffff"
+                app:tabIndicatorColor="@color/app_theme_color"
+                app:tabPaddingStart="20dp"
+                app:tabPaddingEnd="0dp"
+                android:minHeight="?attr/actionBarSize" />
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:id="@+id/notification_bar"
+                android:background="@color/app_theme_color"
+                android:layout_below="@+id/tab_layout"
+                android:visibility="gone">
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:id="@+id/noti_icon"
+                    android:src="@drawable/icon_alert"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="15dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/noti_toptext"
+                    android:layout_toRightOf="@+id/noti_icon"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="12dp"
+                    android:text="YOUR FIRETEAM IS READY"
+                    android:textColor="#ffc600"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/noti_text"
+                    android:layout_toRightOf="@+id/noti_icon"
+                    android:text="missing event type"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/trimbe_white"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="30dp"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/noti_subtext"
+                    android:layout_toRightOf="@+id/noti_icon"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/trimbe_white"
+                    android:layout_marginLeft="15dp"
+                    android:maxLines = "10"
+                    android:scrollbars = "vertical"
+                    android:layout_marginTop="47dp"
+                    android:textSize="12sp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/noti_close"
+                    android:src="@drawable/icon_close_sm"
+                    android:layout_alignParentRight="true"
+                    android:paddingRight="17dp"
+                    android:paddingTop="9dp"/>
+
+            </RelativeLayout>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:background="@android:color/transparent"
+                android:layout_below="@+id/notification_bar"
+                android:id="@+id/empty_img"/>
+
+            <!--<android.support.v4.widget.SwipeRefreshLayout-->
+                <!--android:id="@+id/swipeRefreshLayout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/empty_img">-->
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/empty_img"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    android:background="@android:color/transparent"/>
+            <!--</android.support.v4.widget.SwipeRefreshLayout>-->
         </RelativeLayout>
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="6dp"
-            android:background="@android:color/transparent"
-            android:layout_below="@+id/notification_bar"
-            android:id="@+id/empty_img"/>
 
-        <!--<android.support.design.widget.TabLayout-->
-            <!--android:id="@+id/tab_layout"-->
-            <!--app:tabMode="fixed"-->
-            <!--android:layout_alignParentTop="true"-->
+        <!--<android.support.v4.widget.SwipeRefreshLayout-->
+            <!--android:id="@+id/swipeRefreshLayout"-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="wrap_content"-->
             <!--android:layout_below="@+id/empty_img"-->
-            <!--android:layout_above="@+id/create_new_event"-->
-            <!--android:background="?attr/colorPrimary"-->
-            <!--android:elevation="6dp"-->
-            <!--app:tabTextColor="#d3d3d3"-->
-            <!--app:tabSelectedTextColor="#ffffff"-->
-            <!--app:tabIndicatorColor="#ff00ff"-->
-            <!--android:minHeight="?attr/actionBarSize"-->
-            <!--/>-->
+            <!--android:layout_above="@+id/create_new_event">-->
 
-        <!--<android.support.v4.view.ViewPager-->
-            <!--android:id="@+id/viewpager"-->
-            <!--android:layout_below="@+id/tab_layout"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--/>-->
-
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/empty_img"
-            android:layout_above="@+id/create_new_event">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/event_view"
-                android:background="@android:color/transparent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </android.support.v4.widget.SwipeRefreshLayout>
+            <!--<android.support.v7.widget.RecyclerView-->
+                <!--android:id="@+id/event_view"-->
+                <!--android:background="@android:color/transparent"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"/>-->
+        <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 
         <TextView
             android:layout_width="match_parent"

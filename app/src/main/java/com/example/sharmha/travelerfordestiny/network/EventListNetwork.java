@@ -4,7 +4,6 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.example.sharmha.travelerfordestiny.ControlManager;
-import com.example.sharmha.travelerfordestiny.ListActivity;
 import com.example.sharmha.travelerfordestiny.utils.Util;
 import com.example.sharmha.travelerfordestiny.data.EventData;
 import com.example.sharmha.travelerfordestiny.data.EventList;
@@ -30,8 +29,6 @@ public class EventListNetwork extends Observable{
 
     private EventList eventList;
     private ControlManager mManager;
-
-    private ListActivity listA;
 
     public EventListNetwork(Context c) {
         //listA = act;
