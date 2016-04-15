@@ -29,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.example.sharmha.travelerfordestiny.data.ActivityData;
@@ -39,6 +40,9 @@ import com.example.sharmha.travelerfordestiny.data.UserData;
 import com.example.sharmha.travelerfordestiny.network.ActivityListNetwork;
 import com.example.sharmha.travelerfordestiny.utils.Constants;
 import com.example.sharmha.travelerfordestiny.utils.Util;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -109,7 +113,7 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
     private ImageView close_err;
 
     private RelativeLayout calendar_layout;
-    private CalendarView calendar;
+    private MaterialCalendarView calendar;
     private RelativeLayout date;
     private TextView date_display;
     private RelativeLayout time;
@@ -270,12 +274,35 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
 //                activity_text_view.setText(Constants.ACTIVITY_WEEKLY);
                 final_act_icon_view.setImageResource(R.drawable.icon_weeklies);
                 final_act_text_view.setText(Constants.ACTIVITY_WEEKLY);
-                    ArrayList<ActivityData> secActivity = mCntrlMngr.getCustomActivityList(secondActivityType.getText().toString());
-                    vf.showNext();
-                    if (secActivity != null) {
-                        setActivityRecyclerView(secActivity);
+                ArrayList<ActivityData> secActivity = mCntrlMngr.getCustomActivityList(secondActivityType.getText().toString());
+                customCurrentActivityList.clear();
+                if (secActivity != null) {
+                    customCurrentActivityList.addAll(secActivity);
+                    ArrayList<ActivityData> filterRaidActivity = new ArrayList<ActivityData>();
+                    int counter = 0;
+                    for (int i = 0; i < secActivity.size(); i++) {
+                        if (i == 0) {
+                            filterRaidActivity.add(secActivity.get(i));
+                        } else {
+                            counter = 0;
+                            for (int y = 0; y < filterRaidActivity.size(); y++) {
+                                if (secActivity.get(i).getActivitySubtype().equalsIgnoreCase(filterRaidActivity.get(y).getActivitySubtype()) && secActivity.get(i).getActivityDifficulty().equalsIgnoreCase(filterRaidActivity.get(y).getActivityDifficulty())) {
+                                    counter++;
+                                }
+                            }
+                            if (counter == 0) {
+                                filterRaidActivity.add(secActivity.get(i));
+                            }
+                        }
                     }
-                //}
+
+
+                    if (secActivity != null) {
+                        setActivityRecyclerView(filterRaidActivity);
+                    }
+                    //}
+                }
+                vf.showNext();
             }
         });
 
@@ -313,12 +340,12 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
         createNewEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (vf.getDisplayedChild()==2) {
+                if (vf.getDisplayedChild() == 2) {
 //                    Toast.makeText(CreateNewEvent.this, "Create new Event",
 //                            Toast.LENGTH_SHORT).show();
-                    if (mAdapter!= null && mAdapter.aList!= null) {
-                        if (checkpointActList != null && currentCheckpointActivityPosition>=0) {
-                            if (checkpointActList.get(currentCheckpointActivityPosition).getId()!=null && !checkpointActList.get(currentCheckpointActivityPosition).getId().isEmpty()) {
+                    if (mAdapter != null && mAdapter.aList != null) {
+                        if (checkpointActList != null && currentCheckpointActivityPosition >= 0) {
+                            if (checkpointActList.get(currentCheckpointActivityPosition).getId() != null && !checkpointActList.get(currentCheckpointActivityPosition).getId().isEmpty()) {
                                 String activityId = checkpointActList.get(currentCheckpointActivityPosition).getId();
                                 String creator_id = user.getUserId();
                                 int maxP = checkpointActList.get(currentCheckpointActivityPosition).getMaxPlayer();
@@ -333,7 +360,7 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
 //                                    progress.show();
                                     linlaHeaderProgress.setVisibility(View.VISIBLE);
                                     String dateTime = getCreateEventDateTime();
-                                    mCntrlMngr.postCreateEvent(activityId, creator_id, minP, maxP,dateTime, CreateNewEvent.this);
+                                    mCntrlMngr.postCreateEvent(activityId, creator_id, minP, maxP, dateTime, CreateNewEvent.this);
                                 }
                             }
                         }
@@ -344,13 +371,13 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
 
         dropdown = (Spinner)findViewById(R.id.event_creation_checkpoint);
         dropdown.setBackground(backgroundWithBorder(getResources()
-                                .getColor(R.color.app_theme_color),
-                        getResources().getColor(R.color.app_theme_color)));
+                        .getColor(R.color.app_theme_color),
+                getResources().getColor(R.color.app_theme_color)));
         checkpointItems = new ArrayList<String>();
         dropdown.setOnItemSelectedListener(this);
 
         calendar_layout = (RelativeLayout) findViewById(R.id.calendar_layout);
-        calendar = (CalendarView) findViewById(R.id.calendar);
+        calendar = (MaterialCalendarView) findViewById(R.id.calendar);
         date = (RelativeLayout) findViewById(R.id.date);
         time = (RelativeLayout) findViewById(R.id.time);
         date_display = (TextView) findViewById(R.id.date_text);
@@ -460,11 +487,24 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
 //        calendar.setFirstDayOfWeek(2);
 //
 //        calendar.setSelectedWeekBackgroundColor(getResources().getColor(R.color.app_theme_color));
-        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+
+        calendar.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                date_display.setText(month + "-" + dayOfMonth + "-" + year);
-                //calendar_layout.setVisibility(View.GONE);
+            public void onDateSelected(MaterialCalendarView materialCalendarView, CalendarDay calendarDay, boolean b) {
+                int m= calendarDay.getMonth();
+                int d = calendarDay.getDay();
+                if(m==1 && d>29) {
+                    m = 3;
+                    if (d==30){
+                        d = 1;
+                    } else {
+                        d = 2;
+                    }
+                } else {
+                    m= m + 1;
+                }
+                date_display.setText(m+"-"+d
+                        +"-"+calendarDay.getYear());
             }
         });
     }

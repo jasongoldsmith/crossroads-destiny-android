@@ -22,6 +22,7 @@ public class EventData {
     private CreatorData creatorData;
     private String launchDate;
     private long _timeInMilliseconds;
+    private String launchStatus;
     //private PlayerData playerData;
 
     public EventData () {
@@ -61,6 +62,14 @@ public class EventData {
 
     public String getLaunchDate() {
         return launchDate;
+    }
+
+    public void setLaunchEventStatus(String status) {
+        launchStatus = status;
+    }
+
+    public String getLaunchEventStatus() {
+        return this.launchStatus;
     }
 
     public void setEventStatus(String status) {
@@ -131,6 +140,9 @@ public class EventData {
                 setMaxPlayer(maxPlayers);
                 if(json.has("launchDate")){
                     setLaunchDate(json.getString("launchDate"));
+                }
+                if(json.has("launchStatus")) {
+                    setLaunchEventStatus(json.getString("launchStatus"));
                 }
 
                 activityData.toJson(actData);

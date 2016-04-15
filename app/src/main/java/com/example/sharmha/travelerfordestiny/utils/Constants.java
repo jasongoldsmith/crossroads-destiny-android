@@ -13,6 +13,8 @@ public class Constants {
     public static final String ACTIVITY_RAID = "RAID";
     public static final String ACTIVITY_WEEKLY = "WEEKLY";
     public static final String ACTIVITY_CRUCIBLE = "CRUCIBLE";
+    public static final String LAUNCH_STATUS_UPCOMING = "upcoming";
+    public static final String LAUNCH_STATUS_NOW = "now";
 
     public final static String GCM_SENDER_ID = "375926567407";
 

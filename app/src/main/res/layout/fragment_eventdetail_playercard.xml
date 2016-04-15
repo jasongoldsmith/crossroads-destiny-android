@@ -43,7 +43,8 @@
                 android:id="@+id/event_detail_message"
                 android:src="@drawable/icon_chat_detailscreen"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 

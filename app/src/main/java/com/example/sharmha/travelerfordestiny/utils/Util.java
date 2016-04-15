@@ -219,6 +219,34 @@ public class Util {
         return sdf.format(cal.getTime());
     }
 
+    public static String convertUTCtoReadable(String utcDate) {
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date newDate = null;
+        try {
+            newDate = format.parse(utcDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        format = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+        String date = format.format(newDate);
+        return date;
+
+
+//        Date fDate = null;
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+//        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+//        try {
+//            fDate = simpleDateFormat.parse(utcDate);
+//        } catch (ParseException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//        return fDate.toString();
+    }
+
     public static long parseDate(String dateString) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         if (dateString != null) {

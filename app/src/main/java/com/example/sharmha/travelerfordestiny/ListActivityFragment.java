@@ -11,6 +11,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -18,11 +19,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
+import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -101,6 +104,9 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         if (user.getUser()!=null){
             userNameDrawer.setText(user.getUser());
         }
+
+        fragmentCurrentEventList = new ArrayList<EventData>();
+        fragmentupcomingEventList = new ArrayList<EventData>();
 
         drawerLayout = (DrawerLayout) findViewById(R.id.out);
 
@@ -231,6 +237,28 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             }
         });
 
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                //hack to update upcoming fragment
+                if(position==1){
+
+                    updateCurrentFrag();
+                    //getSupportFragmentManager().getFragments().get(position).
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         crash_report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -296,9 +324,11 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             String msg = intent.getStringExtra("message");
             notiEventText.setText(subtype);
             if(playerMsg){
-                notiTopText.setText("YOUR FIRETEAM IS SAYING");
+                notiTopText.setText("FIRETEAM MESSAGE");
+                notiMessage.setVisibility(View.VISIBLE);
                 notiMessage.setText(msg);
             }else {
+                notiTopText.setText("YOUR FIRETEAM IS READY");
                 notiMessage.setVisibility(View.GONE);
                 mManager.getEventList(ListActivityFragment.this);
             }
@@ -324,6 +354,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
         String tabTitles[] = new String[] { "CURRENT", "UPCOMING" };
         Context context;
+        SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
 
         public PagerAdapter(FragmentManager fm, Context context) {
             super(fm);
@@ -354,6 +385,23 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             return tabTitles[position];
         }
 
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            Fragment fragment = (Fragment) super.instantiateItem(container, position);
+            //registeredFragments.put(position, fragment);
+            return fragment;
+        }
+
+//        public Fragment getRegisteredFragment(int position) {
+//            return registeredFragments.get(position);
+//        }
+//
+//        @Override
+//        public void destroyItem(ViewGroup container, int position, Object object) {
+//            registeredFragments.remove(position);
+//            super.destroyItem(container, position, object);
+//        }
+
         public View getTabView(int position) {
             View tab = LayoutInflater.from(ListActivityFragment.this).inflate(R.layout.custom_tab, null);
             TextView tv = (TextView) tab.findViewById(R.id.custom_text);
@@ -363,7 +411,6 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             tv.setText(tabTitles[position]);
             return tab;
         }
-
     }
 
     private void updateCurrentFrag() {
@@ -376,6 +423,8 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             ((BlankFragment)page).updateCurrListAdapter(fragmentupcomingEventList);
         }
     }
+
+
 
     @Override
     public void update(Observable observable, Object data) {
@@ -419,7 +468,6 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                 }
             }
         }
-
     }
 
     @Override

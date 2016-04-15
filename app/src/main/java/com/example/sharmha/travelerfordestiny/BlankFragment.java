@@ -126,6 +126,7 @@ public class BlankFragment extends Fragment {
             protected TextView playerCountImage3;
             protected ImageView joinBtn;
             protected ImageView unjoinBtn;
+            protected TextView eventDate;
 
             public MyViewHolder(View v) {
                 super(v);
@@ -142,6 +143,7 @@ public class BlankFragment extends Fragment {
                 joinBtn = (ImageView) v.findViewById(R.id.join_btn);
                 unjoinBtn = (ImageView) v.findViewById(R.id.unjoin_btn);
                 eventPlayerNameCnt = (TextView) v.findViewById(R.id.activity_player_name_lf);
+                eventDate = (TextView) v.findViewById(R.id.event_time);
             }
         }
 
@@ -173,9 +175,22 @@ public class BlankFragment extends Fragment {
                 String creatorId = this.elistLocal.get(position).getCreatorData().getPlayerId();
                 final String status = this.elistLocal.get(position).getEventStatus();
 
-                if (creatorId.equalsIgnoreCase(user.getUserId())) {
-                    CreatorIn = true;
-                    CreatorIsPlayer = true;
+                if(creatorId!=null){
+                    if (user!=null && user.getUserId()!=null){
+                        if (creatorId.equalsIgnoreCase(user.getUserId())) {
+                            CreatorIn = true;
+                            CreatorIsPlayer = true;
+                        }
+                    }
+                }
+
+                if(elistLocal.get(position).getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING)) {
+                    String date  = Util.convertUTCtoReadable(elistLocal.get(position).getLaunchDate());
+                    if (date!=null){
+                        holder.eventDate.setText(date);
+                    }
+                } else {
+                    holder.eventDate.setText("");
                 }
 
                 for (int y = 0; y < i; y++) {
@@ -364,6 +379,13 @@ public class BlankFragment extends Fragment {
         public void onAttachedToRecyclerView(RecyclerView recyclerView) {
             super.onAttachedToRecyclerView(recyclerView);
         }
+    }
+
+    public boolean checkCurrentList() {
+        if (currentEventList.size()==0){
+            return true;
+        }
+        return false;
     }
 
     public void updateCurrListAdapter(ArrayList<EventData> eData){

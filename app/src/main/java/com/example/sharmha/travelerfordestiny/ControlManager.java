@@ -116,7 +116,7 @@ public class ControlManager implements Observer{
             eventListNtwrk.addObserver(activity);
             eventListNtwrk.addObserver(this);
             eventListNtwrk.getEvents();
-            //getAndroidVersion(activity);
+            getAndroidVersion(activity);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -175,6 +175,17 @@ public class ControlManager implements Observer{
 //    }
 
     public void postUnJoinEvent(ListActivityFragment activity, RequestParams params) {
+        try {
+            eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(activity);
+            eventRelationshipNtwrk.addObserver(activity);
+            eventRelationshipNtwrk.addObserver(this);
+            eventRelationshipNtwrk.postUnJoin(params);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void postUnJoinEvent(EventDetailActivity activity, RequestParams params) {
         try {
             eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(activity);
             eventRelationshipNtwrk.addObserver(activity);
@@ -259,15 +270,15 @@ public class ControlManager implements Observer{
         }
     }
 
-//    public void getAndroidVersion(ListActivity activity) {
-//        getVersionNetwork = new GetVersion(activity);
-//        getVersionNetwork.addObserver(this);
-//        try {
-//            getVersionNetwork.getAppVer();
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public void getAndroidVersion(ListActivityFragment activity) {
+        getVersionNetwork = new GetVersion(activity);
+        getVersionNetwork.addObserver(this);
+        try {
+            getVersionNetwork.getAppVer();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void setCurrentActivity(Activity act) {
         this.mCurrentAct = act;

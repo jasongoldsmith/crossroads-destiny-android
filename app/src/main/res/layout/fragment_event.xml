@@ -8,7 +8,7 @@
     <android.support.v7.widget.CardView
         xmlns:conversation="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="136dp"
+        android:layout_height="144dp"
         android:id="@+id/event"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -32,7 +32,8 @@
             android:id="@+id/event_top_frag"
             android:orientation="horizontal"
             android:layout_alignParentTop="true"
-            android:layout_margin="10dp">
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp">
 
             <ImageView
                 android:layout_width="40dp"
@@ -77,8 +78,16 @@
                     android:layout_below="@+id/activity_name"
                     android:textColor="#ffc600"
                     android:layout_toRightOf="@+id/activity_player_name"
-                    android:textSize="12sp"
-                    />
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/activity_player_name"
+                    android:id="@+id/event_time"
+                    android:fontFamily="sans-serif"
+                    android:textColor="#ffc600"
+                    android:textSize="12sp" />
             </RelativeLayout>
 
             <TextView
@@ -87,7 +96,8 @@
                 android:text=""
                 android:id="@+id/activity_aLight"
                 android:textSize="20sp"
-                android:textColor="#f8e71c"
+                android:layout_marginRight="10dp"
+                android:textColor="#ffc600"
                 android:layout_alignParentRight="true">
             </TextView>
 
@@ -99,8 +109,8 @@
             android:id="@+id/event_bottom_frag"
             android:layout_below="@+id/event_top_frag"
             android:orientation="horizontal"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="10dp">
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp">
 
             <!--<PlayerProfileImageView-->
                 <!--android:id="@+id/profile_icon"-->
