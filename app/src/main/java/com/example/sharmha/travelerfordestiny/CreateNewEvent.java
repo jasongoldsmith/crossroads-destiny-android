@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -117,8 +118,8 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
     private RelativeLayout date;
     private TextView date_display;
     private RelativeLayout time;
-    private RelativeLayout time_layout;
-    private TimePicker timePicker;
+    //private RelativeLayout time_layout;
+    //private TimePicker timePicker;
     private TextView time_display;
 
     static final int TIME_DIALOG_ID = 999;
@@ -397,21 +398,21 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
             }
         });
 
-        time_layout = (RelativeLayout) findViewById(R.id.time_layout);
-        timePicker = (TimePicker) findViewById(R.id.timePicker);
+        //time_layout = (RelativeLayout) findViewById(R.id.time_layout);
+        //timePicker = (TimePicker) findViewById(R.id.timePicker);
         time = (RelativeLayout) findViewById(R.id.time);
         time_display = (TextView) findViewById(R.id.time_text);
-        time_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                time_layout.setVisibility(View.GONE);
-            }
-        });
+//        time_layout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                time_layout.setVisibility(View.GONE);
+//            }
+//        });
 
         time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                time_layout.setVisibility(View.VISIBLE);
+                //time_layout.setVisibility(View.VISIBLE);
 
                 showDialog(TIME_DIALOG_ID);
 
@@ -453,7 +454,7 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
                 tpd.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        time_layout.setVisibility(View.GONE);
+                        //time_layout.setVisibility(View.GONE);
                     }
                 });
                 return tpd;
@@ -462,7 +463,7 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
 
     }
 
-    private TimePickerDialog.OnTimeSetListener timePickerListener =  new TimePickerDialog.OnTimeSetListener() {
+    protected TimePickerDialog.OnTimeSetListener timePickerListener =  new TimePickerDialog.OnTimeSetListener() {
 
         public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
             hour = selectedHour;
@@ -473,7 +474,7 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
             if(aTime!=null) {
                 time_display.setText(aTime);
             }
-            time_layout.setVisibility(View.GONE);
+            //time_layout.setVisibility(View.GONE);
         }
     };
 //            .setOnDismissListener(new DialogInterface.OnDismissListener() {

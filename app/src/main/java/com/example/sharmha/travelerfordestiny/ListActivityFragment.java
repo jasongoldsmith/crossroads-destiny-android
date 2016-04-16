@@ -36,6 +36,7 @@ import com.example.sharmha.travelerfordestiny.data.UserData;
 import com.example.sharmha.travelerfordestiny.network.EventListNetwork;
 import com.example.sharmha.travelerfordestiny.network.EventRelationshipHandlerNetwork;
 import com.example.sharmha.travelerfordestiny.utils.CircularImageView;
+import com.example.sharmha.travelerfordestiny.utils.Constants;
 import com.example.sharmha.travelerfordestiny.utils.SendBackpressBroadcast;
 import com.example.sharmha.travelerfordestiny.utils.Util;
 import com.example.sharmha.travellerdestiny.R;
@@ -430,6 +431,9 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     public void update(Observable observable, Object data) {
         if (observable instanceof EventListNetwork) {
             eList = (EventList)data;
+            if(eData!=null) {
+                eData.clear();
+            }
             eData = eList.getEventList();
             createUpcomingCurrentList(eData);
             updateCurrentFrag();
@@ -459,13 +463,20 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             fragmentCurrentEventList = new ArrayList<EventData>();
             fragmentupcomingEventList = new ArrayList<EventData>();
             for (int i=0;i<currentEventList.size();i++) {
-                if(currentEventList.get(i).getLaunchDate()!=null) {
-                    if (Util.updateCurrEventOnTime(currentEventList.get(i).getLaunchDate())) {
-                        fragmentCurrentEventList.add(currentEventList.get(i));
-                    } else {
+                if(currentEventList.get(i).getLaunchEventStatus()!=null){
+                    if(currentEventList.get(i).getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING)){
                         fragmentupcomingEventList.add(currentEventList.get(i));
+                    } else {
+                        fragmentCurrentEventList.add(currentEventList.get(i));
                     }
                 }
+//                if(currentEventList.get(i).getLaunchDate()!=null) {
+//                    if (Util.updateCurrEventOnTime(currentEventList.get(i).getLaunchDate())) {
+//                        fragmentCurrentEventList.add(currentEventList.get(i));
+//                    } else {
+//                        fragmentupcomingEventList.add(currentEventList.get(i));
+//                    }
+//                }
             }
         }
     }

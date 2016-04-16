@@ -333,8 +333,7 @@
                 android:src="@drawable/profile_image"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="20dp"
-                android:layout_marginTop="81dp"
-                android:onClick="updateProfileAvatar" />
+                android:layout_marginTop="81dp"/>
 
             <TextView
                 android:id="@+id/profile_name"
