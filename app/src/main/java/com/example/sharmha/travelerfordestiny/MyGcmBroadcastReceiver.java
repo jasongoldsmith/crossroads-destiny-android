@@ -2,6 +2,7 @@ package com.example.sharmha.travelerfordestiny;
 
 import android.app.ActivityManager;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -47,18 +48,8 @@ public class MyGcmBroadcastReceiver extends BroadcastReceiver {
                         in.putExtra("payload", payload);
                         in.putExtra("message", alert);
                         in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                        JSONObject jsonObj = new JSONObject(payload);
-//                        EventData ed = new EventData();
-//                        ed.toJson(jsonObj);
-//                        ActivityData ad = ed.getActivityData();
-//                        String st = ad.getActivitySubtype();
-//                        in.putExtra("subtype", st);
                         context.startService(in);
-
-                    //broadcast message to activity
-                    //in.putExtra("subtype", ed)
-
-            } //else if (pushData != null) {
+            } else {
 //                Intent i = new Intent(context, UpdateCacheService.class);
 //                i.putExtra("message", payload);
 //                i.putExtra("alert", alert);
@@ -70,19 +61,37 @@ public class MyGcmBroadcastReceiver extends BroadcastReceiver {
 //                    return;
 //                }
                 //int notificationCounter = Utils.readNewNotificationCount();
-//                Intent notificationIntent = createNotificationIntent(context, alert, gcmMessage, payload, gcmMessage.getTimeInMilliseconds());
-//                PendingIntent resultIntent = PendingIntent.getActivity(context, gcmMessage.getTimeInMilliseconds(), notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                Intent notificationIntent = createNotificationIntent(context, alert, payload);
+                PendingIntent resultIntent = PendingIntent.getActivity(context, Constants.INTENT_ID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
                 if(alert!=null) {
-                    mBuilder.setAutoCancel(false).setSmallIcon(R.drawable.img_traveler_badge_icon).setContentTitle(context.getResources().getString(R.string.app_name)).setStyle(new NotificationCompat.BigTextStyle().bigText(alert)).setContentText(alert);
+                    mBuilder.setAutoCancel(true).setSmallIcon(R.drawable.img_traveler_badge_icon).setContentIntent(resultIntent).setContentTitle(context.getResources().getString(R.string.app_name)).setStyle(new NotificationCompat.BigTextStyle().bigText(alert)).setContentText(alert);
                 }else{
-                    mBuilder.setSmallIcon(R.drawable.img_traveler_badge_icon).setContentText("New Message Received").setContentTitle(context.getResources().getString(R.string.app_name));
+                    mBuilder.setSmallIcon(R.drawable.img_traveler_badge_icon).setContentIntent(resultIntent).setContentText("New Message Received").setContentTitle(context.getResources().getString(R.string.app_name));
                 }
                 NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.notify(1, mBuilder.build());
                 //Utils.storeNewNotificationCount(notificationCounter);
-            //}
+            }
         }
+    }
+
+    private Intent createNotificationIntent(Context ctxt, String alert, String payload) {
+        // notificationIntent
+        Intent notificationIntent = new Intent(ctxt, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // mark intent as notification
+        notificationIntent.putExtra(Constants.TRAVELER_NOTIFICATION_INTENT, Constants.TRAVELER_NOTIFICATION_INTENT);
+        // SplashScreen Intent
+        Intent launchIntent = new Intent(ctxt, MainActivity.class);
+        if (alert != null && alert.length() > 0 && payload != null && payload.length() > 0) {
+            Intent contentIntent = new Intent();
+            contentIntent.putExtra("message", payload);
+            contentIntent.putExtra("alert", alert);
+            contentIntent.putExtra("id", Constants.INTENT_ID);
+            launchIntent.putExtra(Constants.NOTIFICATION_INTENT_CHANNEL, contentIntent);
+        }
+        notificationIntent.putExtra(Constants.TRAVELER_NOTIFICATION_INTENT, launchIntent);
+        return notificationIntent;
     }
 
     public boolean isAppRunning(Context context) {

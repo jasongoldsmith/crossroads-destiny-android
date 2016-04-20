@@ -2,6 +2,7 @@ package com.example.sharmha.travelerfordestiny.utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -320,7 +322,6 @@ public class Util {
     }
 
     public static void picassoLoadIcon(Context c, ImageView eventIcon, String url, int height, int width, int avatar) {
-
         if (url != null) {
             Picasso.with(c).load(url)
                     .resizeDimen(width, height)
@@ -338,4 +339,11 @@ public class Util {
                     });
         }
     }
+
+//    public static void clearNotification(Bundle extras) {
+//        int id = extras.getInt("id");
+//        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+//        notificationManager.cancel(NOTIFICATION_ID);
+//
+//    }
 }

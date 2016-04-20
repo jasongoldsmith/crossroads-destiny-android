@@ -96,13 +96,73 @@
             android:text="EVENT DETAILS"/>
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:id="@+id/notification_bar"
+        android:background="@color/app_theme_color"
+        android:layout_below="@+id/eventdetail_top_layout"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/noti_icon"
+            android:src="@drawable/icon_alert"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="15dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/noti_toptext"
+            android:layout_toRightOf="@+id/noti_icon"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="12dp"
+            android:text="YOUR FIRETEAM IS READY"
+            android:textColor="#ffc600"
+            android:textSize="12sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/noti_text"
+            android:layout_toRightOf="@+id/noti_icon"
+            android:text="missing event type"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/trimbe_white"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="30dp"
+            android:textSize="12sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/noti_subtext"
+            android:layout_toRightOf="@+id/noti_icon"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/trimbe_white"
+            android:layout_marginLeft="15dp"
+            android:maxLines = "10"
+            android:scrollbars = "vertical"
+            android:layout_marginTop="47dp"
+            android:textSize="12sp"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/noti_close"
+            android:src="@drawable/icon_close_sm"
+            android:layout_alignParentRight="true"
+            android:paddingRight="17dp"
+            android:paddingTop="9dp"/>
+
+    </RelativeLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/event_detail_top_frag"
         android:orientation="horizontal"
-        android:layout_below="@+id/eventdetail_top_layout"
+        android:layout_below="@+id/notification_bar"
         android:layout_marginTop="22dp">
 
         <com.example.sharmha.travelerfordestiny.utils.CircularImageView
@@ -157,7 +217,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/eventDetailDate"
                 android:layout_below="@+id/activity_player_name_detail"
-                android:textColor="#ffc600"
+                android:textColor="@color/activity_light_color"
                 android:textSize="12sp"/>
         </RelativeLayout>
 
@@ -167,7 +227,7 @@
             android:text=""
             android:id="@+id/activity_aLight_detail"
             android:textSize="20sp"
-            android:textColor="#ffc600"
+            android:textColor="@color/activity_light_color"
             android:layout_alignParentRight="true"
             android:layout_marginRight="14dp">
         </TextView>
@@ -204,69 +264,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="36dp"-->
-        <!--android:id="@+id/eventdetail_jointeam_layout"-->
-        <!--android:layout_below="@+id/event_player"-->
-        <!--android:layout_marginLeft="17dp"-->
-        <!--android:layout_marginRight="9dp"-->
-        <!--android:layout_marginTop="15dp"-->
-        <!--android:visibility="gone">-->
-        <!--<RelativeLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentLeft="true"-->
-            <!--android:id="@+id/image_join">-->
-            <!--<ImageView-->
-                <!--android:layout_width="@dimen/eventdetail_player_profile_width"-->
-                <!--android:layout_height="@dimen/eventdetail_player_profile_hgt"-->
-                <!--android:src="@drawable/img_avatar_empty"/>-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--android:text="+"-->
-                <!--android:textSize="28sp"/>-->
-        <!--</RelativeLayout>-->
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="18dp"-->
-            <!--android:textColor="@android:color/white"-->
-            <!--android:textSize="12sp"-->
-            <!--android:layout_toRightOf="@+id/image_join"-->
-            <!--android:text="JOIN TEAM"-->
-            <!--android:layout_centerVertical="true"/>-->
-
-    <!--</RelativeLayout>-->
-
-    <!--<Button-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="40dp"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_margin="10dp"-->
-        <!--android:id="@+id/leave_event"-->
-        <!--android:text="LEAVE TEAM"-->
-        <!--android:textSize="12sp"-->
-        <!--android:background="@color/status_bar_color"-->
-        <!--android:textColor="@android:color/white"-->
-        <!--android:visibility="gone"/>-->
-
-    <!--<Button-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="40dp"-->
-        <!--android:layout_above="@+id/leave_event"-->
-        <!--android:layout_below="@+id/eventdetail_jointeam_layout"-->
-        <!--android:layout_margin="10dp"-->
-        <!--android:layout_marginBottom="20dp"-->
-        <!--android:id="@+id/msg_all"-->
-        <!--android:text="MESSAGE ALL"-->
-        <!--android:textSize="12sp"-->
-        <!--android:background="@color/status_bar_color"-->
-        <!--android:textColor="@android:color/white"-->
-        <!--android:visibility="gone"/>-->
-
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -277,7 +274,7 @@
             android:layout_height="50dp"
             android:id="@+id/join_btn"
             android:background="#0086d0"
-            android:text="JOIN"
+            android:text="@string/join_event"
             android:fontFamily="sans-serif"
             android:textStyle="bold"
             android:textColor="@android:color/white"
@@ -289,8 +286,8 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:id="@+id/leave_btn"
-            android:background="#0086d0"
-            android:text="LEAVE"
+            android:background="@color/activity_light_color"
+            android:text="@string/leave_event"
             android:fontFamily="sans-serif"
             android:textStyle="bold"
             android:textColor="@android:color/white"
@@ -303,7 +300,7 @@
             android:layout_height="50dp"
             android:id="@+id/messageall_btn"
             android:background="#0086d0"
-            android:text="MESSAGE ALL"
+            android:text="@string/message_all"
             android:fontFamily="sans-serif"
             android:textStyle="bold"
             android:textColor="@android:color/white"
@@ -375,7 +372,8 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:textSize="13sp"
-                    android:inputType="textMultiLine"/>
+                    android:inputType="textMultiLine"
+                    android:maxLength="140"/>
 
                 <ImageView
                     android:layout_width="wrap_content"

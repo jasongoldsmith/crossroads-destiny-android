@@ -211,9 +211,9 @@ public class BlankFragment extends Fragment {
                         uploadPlayerImg(holder, profileUrl, y, i);
                 }
 
-                allNames = "Created by " + this.elistLocal.get(position).getCreatorData().getPsnId();
+                allNames = this.elistLocal.get(position).getCreatorData().getPsnId();
                 if (!status.equalsIgnoreCase("full")) {
-                    allNamesRem = ", " + "LF" + reqPlayer + "M";
+                    allNamesRem = " " + "LF" + reqPlayer + "M";
                 }
 
                 if (status != null && !status.equalsIgnoreCase("")) {
@@ -273,6 +273,7 @@ public class BlankFragment extends Fragment {
                     }
                 });
 
+                holder.eventaLight.setText("");
                 if (l > 0) {
                     holder.eventaLight.setText("+" + String.valueOf(l));
                 }
@@ -281,6 +282,8 @@ public class BlankFragment extends Fragment {
 
                 holder.eventPlayerNames.setText(allNames);
                 holder.eventPlayerNameCnt.setText(allNamesRem);
+
+                holder.eventaLight.invalidate();
 
                 Util.picassoLoadIcon(mContext, holder.eventIcon, url, R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.img_i_c_o_n_r_a_i_d);
             }

@@ -47,6 +47,7 @@ public class LoginActivity extends Activity implements Observer {
     private TextView errText;
     private ImageView close_err;
     private ProgressDialog dialog;
+    private Intent localPushEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,10 @@ public class LoginActivity extends Activity implements Observer {
 
         Bundle b = getIntent().getExtras();
         user = b.getParcelable("userdata");
+
+        if(b.containsKey("eventIntent")) {
+            localPushEvent = (Intent) b.get("eventIntent");
+        }
 
         name_login = (EditText) findViewById(R.id.login_name);
         pswd_login = (EditText) findViewById(R.id.login_pswrd);
@@ -247,6 +252,9 @@ public class LoginActivity extends Activity implements Observer {
 //                    ListActivity.class);
             Intent regIntent = new Intent(getApplicationContext(),
                     ListActivityFragment.class);
+            if(localPushEvent!=null){
+                regIntent.putExtra("eventIntent", localPushEvent);
+            }
             regIntent.putExtra("userdata", ud);
             startActivity(regIntent);
             finish();

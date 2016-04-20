@@ -5,7 +5,11 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Typeface;
@@ -14,6 +18,7 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.ScrollingMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -126,7 +131,11 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
     private int hour;
     private int minute;
 
-
+    private RelativeLayout notiBar;
+    private TextView notiMessage;
+    private TextView notiTopText;
+    private TextView notiEventText;
+    private ImageView notif_close;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,6 +229,20 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
         //mCheckpointAdapter = new CustomAdapter();
 
         mCheckpointRecycler.setAdapter(mCheckpointAdapter);
+
+        notiBar = (RelativeLayout) findViewById(R.id.notification_bar);
+        notiEventText = (TextView) findViewById(R.id.noti_text);
+
+        notiTopText = (TextView) findViewById(R.id.noti_toptext);
+        notiMessage = (TextView) findViewById(R.id.noti_subtext);
+        notiMessage.setMovementMethod(new ScrollingMovementMethod());
+        notif_close = (ImageView) findViewById(R.id.noti_close);
+        notif_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                notiBar.setVisibility(View.GONE);
+            }
+        });
 
         vf = (ViewFlipper) findViewById( R.id.viewFlipper );
 
@@ -462,6 +485,32 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
         return null;
 
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        registerReceiver(ReceivefromService, new IntentFilter("subtype_flag"));
+    }
+
+    private BroadcastReceiver ReceivefromService = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String subtype = intent.getStringExtra("subtype");
+            boolean playerMsg = intent.getBooleanExtra("playerMessage", false);
+            String msg = intent.getStringExtra("message");
+            notiEventText.setText(subtype);
+            if(playerMsg){
+                notiTopText.setText("FIRETEAM MESSAGE");
+                notiMessage.setVisibility(View.VISIBLE);
+                notiMessage.setText(msg);
+            }else {
+                notiTopText.setText("YOUR FIRETEAM IS READY");
+                notiMessage.setVisibility(View.GONE);
+                //mManager.getEventList(ListActivityFragment.this);
+            }
+            notiBar.setVisibility(View.VISIBLE);
+        }
+    };
 
     protected TimePickerDialog.OnTimeSetListener timePickerListener =  new TimePickerDialog.OnTimeSetListener() {
 

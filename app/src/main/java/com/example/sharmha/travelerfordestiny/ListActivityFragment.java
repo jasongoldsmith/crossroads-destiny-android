@@ -30,6 +30,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.sharmha.travelerfordestiny.data.ActivityData;
+import com.example.sharmha.travelerfordestiny.data.CurrentEventDataHolder;
 import com.example.sharmha.travelerfordestiny.data.EventData;
 import com.example.sharmha.travelerfordestiny.data.EventList;
 import com.example.sharmha.travelerfordestiny.data.UserData;
@@ -41,6 +43,9 @@ import com.example.sharmha.travelerfordestiny.utils.SendBackpressBroadcast;
 import com.example.sharmha.travelerfordestiny.utils.Util;
 import com.example.sharmha.travellerdestiny.R;
 import com.loopj.android.http.RequestParams;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -77,6 +82,8 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     private TextView crash_report;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+
+    private EventData pushEventObject;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +94,15 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         //hideStatusBar();
         Bundle b = getIntent().getExtras();
         user = b.getParcelable("userdata");
+        if(b.containsKey("eventIntent")){
+            Intent localPushEventObj = (Intent)b.get("eventIntent");
+            if(localPushEventObj.hasExtra("message")) {
+                String payload = localPushEventObj.getStringExtra("message");
+                createPushEventObj(payload);
+            }
+            //Util.clearNotification(localPushEventObj.getExtras());
+            this.getIntent().removeExtra("eventIntent");
+        }
 
         mManager = ControlManager.getmInstance();
         mManager.setCurrentActivity(this);
@@ -272,6 +288,50 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if(pushEventObject==null) {
+            if (this.getIntent().hasExtra("eventIntent")) {
+                Intent cIntent = (Intent) this.getIntent().getExtras().get("eventIntent");
+                String contentIntent = cIntent.getExtras().get("message").toString();
+                createPushEventObj(contentIntent);
+            }
+        }
+    }
+
+    private void createPushEventObj(String payload) {
+        pushEventObject = new EventData();
+        try {
+            JSONObject jsonObj = new JSONObject(payload);
+
+            if(jsonObj.has("event")) {
+                pushEventObject.toJson((JSONObject) jsonObj.get("event"));
+            } else {
+                pushEventObject.toJson(jsonObj);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void launchPushEventDetail() {
+        if(pushEventObject!=null) {
+            if (pushEventObject.getActivityData() != null) {
+                if (pushEventObject.getActivityData().getActivitySubtype() != null) {
+                    CurrentEventDataHolder ins = CurrentEventDataHolder.getInstance();
+                    ins.setData(pushEventObject);
+                    //launch eventdetailactivity
+                    //start new activity for event
+                    Intent regIntent = new Intent(this,
+                            EventDetailActivity.class);
+                    regIntent.putExtra("userdata", user);
+                    startActivity(regIntent);
+                }
+            }
+        }
+    }
+
     private void setTRansparentStatusBar() {
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -320,20 +380,22 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     private BroadcastReceiver ReceivefromService = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String subtype = intent.getStringExtra("subtype");
-            boolean playerMsg = intent.getBooleanExtra("playerMessage", false);
-            String msg = intent.getStringExtra("message");
-            notiEventText.setText(subtype);
-            if(playerMsg){
-                notiTopText.setText("FIRETEAM MESSAGE");
-                notiMessage.setVisibility(View.VISIBLE);
-                notiMessage.setText(msg);
-            }else {
-                notiTopText.setText("YOUR FIRETEAM IS READY");
-                notiMessage.setVisibility(View.GONE);
-                mManager.getEventList(ListActivityFragment.this);
+            if (mManager.getCurrentActivity() == ListActivityFragment.this) {
+                String subtype = intent.getStringExtra("subtype");
+                boolean playerMsg = intent.getBooleanExtra("playerMessage", false);
+                String msg = intent.getStringExtra("message");
+                notiEventText.setText(subtype);
+                if (playerMsg) {
+                    notiTopText.setText("FIRETEAM MESSAGE");
+                    notiMessage.setVisibility(View.VISIBLE);
+                    notiMessage.setText(msg);
+                } else {
+                    notiTopText.setText("YOUR FIRETEAM IS READY");
+                    notiMessage.setVisibility(View.GONE);
+                    mManager.getEventList(ListActivityFragment.this);
+                }
+                notiBar.setVisibility(View.VISIBLE);
             }
-            notiBar.setVisibility(View.VISIBLE);
         }
     };
 
@@ -436,6 +498,10 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             }
             eData = eList.getEventList();
             createUpcomingCurrentList(eData);
+            if(pushEventObject!=null){
+                launchPushEventDetail();
+                pushEventObject=null;
+            }
             updateCurrentFrag();
         }else if (observable instanceof EventRelationshipHandlerNetwork) {
             EventData ed = new EventData();
@@ -455,6 +521,8 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                     }
                 }
             }
+            //to update all lists in the background
+            mManager.getEventList(ListActivityFragment.this);
         }
     }
 

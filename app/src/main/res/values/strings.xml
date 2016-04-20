@@ -12,4 +12,8 @@
     <string name="date_default">Date - Today</string>
     <string name="time_default">Time - Now</string>
 
+    <string name="leave_event">LEAVE EVENT</string>
+    <string name="join_event">JOIN</string>
+    <string name="message_all">MESSAGE ALL</string>
+
 </resources>

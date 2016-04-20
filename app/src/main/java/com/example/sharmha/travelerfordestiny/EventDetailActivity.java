@@ -1,18 +1,20 @@
 package com.example.sharmha.travelerfordestiny;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.graphics.Color;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -24,7 +26,6 @@ import com.example.sharmha.travelerfordestiny.data.PlayerData;
 import com.example.sharmha.travelerfordestiny.data.UserData;
 import com.example.sharmha.travelerfordestiny.network.EventRelationshipHandlerNetwork;
 import com.example.sharmha.travelerfordestiny.network.EventSendMessageNetwork;
-import com.example.sharmha.travelerfordestiny.network.NetworkEngine;
 import com.example.sharmha.travelerfordestiny.utils.CircularImageView;
 import com.example.sharmha.travelerfordestiny.utils.Constants;
 import com.example.sharmha.travelerfordestiny.utils.Util;
@@ -64,6 +65,11 @@ public class EventDetailActivity extends Activity implements Observer {
     private TextView leaveBtn;
     private TextView msgallBtn;
 
+    private RelativeLayout notiBar;
+    private TextView notiMessage;
+    private TextView notiTopText;
+    private TextView notiEventText;
+
     private TextView editMsgPlayer;
 
 //    private Button leaveEvent;
@@ -72,6 +78,7 @@ public class EventDetailActivity extends Activity implements Observer {
     private boolean joinBtnActive;
     private TextView eventDetailDate;
     private boolean userIsPlayer;
+    private ImageView notif_close;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +95,8 @@ public class EventDetailActivity extends Activity implements Observer {
         //setTRansparentStatusBar();
 
         controlManager = ControlManager.getmInstance();
+
+        controlManager.setCurrentActivity(EventDetailActivity.this);
 
         _handler = new Handler();
 
@@ -107,9 +116,6 @@ public class EventDetailActivity extends Activity implements Observer {
         back = (ImageView) findViewById(R.id.eventdetail_backbtn);
         eventDetailDate = (TextView) findViewById(R.id.eventDetailDate);
 
-//        leaveEvent = (Button) findViewById(R.id.leave_event);
-//        msgAll = (Button) findViewById(R.id.msg_all);
-
         sendmsg_bckgrnd = (RelativeLayout) findViewById(R.id.sendmsg_background);
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -122,16 +128,19 @@ public class EventDetailActivity extends Activity implements Observer {
         editText = (EditText) findViewById(R.id.edittext);
         sendBtn = (ImageView) findViewById(R.id.send_btn);
 
-//        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
-//                    // the user is done typing.
-//                    sendMessage();
-//                }
-//                return false;
-//            }
-//        });
+        notiBar = (RelativeLayout) findViewById(R.id.notification_bar);
+        notiEventText = (TextView) findViewById(R.id.noti_text);
+
+        notiTopText = (TextView) findViewById(R.id.noti_toptext);
+        notiMessage = (TextView) findViewById(R.id.noti_subtext);
+        notiMessage.setMovementMethod(new ScrollingMovementMethod());
+        notif_close = (ImageView) findViewById(R.id.noti_close);
+        notif_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                notiBar.setVisibility(View.GONE);
+            }
+        });
 
         if(currEvent.getActivityData().getActivityIconUrl()!=null) {
             Util.picassoLoadIcon(EventDetailActivity.this, eventProfileImg, currEvent.getActivityData().getActivityIconUrl(), R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.img_i_c_o_n_r_a_i_d);
@@ -148,13 +157,6 @@ public class EventDetailActivity extends Activity implements Observer {
         if (user.getImageUrl()!=null){
             Util.picassoLoadIcon(EventDetailActivity.this, userProfile, user.getImageUrl(), R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.img_avatar_you);
         }
-
-        //jointeam = (RelativeLayout) findViewById(R.id.eventdetail_jointeam_layout);
-//        if(inst.getJoinVisible()){
-//            jointeam.setVisibility(View.VISIBLE);
-//        }else {
-//            leaveEvent.setVisibility(View.VISIBLE);
-//        }
 
         checkUserIsPlayer();
         joinBtn.setOnClickListener(new View.OnClickListener() {
@@ -194,19 +196,6 @@ public class EventDetailActivity extends Activity implements Observer {
 
         sendMessageLayout = (RelativeLayout) findViewById(R.id.send_message_layout);
 
-//        String allNames = "";
-//        String allNamesRem = "";
-//        int reqPlayer = currEvent.getActivityData().getMaxPlayer() - currEvent.getPlayerData().size();
-//
-//        allNames = "Created by " + currEvent.getCreatorData().getPsnId();
-//        if (!currEvent.getEventStatus().equalsIgnoreCase("full")) {
-//            allNamesRem = ", " + "LF" +reqPlayer+"M";
-//        }
-//
-//        eventSubName.setText(allNames);
-//        eventSubNameLF.setText(allNamesRem);
-//        int i = currEvent.getPlayerData().size();
-
         sendmsg_bckgrnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -237,6 +226,32 @@ public class EventDetailActivity extends Activity implements Observer {
         });
 
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        registerReceiver(ReceivefromService, new IntentFilter("subtype_flag"));
+    }
+
+    private BroadcastReceiver ReceivefromService = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String subtype = intent.getStringExtra("subtype");
+            boolean playerMsg = intent.getBooleanExtra("playerMessage", false);
+            String msg = intent.getStringExtra("message");
+            notiEventText.setText(subtype);
+            if(playerMsg){
+                notiTopText.setText("FIRETEAM MESSAGE");
+                notiMessage.setVisibility(View.VISIBLE);
+                notiMessage.setText(msg);
+            }else {
+                notiTopText.setText("YOUR FIRETEAM IS READY");
+                notiMessage.setVisibility(View.GONE);
+                //mManager.getEventList(ListActivityFragment.this);
+            }
+            notiBar.setVisibility(View.VISIBLE);
+        }
+    };
 
     private void setBottomButtonSelection() {
         if(checkUserIsCreator()){
@@ -288,37 +303,18 @@ public class EventDetailActivity extends Activity implements Observer {
         }
     }
 
-//    private void setSendMsgToAllVisibility() {
-//        if(currEvent!=null) {
-//            if(currEvent.getCreatorData()!=null && currEvent.getCreatorData().getPlayerId()!=null) {
-//                if(user!=null && user.getUserId()!=null){
-//                    if(currEvent.getCreatorData().getPlayerId().equalsIgnoreCase(user.getUserId())) {
-//                        msgAll.setVisibility(View.VISIBLE);
-//                    }
-//                }
-//            }
-//        }
-//    }
-
     private void setPlayerNames() {
         String allNames = "";
         String allNamesRem = "";
         int reqPlayer = currEvent.getActivityData().getMaxPlayer() - currEvent.getPlayerData().size();
 
-        allNames = "Created by " + currEvent.getCreatorData().getPsnId();
+        allNames = currEvent.getCreatorData().getPsnId();
         if (!currEvent.getEventStatus().equalsIgnoreCase("full")) {
-            allNamesRem = ", " + "LF" +reqPlayer+"M";
+            allNamesRem = " " + "LF" +reqPlayer+"M";
         }
 
         eventSubName.setText(allNames);
         eventSubNameLF.setText(allNamesRem);
-    }
-
-    private void setTRansparentStatusBar() {
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
     }
 
     @Override
@@ -357,26 +353,6 @@ public class EventDetailActivity extends Activity implements Observer {
         hideKeyboard();
     }
 
-//    private void checkLeaveBtn() {
-//        boolean userPresent=false;
-//        if(this.currEvent.getPlayerData()!=null){
-//            for (int i=0; i<currEvent.getPlayerData().size(); i++){
-//                if(user.getUserId().equalsIgnoreCase(currEvent.getPlayerData().get(i).getPlayerId())){
-//                    leaveEvent.setVisibility(View.VISIBLE);
-////                    jointeam.setVisibility(View.GONE);
-//                    //joinBtnActive = false;
-//                    userPresent = true;
-//                    break;
-//                }
-//            }
-//            if(!userPresent) {
-////                jointeam.setVisibility(View.VISIBLE);
-//                leaveEvent.setVisibility(View.GONE);
-//                //joinBtnActive = true;
-//            }
-//        }
-//    }
-
     private boolean checkUserIsPlayer(){
         if(this.currEvent.getPlayerData()!=null) {
             for (int i = 0; i < currEvent.getPlayerData().size(); i++) {
@@ -396,26 +372,6 @@ public class EventDetailActivity extends Activity implements Observer {
         }
         return false;
     }
-
-//    private void checkJoinLeaveBtn() {
-//        boolean userPresent=false;
-//        if(this.currEvent.getPlayerData()!=null){
-//            for (int i=0; i<currEvent.getPlayerData().size(); i++){
-//                if(user.getUserId().equalsIgnoreCase(currEvent.getPlayerData().get(i).getPlayerId())){
-//                    leaveEvent.setVisibility(View.VISIBLE);
-//                    jointeam.setVisibility(View.GONE);
-//                    //joinBtnActive = false;
-//                    userPresent = true;
-//                    break;
-//                }
-//            }
-//            if(!userPresent) {
-//                jointeam.setVisibility(View.VISIBLE);
-//                leaveEvent.setVisibility(View.GONE);
-//                //joinBtnActive = true;
-//            }
-//        }
-//    }
 
     private class CurrentEventsViewAdapter extends RecyclerView.Adapter<CurrentEventsViewAdapter.CurrentEventsViewHolder> {
 
@@ -459,73 +415,81 @@ public class EventDetailActivity extends Activity implements Observer {
         @Override
         public void onBindViewHolder(CurrentEventsViewHolder holder, final int position) {
             String currPlayerId = null;
-            if (playerLocal.get(position)!=null){
-                if(playerLocal.get(position).getPlayerId()!=null){
-                   currPlayerId = playerLocal.get(position).getPlayerId();
-                }
-                if (playerLocal.get(position).getPlayerImageUrl()!=null){
-                    Util.picassoLoadIcon(EventDetailActivity.this, holder.playerProfile, playerLocal.get(position).getPlayerImageUrl(),
-                            R.dimen.eventdetail_player_profile_hgt, R.dimen.eventdetail_player_profile_width, R.drawable.avatar36);
-                }
-                if (playerLocal.get(position).getPsnId() != null) {
-                    holder.playerName.setText(playerLocal.get(position).getPsnId());
-                }
-
-//                if(inst.getJoinVisible() || playerLocal.get(position).getPlayerId().equalsIgnoreCase(user.getUserId()) || (!playerLocal.get(position).getPlayerId().equalsIgnoreCase(currEvent.getCreatorData().getPlayerId()))) {
-//                    holder.message.setVisibility(View.GONE);
-//                }
-// Todo fix this logic
-//                if(currEvent.getCreatorData().getPlayerId().equalsIgnoreCase(user.getUserId())&&(!playerLocal.get(position).getPlayerId().equalsIgnoreCase(currEvent.getCreatorData().getPlayerId()))){
-//                    holder.message.setVisibility(View.VISIBLE);
-//                }
-//
-//                if ((!userIsPlayer) && (currEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL))){
-//                    holder.message.setVisibility(View.GONE);
-//                }
-                holder.message.setVisibility(View.GONE);
-
-                if(checkUserIsCreator() && (!playerLocal.get(position).getPlayerId().equalsIgnoreCase(currEvent.getCreatorData().getPlayerId()))){
-                    holder.message.setVisibility(View.VISIBLE);
-                } if ((checkUserIsPlayer() && !checkUserIsCreator()) && (playerLocal.get(position).getPlayerId().equalsIgnoreCase(currEvent.getCreatorData().getPlayerId()))){
-                    holder.message.setVisibility(View.VISIBLE);
-                }
-
-                final String finalCurrPlayerId = currPlayerId;
-                holder.message.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (sendmsg_bckgrnd != null) {
-                            sendmsg_bckgrnd.setVisibility(View.VISIBLE);
-                            editMsgPlayer.setText(playerLocal.get(position).getPsnId());
-                            showKeyboard();
+            if(playerLocal!=null) {
+                if (position >= playerLocal.size() && getMaxPlayer() > playerLocal.size() ) {
+                    holder.playerName.setText("searching...");
+                    holder.playerProfile.setBackground(getResources().getDrawable(R.drawable.icon_profile_blank));
+                } else {
+                    if (playerLocal.get(position) != null) {
+                        if (playerLocal.get(position).getPlayerId() != null) {
+                            currPlayerId = playerLocal.get(position).getPlayerId();
+                        }
+                        if (playerLocal.get(position).getPlayerImageUrl() != null) {
+                            Util.picassoLoadIcon(EventDetailActivity.this, holder.playerProfile, playerLocal.get(position).getPlayerImageUrl(),
+                                    R.dimen.eventdetail_player_profile_hgt, R.dimen.eventdetail_player_profile_width, R.drawable.avatar36);
+                        }
+                        if (playerLocal.get(position).getPsnId() != null) {
+                            holder.playerName.setText(playerLocal.get(position).getPsnId());
                         }
 
-                        if (sendBtn != null) {
-                            sendBtn.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    //v.setEnabled(false);
-                                    String s = getEditText();
-                                    if(s!=null) {
-                                        sendMessage(finalCurrPlayerId, s);
-                                    }
+                        holder.message.setVisibility(View.GONE);
+
+                        if (checkUserIsCreator() && (!playerLocal.get(position).getPlayerId().equalsIgnoreCase(currEvent.getCreatorData().getPlayerId()))) {
+                            holder.message.setVisibility(View.VISIBLE);
+                        }
+                        if ((checkUserIsPlayer() && !checkUserIsCreator()) && (playerLocal.get(position).getPlayerId().equalsIgnoreCase(currEvent.getCreatorData().getPlayerId()))) {
+                            holder.message.setVisibility(View.VISIBLE);
+                        }
+
+                        final String finalCurrPlayerId = currPlayerId;
+                        holder.message.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (sendmsg_bckgrnd != null) {
+                                    sendmsg_bckgrnd.setVisibility(View.VISIBLE);
+                                    editMsgPlayer.setText(playerLocal.get(position).getPsnId());
+                                    showKeyboard();
                                 }
-                            });
-                        }
+
+                                if (sendBtn != null) {
+                                    sendBtn.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            //v.setEnabled(false);
+                                            String s = getEditText();
+                                            if (s != null) {
+                                                sendMessage(finalCurrPlayerId, s);
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
                     }
-                });
+                }
             }
         }
 
         @Override
         public int getItemCount() {
-            return playerLocal.size();
+            return getMaxPlayer();
         }
         @Override
         public void onAttachedToRecyclerView(RecyclerView recyclerView) {
             super.onAttachedToRecyclerView(recyclerView);
         }
 
+    }
+
+    private int getMaxPlayer() {
+        if(currEvent!=null){
+            if(currEvent.getActivityData()!=null){
+                if(currEvent.getActivityData().getMaxPlayer()>0){
+                    return currEvent.getActivityData().getMaxPlayer();
+                }
+            }
+        }
+        return 0;
     }
 
     private void showKeyboard() {

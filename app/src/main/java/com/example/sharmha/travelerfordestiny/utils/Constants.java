@@ -21,4 +21,7 @@ public class Constants {
     public final static int LOGIN = 1;
     public final static int REGISTER = 2;
 
+    public static final String TRAVELER_NOTIFICATION_INTENT = "com.example.sharmha.travelerfordestiny";
+    public static String NOTIFICATION_INTENT_CHANNEL = "com.example.sharmha.notificationintent";
+    public static int INTENT_ID = 9999;
 }
