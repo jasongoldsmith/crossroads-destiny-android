@@ -81,6 +81,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     private TextView createNewEventBtn;
     private TextView crash_report;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private TextView showVersion;
 
 
     private EventData pushEventObject;
@@ -245,6 +246,11 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 //                refreshItems();
 //            }
 //        });
+
+        showVersion = (TextView) findViewById(R.id.build_version);
+        if(Util.getApplicationVersionCode(ListActivityFragment.this)!=null){
+            showVersion.setText("Version - " + Util.getApplicationVersionCode(ListActivityFragment.this));
+        }
 
         viewPager.setOnTouchListener(new View.OnTouchListener() {
             @Override
