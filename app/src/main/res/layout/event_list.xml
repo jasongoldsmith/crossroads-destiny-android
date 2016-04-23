@@ -366,12 +366,18 @@
             android:layout_marginTop="44dp"
             android:visibility="gone"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
             android:id="@+id/logout_btn"
             android:layout_below="@+id/reset"
-            android:src="@drawable/btn_logout"
+            android:background="@color/logout_btn_background"
+            android:text="@string/logout"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:layout_marginRight="37dp"
+            android:layout_marginLeft="37dp"
+            android:gravity="center"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="55dp"/>
 
@@ -392,30 +398,27 @@
             android:layout_alignParentBottom="true"
             android:layout_margin="20dp"
             android:layout_centerInParent="true"
-            android:text="Report Crash"
+            android:text="@string/report_crash"
             android:textColor="@android:color/white"
             android:gravity="center"
-            android:background="#2b4249"/>
+            android:background="@color/logout_btn_background"/>
 
-        <!--<android.support.v7.widget.RecyclerView-->
-            <!--android:id="@+id/profile_drawer"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_below="@+id/profile_header"-->
-            <!--android:layout_gravity="start"-->
-            <!--android:choiceMode="singleChoice"-->
-            <!--android:divider="@drawable/profile_divider"-->
-            <!--android:dividerHeight="2dp" />-->
+    </RelativeLayout>
 
-        <!--<TextView-->
-            <!--android:id="@+id/logout_btn"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:textColor="@color/profile_logout"-->
-            <!--android:gravity="center_horizontal"-->
-            <!--android:text="Logout"-->
-            <!--android:textAppearance="?android:attr/textAppearanceListItemSmall" />-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/sample_background"
+        android:id="@+id/progress_bar_layout"
+        android:clickable="true"
+        android:visibility="gone">
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminateDrawable="@drawable/progress" />
     </RelativeLayout>
 
 </android.support.v4.widget.DrawerLayout>

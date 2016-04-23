@@ -8,7 +8,7 @@
     <android.support.v7.widget.CardView
         xmlns:conversation="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="144dp"
+        android:layout_height="wrap_content"
         android:id="@+id/event"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -17,14 +17,10 @@
         conversation:cardElevation="0dp">
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        <ImageView
-            android:src="@drawable/img_card_bg_new"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"/>
+            android:layout_width="wrap_content"
+            android:layout_height="122dp"
+            android:background="@drawable/img_card_bg_new"
+            android:id="@+id/fragment_event_mainlayout">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -61,7 +57,19 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/checkoint_text"
                     android:layout_below="@+id/activity_name"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/activity_light_color"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textSize="12sp"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/checkoint_text"
                     android:id="@+id/activity_player_name"
                     android:fontFamily="sans-serif"
                     android:textColor="@android:color/white"
@@ -75,8 +83,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/activity_player_name_lf"
-                    android:layout_below="@+id/activity_name"
-                    android:textColor="#ffc600"
+                    android:layout_below="@+id/checkoint_text"
+                    android:textColor="@color/activity_light_color"
                     android:layout_toRightOf="@+id/activity_player_name"
                     android:textSize="12sp" />
 
@@ -86,18 +94,18 @@
                     android:layout_below="@+id/activity_player_name"
                     android:id="@+id/event_time"
                     android:fontFamily="sans-serif"
-                    android:textColor="#ffc600"
+                    android:textStyle="italic"
+                    android:textColor="@android:color/white"
                     android:textSize="12sp" />
             </RelativeLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
                 android:id="@+id/activity_aLight"
                 android:textSize="20sp"
                 android:layout_marginRight="10dp"
-                android:textColor="#ffc600"
+                android:textColor="@color/activity_light_color"
                 android:layout_alignParentRight="true">
             </TextView>
 
@@ -109,8 +117,7 @@
             android:id="@+id/event_bottom_frag"
             android:layout_below="@+id/event_top_frag"
             android:orientation="horizontal"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp">
+            android:layout_marginTop="18dp">
 
             <!--<PlayerProfileImageView-->
                 <!--android:id="@+id/profile_icon"-->
@@ -169,7 +176,7 @@
                     android:textSize="12sp"
                     android:textColor="@android:color/white"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginLeft="10dp"
                     android:visibility="gone"/>
             </RelativeLayout>
 
@@ -195,17 +202,9 @@
                     android:visibility="gone"/>
 
             </RelativeLayout>
-
-        </RelativeLayout>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/img_view_detail"
-                android:layout_below="@+id/event_bottom_frag"
-                android:layout_marginLeft="60dp"/>
-
         </RelativeLayout>
 
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 

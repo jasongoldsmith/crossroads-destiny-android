@@ -6,6 +6,9 @@
     <dimen name="activity_icon_hgt">40dp</dimen>
     <dimen name="activity_icon_width">40dp</dimen>
 
+    <dimen name="activity_icon_hgt_createevent">28dp</dimen>
+    <dimen name="activity_icon_width_createevent">28dp</dimen>
+
     <dimen name="player_icon_hgt">40dp</dimen>
     <dimen name="player_icon_width">40dp</dimen>
 

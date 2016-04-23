@@ -71,14 +71,13 @@ public class EventDetailActivity extends Activity implements Observer {
     private TextView notiEventText;
 
     private TextView editMsgPlayer;
-
-//    private Button leaveEvent;
-//    private Button msgAll;
     private Handler _handler;
     private boolean joinBtnActive;
     private TextView eventDetailDate;
     private boolean userIsPlayer;
     private ImageView notif_close;
+    private RelativeLayout progressBar;
+    private TextView eventCheckpoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +90,10 @@ public class EventDetailActivity extends Activity implements Observer {
         joinBtn = (TextView) findViewById(R.id.join_btn);
         leaveBtn = (TextView) findViewById(R.id.leave_btn);
         msgallBtn = (TextView) findViewById(R.id.messageall_btn);
+
+        progressBar = (RelativeLayout) findViewById(R.id.progress_bar_eventdetail_layout);
+
+        eventCheckpoint = (TextView) findViewById(R.id.eventDetailCheckpoint);
 
         //setTRansparentStatusBar();
 
@@ -152,6 +155,13 @@ public class EventDetailActivity extends Activity implements Observer {
 
         if (currEvent.getActivityData().getActivityLight()> 0) {
             eventLight.setText("+" + currEvent.getActivityData().getActivityLight());
+        } else if(currEvent.getActivityData().getActivityLevel()>0) {
+            eventLight.setText("lvl " + currEvent.getActivityData().getActivityLevel());
+        }
+
+        if(currEvent.getActivityData().getActivityCheckpoint()!=null && (!currEvent.getActivityData().getActivityCheckpoint().equalsIgnoreCase("null"))){
+            eventCheckpoint.setVisibility(View.VISIBLE);
+            eventCheckpoint.setText(currEvent.getActivityData().getActivityCheckpoint());
         }
 
         if (user.getImageUrl()!=null){
@@ -165,6 +175,8 @@ public class EventDetailActivity extends Activity implements Observer {
                 RequestParams rp = new RequestParams();
                 rp.put("eId", currEvent.getEventId());
                 rp.put("player", user.getUserId());
+                hideProgress();
+                showProgress();
                 controlManager.postJoinEvent(EventDetailActivity.this, rp);
             }
         });
@@ -175,6 +187,8 @@ public class EventDetailActivity extends Activity implements Observer {
                 RequestParams rp = new RequestParams();
                 rp.put("eId", currEvent.getEventId());
                 rp.put("player", user.getUserId());
+                hideProgress();
+                showProgress();
                 controlManager.postUnJoinEvent(EventDetailActivity.this, rp);
             }
         });
@@ -278,28 +292,40 @@ public class EventDetailActivity extends Activity implements Observer {
 
         if (sendBtn != null) {
             sendBtn.setOnClickListener(new View.OnClickListener() {
-                String msg=null;
+                String msg = null;
+
                 @Override
                 public void onClick(View v) {
-                    _handler.postDelayed(new Runnable() {
+                    _handler.post(new Runnable() {
                         @Override
                         public void run() {
                             for (int i = 0; i < currEvent.getPlayerData().size(); i++) {
-                                if (i==0){
+                                if (i == 0) {
                                     msg = getEditText();
                                 }
                                 if (!user.getUserId().equalsIgnoreCase(currEvent.getPlayerData().get(i).getPlayerId())) {
                                     //v.setEnabled(false);
-                                    if(msg!=null) {
+                                    if (msg != null) {
                                         sendMessage(currEvent.getPlayerData().get(i).getPlayerId(), msg);
                                     }
                                 }
                             }
                         }
-                    }, 500);
-                    //sendMessage(v, playerId);
+                    });
                 }
             });
+        }
+    }
+
+    private void showProgress() {
+        if(progressBar!=null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void hideProgress() {
+        if(progressBar!=null) {
+            progressBar.setVisibility(View.GONE);
         }
     }
 
@@ -319,27 +345,25 @@ public class EventDetailActivity extends Activity implements Observer {
 
     @Override
     public void update(Observable observable, Object data) {
-        if(observable instanceof EventRelationshipHandlerNetwork) {
-            //currEvent = new EventData();
-            this.currEvent = (EventData) data;
-            if (currEvent != null) {
-                if (currEvent.getPlayerData() != null) {
-                    if (mAdapter != null) {
-                        mAdapter.playerLocal.clear();
-                        mAdapter.addItem(currEvent.getPlayerData());
-                        mAdapter.notifyDataSetChanged();
+            hideProgress();
+            if (observable instanceof EventRelationshipHandlerNetwork) {
+                hideProgress();
+                this.currEvent = (EventData) data;
+                if (currEvent != null) {
+                    if (currEvent.getPlayerData() != null) {
+                        if (mAdapter != null) {
+                            mAdapter.playerLocal.clear();
+                            mAdapter.addItem(currEvent.getPlayerData());
+                            mAdapter.notifyDataSetChanged();
+                        }
+                        setPlayerNames();
+                        setBottomButtonSelection();
                     }
-                    setPlayerNames();
-                    setBottomButtonSelection();
-                    //checkJoinLeaveBtn();
-                    //jointeam.setVisibility(View.GONE);
                 }
-                //setSendMsgToAllVisibility();
+            } else if (observable instanceof EventSendMessageNetwork) {
+                editText.setText("");
+                hideSendMsgBckground();
             }
-        } else if(observable instanceof EventSendMessageNetwork) {
-            editText.setText("");
-            hideSendMsgBckground();
-        }
     }
 
     private void hideSendMsgBckground() {
@@ -418,7 +442,7 @@ public class EventDetailActivity extends Activity implements Observer {
             if(playerLocal!=null) {
                 if (position >= playerLocal.size() && getMaxPlayer() > playerLocal.size() ) {
                     holder.playerName.setText("searching...");
-                    holder.playerProfile.setBackground(getResources().getDrawable(R.drawable.icon_profile_blank));
+                    //holder.playerProfile.setBackground(getResources().getDrawable(R.drawable.img_profile_blank));
                 } else {
                     if (playerLocal.get(position) != null) {
                         if (playerLocal.get(position).getPlayerId() != null) {
@@ -526,6 +550,7 @@ public class EventDetailActivity extends Activity implements Observer {
 //                            @Override
 //                            public void run() {
                                 controlManager.postEventMessage(EventDetailActivity.this, msg, currentPlayerId, currEvent.getEventId());
+                        hideSendMsgBckground();
 //                            }
 //                            //hideSendMsgBckground();
 //                        }, 1000);

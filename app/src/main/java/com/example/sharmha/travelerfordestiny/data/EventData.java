@@ -21,7 +21,6 @@ public class EventData {
     private ArrayList<PlayerData> playerDataList;
     private CreatorData creatorData;
     private String launchDate;
-    private long _timeInMilliseconds;
     private String launchStatus;
     //private PlayerData playerData;
 
@@ -33,21 +32,6 @@ public class EventData {
 
     public void setEventId(String id) {
         eventId = id;
-    }
-
-    public void setTimeInMilliseconds(long timeInMilliseconds) {
-        this._timeInMilliseconds = timeInMilliseconds;
-    }
-
-    public long getTimeInMilliseconds() {
-        ensureTimeInMilliseconds();
-        return this._timeInMilliseconds;
-    }
-
-    private void ensureTimeInMilliseconds() {
-        if (this._timeInMilliseconds == 0) {
-            this._timeInMilliseconds = -Util.parseDate(getLaunchDate());
-        }
     }
 
     public String getEventId() {

@@ -1,11 +1,14 @@
 package com.example.sharmha.travelerfordestiny;
 
+import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -27,6 +30,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -68,7 +72,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     private CircularImageView userProfileDrawer;
     private TextView userNameDrawer;
     private DrawerLayout drawerLayout;
-    private ImageView logout;
+    private TextView logout;
     private ActionBarDrawerToggle mDrawerToggle;
     private RelativeLayout notiBar;
     private TextView notiEventText;
@@ -80,11 +84,11 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     private ImageView close_err;
     private TextView createNewEventBtn;
     private TextView crash_report;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     private TextView showVersion;
-
+    private RelativeLayout progress;
 
     private EventData pushEventObject;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,7 +112,11 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         mManager = ControlManager.getmInstance();
         mManager.setCurrentActivity(this);
 
+        mManager.postGetActivityList(this);
+
         mManager.getEventList(this);
+
+        progress = (RelativeLayout) findViewById(R.id.progress_bar_layout);
 
         userProfile = (ImageView) findViewById(R.id.userProfile);
         userProfileDrawer = (CircularImageView) findViewById(R.id.profile_avatar);
@@ -128,7 +136,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
         drawerLayout = (DrawerLayout) findViewById(R.id.out);
 
-        logout = (ImageView) findViewById(R.id.logout_btn);
+        logout = (TextView) findViewById(R.id.logout_btn);
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -237,16 +245,6 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             tab.setCustomView(pagerAdapter.getTabView(i));
         }
 
-//        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-//
-//        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                // Refresh items
-//                refreshItems();
-//            }
-//        });
-
         showVersion = (TextView) findViewById(R.id.build_version);
         if(Util.getApplicationVersionCode(ListActivityFragment.this)!=null){
             showVersion.setText("Version - " + Util.getApplicationVersionCode(ListActivityFragment.this));
@@ -291,7 +289,6 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                 startActivity(regIntent);
             }
         });
-
     }
 
     @Override
@@ -303,6 +300,18 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                 String contentIntent = cIntent.getExtras().get("message").toString();
                 createPushEventObj(contentIntent);
             }
+        }
+    }
+
+    public void showProgress() {
+        if(progress!=null) {
+            progress.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void hideProgress() {
+        if(progress!=null) {
+            progress.setVisibility(View.GONE);
         }
     }
 
@@ -338,11 +347,14 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setTRansparentStatusBar() {
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
     }
 
     private void openProfileDrawer(int gravity) {
@@ -361,15 +373,6 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     @Override
     public void onResume() {
         super.onResume();
-        //get current updated list from manager
-//        if (mManager!= null) {
-//            if (mManager.getEventListCurrent() != null) {
-//                mAdapter.elistLocal.clear();
-//                mAdapter.addItem(mManager.getEventListCurrent());
-//                mAdapter.notifyDataSetChanged();
-//            }
-//        }
-
         //get latest event list
         if (mManager!= null) {
             mManager.setCurrentActivity(this);
@@ -404,20 +407,6 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             }
         }
     };
-
-//    void refreshItems() {
-//        // Load items
-//        // ...
-//        mManager.getEventList(this);
-//
-//        // Stop refresh animation
-//        mSwipeRefreshLayout.setRefreshing(false);
-//
-//        // Load complete
-////        onItemsLoadComplete();
-//    }
-
-    //public getEventList
 
     class PagerAdapter extends FragmentPagerAdapter {
 
@@ -461,21 +450,11 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             return fragment;
         }
 
-//        public Fragment getRegisteredFragment(int position) {
-//            return registeredFragments.get(position);
-//        }
-//
-//        @Override
-//        public void destroyItem(ViewGroup container, int position, Object object) {
-//            registeredFragments.remove(position);
-//            super.destroyItem(container, position, object);
-//        }
-
         public View getTabView(int position) {
             View tab = LayoutInflater.from(ListActivityFragment.this).inflate(R.layout.custom_tab, null);
             TextView tv = (TextView) tab.findViewById(R.id.custom_text);
             tv.setTypeface(Typeface.SANS_SERIF, 1);
-            tv.setPadding(Util.dpToPx(42, ListActivityFragment.this), 25, 0, 0);
+            tv.setPadding(Util.dpToPx(43, ListActivityFragment.this), 25, 0, 0);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
             tv.setText(tabTitles[position]);
             return tab;
@@ -497,38 +476,42 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
     @Override
     public void update(Observable observable, Object data) {
-        if (observable instanceof EventListNetwork) {
-            eList = (EventList)data;
-            if(eData!=null) {
-                eData.clear();
-            }
-            eData = eList.getEventList();
-            createUpcomingCurrentList(eData);
-            if(pushEventObject!=null){
-                launchPushEventDetail();
-                pushEventObject=null;
-            }
-            updateCurrentFrag();
-        }else if (observable instanceof EventRelationshipHandlerNetwork) {
-            EventData ed = new EventData();
-            ed = (EventData) data;
-            if (this.eData != null) {
-                for (int i = 0; i < this.eData.size(); i++) {
-                    if (ed.getEventId().equalsIgnoreCase(this.eData.get(i).getEventId())) {
-                        if (ed.getMaxPlayer() > 0) {
-                            this.eData.remove(i);
-                            this.eData.add(i, ed);
-                        } else {
-                            this.eData.remove(i);
+        if (data != null) {
+            if (observable instanceof EventListNetwork) {
+                eList = (EventList) data;
+                if (eData != null) {
+                    eData.clear();
+                }
+                eData = eList.getEventList();
+                createUpcomingCurrentList(eData);
+                //Checking if current launch happened due to push notification click
+                if (pushEventObject != null) {
+                    launchPushEventDetail();
+                    pushEventObject = null;
+                }
+                updateCurrentFrag();
+            } else if (observable instanceof EventRelationshipHandlerNetwork) {
+                EventData ed = new EventData();
+                ed = (EventData) data;
+                if (this.eData != null) {
+                    for (int i = 0; i < this.eData.size(); i++) {
+                        if (ed.getEventId().equalsIgnoreCase(this.eData.get(i).getEventId())) {
+                            if (ed.getMaxPlayer() > 0) {
+                                this.eData.remove(i);
+                                this.eData.add(i, ed);
+                            } else {
+                                this.eData.remove(i);
+                            }
+                            createUpcomingCurrentList(eData);
+                            updateCurrentFrag();
+                            hideProgress();
+                            break;
                         }
-                        createUpcomingCurrentList(eData);
-                        updateCurrentFrag();
-                        break;
                     }
                 }
+                //to update all lists in the background
+                mManager.getEventList(ListActivityFragment.this);
             }
-            //to update all lists in the background
-            mManager.getEventList(ListActivityFragment.this);
         }
     }
 
@@ -544,13 +527,6 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                         fragmentCurrentEventList.add(currentEventList.get(i));
                     }
                 }
-//                if(currentEventList.get(i).getLaunchDate()!=null) {
-//                    if (Util.updateCurrEventOnTime(currentEventList.get(i).getLaunchDate())) {
-//                        fragmentCurrentEventList.add(currentEventList.get(i));
-//                    } else {
-//                        fragmentupcomingEventList.add(currentEventList.get(i));
-//                    }
-//                }
             }
         }
     }

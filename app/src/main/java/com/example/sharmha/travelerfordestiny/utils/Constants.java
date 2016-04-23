@@ -11,8 +11,12 @@ public class Constants {
     public static final String STATUS_OPEN = "open";
 
     public static final String ACTIVITY_RAID = "RAID";
-    public static final String ACTIVITY_WEEKLY = "WEEKLY";
+    public static final String ACTIVITY_ARENA = "ARENA";
     public static final String ACTIVITY_CRUCIBLE = "CRUCIBLE";
+    public static final String ACTIVITY_FEATURED = "FEATURED";
+    public static final String ACTIVITY_STRIKES = "STRIKE";
+    public static final String ACTIVITY_PATROL = "PATROL";
+
     public static final String LAUNCH_STATUS_UPCOMING = "upcoming";
     public static final String LAUNCH_STATUS_NOW = "now";
 

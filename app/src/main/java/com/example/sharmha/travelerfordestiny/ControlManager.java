@@ -98,18 +98,6 @@ public class ControlManager implements Observer{
         return null;
     }
 
-//    public void getEventList(ListActivity activity) {
-//        try {
-//            eventListNtwrk = new EventListNetwork(activity);
-//            eventListNtwrk.addObserver(activity);
-//            eventListNtwrk.addObserver(this);
-//            eventListNtwrk.getEvents();
-//            getAndroidVersion(activity);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     public void getEventList(ListActivityFragment activity) {
         try {
             eventListNtwrk = new EventListNetwork(activity);
@@ -154,25 +142,24 @@ public class ControlManager implements Observer{
 
     public void postGetActivityList(CreateNewEvent c) {
         try {
+                activityListNetwork = new ActivityListNetwork(c);
+                //activityListNetwork.addObserver(c);
+                activityListNetwork.addObserver(this);
+                activityListNetwork.postGetActivityList();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void postGetActivityList(ListActivityFragment c) {
+        try {
             activityListNetwork = new ActivityListNetwork(c);
-            activityListNetwork.addObserver(c);
             activityListNetwork.addObserver(this);
             activityListNetwork.postGetActivityList();
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-
-//    public void postUnJoinEvent(ListActivity activity, RequestParams params) {
-//        try {
-//            eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(activity);
-//            eventRelationshipNtwrk.addObserver(activity);
-//            eventRelationshipNtwrk.addObserver(this);
-//            eventRelationshipNtwrk.postUnJoin(params);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     public void postUnJoinEvent(ListActivityFragment activity, RequestParams params) {
         try {
@@ -200,9 +187,17 @@ public class ControlManager implements Observer{
         if (this.activityList!= null) {
             raidActivityList = new ArrayList<ActivityData>();
 
-            for (int i=0; i<activityList.size();i++) {
-                if (activityList.get(i).getActivityType().equalsIgnoreCase(tempActivityName)){
-                    raidActivityList.add(activityList.get(i));
+            if(tempActivityName.equalsIgnoreCase(Constants.ACTIVITY_FEATURED)) {
+                for (int i = 0; i < activityList.size(); i++) {
+                    if (activityList.get(i).getActivityFeature()) {
+                        raidActivityList.add(activityList.get(i));
+                    }
+                }
+            } else {
+                for (int i = 0; i < activityList.size(); i++) {
+                    if (activityList.get(i).getActivityType().equalsIgnoreCase(tempActivityName)) {
+                        raidActivityList.add(activityList.get(i));
+                    }
                 }
             }
             return this.raidActivityList;

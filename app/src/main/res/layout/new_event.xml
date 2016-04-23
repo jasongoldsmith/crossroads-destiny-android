@@ -207,19 +207,19 @@
                     android:id="@+id/first_img_layout">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:id="@+id/first_backgrnd"
-                        android:background="@drawable/img_i_c_o_n_r_a_i_d"
+                        android:background="@drawable/img_featured_icon"
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentTop="true"
-                        android:layout_marginTop="14dp"/>
+                        android:layout_marginTop="9dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/first"
-                        android:text="Raid"
+                        android:text="@string/featured"
                         android:fontFamily="sans-serif"
                         android:textStyle="bold"
                         android:layout_alignParentBottom="true"
@@ -237,7 +237,7 @@
                     android:layout_height="96dp"
                     android:id="@+id/new_event_card2"
                     android:layout_toRightOf="@+id/new_event_card"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="6dp"
                     conversation:cardBackgroundColor="#0086d0">
 
                 <RelativeLayout
@@ -246,19 +246,19 @@
                     android:id="@+id/second_img_layout">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:id="@+id/second_backgrnd"
-                        android:background="@drawable/icon_weeklies"
+                        android:background="@drawable/img_raids_icon"
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentTop="true"
-                        android:layout_marginTop="14dp"/>
+                        android:layout_marginTop="9dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/second"
-                        android:text="Weekly"
+                        android:text="@string/raids"
                         android:fontFamily="sans-serif"
                         android:textStyle="bold"
                         android:layout_alignParentBottom="true"
@@ -275,7 +275,7 @@
                     android:layout_height="96dp"
                     android:id="@+id/new_event_card3"
                     android:layout_toRightOf="@+id/new_event_card2"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="6dp"
                     conversation:cardBackgroundColor="#0086d0">
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -283,18 +283,18 @@
                     android:id="@+id/third_img_layout">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:id="@+id/third_backgrnd"
-                        android:background="@drawable/icon_crucible"
+                        android:background="@drawable/img_arena_icon"
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentTop="true"
-                        android:layout_marginTop="14dp"/>
+                        android:layout_marginTop="9dp"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/third"
-                        android:text="Crucible"
+                        android:text="@string/arena"
                         android:fontFamily="sans-serif"
                         android:textStyle="bold"
                         android:layout_alignParentBottom="true"
@@ -305,37 +305,119 @@
                 </RelativeLayout>
                 </android.support.v7.widget.CardView>
 
+                <android.support.v7.widget.CardView
+                    xmlns:conversation="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="94dp"
+                    android:layout_height="96dp"
+                    android:id="@+id/new_event_card4"
+                    android:layout_below="@+id/new_event_card"
+                    android:layout_marginTop="6dp"
+                    conversation:cardBackgroundColor="#0086d0">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/fourth_img_layout">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:id="@+id/fourth_backgrnd"
+                            android:background="@drawable/img_crucible_icon"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginTop="9dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/fourth"
+                            android:text="@string/crucible"
+                            android:fontFamily="sans-serif"
+                            android:textStyle="bold"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="7dp"
+                            android:textColor="@android:color/white"
+                            android:textSize="12sp"/>
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    xmlns:conversation="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="94dp"
+                    android:layout_height="96dp"
+                    android:id="@+id/new_event_card5"
+                    android:layout_below="@+id/new_event_card2"
+                    android:layout_toRightOf="@+id/new_event_card4"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    conversation:cardBackgroundColor="#0086d0">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/fifth_img_layout">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:id="@+id/fifth_backgrnd"
+                            android:background="@drawable/img_strikes_icon"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginTop="9dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/fifth"
+                            android:text="@string/strikes"
+                            android:fontFamily="sans-serif"
+                            android:textStyle="bold"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="7dp"
+                            android:textColor="@android:color/white"
+                            android:textSize="12sp"/>
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    xmlns:conversation="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="94dp"
+                    android:layout_height="96dp"
+                    android:id="@+id/new_event_card6"
+                    android:layout_below="@+id/new_event_card3"
+                    android:layout_toRightOf="@+id/new_event_card5"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    conversation:cardBackgroundColor="#0086d0">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/sixth_img_layout">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:id="@+id/sixth_backgrnd"
+                            android:background="@drawable/img_patrol_icon"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginTop="9dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/sixth"
+                            android:text="@string/patrol"
+                            android:fontFamily="sans-serif"
+                            android:textStyle="bold"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="7dp"
+                            android:textColor="@android:color/white"
+                            android:textSize="12sp"/>
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
             </RelativeLayout>
-
-            <!--<LinearLayout-->
-                <!--android:orientation="horizontal"-->
-                <!--android:layout_marginTop="50dp"-->
-                <!--android:layout_width="fill_parent" android:layout_height="wrap_content"-->
-                <!--android:layout_below="@+id/imagelayout">-->
-
-                <!--<Button-->
-                    <!--android:id="@+id/event_cancel"-->
-                    <!--android:layout_width="64dp" android:layout_height="36dp"-->
-                    <!--android:text="CANCEL"-->
-                    <!--android:textColor="@android:color/holo_green_dark"-->
-                    <!--android:background="@android:color/white"-->
-                    <!--android:layout_marginRight="10dp"-->
-                    <!--android:layout_marginLeft="10dp"-->
-                    <!--android:layout_weight="1.0"-->
-                    <!--android:visibility="gone"/>-->
-
-                <!--<Button-->
-                    <!--android:id="@+id/event_next"-->
-                    <!--android:layout_width="64dp" android:layout_height="36dp"-->
-                    <!--android:text="NEXT"-->
-                    <!--android:textColor="@android:color/white"-->
-                    <!--android:background="@android:color/holo_green_dark"-->
-                    <!--android:layout_marginLeft="10dp"-->
-                    <!--android:layout_marginRight="10dp"-->
-                    <!--android:layout_weight="1.0"-->
-                    <!--android:visibility="gone"/>-->
-
-            <!--</LinearLayout>-->
 
         </RelativeLayout>
 
@@ -350,28 +432,6 @@
                 android:src="@drawable/img_background_02"
                 android:background="@drawable/img_bg_gradient_register"
                 android:scaleType="fitXY"/>
-
-            <!--<ImageView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/event_icon"-->
-                <!--android:layout_marginTop="39dp"-->
-                <!--android:src="@drawable/img_i_c_o_n_r_a_i_d"-->
-                <!--android:layout_centerHorizontal="true"/>-->
-
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_below="@+id/event_icon"-->
-                <!--android:id="@+id/event_raid"-->
-                <!--android:layout_centerHorizontal="true"-->
-                <!--android:fontFamily="sans-serif"-->
-                <!--android:textStyle="bold"-->
-                <!--android:layout_marginTop="6dp"-->
-                <!--android:layout_marginBottom="15dp"-->
-                <!--android:text="R A I D"-->
-                <!--android:textColor="@android:color/white"-->
-                <!--android:textSize="16sp"/>-->
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -557,16 +617,6 @@
                 </RelativeLayout>
 
             </LinearLayout>
-            <!--<TextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="50dp"-->
-                <!--android:id="@+id/event_creation_date"-->
-                <!--android:layout_below="@id/event_creation_checkpoint"-->
-                <!--android:layout_margin="10dp"-->
-                <!--android:text="Start Time - Now"-->
-                <!--android:textColor="@android:color/white"-->
-                <!--android:background="#0086d0"-->
-                <!--android:gravity="center"/>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -583,22 +633,6 @@
                     android:id="@+id/activity_checkpoint_list" />
             </LinearLayout>
 
-
-            <LinearLayout
-                android:id="@+id/linlaHeaderProgress"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone" >
-
-                <ProgressBar
-                    android:id="@+id/pbHeaderProgress"
-                    style="?android:attr/progressBarStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                </ProgressBar>
-            </LinearLayout>
         </RelativeLayout>
 
     </ViewFlipper>
@@ -652,6 +686,22 @@
             android:layout_centerInParent="true"
             android:id="@+id/timePicker">
         </TimePicker>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/sample_background"
+        android:id="@+id/linlaHeaderProgress"
+        android:clickable="true"
+        android:visibility="gone">
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminateDrawable="@drawable/progress" />
     </RelativeLayout>
 
 </RelativeLayout>

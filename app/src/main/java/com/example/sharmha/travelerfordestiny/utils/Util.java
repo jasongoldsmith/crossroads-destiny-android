@@ -124,29 +124,6 @@ public class Util {
         return "ANDROID_ID_NOT_DEFINED";
     }
 
-    /**
-     * given a string, generate SHA-256 hash
-     *
-     * @param plain
-     * @return
-     */
-    public static String getDeviceSHA256Hash(String plain) {
-        try {
-            final MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(plain.getBytes());
-            byte byteData[] = md.digest();
-
-            // convert byte to hex
-            StringBuffer hex_string = new StringBuffer();
-            for (int i = 0; i < byteData.length; i++) {
-                hex_string.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
-            }
-            return hex_string.toString();
-        } catch (NoSuchAlgorithmException e) {
-            return "Exception_when_trying_to_generate_hash";
-        }
-    }
-
     public static void clearDefaults(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
@@ -231,22 +208,9 @@ public class Util {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         format = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
         String date = format.format(newDate);
         return date;
-
-
-//        Date fDate = null;
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-//        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-//        try {
-//            fDate = simpleDateFormat.parse(utcDate);
-//        } catch (ParseException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//        return fDate.toString();
     }
 
     public static long parseDate(String dateString) {
@@ -295,30 +259,20 @@ public class Util {
         return false;
     }
 
-    public static void getCurrentTime(String utcDate) {
+    public static String getCurrentTime() {
         Calendar cal = Calendar.getInstance();
-        TimeZone tz = cal.getTimeZone();
-        Date a = cal.getTime();
-        long b = cal.getTimeInMillis();
-        TimeZone c = cal.getTimeZone();
-        Date x;
 
-        long msFromEpochGmt = cal.getTimeInMillis();
-        long offsetFromUTC = tz.getOffset(msFromEpochGmt);
+        SimpleDateFormat df = new SimpleDateFormat("hh:mm a");
+        String formattedTime = df.format(cal.getTime());
+        return formattedTime;
+    }
 
-        DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        DateFormat pstFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        pstFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+    public static String getCurrentDate() {
+        Calendar c = Calendar.getInstance();
 
-        try {
-            Date date = utcFormat.parse(utcDate);
-            x = pstFormat.parse(utcDate);
-            System.out.println("Hardik" + "time is "+ x);
-            System.out.println("Hardik current time  " + a);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+        String formattedDate = df.format(c.getTime());
+        return formattedDate;
     }
 
     public static void picassoLoadIcon(Context c, ImageView eventIcon, String url, int height, int width, int avatar) {

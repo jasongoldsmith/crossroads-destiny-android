@@ -1,5 +1,6 @@
 package com.example.sharmha.travelerfordestiny;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,10 +9,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.sharmha.travelerfordestiny.data.CurrentEventDataHolder;
@@ -50,10 +54,8 @@ public class BlankFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mManager = ControlManager.getmInstance();
         user = mManager.getUserData();
-
     }
 
     @Override
@@ -114,6 +116,7 @@ public class BlankFragment extends Fragment {
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder
         public class MyViewHolder extends RecyclerView.ViewHolder {
+            private RelativeLayout event_card_mainLayout;
             private CardView event_card;
             protected TextView eventSubType;
             protected TextView eventPlayerNames;
@@ -127,10 +130,12 @@ public class BlankFragment extends Fragment {
             protected ImageView joinBtn;
             protected ImageView unjoinBtn;
             protected TextView eventDate;
+            protected TextView checkpointText;
 
             public MyViewHolder(View v) {
                 super(v);
                 view = v;
+                event_card_mainLayout = (RelativeLayout) v.findViewById(R.id.fragment_event_mainlayout);
                 event_card = (CardView) v.findViewById(R.id.event);
                 eventSubType = (TextView) v.findViewById(R.id.activity_name);
                 eventPlayerNames = (TextView) v.findViewById(R.id.activity_player_name);
@@ -144,6 +149,7 @@ public class BlankFragment extends Fragment {
                 unjoinBtn = (ImageView) v.findViewById(R.id.unjoin_btn);
                 eventPlayerNameCnt = (TextView) v.findViewById(R.id.activity_player_name_lf);
                 eventDate = (TextView) v.findViewById(R.id.event_time);
+                checkpointText = (TextView) v.findViewById(R.id.checkoint_text);
             }
         }
 
@@ -172,8 +178,14 @@ public class BlankFragment extends Fragment {
                 int reqPlayer = this.elistLocal.get(position).getActivityData().getMaxPlayer() - this.elistLocal.get(position).getPlayerData().size();
                 // get players
                 int i = this.elistLocal.get(position).getPlayerData().size();
+                int level = this.elistLocal.get(position).getActivityData().getActivityLevel();
+                String checkpoint = this.elistLocal.get(position).getActivityData().getActivityCheckpoint();
                 String creatorId = this.elistLocal.get(position).getCreatorData().getPlayerId();
                 final String status = this.elistLocal.get(position).getEventStatus();
+
+                holder.checkpointText.setVisibility(View.GONE);
+                holder.eventDate.setVisibility(View.GONE);
+                setCardViewLayoutParams(holder.event_card_mainLayout, 137);
 
                 if(creatorId!=null){
                     if (user!=null && user.getUserId()!=null){
@@ -183,14 +195,26 @@ public class BlankFragment extends Fragment {
                         }
                     }
                 }
-
-                if(elistLocal.get(position).getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING)) {
-                    String date  = Util.convertUTCtoReadable(elistLocal.get(position).getLaunchDate());
-                    if (date!=null){
-                        holder.eventDate.setText(date);
+                if(elistLocal.get(position).getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING) || (checkpoint!=null)) {
+                    if(elistLocal.get(position).getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING)) {
+                        String date = Util.convertUTCtoReadable(elistLocal.get(position).getLaunchDate());
+                        if (date != null) {
+                            holder.eventDate.setVisibility(View.VISIBLE);
+                            holder.eventDate.setText(date);
+                        }
+                        if (checkpoint != null && checkpoint.length() > 0 && (!checkpoint.equalsIgnoreCase("null"))) {
+                            holder.checkpointText.setVisibility(View.VISIBLE);
+                            holder.checkpointText.setText(checkpoint);
+                            setCardViewLayoutParams(holder.event_card_mainLayout, 177);
+                        } else {
+                            holder.checkpointText.setVisibility(View.GONE);
+                            setCardViewLayoutParams(holder.event_card_mainLayout, 155);
+                        }
+                    } else if (checkpoint != null && checkpoint.length() > 0 && (!checkpoint.equalsIgnoreCase("null"))) {
+                        holder.checkpointText.setVisibility(View.VISIBLE);
+                        holder.checkpointText.setText(checkpoint);
+                        setCardViewLayoutParams(holder.event_card_mainLayout, 155);
                     }
-                } else {
-                    holder.eventDate.setText("");
                 }
 
                 for (int y = 0; y < i; y++) {
@@ -224,6 +248,8 @@ public class BlankFragment extends Fragment {
                                 RequestParams rp = new RequestParams();
                                 rp.put("eId", eId);
                                 rp.put("player", user.getUserId());
+                                mContext.hideProgress();
+                                mContext.showProgress();
                                 mManager.postJoinEvent(mContext, rp);
                                 holder.joinBtn.setClickable(false);
                             }
@@ -235,6 +261,8 @@ public class BlankFragment extends Fragment {
                                 RequestParams rp = new RequestParams();
                                 rp.put("eId", eId);
                                 rp.put("player", user.getUserId());
+                                mContext.hideProgress();
+                                mContext.showProgress();
                                 mManager.postUnJoinEvent(mContext, rp);
                                 holder.unjoinBtn.setClickable(false);
                             }
@@ -275,7 +303,10 @@ public class BlankFragment extends Fragment {
 
                 holder.eventaLight.setText("");
                 if (l > 0) {
-                    holder.eventaLight.setText("+" + String.valueOf(l));
+                    String st = "\u2726";
+                    holder.eventaLight.setText(st + String.valueOf(l));
+                } else if(level>0) {
+                    holder.eventaLight.setText("lvl " + String.valueOf(level));
                 }
 
                 updateJoinButton(holder, status, CreatorIn, CreatorIsPlayer);
@@ -284,8 +315,19 @@ public class BlankFragment extends Fragment {
                 holder.eventPlayerNameCnt.setText(allNamesRem);
 
                 holder.eventaLight.invalidate();
+                holder.event_card_mainLayout.invalidate();
+                holder.checkpointText.invalidate();
+                holder.eventDate.invalidate();
 
                 Util.picassoLoadIcon(mContext, holder.eventIcon, url, R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.img_i_c_o_n_r_a_i_d);
+            }
+        }
+
+        private void setCardViewLayoutParams(RelativeLayout event_card_mainLayout, int i) {
+            int pix = Util.dpToPx(i, mContext);
+            if(pix>0) {
+                event_card_mainLayout.getLayoutParams().height = pix;
+                event_card_mainLayout.requestLayout();
             }
         }
 

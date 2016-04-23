@@ -24,6 +24,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -69,6 +70,10 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
     private TextView firstActivityType;
     private TextView secondActivityType;
     private TextView thirdActivityType;
+    private TextView fourthActivityType;
+    private TextView fifthActivityType;
+    private TextView sixthActivityType;
+
     private TextView createAvtivityNameText;
 
     private ImageView activity_icon_view;
@@ -95,6 +100,9 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
     private RelativeLayout firstActivityLayout;
     private RelativeLayout secondActivityLayout;
     private RelativeLayout thirdActivityLayout;
+    private RelativeLayout fourthActivityLayout;
+    private RelativeLayout fifthActivityLayout;
+    private RelativeLayout sixthActivityLayout;
 
     private ImageView backButton;
     private UserData user;
@@ -110,7 +118,7 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
     private ArrayList<ActivityData> customCurrentActivityList;
 
     private ProgressDialog progress;
-    private LinearLayout linlaHeaderProgress;
+    private RelativeLayout linlaHeaderProgress;
 
     private ControlManager mCntrlMngr;
 
@@ -123,8 +131,6 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
     private RelativeLayout date;
     private TextView date_display;
     private RelativeLayout time;
-    //private RelativeLayout time_layout;
-    //private TimePicker timePicker;
     private TextView time_display;
 
     static final int TIME_DIALOG_ID = 999;
@@ -136,10 +142,14 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
     private TextView notiTopText;
     private TextView notiEventText;
     private ImageView notif_close;
+    private ImageView createActivityIconview;
+    private RelativeLayout checkpointLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Remove title bar
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.new_event);
 
         //set orientation portrait
@@ -149,6 +159,7 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
 
         mCntrlMngr = ControlManager.getmInstance();
         mCntrlMngr.setCurrentActivity(this);
+        //mCntrlMngr.getAllActivities(this);
 
         Bundle b = getIntent().getExtras();
         user = b.getParcelable("userdata");
@@ -161,7 +172,10 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
 
         mCntrlMngr.postGetActivityList(this);
 
+        //createLocalActivityLists();
+
         createAvtivityNameText = (TextView) findViewById(R.id.event_creation_first);
+        createActivityIconview = (ImageView) findViewById(R.id.firstcard_img);
 
 //        nextBtn = (Button) findViewById(R.id.event_next);
 //        cancelBtn = (Button) findViewById(R.id.event_cancel);
@@ -171,6 +185,9 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
         firstActivityLayout = (RelativeLayout) findViewById(R.id.first_img_layout);
         secondActivityLayout = (RelativeLayout) findViewById(R.id.second_img_layout);
         thirdActivityLayout = (RelativeLayout) findViewById(R.id.third_img_layout);
+        fourthActivityLayout = (RelativeLayout) findViewById(R.id.fourth_img_layout);
+        fifthActivityLayout = (RelativeLayout) findViewById(R.id.fifth_img_layout);
+        sixthActivityLayout = (RelativeLayout) findViewById(R.id.sixth_img_layout);
 
         errLayout = (RelativeLayout) findViewById(R.id.error_layout);
         errText = (TextView) findViewById(R.id.error_sub);
@@ -186,9 +203,10 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
         firstActivityType = (TextView) findViewById(R.id.first);
         secondActivityType = (TextView) findViewById(R.id.second);
         thirdActivityType = (TextView) findViewById(R.id.third);
+        fourthActivityType = (TextView) findViewById(R.id.fourth);
+        fifthActivityType = (TextView) findViewById(R.id.fifth);
+        sixthActivityType = (TextView) findViewById(R.id.sixth);
 
-//        activity_icon_view = (ImageView) findViewById(R.id.event_icon);
-//        activity_text_view = (TextView) findViewById(R.id.event_raid);
         final_act_icon_view = (ImageView) findViewById(R.id.event_icon1);
         final_act_text_view = (TextView) findViewById(R.id.event_raid1);
 
@@ -196,10 +214,7 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
 
         final_create_event_firstcard = (RelativeLayout) findViewById(R.id.final_create_event_firstcard);
 
-//        firstActivityTypeBckgrnd = (ImageView) findViewById(R.id.first_backgrnd);
-//        secondActivityTypeBckgrnd = (ImageView) findViewById(R.id.second_backgrnd);
-//        thirdActivityTypeBckgrnd = (ImageView) findViewById(R.id.third_backgrnd);
-
+        checkpointLayout = (RelativeLayout) findViewById(R.id.event_creation_checkpoint_layout);
         backButton = (ImageView) findViewById(R.id.back_btn);
 
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -249,12 +264,20 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
         firstActivityLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                firstActivityTypeBckgrnd.setVisibility(View.VISIBLE);
-//                secondActivityTypeBckgrnd.setVisibility(View.GONE);
-//                thirdActivityTypeBckgrnd.setVisibility(View.GONE);
-//                if (firstActivityType.getText().toString() != null && (!firstActivityType.getText().toString().isEmpty())) {
-//                activity_icon_view.setImageResource(R.drawable.img_i_c_o_n_r_a_i_d);
-//                activity_text_view.setText(Constants.ACTIVITY_RAID);
+                final_act_icon_view.setImageResource(R.drawable.img_featured_icon);
+                final_act_text_view.setText(Constants.ACTIVITY_FEATURED);
+                ArrayList<ActivityData> thirdActivity = mCntrlMngr.getCustomActivityList(Constants.ACTIVITY_FEATURED);
+                vf.showNext();
+                if (thirdActivity != null) {
+                    setActivityRecyclerView(thirdActivity);
+                }
+                //}
+            }
+        });
+
+        secondActivityLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 final_act_icon_view.setImageResource(R.drawable.img_i_c_o_n_r_a_i_d);
                 final_act_text_view.setText(Constants.ACTIVITY_RAID);
                 ArrayList<ActivityData> raidActivity = mCntrlMngr.getCustomActivityList(Constants.ACTIVITY_RAID);
@@ -283,22 +306,15 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
                     }
                 }
                 vf.showNext();
-//                }
             }
         });
 
-        secondActivityLayout.setOnClickListener(new View.OnClickListener() {
+        thirdActivityLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                firstActivityTypeBckgrnd.setVisibility(View.GONE);
-//                secondActivityTypeBckgrnd.setVisibility(View.VISIBLE);
-//                thirdActivityTypeBckgrnd.setVisibility(View.GONE);
-//                if (secondActivityType.getText().toString()!=null && (!secondActivityType.getText().toString().isEmpty())) {
-//                activity_icon_view.setImageResource(R.drawable.icon_weeklies);
-//                activity_text_view.setText(Constants.ACTIVITY_WEEKLY);
-                final_act_icon_view.setImageResource(R.drawable.icon_weeklies);
-                final_act_text_view.setText(Constants.ACTIVITY_WEEKLY);
-                ArrayList<ActivityData> secActivity = mCntrlMngr.getCustomActivityList(secondActivityType.getText().toString());
+                final_act_icon_view.setImageResource(R.drawable.img_arena_icon);
+                final_act_text_view.setText(Constants.ACTIVITY_ARENA);
+                ArrayList<ActivityData> secActivity = mCntrlMngr.getCustomActivityList(thirdActivityType.getText().toString());
                 customCurrentActivityList.clear();
                 if (secActivity != null) {
                     customCurrentActivityList.addAll(secActivity);
@@ -330,23 +346,68 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
             }
         });
 
-        thirdActivityLayout.setOnClickListener(new View.OnClickListener() {
+        fourthActivityLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                firstActivityTypeBckgrnd.setVisibility(View.GONE);
-//                secondActivityTypeBckgrnd.setVisibility(View.GONE);
-//                thirdActivityTypeBckgrnd.setVisibility(View.VISIBLE);
-//                if (thirdActivityType.getText().toString()!=null && (!thirdActivityType.getText().toString().isEmpty())) {
-//                activity_icon_view.setImageResource(R.drawable.icon_crucible);
-//                activity_text_view.setText(Constants.ACTIVITY_CRUCIBLE);
-                final_act_icon_view.setImageResource(R.drawable.icon_crucible);
+                final_act_icon_view.setImageResource(R.drawable.img_crucible_icon);
                 final_act_text_view.setText(Constants.ACTIVITY_CRUCIBLE);
-                    ArrayList<ActivityData> thirdActivity = mCntrlMngr.getCustomActivityList(thirdActivityType.getText().toString());
+                    ArrayList<ActivityData> thirdActivity = mCntrlMngr.getCustomActivityList(fourthActivityType.getText().toString());
                     vf.showNext();
                     if (thirdActivity != null) {
                         setActivityRecyclerView(thirdActivity);
                     }
                 //}
+            }
+        });
+
+        fifthActivityLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final_act_icon_view.setImageResource(R.drawable.img_strikes_icon);
+                final_act_text_view.setText(Constants.ACTIVITY_STRIKES);
+                ArrayList<ActivityData> thirdActivity = mCntrlMngr.getCustomActivityList("Strike");
+                vf.showNext();
+                if (thirdActivity != null) {
+                    setActivityRecyclerView(thirdActivity);
+                }
+                //}
+            }
+        });
+
+        sixthActivityLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final_act_icon_view.setImageResource(R.drawable.img_patrol_icon);
+                final_act_text_view.setText(Constants.ACTIVITY_PATROL);
+                ArrayList<ActivityData> secActivity = mCntrlMngr.getCustomActivityList(sixthActivityType.getText().toString());
+                customCurrentActivityList.clear();
+                if (secActivity != null) {
+                    customCurrentActivityList.addAll(secActivity);
+                    ArrayList<ActivityData> filterRaidActivity = new ArrayList<ActivityData>();
+                    int counter = 0;
+                    for (int i = 0; i < secActivity.size(); i++) {
+                        if (i == 0) {
+                            filterRaidActivity.add(secActivity.get(i));
+                        } else {
+                            counter = 0;
+                            for (int y = 0; y < filterRaidActivity.size(); y++) {
+                                if (secActivity.get(i).getActivitySubtype().equalsIgnoreCase(filterRaidActivity.get(y).getActivitySubtype()) && secActivity.get(i).getActivityDifficulty().equalsIgnoreCase(filterRaidActivity.get(y).getActivityDifficulty())) {
+                                    counter++;
+                                }
+                            }
+                            if (counter == 0) {
+                                filterRaidActivity.add(secActivity.get(i));
+                            }
+                        }
+                    }
+
+
+                    if (secActivity != null) {
+                        setActivityRecyclerView(filterRaidActivity);
+                    }
+                    //}
+                }
+                vf.showNext();
             }
         });
 
@@ -359,14 +420,12 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
 
         progress = new ProgressDialog(this);
         // CAST THE LINEARLAYOUT HOLDING THE MAIN PROGRESS (SPINNER)
-        linlaHeaderProgress = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
+        linlaHeaderProgress = (RelativeLayout) findViewById(R.id.linlaHeaderProgress);
 
         createNewEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (vf.getDisplayedChild() == 2) {
-//                    Toast.makeText(CreateNewEvent.this, "Create new Event",
-//                            Toast.LENGTH_SHORT).show();
                     if (mAdapter != null && mAdapter.aList != null) {
                         if (checkpointActList != null && currentCheckpointActivityPosition >= 0) {
                             if (checkpointActList.get(currentCheckpointActivityPosition).getId() != null && !checkpointActList.get(currentCheckpointActivityPosition).getId().isEmpty()) {
@@ -377,11 +436,6 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
                                 ArrayList<String> players = new ArrayList<String>();
                                 players.add(creator_id);
                                 if (activityId != null && creator_id != null) {
-                                    //disable clicks
-                                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-//                                    progress.setTitle("Creating New Event");
-//                                    progress.show();
                                     linlaHeaderProgress.setVisibility(View.VISIBLE);
                                     String dateTime = getCreateEventDateTime();
                                     mCntrlMngr.postCreateEvent(activityId, creator_id, minP, maxP, dateTime, CreateNewEvent.this);
@@ -421,41 +475,27 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
             }
         });
 
-        //time_layout = (RelativeLayout) findViewById(R.id.time_layout);
-        //timePicker = (TimePicker) findViewById(R.id.timePicker);
         time = (RelativeLayout) findViewById(R.id.time);
         time_display = (TextView) findViewById(R.id.time_text);
-//        time_layout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                time_layout.setVisibility(View.GONE);
-//            }
-//        });
 
         time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //time_layout.setVisibility(View.VISIBLE);
-
                 showDialog(TIME_DIALOG_ID);
-
-//                TimePickerDialog myTPDialog = new TimePickerDialog(CreateNewEvent.this,timePickerListener,0,0,false);
-//                myTPDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-//                    public void onDismiss(DialogInterface dialog) {
-//                        time_layout.setVisibility(View.GONE);
-//                    }
-//                });
-//                myTPDialog.show();
-                //intializeTime();
             }
         });
     }
 
     private String getCreateEventDateTime() {
         if(date_display!=null) {
-            if ((!date_display.getText().toString().equalsIgnoreCase(getResources().getString(R.string.date_default))) && (!time_display.getText().toString().equalsIgnoreCase(getResources().getString(R.string.time_default)))) {
+            if ((!date_display.getText().toString().equalsIgnoreCase(getResources().getString(R.string.date_default))) || (!time_display.getText().toString().equalsIgnoreCase(getResources().getString(R.string.time_default)))) {
                 try {
-                    //String t = changeTimeFormat(time_display.getText().toString());
+                    if(date_display.getText().toString().equalsIgnoreCase(getResources().getString(R.string.date_default))) {
+                        date_display.setText(Util.getCurrentDate());
+                    }
+                    if(time_display.getText().toString().equalsIgnoreCase(getResources().getString(R.string.time_default))) {
+                        time_display.setText(Util.getCurrentTime());
+                    }
                     String d = Util.changeTimeFormat(time_display.getText().toString(), date_display.getText().toString());
                     return d;
                 } catch (Exception e) {
@@ -519,25 +559,13 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
             minute = selectedMinute;
             // set current time into textview
             String aTime = Util.updateTime(hour, minute);
-//            String t = new StringBuilder().append(padding_str(hour)).append(":").append(padding_str(minute)).toString();
             if(aTime!=null) {
                 time_display.setText(aTime);
             }
-            //time_layout.setVisibility(View.GONE);
         }
     };
-//            .setOnDismissListener(new DialogInterface.OnDismissListener() {
-//        public void onDismiss(DialogInterface dialog) {
-//            // Cancel code here
-//        }
-//    });
 
     private void intializeCalendar() {
-//        calendar.setShowWeekNumber(false);
-//        calendar.setFirstDayOfWeek(2);
-//
-//        calendar.setSelectedWeekBackgroundColor(getResources().getColor(R.color.app_theme_color));
-
         calendar.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(MaterialCalendarView materialCalendarView, CalendarDay calendarDay, boolean b) {
@@ -570,8 +598,8 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
         GradientDrawable gdDefault = new GradientDrawable();
         gdDefault.setColor(bgcolor);
         gdDefault.setStroke(2, brdcolor);
-        gdDefault.setCornerRadii(new float[] { Util.dpToPx(2, this), Util.dpToPx(2, this), 0, 0, 0, 0,
-                Util.dpToPx(2, this), Util.dpToPx(2, this) });
+        gdDefault.setCornerRadii(new float[]{Util.dpToPx(2, this), Util.dpToPx(2, this), 0, 0, 0, 0,
+                Util.dpToPx(2, this), Util.dpToPx(2, this)});
 
         return gdDefault;
 
@@ -630,11 +658,12 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
                 int aLight = aList.get(position).getActivityLight();
                 String aFinalLight=" ";
 
-                if(aLight>0) {
-                    aFinalLight = String.valueOf(aList.get(position).getActivityLight() + " Light");
-                }
+                //till decided app not showing light level in selecting activity subtype
+//                if(aLight>0) {
+//                    aFinalLight = String.valueOf(aList.get(position).getActivityLight() + " Light");
+//                }
 
-                if (diff.equalsIgnoreCase("null")){
+                if (diff==null || diff.equalsIgnoreCase("null")){
                     diff = "";
                 } else {
                     diff = " - " +diff;
@@ -680,33 +709,31 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
                     }
                 }
 
+                    adapterCheckpoint = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, checkpointItems) {
 
+                        int FONT_STYLE = Typeface.BOLD;
 
-                adapterCheckpoint = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, checkpointItems){
+                        public View getView(int position, View convertView, ViewGroup parent) {
+                            View v = super.getView(position, convertView, parent);
 
-                    int FONT_STYLE = Typeface.BOLD;
+                            ((TextView) v).setTypeface(Typeface.SANS_SERIF, FONT_STYLE);
+                            ((TextView) v).setTextColor(
+                                    getResources().getColorStateList(R.color.trimbe_white)
+                            );
+                            ((TextView) v).setGravity(Gravity.LEFT);
 
-                    public View getView(int position, View convertView, ViewGroup parent) {
-                        View v = super.getView(position, convertView, parent);
+                            ((TextView) v).setPadding(Util.dpToPx(55, CreateNewEvent.this), 0, 0, 0);
+                            ((TextView) v).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                            ((TextView) v).setText("Checkpoint - " + ((TextView) v).getText());
 
-                        ((TextView) v).setTypeface(Typeface.SANS_SERIF, FONT_STYLE);
-                        ((TextView) v).setTextColor(
-                                getResources().getColorStateList(R.color.trimbe_white)
-                        );
-                        ((TextView) v).setGravity(Gravity.LEFT);
+                            return v;
+                        }
 
-                        ((TextView) v).setPadding(Util.dpToPx(55, CreateNewEvent.this), 0, 0, 0);
-                        ((TextView) v).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                        ((TextView) v).setText("Checkpoint - " + ((TextView) v).getText());
+                        public View getDropDownView(int position, View convertView, ViewGroup parent) {
 
-                        return v;
-                    }
+                            //View v = super.getDropDownView(position, convertView,parent);
 
-                    public View getDropDownView(int position, View convertView,ViewGroup parent) {
-
-                        //View v = super.getDropDownView(position, convertView,parent);
-
-                        return getCustomView(position, convertView, parent, checkpointItems);
+                            return getCustomView(position, convertView, parent, checkpointItems);
 
 //                        ((TextView) v).setGravity(Gravity.CENTER);
 //
@@ -716,16 +743,18 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
 //
 //                        return v;
 
-                    }
-                };
-                adapterCheckpoint.setDropDownViewResource(R.layout.empty_layout);
-                dropdown.setAdapter(adapterCheckpoint);
+                        }
+                    };
+                    adapterCheckpoint.setDropDownViewResource(R.layout.empty_layout);
+                    dropdown.setAdapter(adapterCheckpoint);
 //                adapterCheckpoint.clear();
 //                adapterCheckpoint.addAll(checkpointItems);
-                adapterCheckpoint.notifyDataSetChanged();
+                    adapterCheckpoint.notifyDataSetChanged();
             }
         }
         createAvtivityNameText.setText(activity_custom_name);
+        //createActivityIconview.
+        Util.picassoLoadIcon(CreateNewEvent.this, createActivityIconview, currentActivity.getActivityIconUrl(), R.dimen.activity_icon_hgt_createevent, R.dimen.activity_icon_width_createevent, R.drawable.img_featured_icon);
         createNewEventBtn.setBackgroundColor(getResources().getColor(R.color.create_new_event_green));
         vf.showNext();
     }
@@ -798,8 +827,6 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
     }
 
     public void dismissProgressBar(){
-        //enable screen clicks
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         // To dismiss the dialog
         linlaHeaderProgress.setVisibility(View.GONE);
     }

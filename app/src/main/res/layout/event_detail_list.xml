@@ -74,6 +74,8 @@
             android:src="@drawable/icon_back_arrow"
             android:paddingLeft="13dp"
             android:paddingTop="17dp"
+            android:paddingBottom="20dp"
+            android:paddingRight="20dp"
             android:layout_alignParentLeft="true"/>
         <com.example.sharmha.travelerfordestiny.utils.CircularImageView
             android:layout_width="@dimen/player_profile_width"
@@ -193,7 +195,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/eventDetailCheckpoint"
                 android:layout_below="@+id/activity_name_detail"
+                android:textColor="@color/activity_light_color"
+                android:textSize="12sp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/eventDetailCheckpoint"
                 android:id="@+id/activity_player_name_detail"
                 android:fontFamily="sans-serif"
                 android:textColor="@android:color/white"
@@ -207,7 +218,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/activity_player_name_lf_detail"
-                android:layout_below="@+id/activity_name_detail"
+                android:layout_below="@+id/eventDetailCheckpoint"
                 android:textColor="#ffc600"
                 android:layout_toRightOf="@+id/activity_player_name_detail"
                 android:textSize="12sp" />
@@ -216,8 +227,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/eventDetailDate"
+                android:fontFamily="sans-serif"
+                android:textStyle="italic"
+                android:textColor="@android:color/white"
                 android:layout_below="@+id/activity_player_name_detail"
-                android:textColor="@color/activity_light_color"
                 android:textSize="12sp"/>
         </RelativeLayout>
 
@@ -385,6 +398,22 @@
             </RelativeLayout>
 
         </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/sample_background"
+        android:id="@+id/progress_bar_eventdetail_layout"
+        android:clickable="true"
+        android:visibility="gone">
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminateDrawable="@drawable/progress" />
     </RelativeLayout>
 
 </RelativeLayout>

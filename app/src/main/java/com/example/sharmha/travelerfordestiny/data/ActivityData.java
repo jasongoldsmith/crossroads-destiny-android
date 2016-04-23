@@ -17,7 +17,8 @@ public class ActivityData {
     private String activityCheckpoint;
     private String activityDifficulty;
     private String activityIconUrl;
-    private String activityLevel;
+    private int activityLevel;
+    private boolean activityFeature;
 
     public void setId(String aId) {
         id = aId;
@@ -33,6 +34,14 @@ public class ActivityData {
 
     public String getActivityType() {
         return this.activityType;
+    }
+
+    public void setActivityFeature(boolean aFeature) {
+        activityFeature = aFeature;
+    }
+
+    public boolean getActivityFeature() {
+        return this.activityFeature;
     }
 
     public void setActivitySubtype(String aSubtype) {
@@ -91,11 +100,11 @@ public class ActivityData {
         return this.maxPlayer;
     }
 
-    public void setActivityLevel(String level) {
+    public void setActivityLevel(int level) {
         activityLevel = level;
     }
 
-    public String getActivityLevel() {
+    public int getActivityLevel() {
         return this.activityLevel;
     }
 
@@ -106,7 +115,9 @@ public class ActivityData {
             setActivitySubtype(actData.getString("aSubType"));
             setMinPlayer(actData.getInt("minPlayers"));
             setMaxPlayer(actData.getInt("maxPlayers"));
-            setActivityCheckpoint(actData.getString("aCheckpoint"));
+            if(!actData.isNull("aCheckpoint")) {
+                setActivityCheckpoint(actData.getString("aCheckpoint"));
+            }
             setActivityDifficulty(actData.getString("aDifficulty"));
             if (!actData.isNull("aIconUrl")) {
                 setActivityIconUrl(actData.getString("aIconUrl"));
@@ -114,6 +125,12 @@ public class ActivityData {
                 setActivityIconUrl(null);
             }
             setActivityLight(actData.getInt("aLight"));
+            if (!actData.isNull("aLevel")) {
+                setActivityLevel(actData.getInt("aLevel"));
+            }
+            if (!actData.isNull("isFeatured")) {
+                setActivityFeature(actData.getBoolean("isFeatured"));
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();

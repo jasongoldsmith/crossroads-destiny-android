@@ -16,4 +16,14 @@
     <string name="join_event">JOIN</string>
     <string name="message_all">MESSAGE ALL</string>
 
+    <string name="logout">Logout</string>
+    <string name="report_crash">Report Crash</string>
+
+    <!-- Create event card text strings-->
+    <string name="featured">Featured</string>
+    <string name="raids">Raids</string>
+    <string name="arena">Arena</string>
+    <string name="crucible">Crucible</string>
+    <string name="strikes">Strikes</string>
+    <string name="patrol">Patrol</string>
 </resources>
