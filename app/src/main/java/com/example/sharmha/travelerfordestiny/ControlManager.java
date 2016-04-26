@@ -249,6 +249,9 @@ public class ControlManager implements Observer{
     }
 
     public void showErrorDialogue(String err) {
+        if(err==null){
+            err = "Request failed. Please wait a few seconds and refresh.";
+        }
         if (this.mCurrentAct!=null) {
             if (mCurrentAct instanceof SplashActivity) {
                 ((SplashActivity)mCurrentAct).showError(err);
@@ -261,6 +264,8 @@ public class ControlManager implements Observer{
             } else if(mCurrentAct instanceof CreateNewEvent){
                 ((CreateNewEvent) mCurrentAct).dismissProgressBar();
                 ((CreateNewEvent) mCurrentAct).showError(err);
+            } else if (mCurrentAct instanceof EventDetailActivity){
+                ((EventDetailActivity) mCurrentAct).showError(err);
             }
         }
     }

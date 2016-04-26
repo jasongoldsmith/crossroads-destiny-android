@@ -50,7 +50,7 @@ public class LoginNetwork extends Observable {
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
 //                    Toast.makeText(mContext, "Signup error from server  - " + statusCode,
 //                            Toast.LENGTH_LONG).show();
-                    mManager.showErrorDialogue(statusCode + " - Login failed");
+                    mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
                 }
             });
         }else {
@@ -72,9 +72,7 @@ public class LoginNetwork extends Observable {
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                    Toast.makeText(mContext, "Signup error from server  - " + statusCode,
-//                            Toast.LENGTH_LONG).show();
-                    mManager.showErrorDialogue(statusCode + " - Signup failed");
+                    mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
                 }
             });
         }else {

@@ -81,7 +81,7 @@ public class EventListNetwork extends Observable{
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
 //                        Toast.makeText(mContext, "List error from server  - " + statusCode + " " + errorResponse.getString("message"),
 //                                Toast.LENGTH_LONG).show();
-                    mManager.showErrorDialogue(statusCode + " - server failed");
+                    mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
                 }
             });
         }else {

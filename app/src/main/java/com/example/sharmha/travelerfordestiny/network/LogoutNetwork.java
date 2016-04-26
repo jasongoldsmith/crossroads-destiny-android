@@ -48,7 +48,7 @@ public class LogoutNetwork extends Observable {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                mManager.showErrorDialogue(statusCode + " - Logout failed");
+                mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
             }
         });
     }

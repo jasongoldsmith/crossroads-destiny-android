@@ -268,18 +268,9 @@
         android:background="#979797"
         android:layout_below="@+id/currentgoing"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/event_player"
-        android:layout_below="@+id/bar"
-        android:background="@android:color/transparent"
-        android:layout_marginLeft="17dp"
-        android:layout_marginRight="9dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:id="@+id/detail_bottom_btn">
         <TextView
@@ -322,6 +313,17 @@
             android:gravity="center"
             android:visibility="gone"/>
     </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/event_player"
+        android:layout_below="@+id/bar"
+        android:layout_above="@+id/detail_bottom_btn"
+        android:background="@android:color/transparent"
+        android:layout_marginLeft="17dp"
+        android:layout_marginRight="9dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

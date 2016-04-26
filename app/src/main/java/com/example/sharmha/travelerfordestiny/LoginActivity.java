@@ -91,25 +91,26 @@ public class LoginActivity extends Activity implements Observer {
                 username = name_login.getText().toString();
                 password = pswd_login.getText().toString();
                 if (username!=null && password!=null) {
-                    if (username.length()>0 && password.length()>0) {
+                    if (username.length()>4 && password.length()>4) {
                         RequestParams params = new RequestParams();
                         params.put("userName", username);
                         params.put("passWord", password);
                         dialog.show();
                         mManager.postLogin(LoginActivity.this, params, Constants.LOGIN);
                     } else {
-                        showError("Username or Password is empty");
+                        if(username.length()!=0){
+                            showError(getResources().getString(R.string.username_short));
+                        } else if(username.length() == 0) {
+                            showError(getResources().getString(R.string.username_missing));
+                        } else if(password.length()!=0) {
+                            showError(getResources().getString(R.string.password_short));
+                        } else {
+                            showError(getResources().getString(R.string.password_missing));
+                        }
                     }
                 }
             }
         });
-
-//        root.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//            public void onGlobalLayout() {
-//                int heightDiff = root.getRootView().getHeight() - root.getHeight();
-//                // IF height diff is more then 150, consider keyboard as visible.
-//            }
-//        });
 
         pswd_login.addTextChangedListener(new TextWatcher() {
             @Override

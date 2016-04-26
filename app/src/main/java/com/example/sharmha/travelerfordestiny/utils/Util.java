@@ -25,6 +25,9 @@ import com.google.android.gms.iid.InstanceID;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -199,7 +202,6 @@ public class Util {
     }
 
     public static String convertUTCtoReadable(String utcDate) {
-
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         format.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date newDate = null;
@@ -225,6 +227,17 @@ public class Util {
             }
         }
         return 0;
+    }
+
+    public static String getErrorMessage(JSONObject jsonResponse) {
+        try {
+            JSONObject jsonData = jsonResponse.optJSONObject("error");
+            String n = jsonData.getString("message");
+            return n;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static Calendar getCalendar(String dateString) {

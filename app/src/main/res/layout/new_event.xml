@@ -168,13 +168,13 @@
                 android:scaleType="fitXY"/>
 
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:id="@+id/act_banner"
-                android:src="@drawable/img_activity_banner"
+                android:src="@drawable/img_globe_icon"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="105dp"
-                android:layout_marginBottom="4dp"/>
+                android:layout_marginTop="91dp"
+                android:layout_marginBottom="7dp"/>
 
             <TextView
                 android:layout_width="wrap_content"

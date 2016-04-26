@@ -181,7 +181,17 @@ public class RegisterActivity extends Activity implements Observer {
                     dialog.show();
                     mManager.postLogin(RegisterActivity.this, params, Constants.REGISTER);
                 } else {
-                    showError("Username, Password or PSNId is empty");
+                    if(username.length()!=0){
+                        showError(getResources().getString(R.string.username_short));
+                    } else if(username.length() == 0) {
+                        showError(getResources().getString(R.string.username_missing));
+                    } else if(password.length()!=0) {
+                        showError(getResources().getString(R.string.password_short));
+                    } else if(password.length()==0){
+                        showError(getResources().getString(R.string.password_missing));
+                    } else {
+                        showError("Please enter PsnId.");
+                    }
                 }
             }
         });

@@ -366,6 +366,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     }
 
     public void showError(String err) {
+        hideProgress();
         errLayout.setVisibility(View.VISIBLE);
         errText.setText(err);
     }

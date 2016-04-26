@@ -26,4 +26,18 @@
     <string name="crucible">Crucible</string>
     <string name="strikes">Strikes</string>
     <string name="patrol">Patrol</string>
+
+    <!-- error message strings -->
+    <string name="username_short">Your username must have at least 5 characters.</string>
+    <string name="username_missing">Please enter a username.</string>
+    <string name="password_short">Your password must have at least 5 characters.</string>
+    <string name="password_missing">Please enter a password.</string>
+    <string name="login_fails">The username and password do not match. Please try again.</string>
+    <string name="signup_fails">Account creation failed.</string>
+    <string name="generic_error">Request failed. Please wait a few seconds and refresh.</string>
+    <string name="empty_chat">Please enter a message.</string>
+    <string name="undefined_server_error">Undefined server error. Please wait a few seconds and refresh.</string>
+    <string name="server_error">Server request failed. Please wait a few seconds and refresh.</string>
+    <string name="title_activity_base">BaseActivity</string>
+
 </resources>

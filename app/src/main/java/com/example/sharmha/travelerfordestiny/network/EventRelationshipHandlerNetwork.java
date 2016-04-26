@@ -63,7 +63,7 @@ public class EventRelationshipHandlerNetwork extends Observable{
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    mManager.showErrorDialogue(statusCode + " - server failed join");
+                    mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
                 }
             });
         }else {
@@ -102,7 +102,7 @@ public class EventRelationshipHandlerNetwork extends Observable{
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
 //                        Toast.makeText(mContext, "List error from server  - " + statusCode + " " + errorResponse.getString("message"),
 //                                Toast.LENGTH_LONG).show();
-                        mManager.showErrorDialogue(statusCode + " - server failed unjoin");
+                        mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
                 }
             });
         }else {
@@ -132,9 +132,7 @@ public class EventRelationshipHandlerNetwork extends Observable{
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        //todo handle this error better
-                    mManager.showErrorDialogue(statusCode + " - server failed for create event");
-                        //((CreateNewEvent)mContext).finish();
+                    mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
                 }
             });
         }else {
