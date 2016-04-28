@@ -44,7 +44,10 @@ public class MainActivity extends Activity implements Observer {
             if (messageIntent == null) {
                 return;
             }
-            contentIntent = (Intent) messageIntent.getExtras().get(Constants.NOTIFICATION_INTENT_CHANNEL);
+            contentIntent = null;
+            if(messageIntent.getExtras() != null) {
+                contentIntent = (Intent) messageIntent.getExtras().get(Constants.NOTIFICATION_INTENT_CHANNEL);
+            }
         }
 
         if (u != null && p!= null && !u.isEmpty() && !p.isEmpty()) {

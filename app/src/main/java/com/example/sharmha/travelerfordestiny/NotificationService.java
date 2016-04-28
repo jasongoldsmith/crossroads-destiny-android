@@ -35,7 +35,7 @@ public class NotificationService extends Service {
 
         JSONObject jsonObj = null;
         try {
-            jsonObj = new JSONObject(payload);
+            jsonObj = (payload != null && !payload.equals(""))?new JSONObject(payload): new JSONObject();
             EventData ed = new EventData();
             Intent in = new Intent("subtype_flag");
 
@@ -54,7 +54,7 @@ public class NotificationService extends Service {
                 }
             }
 
-            if(jsonObj.has("playerMessage")){
+            if(jsonObj.has("playerMessage") || payload == null){
                 in.putExtra("playerMessage", true);
             }
             if(alert!=null && alert.length()>0){
