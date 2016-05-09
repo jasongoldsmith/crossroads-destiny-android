@@ -142,7 +142,7 @@ public class MainActivity extends Activity implements Observer {
             ud.setPassword(p);
             mManager.setUserdata(ud);
             Intent regIntent = new Intent(getApplicationContext(),
-                    ListActivityFragment.class);
+                    CreateNewEvent.class);
             regIntent.putExtra("userdata", ud);
             if(contentIntent!=null) {
                 regIntent.putExtra("eventIntent", contentIntent);

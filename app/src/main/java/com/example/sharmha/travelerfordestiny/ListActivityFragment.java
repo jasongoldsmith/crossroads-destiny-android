@@ -224,6 +224,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                         CreateNewEvent.class);
                 regIntent.putExtra("userdata", user);
                 startActivity(regIntent);
+                finish();
             }
         });
 

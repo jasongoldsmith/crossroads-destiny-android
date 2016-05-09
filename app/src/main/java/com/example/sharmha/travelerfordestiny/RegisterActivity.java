@@ -227,7 +227,7 @@ public class RegisterActivity extends Activity implements Observer {
             dialog.dismiss();
             // go to logout page
             Intent regIntent = new Intent(getApplicationContext(),
-                    ListActivityFragment.class);
+                    CreateNewEvent.class);
             regIntent.putExtra("userdata", ud);
             startActivity(regIntent);
             finish();

@@ -248,11 +248,10 @@ public class LoginActivity extends Activity implements Observer {
             mManager.setUserdata(ud);
             //dismiss progress
             dialog.dismiss();
-            // go to logout page
 //            Intent regIntent = new Intent(getApplicationContext(),
 //                    ListActivity.class);
             Intent regIntent = new Intent(getApplicationContext(),
-                    ListActivityFragment.class);
+                    CreateNewEvent.class);
             if(localPushEvent!=null){
                 regIntent.putExtra("eventIntent", localPushEvent);
             }

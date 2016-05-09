@@ -144,6 +144,7 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
     private ImageView notif_close;
     private ImageView createActivityIconview;
     private RelativeLayout checkpointLayout;
+    Intent localPushEventObj;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +164,10 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
 
         Bundle b = getIntent().getExtras();
         user = b.getParcelable("userdata");
+        if(b.containsKey("eventIntent")) {
+            localPushEventObj = (Intent) b.get("eventIntent");
+        }
+
 
         if (user.getImageUrl()!=null) {
             Util.picassoLoadIcon(this, userProfile, user.getImageUrl(), R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.avatar);
@@ -850,10 +855,21 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
                     createNewEventBtn.setBackgroundColor(getResources().getColor(R.color.event_user_image_background));
                 }
             }else {
-                finish();
+                launchListActivityAndFinish();
             }
         }else {
-            finish();
+            launchListActivityAndFinish();
         }
     }
+
+    private void launchListActivityAndFinish() {
+        Intent i=new Intent (this, ListActivityFragment.class);
+        i.putExtra("userdata", user);
+        if(localPushEventObj!=null){
+            i.putExtra("eventIntent", localPushEventObj);
+        }
+        startActivity(i);
+        finish();
+    }
+
 }
