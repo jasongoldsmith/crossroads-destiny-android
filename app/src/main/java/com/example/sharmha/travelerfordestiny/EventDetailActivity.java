@@ -160,7 +160,7 @@ public class EventDetailActivity extends Activity implements Observer {
         });
 
         if(currEvent.getActivityData().getActivityIconUrl()!=null) {
-            Util.picassoLoadIcon(EventDetailActivity.this, eventProfileImg, currEvent.getActivityData().getActivityIconUrl(), R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.img_i_c_o_n_r_a_i_d);
+            Util.picassoLoadIcon(EventDetailActivity.this, eventProfileImg, currEvent.getActivityData().getActivityIconUrl(), R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.img_r_a_i_d_i_c_o_n);
         }
 
         if (currEvent.getActivityData().getActivitySubtype()!=null) {
@@ -261,6 +261,12 @@ public class EventDetailActivity extends Activity implements Observer {
         registerReceiver(ReceivefromService, new IntentFilter("subtype_flag"));
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        unregisterReceiver(ReceivefromService);
+    }
+
     private BroadcastReceiver ReceivefromService = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -273,7 +279,8 @@ public class EventDetailActivity extends Activity implements Observer {
                 notiMessage.setVisibility(View.VISIBLE);
                 notiMessage.setText(msg);
             }else {
-                notiTopText.setText("YOUR FIRETEAM IS READY");
+                notiEventText.setText("Your Fireteam is ready!");
+                notiTopText.setText(subtype);
                 notiMessage.setVisibility(View.GONE);
                 //mManager.getEventList(ListActivityFragment.this);
             }

@@ -76,6 +76,7 @@ public class BlankFragment extends Fragment {
 
         RecyclerView rv = (RecyclerView) rootView.findViewById(R.id.event_view);
         rv.setHasFixedSize(true);
+
         adapter = new MyAdapter(currentEventList);
         rv.setAdapter(adapter);
 

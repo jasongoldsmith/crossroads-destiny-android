@@ -10,6 +10,10 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -86,6 +90,9 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     private TextView crash_report;
     private TextView showVersion;
     private RelativeLayout progress;
+    private ValueEventListener listener;
+
+    private Firebase refFirebase;
 
     private EventData pushEventObject;
 
@@ -111,13 +118,18 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
         mManager = ControlManager.getmInstance();
         mManager.setCurrentActivity(this);
-
         mManager.postGetActivityList(this);
+
+        // get existing event list
+        getExistingList();
 
         mManager.getEventList(this);
 
-        progress = (RelativeLayout) findViewById(R.id.progress_bar_layout);
+        Firebase.setAndroidContext(this);
+        setupEventListener();
+        //registerFirbase();
 
+        progress = (RelativeLayout) findViewById(R.id.progress_bar_layout);
         userProfile = (ImageView) findViewById(R.id.userProfile);
         userProfileDrawer = (CircularImageView) findViewById(R.id.profile_avatar);
         userNameDrawer = (TextView) findViewById(R.id.profile_name);
@@ -191,7 +203,6 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
         notiBar = (RelativeLayout) findViewById(R.id.notification_bar);
         notiEventText = (TextView) findViewById(R.id.noti_text);
-
         notiTopText = (TextView) findViewById(R.id.noti_toptext);
         notiMessage = (TextView) findViewById(R.id.noti_subtext);
         notiMessage.setMovementMethod(new ScrollingMovementMethod());
@@ -224,7 +235,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                         CreateNewEvent.class);
                 regIntent.putExtra("userdata", user);
                 startActivity(regIntent);
-                finish();
+                //finish();
             }
         });
 
@@ -264,7 +275,6 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 //hack to update upcoming fragment
                 if(position==1){
-
                     updateCurrentFrag();
                     //getSupportFragmentManager().getFragments().get(position).
                 }
@@ -290,6 +300,42 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                 startActivity(regIntent);
             }
         });
+    }
+
+    private void getExistingList() {
+        if (mManager!=null) {
+            if (mManager.getEventListCurrent()!=null && (!mManager.getEventListCurrent().isEmpty())) {
+                createUpcomingCurrentList(mManager.getEventListCurrent());
+            }
+        }
+    }
+
+    private void registerFirbase() {
+        refFirebase = new Firebase(Util.getFirebaseUrl(this.user.getClanId()));
+        if(listener!=null) {
+            refFirebase.addValueEventListener(listener);
+        }
+    }
+
+    private void unregisterFirebase() {
+        if(listener!=null) {
+            refFirebase.removeEventListener(listener);
+            refFirebase.removeValue();
+        }
+    }
+
+    private void setupEventListener() {
+        listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                System.out.println("Hardik" + " " +snapshot.getValue());
+                mManager.getEventList(ListActivityFragment.this);
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        };
     }
 
     @Override
@@ -378,14 +424,31 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         //get latest event list
         if (mManager!= null) {
             mManager.setCurrentActivity(this);
+            getExistingList();
             mManager.getEventList(this);
         }
+
+        registerFirbase();
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        unregisterFirebase();
     }
 
     @Override
     public void onStart() {
         super.onStart();
         registerReceiver(ReceivefromService, new IntentFilter("subtype_flag"));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        unregisterReceiver(ReceivefromService);
     }
 
     private BroadcastReceiver ReceivefromService = new BroadcastReceiver() {
@@ -401,7 +464,8 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                     notiMessage.setVisibility(View.VISIBLE);
                     notiMessage.setText(msg);
                 } else {
-                    notiTopText.setText("YOUR FIRETEAM IS READY");
+                    notiEventText.setText("Your Fireteam is ready!");
+                    notiTopText.setText(subtype);
                     notiMessage.setVisibility(View.GONE);
                     mManager.getEventList(ListActivityFragment.this);
                 }

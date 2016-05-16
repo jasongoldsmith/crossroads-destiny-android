@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:conversation="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.sharmha.travelerfordestiny.ForgotLoginActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/img_background_map"
+        android:scaleType="fitXY"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/error_layout"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/black"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/error"
+            android:src="@drawable/icon_error"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="22dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/error_text"
+            android:text="MISADVENTURE"
+            android:textSize="12sp"
+            android:textColor="#ff0000"
+            android:layout_toRightOf="@+id/error"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="13dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/error_sub"
+            android:textSize="12sp"
+            android:textColor="@color/trimbe_white"
+            android:layout_toRightOf="@+id/error"
+            android:layout_below="@+id/error_text"
+            android:layout_marginBottom="14dp"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="30dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/err_close"
+            android:src="@drawable/icon_close_sm"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="9dp"
+            android:layout_marginEnd="7dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/error_layout">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/forgotlogin_text"
+        android:layout_centerHorizontal="true"
+        android:text="Forgot Login"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:layout_marginTop="16dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/back"
+        android:src="@drawable/icon_back_arrow"
+        android:paddingTop="8dp"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/forgotlogin_subtext"
+        android:layout_below="@id/forgotlogin_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="74dp"
+        android:text="@string/forgotlogin_text"
+        android:textColor="@color/trimbe_white"
+        android:textSize="20sp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/psnid_forgot_layout"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="#4f000000"
+        android:layout_below="@+id/forgotlogin_subtext">
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:id="@+id/psn_icon"
+            android:src="@drawable/img_icon_id"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginBottom="22dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/psn"
+            android:layout_toRightOf="@+id/psn_icon"
+            android:fontFamily="sans-serif"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="13dp"
+            android:textSize="10sp"
+            android:text="PSN ID"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/forgot_psn"
+            android:textCursorDrawable="@drawable/cursor_draw"
+            android:hint="Enter PSN ID"
+            android:textColor="@android:color/white"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
+            android:background="@null"
+            android:textSize="14sp"
+            android:layout_toRightOf="@+id/psn_icon"
+            android:layout_below="@+id/psn"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="25dp" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:id="@+id/send_forgotlogin"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        conversation:cardBackgroundColor="@color/app_theme_color">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Reset"
+                android:textColor="@android:color/white" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+    </RelativeLayout>
+
+</RelativeLayout>

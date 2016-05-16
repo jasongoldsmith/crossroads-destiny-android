@@ -8,15 +8,17 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.sharmha.travelerfordestiny.data.AppVersion;
+import com.example.sharmha.travelerfordestiny.network.GetVersion;
+import com.example.sharmha.travelerfordestiny.network.LoginNetwork;
 import com.example.sharmha.travelerfordestiny.utils.Util;
+import com.example.sharmha.travelerfordestiny.utils.Version;
 import com.example.sharmha.travellerdestiny.R;
 import com.example.sharmha.travelerfordestiny.data.UserData;
 import com.example.sharmha.travelerfordestiny.utils.Constants;
 import com.loopj.android.http.RequestParams;
-
 import java.util.Observable;
 import java.util.Observer;
-
 
 public class MainActivity extends Activity implements Observer {
 
@@ -24,13 +26,14 @@ public class MainActivity extends Activity implements Observer {
     private View signin_layout;
     public UserData userData;
     Intent contentIntent;
-    String p;
+    private String p;
+    private String u;
     private ControlManager mManager;
 
     @Override
     protected void onCreate(Bundle outState) {
         super.onCreate(outState);
-        String u= Util.getDefaults("user", getApplicationContext());
+        u= Util.getDefaults("user", getApplicationContext());
         p = Util.getDefaults("password", getApplicationContext());
 
         userData = new UserData();
@@ -50,15 +53,19 @@ public class MainActivity extends Activity implements Observer {
             }
         }
 
-        if (u != null && p!= null && !u.isEmpty() && !p.isEmpty()) {
-            setContentView(R.layout.splash_loading);
-            Util.storeUserData(userData, u, p);
+        setContentView(R.layout.splash_loading);
+        //check android version
+        mManager.getAndroidVersion(this);
 
+    }
+
+    private void forwardAfterVersionCheck() {
+        if (u != null && p!= null && !u.isEmpty() && !p.isEmpty()) {
+            Util.storeUserData(userData, u, p);
             RequestParams params = new RequestParams();
             params.put("userName", u);
             params.put("passWord", p);
             mManager.postLogin(MainActivity.this, params, Constants.LOGIN);
-
         }else {
             setContentView(R.layout.activity_main);
 
@@ -111,6 +118,7 @@ public class MainActivity extends Activity implements Observer {
     @Override
     protected void onStop() {
         super.onStop();
+        unregisterReceiver(ReceivefromBackpressService);
     }
 
     @Override
@@ -128,7 +136,6 @@ public class MainActivity extends Activity implements Observer {
         return null;
     }
 
-
     @Override
     public void onBackPressed() {
         finish();
@@ -136,19 +143,36 @@ public class MainActivity extends Activity implements Observer {
 
     @Override
     public void update(Observable observable, Object data) {
-        UserData ud = (UserData)data;
-        if (ud.getAuthenticationId() == Constants.LOGIN) {
-
-            ud.setPassword(p);
-            mManager.setUserdata(ud);
-            Intent regIntent = new Intent(getApplicationContext(),
-                    CreateNewEvent.class);
-            regIntent.putExtra("userdata", ud);
-            if(contentIntent!=null) {
-                regIntent.putExtra("eventIntent", contentIntent);
+        if(observable instanceof GetVersion) {
+            AppVersion ver = (AppVersion) data;
+            String currVer = Util.getApplicationVersionCode(this);
+            String latestVer = ver.getVersion();
+            Version currVersion = new Version(currVer);
+            Version latestVersion = new Version(latestVer);
+            if (latestVersion.compareTo(currVersion) > 0) {
+                //mManager.getAndroidVersion(this);
+            } else {
+                forwardAfterVersionCheck();
             }
-            startActivity(regIntent);
-            finish();
+        } else if(observable instanceof LoginNetwork) {
+            UserData ud = (UserData) data;
+            if (ud.getAuthenticationId() == Constants.LOGIN) {
+
+                ud.setPassword(p);
+                mManager.setUserdata(ud);
+                Intent regIntent;
+                if (contentIntent != null) {
+                    regIntent = new Intent(getApplicationContext(),
+                            ListActivityFragment.class);
+                    regIntent.putExtra("eventIntent", contentIntent);
+                } else {
+                    regIntent = new Intent(getApplicationContext(),
+                            CreateNewEvent.class);
+                }
+                regIntent.putExtra("userdata", ud);
+                startActivity(regIntent);
+                finish();
+            }
         }
     }
 }

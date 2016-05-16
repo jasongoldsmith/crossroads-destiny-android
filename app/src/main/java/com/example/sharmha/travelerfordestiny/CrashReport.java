@@ -2,8 +2,13 @@ package com.example.sharmha.travelerfordestiny;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sharmha.travelerfordestiny.data.UserData;
@@ -16,9 +21,10 @@ import com.loopj.android.http.RequestParams;
 public class CrashReport extends Activity {
 
     private EditText crash_text;
-    private TextView send_crash;
+    private CardView send_crash;
     private UserData user;
     private ControlManager controlManager;
+    private ImageView backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +37,26 @@ public class CrashReport extends Activity {
         user = b.getParcelable("userdata");
 
         crash_text = (EditText) findViewById(R.id.crash_edittext);
-        send_crash = (TextView) findViewById(R.id.send_crash);
+        send_crash = (CardView) findViewById(R.id.send_crash);
+        backBtn = (ImageView) findViewById(R.id.back);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        crash_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
+                    // the user is done typing.
+                    send_crash.requestFocus();
+                    send_crash.performClick();
+                }
+                return false;
+            }
+        });
 
         send_crash.setOnClickListener(new View.OnClickListener() {
             @Override

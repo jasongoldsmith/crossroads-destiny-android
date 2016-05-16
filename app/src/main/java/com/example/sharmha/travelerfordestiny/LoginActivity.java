@@ -23,6 +23,8 @@ import com.example.sharmha.travelerfordestiny.utils.Constants;
 
 import com.loopj.android.http.*;
 
+import org.w3c.dom.Text;
+
 import java.util.Observable;
 import java.util.Observer;
 
@@ -48,6 +50,7 @@ public class LoginActivity extends Activity implements Observer {
     private ImageView close_err;
     private ProgressDialog dialog;
     private Intent localPushEvent;
+    private TextView forgotLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,17 @@ public class LoginActivity extends Activity implements Observer {
         errLayout = (RelativeLayout) findViewById(R.id.error_layout);
         errText = (TextView) findViewById(R.id.error_sub);
         close_err = (ImageView) findViewById(R.id.err_close);
+
+        forgotLogin = (TextView) findViewById(R.id.forgot_login);
+
+        forgotLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),
+                        ForgotLoginActivity.class);
+                startActivity(intent);
+            }
+        });
 
         close_err.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,14 +112,14 @@ public class LoginActivity extends Activity implements Observer {
                         dialog.show();
                         mManager.postLogin(LoginActivity.this, params, Constants.LOGIN);
                     } else {
-                        if(username.length()!=0){
-                            showError(getResources().getString(R.string.username_short));
-                        } else if(username.length() == 0) {
+                        if(username.length()==0){
                             showError(getResources().getString(R.string.username_missing));
-                        } else if(password.length()!=0) {
-                            showError(getResources().getString(R.string.password_short));
-                        } else {
+                        } else if(username.length() < 5) {
+                            showError(getResources().getString(R.string.username_short));
+                        } else if(password.length()==0) {
                             showError(getResources().getString(R.string.password_missing));
+                        } else {
+                            showError(getResources().getString(R.string.password_short));
                         }
                     }
                 }
@@ -170,6 +184,8 @@ public class LoginActivity extends Activity implements Observer {
 
     public void showError(String err) {
         dialog.dismiss();
+        login_btn.setEnabled(true);
+        errLayout.setVisibility(View.GONE);
         errLayout.setVisibility(View.VISIBLE);
         errText.setText(err);
     }
@@ -248,14 +264,24 @@ public class LoginActivity extends Activity implements Observer {
             mManager.setUserdata(ud);
             //dismiss progress
             dialog.dismiss();
-//            Intent regIntent = new Intent(getApplicationContext(),
-//                    ListActivity.class);
-            Intent regIntent = new Intent(getApplicationContext(),
-                    CreateNewEvent.class);
-            if(localPushEvent!=null){
+            //decide landing page based on push notification available or not
+            Intent regIntent;
+            if(localPushEvent!=null) {
+                regIntent = new Intent(getApplicationContext(),
+                        ListActivityFragment.class);
                 regIntent.putExtra("eventIntent", localPushEvent);
+            } else {
+                regIntent = new Intent(getApplicationContext(),
+                        CreateNewEvent.class);
             }
             regIntent.putExtra("userdata", ud);
+
+//            Intent regIntent = new Intent(getApplicationContext(),
+//                    CreateNewEvent.class);
+//            if(localPushEvent!=null){
+//                regIntent.putExtra("eventIntent", localPushEvent);
+//            }
+//            regIntent.putExtra("userdata", ud);
             startActivity(regIntent);
             finish();
         }

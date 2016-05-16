@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:conversation="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageView
@@ -14,28 +16,78 @@
         android:layout_height="wrap_content"
         android:id="@+id/crash_text"
         android:layout_centerHorizontal="true"
-        android:text="Contact Us"
+        android:text="Send Feedback"
+        android:textColor="@android:color/white"
         android:textSize="20sp"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="16dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/back"
+        android:src="@drawable/icon_back_arrow"
+        android:paddingTop="8dp"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/feedback_text"
+        android:layout_below="@id/crash_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:text="@string/feedback_text"
+        android:textColor="@color/trimbe_white"
+        android:textSize="20sp"/>
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="120dp"
         android:id="@+id/crash_edittext"
-        android:layout_margin="20dp"
-        android:layout_below="@+id/crash_text"
+        android:background="#4D000000"
+        android:hint="  Your message"
+        android:gravity="top"
+        android:nextFocusDown="@+id/send_crash"
+        android:textColor="@color/trimbe_white"
+        android:imeOptions="actionDone"
+        android:textSize="14sp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/feedback_text"
         android:layout_marginBottom="50dp"/>
 
-    <TextView
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/crash_edittext"
+    <android.support.v7.widget.CardView
+        android:layout_width="60dp"
+        android:layout_height="30dp"
         android:id="@+id/send_crash"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="15dp"
-        android:gravity="center"
-        android:text="SEND"
-        android:textColor="@android:color/white"
-        android:background="@color/app_theme_color" />
+        conversation:cardBackgroundColor="@color/app_theme_color">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="SEND"
+                android:textColor="@android:color/white" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <!--<TextView-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:layout_below="@id/crash_edittext"-->
+        <!--android:id="@+id/send_crash"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:gravity="center"-->
+        <!--android:text="SEND"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:background="@color/app_theme_color" />-->
 
 </RelativeLayout>

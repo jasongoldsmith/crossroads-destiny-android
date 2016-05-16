@@ -181,16 +181,16 @@ public class RegisterActivity extends Activity implements Observer {
                     dialog.show();
                     mManager.postLogin(RegisterActivity.this, params, Constants.REGISTER);
                 } else {
-                    if(username.length()!=0){
-                        showError(getResources().getString(R.string.username_short));
-                    } else if(username.length() == 0) {
+                    if(username.length()==0){
                         showError(getResources().getString(R.string.username_missing));
-                    } else if(password.length()!=0) {
-                        showError(getResources().getString(R.string.password_short));
-                    } else if(password.length()==0){
+                    } else if(username.length() < 5) {
+                        showError(getResources().getString(R.string.username_short));
+                    } else if(password.length()==0) {
                         showError(getResources().getString(R.string.password_missing));
+                    } else if(password.length()<5){
+                        showError(getResources().getString(R.string.password_short));
                     } else {
-                        showError("Please enter PsnId.");
+                        showError("Please enter correct PsnId.");
                     }
                 }
             }
@@ -199,6 +199,8 @@ public class RegisterActivity extends Activity implements Observer {
 
     public void showError(String err) {
         dialog.dismiss();
+        signup_btn.setEnabled(true);
+        errLayout.setVisibility(View.GONE);
         errLayout.setVisibility(View.VISIBLE);
         errText.setText(err);
     }

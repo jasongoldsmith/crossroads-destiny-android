@@ -537,6 +537,12 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
         registerReceiver(ReceivefromService, new IntentFilter("subtype_flag"));
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        unregisterReceiver(ReceivefromService);
+    }
+
     private BroadcastReceiver ReceivefromService = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -549,7 +555,8 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
                 notiMessage.setVisibility(View.VISIBLE);
                 notiMessage.setText(msg);
             }else {
-                notiTopText.setText("YOUR FIRETEAM IS READY");
+                notiEventText.setText("Your Fireteam is ready!");
+                notiTopText.setText(subtype);
                 notiMessage.setVisibility(View.GONE);
                 //mManager.getEventList(ListActivityFragment.this);
             }
@@ -574,20 +581,20 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
         calendar.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(MaterialCalendarView materialCalendarView, CalendarDay calendarDay, boolean b) {
-                int m= calendarDay.getMonth();
+                int m = calendarDay.getMonth();
                 int d = calendarDay.getDay();
-                if(m==1 && d>29) {
+                if (m == 1 && d > 29) {
                     m = 3;
-                    if (d==30){
+                    if (d == 30) {
                         d = 1;
                     } else {
                         d = 2;
                     }
                 } else {
-                    m= m + 1;
+                    m = m + 1;
                 }
-                date_display.setText(m+"-"+d
-                        +"-"+calendarDay.getYear());
+                date_display.setText(m + "-" + d
+                        + "-" + calendarDay.getYear());
             }
         });
     }
@@ -825,10 +832,18 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
             //EventData ed = (EventData)data;
             dismissProgressBar();
 //            progress.dismiss();
-            finish();
+            launchListActivityAndFinish();
+//            finish();
         }
 //        mAdapter.addItem(aData);
 //        mAdapter.notifyDataSetChanged();
+    }
+
+    private void startListActivity() {
+        Intent regIntent = new Intent(getApplicationContext(),
+                ListActivityFragment.class);
+        regIntent.putExtra("userdata", user);
+        startActivity(regIntent);
     }
 
     public void dismissProgressBar(){

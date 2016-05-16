@@ -16,6 +16,7 @@ import com.example.sharmha.travelerfordestiny.network.ActivityListNetwork;
 import com.example.sharmha.travelerfordestiny.network.EventListNetwork;
 import com.example.sharmha.travelerfordestiny.network.EventRelationshipHandlerNetwork;
 import com.example.sharmha.travelerfordestiny.network.EventSendMessageNetwork;
+import com.example.sharmha.travelerfordestiny.network.ForgotPasswordNetwork;
 import com.example.sharmha.travelerfordestiny.network.GetVersion;
 import com.example.sharmha.travelerfordestiny.network.LogoutNetwork;
 import com.example.sharmha.travelerfordestiny.network.ReportCrashNetwork;
@@ -65,6 +66,7 @@ public class ControlManager implements Observer{
     private ArrayList<ActivityData> crucibleActivityList;
 
     private static ControlManager mInstance;
+    private ForgotPasswordNetwork forgotPasswordNetwork;
 
     public ControlManager() {
     }
@@ -238,6 +240,16 @@ public class ControlManager implements Observer{
         }
     }
 
+    public void postResetPassword(ForgotLoginActivity activity, RequestParams params) {
+        try {
+            forgotPasswordNetwork = new ForgotPasswordNetwork(activity);
+            forgotPasswordNetwork.addObserver(activity);
+            forgotPasswordNetwork.doResetPassword(params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void postLogout(ListActivityFragment act, RequestParams params) {
         try {
             logoutNetwork = new LogoutNetwork(act);
@@ -266,12 +278,25 @@ public class ControlManager implements Observer{
                 ((CreateNewEvent) mCurrentAct).showError(err);
             } else if (mCurrentAct instanceof EventDetailActivity){
                 ((EventDetailActivity) mCurrentAct).showError(err);
+            } else if (mCurrentAct instanceof ForgotLoginActivity){
+                ((ForgotLoginActivity) mCurrentAct).showError(err);
             }
         }
     }
 
     public void getAndroidVersion(ListActivityFragment activity) {
         getVersionNetwork = new GetVersion(activity);
+        getVersionNetwork.addObserver(this);
+        try {
+            getVersionNetwork.getAppVer();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getAndroidVersion(MainActivity activity) {
+        getVersionNetwork = new GetVersion(activity);
+        getVersionNetwork.addObserver(activity);
         getVersionNetwork.addObserver(this);
         try {
             getVersionNetwork.getAppVer();
@@ -332,14 +357,15 @@ public class ControlManager implements Observer{
                     builder.setPositiveButton(R.string.download_btn, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.dismiss();
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://goo.gl/GSLxIW"));
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Util.getAppDownloadLink()));
                             mCurrentAct.startActivity(browserIntent);
                         }
-                    }).setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
+                    }).setNegativeButton(R.string.later_btn, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
                             dialog.dismiss();
-
+                            if(mCurrentAct instanceof MainActivity) {
+                                getAndroidVersion((MainActivity) mCurrentAct);
+                            }
                         }
                     });
                     AlertDialog dialog = builder.create();

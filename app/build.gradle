@@ -8,8 +8,8 @@ android {
         applicationId "com.example.sharmha.travellerdestiny"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 41
-        versionName "1.40.0"
+        versionCode 7
+        versionName "1.6.0"
     }
     buildTypes {
         release {

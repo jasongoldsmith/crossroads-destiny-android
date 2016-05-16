@@ -3,6 +3,7 @@ package com.example.sharmha.travelerfordestiny.network;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.example.sharmha.travelerfordestiny.utils.Util;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.PersistentCookieStore;
@@ -19,10 +20,10 @@ public class NetworkEngine {
     //Switch development or production server
     //development server
     //private final String BASE_URL = "https://travelerbackend.herokuapp.com/api/v1/";
-
+    private final String BASE_URL = Util.getNetworkUrl();
     private AsyncHttpClient client;
     //production server
-    private final static String BASE_URL = "https://travelerbackendproduction.herokuapp.com/api/v1/";
+    //private final static String BASE_URL = "https://travelerbackendproduction.herokuapp.com/api/v1/";
 
     private NetworkEngine(Context c) {
         client = new AsyncHttpClient();

@@ -42,9 +42,40 @@ import java.util.TimeZone;
  */
 public class Util {
 
+    //To switch between production and development server links
+    //where 1 points to development and 2 points to production
+    private static final int network_connection = 1;
+
     private static final String TAG = Util.class.getName();
     public static final String trimbleDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     static SimpleDateFormat formatter = new SimpleDateFormat(trimbleDateFormat);
+
+    public static String getNetworkUrl() {
+        if (network_connection==2){
+            return Constants.NETWORK_PROD_BASE_URL;
+        }
+        return Constants.NETWORK_DEV_BASE_URL;
+    }
+
+    public static String getFirebaseUrl(String clanId) {
+        String url, tempUrl;
+        if (network_connection==2) {
+            url = Constants.FIREBASE_PROD_URL;
+        } else {
+            url = Constants.FIREBASE_DEV_URL;
+        }
+        if (clanId!=null && (!clanId.equalsIgnoreCase("null")) ) {
+            url = url + "/" + clanId;
+        }
+        return url;
+    }
+
+    public static String getAppDownloadLink() {
+        if (network_connection==2) {
+            return Constants.DOWNLOAD_PROD_BUILD;
+        }
+        return Constants.DOWNLOAD_DEV_BUILD;
+    }
 
     public static boolean isNetworkAvailable(Context c) {
         ConnectivityManager connectivityManager
@@ -230,12 +261,14 @@ public class Util {
     }
 
     public static String getErrorMessage(JSONObject jsonResponse) {
-        try {
-            JSONObject jsonData = jsonResponse.optJSONObject("error");
-            String n = jsonData.getString("message");
-            return n;
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if(jsonResponse!=null) {
+            try {
+                //JSONObject jsonData = jsonResponse.optJSONObject("message");
+                String n = jsonResponse.getString("error");
+                return n;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
@@ -306,11 +339,4 @@ public class Util {
                     });
         }
     }
-
-//    public static void clearNotification(Bundle extras) {
-//        int id = extras.getInt("id");
-//        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-//        notificationManager.cancel(NOTIFICATION_ID);
-//
-//    }
 }

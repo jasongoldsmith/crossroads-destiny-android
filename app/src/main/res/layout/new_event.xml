@@ -34,11 +34,7 @@
             android:id="@+id/back_btn"
             android:src="@drawable/icon_back_arrow"
             android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:paddingLeft="16dp"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:paddingRight="30dp"/>
+            android:layout_alignParentLeft="true"/>
 
     </RelativeLayout>
 
@@ -75,9 +71,10 @@
             android:textSize="12sp"
             android:textColor="@color/trimbe_white"
             android:layout_toRightOf="@+id/error"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/error_text"
             android:layout_marginBottom="14dp"
-            android:layout_marginLeft="13dp"/>
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="30dp"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -168,8 +165,8 @@
                 android:scaleType="fitXY"/>
 
             <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/act_banner"
                 android:src="@drawable/img_globe_icon"
                 android:layout_centerHorizontal="true"
@@ -438,7 +435,9 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="33dp"
-                android:layout_marginRight="33dp">
+                android:layout_marginRight="33dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="40dp">
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

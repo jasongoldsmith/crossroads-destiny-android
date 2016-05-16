@@ -28,4 +28,16 @@ public class Constants {
     public static final String TRAVELER_NOTIFICATION_INTENT = "com.example.sharmha.travelerfordestiny";
     public static String NOTIFICATION_INTENT_CHANNEL = "com.example.sharmha.notificationintent";
     public static int INTENT_ID = 9999;
+
+    //firebase url
+    public static String FIREBASE_DEV_URL = "https://traveler-development.firebaseio.com/events";
+    public static String FIREBASE_PROD_URL = "https://traveler-production.firebaseio.com/events";
+
+    //network base url
+    public static String NETWORK_DEV_BASE_URL = "https://travelerbackend.herokuapp.com/api/v1/";
+    public static String NETWORK_PROD_BASE_URL = "https://travelerbackendproduction.herokuapp.com/api/v1/";
+
+    //app download links
+    public static String DOWNLOAD_DEV_BUILD = "https://goo.gl/6vQpFn";
+    public static String DOWNLOAD_PROD_BUILD = "https://goo.gl/GSLxIW";
 }
