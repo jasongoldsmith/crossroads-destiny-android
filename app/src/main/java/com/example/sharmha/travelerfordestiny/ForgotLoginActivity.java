@@ -18,15 +18,15 @@ import com.loopj.android.http.RequestParams;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ForgotLoginActivity extends Activity implements Observer {
+public class ForgotLoginActivity extends BaseActivity implements Observer {
 
     private ImageView backBtn;
     private EditText psnId;
     private CardView resetPassword;
 
-    private RelativeLayout errLayout;
-    private TextView errText;
-    private ImageView close_err;
+//    private RelativeLayout errLayout;
+//    private TextView errText;
+//    private ImageView close_err;
     private ProgressDialog dialog;
     private ControlManager mManager;
 
@@ -48,16 +48,16 @@ public class ForgotLoginActivity extends Activity implements Observer {
 
         dialog = new ProgressDialog(this);
 
-        errLayout = (RelativeLayout) findViewById(R.id.error_layout);
-        errText = (TextView) findViewById(R.id.error_sub);
-        close_err = (ImageView) findViewById(R.id.err_close);
-
-        close_err.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                errLayout.setVisibility(View.GONE);
-            }
-        });
+//        errLayout = (RelativeLayout) findViewById(R.id.error_layout);
+//        errText = (TextView) findViewById(R.id.error_sub);
+//        close_err = (ImageView) findViewById(R.id.err_close);
+//
+//        close_err.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                errLayout.setVisibility(View.GONE);
+//            }
+//        });
 
         resetPassword = (CardView) findViewById(R.id.send_forgotlogin);
 
@@ -96,9 +96,7 @@ public class ForgotLoginActivity extends Activity implements Observer {
     public void showError(String err) {
         dialog.dismiss();
         resetPassword.setEnabled(true);
-        errLayout.setVisibility(View.GONE);
-        errLayout.setVisibility(View.VISIBLE);
-        errText.setText(err);
+        setErrText(err);
     }
 
     @Override

@@ -17,6 +17,7 @@ public class UserData implements Parcelable {
     private String imageUrl;
     private String userId;
     private String clanId;
+    private String psnVerify;
     private int authenticationId;
 
     public UserData() {
@@ -33,6 +34,14 @@ public class UserData implements Parcelable {
         if (pswd!=null && !pswd.isEmpty()) {
             this.password = pswd;
         }
+    }
+
+    public void setPsnVerify(String psnVeri) {
+        psnVerify = psnVeri;
+    }
+
+    public String getPsnVerify() {
+        return this.psnVerify;
     }
 
     public void setClanId(String id) {
@@ -92,6 +101,7 @@ public class UserData implements Parcelable {
             String profileImg = jsonData.getString("imageUrl");
             String uId = jsonData.getString("_id");
             String clanId = jsonData.getString("clanId");
+            String psnVer = jsonData.getString("psnVerified");
 
             if (n!=null && !n.isEmpty()){
                 setUser(n);
@@ -101,6 +111,7 @@ public class UserData implements Parcelable {
             setImageUrl(profileImg);
             setUserId(uId);
             setClanId(clanId);
+            setPsnVerify(psnVer);
 
         } catch (JSONException e) {
             // TODO Auto-generated catch block
@@ -127,6 +138,7 @@ public class UserData implements Parcelable {
         this.imageUrl = in.readString();
         this.userId = in.readString();
         this.clanId = in.readString();
+        this.psnVerify = in.readString();
     }
 
     @Override
@@ -142,5 +154,6 @@ public class UserData implements Parcelable {
         dest.writeString(this.imageUrl);
         dest.writeString(this.userId);
         dest.writeString(this.clanId);
+        dest.writeString(this.psnVerify);
     }
 }

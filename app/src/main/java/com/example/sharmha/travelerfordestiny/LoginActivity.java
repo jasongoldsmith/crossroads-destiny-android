@@ -31,23 +31,16 @@ import java.util.Observer;
 /**
  * Created by sharmha on 2/22/16.
  */
-public class LoginActivity extends Activity implements Observer {
+public class LoginActivity extends BaseActivity implements Observer {
 
     private EditText name_login;
     private EditText pswd_login;
     private ImageView login_btn;
-//    private NetworkEngine ntwrk;
-//    private Util util;
     private UserData user;
     private String username;
     private String password;
 
-    private String url = "auth/login";
     private ControlManager mManager;
-
-    private RelativeLayout errLayout;
-    private TextView errText;
-    private ImageView close_err;
     private ProgressDialog dialog;
     private Intent localPushEvent;
     private TextView forgotLogin;
@@ -68,9 +61,9 @@ public class LoginActivity extends Activity implements Observer {
         pswd_login = (EditText) findViewById(R.id.login_pswrd);
         login_btn = (ImageView) findViewById(R.id.login_btn);
 
-        errLayout = (RelativeLayout) findViewById(R.id.error_layout);
-        errText = (TextView) findViewById(R.id.error_sub);
-        close_err = (ImageView) findViewById(R.id.err_close);
+//        errLayout = (RelativeLayout) findViewById(R.id.error_layout);
+//        errText = (TextView) findViewById(R.id.error_sub);
+//        close_err = (ImageView) findViewById(R.id.err_close);
 
         forgotLogin = (TextView) findViewById(R.id.forgot_login);
 
@@ -83,12 +76,12 @@ public class LoginActivity extends Activity implements Observer {
             }
         });
 
-        close_err.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                errLayout.setVisibility(View.GONE);
-            }
-        });
+//        close_err.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                errLayout.setVisibility(View.GONE);
+//            }
+//        });
 
         dialog = new ProgressDialog(this);
 
@@ -185,9 +178,7 @@ public class LoginActivity extends Activity implements Observer {
     public void showError(String err) {
         dialog.dismiss();
         login_btn.setEnabled(true);
-        errLayout.setVisibility(View.GONE);
-        errLayout.setVisibility(View.VISIBLE);
-        errText.setText(err);
+        setErrText(err);
     }
 
     private void enableSubmitIfReady() {
@@ -200,62 +191,12 @@ public class LoginActivity extends Activity implements Observer {
         }
     }
 
-//    private void doLogin(RequestParams params) throws JSONException {
-//        ntwrk.post(url, params, new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                // If the response is JSONObject instead of expected JSONArray
-////                Toast.makeText(LoginActivity.this, "Login Success",
-////                        Toast.LENGTH_SHORT).show();
-//
-//                //post gcm token
-//                postGcm();
-//
-//                if (user != null) {
-//                    user.toJson(response);
-//                    user.setPassword(password);
-//
-//                    //save in preferrence
-//                    Util.setDefaults("user", username, getApplicationContext());
-//                    Util.setDefaults("password", password, getApplicationContext());
-//
-////                    SharedPreferences.Editor prefsEditor = mPrefs.edit();
-////                    Gson gson = new Gson();
-////                    String json = gson.toJson(user); // myObject - instance of MyObject
-////                    prefsEditor.putString("userdata", json);
-////                    prefsEditor.commit();
-//
-//                    // go to logout page
-//                    Intent regIntent = new Intent(getApplicationContext(),
-//                            ListActivity.class);
-//                    regIntent.putExtra("userdata", user);
-//                    startActivity(regIntent);
-//                    finish();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                try {
-//                    Toast.makeText(LoginActivity.this, "Login error from server  - " + statusCode + " " + errorResponse.getString("message"),
-//                            Toast.LENGTH_LONG).show();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//    }
-//
-//    private void postGcm() {
-//        //post gcm token
-//        Util.getGCMToken(this, mManager);
-//    }
-
     @Override
     public void update(Observable observable, Object data) {
         UserData ud = (UserData)data;
         if (ud.getAuthenticationId()==Constants.LOGIN) {
 
+            mManager.getEventList();
             //save in preferrence
             Util.setDefaults("user", username, getApplicationContext());
             Util.setDefaults("password", password, getApplicationContext());
@@ -276,12 +217,6 @@ public class LoginActivity extends Activity implements Observer {
             }
             regIntent.putExtra("userdata", ud);
 
-//            Intent regIntent = new Intent(getApplicationContext(),
-//                    CreateNewEvent.class);
-//            if(localPushEvent!=null){
-//                regIntent.putExtra("eventIntent", localPushEvent);
-//            }
-//            regIntent.putExtra("userdata", ud);
             startActivity(regIntent);
             finish();
         }

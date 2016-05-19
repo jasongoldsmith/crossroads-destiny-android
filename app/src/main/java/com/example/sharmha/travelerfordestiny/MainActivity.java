@@ -61,6 +61,8 @@ public class MainActivity extends Activity implements Observer {
 
     private void forwardAfterVersionCheck() {
         if (u != null && p!= null && !u.isEmpty() && !p.isEmpty()) {
+            //todo check how to minimize api calls to get full event list in future from multiple locations
+            mManager.getEventList();
             Util.storeUserData(userData, u, p);
             RequestParams params = new RequestParams();
             params.put("userName", u);

@@ -49,4 +49,5 @@
 
     <color name="logout_btn_background">#1f323b</color>
 
+    <color name="createnewevent_topbar">#19282c</color>
 </resources>

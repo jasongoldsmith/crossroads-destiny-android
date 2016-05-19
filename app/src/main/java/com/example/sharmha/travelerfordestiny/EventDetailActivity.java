@@ -39,7 +39,7 @@ import java.util.Observer;
 /**
  * Created by sharmha on 3/29/16.
  */
-public class EventDetailActivity extends Activity implements Observer {
+public class EventDetailActivity extends BaseActivity implements Observer {
 
     EventData currEvent;
     private TextView eventName;
@@ -78,9 +78,9 @@ public class EventDetailActivity extends Activity implements Observer {
     private ImageView notif_close;
     private RelativeLayout progressBar;
     private TextView eventCheckpoint;
-    private RelativeLayout errLayout;
-    private TextView errText;
-    private ImageView close_err;
+//    private RelativeLayout errLayout;
+//    private TextView errText;
+//    private ImageView close_err;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,16 +122,16 @@ public class EventDetailActivity extends Activity implements Observer {
         back = (ImageView) findViewById(R.id.eventdetail_backbtn);
         eventDetailDate = (TextView) findViewById(R.id.eventDetailDate);
 
-        errLayout = (RelativeLayout) findViewById(R.id.error_layout);
-        errText = (TextView) findViewById(R.id.error_sub);
-        close_err = (ImageView) findViewById(R.id.err_close);
-
-        close_err.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                errLayout.setVisibility(View.GONE);
-            }
-        });
+//        errLayout = (RelativeLayout) findViewById(R.id.error_layout);
+//        errText = (TextView) findViewById(R.id.error_sub);
+//        close_err = (ImageView) findViewById(R.id.err_close);
+//
+//        close_err.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                errLayout.setVisibility(View.GONE);
+//            }
+//        });
 
         sendmsg_bckgrnd = (RelativeLayout) findViewById(R.id.sendmsg_background);
 
@@ -419,8 +419,9 @@ public class EventDetailActivity extends Activity implements Observer {
 
     public void showError(String err) {
         hideProgress();
-        errLayout.setVisibility(View.VISIBLE);
-        errText.setText(err);
+//        errLayout.setVisibility(View.VISIBLE);
+//        errText.setText(err);
+        setErrText(err);
     }
 
     private class CurrentEventsViewAdapter extends RecyclerView.Adapter<CurrentEventsViewAdapter.CurrentEventsViewHolder> {

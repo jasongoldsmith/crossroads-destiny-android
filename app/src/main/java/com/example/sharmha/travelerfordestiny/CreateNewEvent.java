@@ -12,9 +12,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -60,7 +63,7 @@ import java.util.Observer;
 /**
  * Created by sharmha on 3/8/16.
  */
-public class CreateNewEvent extends Activity implements Observer, AdapterView.OnItemSelectedListener {
+public class CreateNewEvent extends BaseActivity implements Observer, AdapterView.OnItemSelectedListener {
 
     private RecyclerView mRecyclerView;
 
@@ -122,9 +125,9 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
 
     private ControlManager mCntrlMngr;
 
-    private RelativeLayout errLayout;
-    private TextView errText;
-    private ImageView close_err;
+//    private RelativeLayout errLayout;
+//    private TextView errText;
+//    private ImageView close_err;
 
     private RelativeLayout calendar_layout;
     private MaterialCalendarView calendar;
@@ -149,9 +152,10 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Remove title bar
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.new_event);
+
+        //hideStatusBar();
+        setTRansparentStatusBar();
 
         //set orientation portrait
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -164,6 +168,12 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
 
         Bundle b = getIntent().getExtras();
         user = b.getParcelable("userdata");
+
+        if (user.getPsnVerify()!=null) {
+            if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                //launchListActivityAndFinish();
+            }
+        }
         if(b.containsKey("eventIntent")) {
             localPushEventObj = (Intent) b.get("eventIntent");
         }
@@ -194,16 +204,16 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
         fifthActivityLayout = (RelativeLayout) findViewById(R.id.fifth_img_layout);
         sixthActivityLayout = (RelativeLayout) findViewById(R.id.sixth_img_layout);
 
-        errLayout = (RelativeLayout) findViewById(R.id.error_layout);
-        errText = (TextView) findViewById(R.id.error_sub);
-        close_err = (ImageView) findViewById(R.id.err_close);
-
-        close_err.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                errLayout.setVisibility(View.GONE);
-            }
-        });
+//        errLayout = (RelativeLayout) findViewById(R.id.error_layout);
+//        errText = (TextView) findViewById(R.id.error_sub);
+//        close_err = (ImageView) findViewById(R.id.err_close);
+//
+//        close_err.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                errLayout.setVisibility(View.GONE);
+//            }
+//        });
 
         firstActivityType = (TextView) findViewById(R.id.first);
         secondActivityType = (TextView) findViewById(R.id.second);
@@ -491,6 +501,16 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
         });
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setTRansparentStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            getWindow().getDecorView().setSystemUiVisibility(
+//                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.createnewevent_topbar));
+        }
+    }
+
     private String getCreateEventDateTime() {
         if(date_display!=null) {
             if ((!date_display.getText().toString().equalsIgnoreCase(getResources().getString(R.string.date_default))) || (!time_display.getText().toString().equalsIgnoreCase(getResources().getString(R.string.time_default)))) {
@@ -601,8 +621,9 @@ public class CreateNewEvent extends Activity implements Observer, AdapterView.On
 
     public void showError(String err) {
         dismissProgressBar();
-        errLayout.setVisibility(View.VISIBLE);
-        errText.setText(err);
+//        errLayout.setVisibility(View.VISIBLE);
+//        errText.setText(err);
+        //setErrText(err);
     }
 
     public GradientDrawable backgroundWithBorder(int bgcolor, int brdcolor) {

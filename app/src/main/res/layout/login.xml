@@ -9,53 +9,53 @@
         android:src="@drawable/img_background_map"
         android:scaleType="fitXY"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/error_layout"
-        android:layout_alignParentTop="true"
-        android:background="@android:color/black"
-        android:visibility="gone">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/error"
-            android:src="@drawable/icon_error"
-            android:layout_alignParentLeft="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="22dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/error_text"
-            android:text="MISADVENTURE"
-            android:textSize="12sp"
-            android:textColor="#ff0000"
-            android:layout_toRightOf="@+id/error"
-            android:layout_marginTop="9dp"
-            android:layout_marginLeft="13dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/error_sub"
-            android:text="Your Username or Password do not match"
-            android:textSize="12sp"
-            android:textColor="@color/trimbe_white"
-            android:layout_toRightOf="@+id/error"
-            android:layout_below="@+id/error_text"
-            android:layout_marginBottom="14dp"
-            android:layout_marginLeft="13dp"
-            android:layout_marginRight="30dp"/>
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/error_layout"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:background="@android:color/black"-->
+        <!--android:visibility="gone">-->
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/error"-->
+            <!--android:src="@drawable/icon_error"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:layout_marginLeft="22dp"/>-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/error_text"-->
+            <!--android:text="MISADVENTURE"-->
+            <!--android:textSize="12sp"-->
+            <!--android:textColor="#ff0000"-->
+            <!--android:layout_toRightOf="@+id/error"-->
+            <!--android:layout_marginTop="9dp"-->
+            <!--android:layout_marginLeft="13dp"/>-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/error_sub"-->
+            <!--android:text="Your Username or Password do not match"-->
+            <!--android:textSize="12sp"-->
+            <!--android:textColor="@color/trimbe_white"-->
+            <!--android:layout_toRightOf="@+id/error"-->
+            <!--android:layout_below="@+id/error_text"-->
+            <!--android:layout_marginBottom="14dp"-->
+            <!--android:layout_marginLeft="13dp"-->
+            <!--android:layout_marginRight="30dp"/>-->
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/err_close"
-            android:src="@drawable/icon_close_sm"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="9dp"
-            android:layout_marginEnd="7dp"/>
-    </RelativeLayout>
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/err_close"-->
+            <!--android:src="@drawable/icon_close_sm"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_marginTop="9dp"-->
+            <!--android:layout_marginEnd="7dp"/>-->
+    <!--</RelativeLayout>-->
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -198,5 +198,7 @@
         android:layout_marginBottom="32dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="45dp"/>
+
+    <include layout="@layout/activity_base" />
 
 </RelativeLayout>

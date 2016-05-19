@@ -29,7 +29,7 @@ import java.util.Observer;
 /**
  * Created by sharmha on 2/22/16.
  */
-public class RegisterActivity extends Activity implements Observer {
+public class RegisterActivity extends BaseActivity implements Observer {
 
     private EditText name_signup;
     private EditText pswd_signup;
@@ -46,11 +46,10 @@ public class RegisterActivity extends Activity implements Observer {
     private String password;
     private String psnid;
 
-    private RelativeLayout errLayout;
-    private TextView errText;
-    private ImageView close_err;
+//    private RelativeLayout errLayout;
+//    private TextView errText;
+//    private ImageView close_err;
 
-    private String url = "auth/register";
     private ProgressDialog dialog;
 
     @Override
@@ -71,16 +70,16 @@ public class RegisterActivity extends Activity implements Observer {
         psnid_signup = (EditText) findViewById(R.id.signup_psn);
         signup_btn = (ImageView) findViewById(R.id.signup_btn);
 
-        errLayout = (RelativeLayout) findViewById(R.id.error_layout);
-        errText = (TextView) findViewById(R.id.error_sub);
-        close_err = (ImageView) findViewById(R.id.err_close);
-
-        close_err.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                errLayout.setVisibility(View.GONE);
-            }
-        });
+//        errLayout = (RelativeLayout) findViewById(R.id.error_layout);
+//        errText = (TextView) findViewById(R.id.error_sub);
+//        close_err = (ImageView) findViewById(R.id.err_close);
+//
+//        close_err.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                errLayout.setVisibility(View.GONE);
+//            }
+//        });
 
         //ntwrk = new NetworkEngine(getApplicationContext());
 
@@ -200,9 +199,7 @@ public class RegisterActivity extends Activity implements Observer {
     public void showError(String err) {
         dialog.dismiss();
         signup_btn.setEnabled(true);
-        errLayout.setVisibility(View.GONE);
-        errLayout.setVisibility(View.VISIBLE);
-        errText.setText(err);
+        setErrText(err);
     }
 
     private void enableSubmitIfReady() {

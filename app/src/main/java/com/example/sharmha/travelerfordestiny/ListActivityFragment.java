@@ -96,14 +96,19 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
     private EventData pushEventObject;
 
+    private RelativeLayout unverifiedUserScreen;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_list);
 
-
-        setTRansparentStatusBar();
         //hideStatusBar();
+        setTRansparentStatusBar();
+
+        mManager = ControlManager.getmInstance();
+        mManager.setCurrentActivity(this);
+
         Bundle b = getIntent().getExtras();
         user = b.getParcelable("userdata");
         if(b.containsKey("eventIntent")){
@@ -116,8 +121,6 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             this.getIntent().removeExtra("eventIntent");
         }
 
-        mManager = ControlManager.getmInstance();
-        mManager.setCurrentActivity(this);
         mManager.postGetActivityList(this);
 
         // get existing event list
@@ -128,6 +131,13 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         Firebase.setAndroidContext(this);
         setupEventListener();
         //registerFirbase();
+
+        if (user.getPsnVerify()!=null) {
+            if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                unverifiedUserScreen = (RelativeLayout) findViewById(R.id.verify_fail);
+                //unverifiedUserScreen.setVisibility(View.VISIBLE);
+            }
+        }
 
         progress = (RelativeLayout) findViewById(R.id.progress_bar_layout);
         userProfile = (ImageView) findViewById(R.id.userProfile);
@@ -235,7 +245,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                         CreateNewEvent.class);
                 regIntent.putExtra("userdata", user);
                 startActivity(regIntent);
-                //finish();
+                finish();
             }
         });
 
@@ -367,11 +377,21 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         try {
             JSONObject jsonObj = new JSONObject(payload);
 
-            if(jsonObj.has("event")) {
-                pushEventObject.toJson((JSONObject) jsonObj.get("event"));
+            if(jsonObj.has("eventId")) {
+                String id = (String) jsonObj.get("eventId");
+                if(mManager!=null) {
+                    if(mManager.getEventObj(id)!=null) {
+                        pushEventObject = mManager.getEventObj(id);
+                    }
+                }
             } else {
                 pushEventObject.toJson(jsonObj);
             }
+//            if(jsonObj.has("event")) {
+//                pushEventObject.toJson((JSONObject) jsonObj.get("event"));
+//            } else {
+//                pushEventObject.toJson(jsonObj);
+//            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -414,8 +434,10 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
     public void showError(String err) {
         hideProgress();
+        errLayout.setVisibility(View.GONE);
         errLayout.setVisibility(View.VISIBLE);
         errText.setText(err);
+        //setErrText(err);
     }
 
     @Override
@@ -538,8 +560,6 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         }
     }
 
-
-
     @Override
     public void update(Observable observable, Object data) {
         if (data != null) {
@@ -582,15 +602,17 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     }
 
     private void createUpcomingCurrentList(ArrayList<EventData> currentEventList) {
-        if (currentEventList!=null && currentEventList.size()>0){
+        if (currentEventList!=null){
             fragmentCurrentEventList = new ArrayList<EventData>();
             fragmentupcomingEventList = new ArrayList<EventData>();
-            for (int i=0;i<currentEventList.size();i++) {
-                if(currentEventList.get(i).getLaunchEventStatus()!=null){
-                    if(currentEventList.get(i).getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING)){
-                        fragmentupcomingEventList.add(currentEventList.get(i));
-                    } else {
-                        fragmentCurrentEventList.add(currentEventList.get(i));
+            if (currentEventList.size()>0) {
+                for (int i = 0; i < currentEventList.size(); i++) {
+                    if (currentEventList.get(i).getLaunchEventStatus() != null) {
+                        if (currentEventList.get(i).getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING)) {
+                            fragmentupcomingEventList.add(currentEventList.get(i));
+                        } else {
+                            fragmentCurrentEventList.add(currentEventList.get(i));
+                        }
                     }
                 }
             }

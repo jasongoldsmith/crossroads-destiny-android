@@ -126,9 +126,12 @@ public class Util {
     }
 
     public static int dpToPx(int dp, Context c) {
-        DisplayMetrics displayMetrics = c.getResources().getDisplayMetrics();
-        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-        return px;
+        if(c!=null) {
+            DisplayMetrics displayMetrics = c.getResources().getDisplayMetrics();
+            int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+            return px;
+        }
+         return 0;
     }
 
     public static String getApplicationVersionCode(Context c) {
@@ -263,9 +266,11 @@ public class Util {
     public static String getErrorMessage(JSONObject jsonResponse) {
         if(jsonResponse!=null) {
             try {
-                //JSONObject jsonData = jsonResponse.optJSONObject("message");
-                String n = jsonResponse.getString("error");
-                return n;
+                if(jsonResponse.has("error")) {
+                    //JSONObject jsonData = jsonResponse.optJSONObject("message");
+                    String n = jsonResponse.getString("error");
+                    return n;
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

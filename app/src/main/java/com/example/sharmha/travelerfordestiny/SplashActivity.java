@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -17,15 +18,15 @@ import com.example.sharmha.travellerdestiny.R;
 /**
  * Created by sharmha on 2/19/16.
  */
-public class SplashActivity extends Activity {
+public class SplashActivity extends BaseActivity {
 
     private static final int SPLASH_DELAY = 500;
     private Handler mHandler;
     private RelativeLayout mLayout;
     private ControlManager cManager;
-    private RelativeLayout errLayout;
-    private TextView errText;
-    private ImageView close_err;
+//    private RelativeLayout errLayout;
+//    private TextView errText;
+//    private ImageView close_err;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,16 +34,16 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.splash_loading);
         cManager = ControlManager.getmInstance();
         cManager.setCurrentActivity(this);
-        errLayout = (RelativeLayout) findViewById(R.id.error_layout);
-        errText = (TextView) findViewById(R.id.error_sub);
-        close_err = (ImageView) findViewById(R.id.err_close);
-
-        close_err.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                errLayout.setVisibility(View.GONE);
-            }
-        });
+//        errLayout = (RelativeLayout) findViewById(R.id.error_layout);
+//        errText = (TextView) findViewById(R.id.error_sub);
+//        close_err = (ImageView) findViewById(R.id.err_close);
+//
+//        close_err.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                errLayout.setVisibility(View.GONE);
+//            }
+//        });
         mHandler = new Handler();
         mLayout = (RelativeLayout) findViewById(R.id.splash_layout);
         mLayout.setVisibility(View.VISIBLE);
@@ -64,7 +65,8 @@ public class SplashActivity extends Activity {
     }
 
     public void showError(String err) {
-        errLayout.setVisibility(View.VISIBLE);
-        errText.setText(err);
+        setErrText(err);
+//        errLayout.setVisibility(View.VISIBLE);
+//        errText.setText(err);
     }
 }

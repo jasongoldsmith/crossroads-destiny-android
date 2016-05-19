@@ -40,4 +40,10 @@ public class Constants {
     //app download links
     public static String DOWNLOAD_DEV_BUILD = "https://goo.gl/6vQpFn";
     public static String DOWNLOAD_PROD_BUILD = "https://goo.gl/GSLxIW";
+
+    //PSN verified keys
+    public static String PSN_VERIFIED = "VERIFIED";
+    public static String PSN_NOT_INITIATED = "NOT_INITIATED";
+    public static String PSN_INITIATED = "INITIATED";
+    public static String PSN_FAILED_INITIATED = "FAILED_INITIATION";
 }

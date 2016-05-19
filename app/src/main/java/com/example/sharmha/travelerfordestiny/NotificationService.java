@@ -39,24 +39,38 @@ public class NotificationService extends Service {
             EventData ed = new EventData();
             Intent in = new Intent("subtype_flag");
 
-            if(jsonObj.has("event")) {
-                ed.toJson((JSONObject) jsonObj.get("event"));
-            } else {
-                ed.toJson(jsonObj);
-            }
-            if(ed.getActivityData()!=null){
-                if(ed.getActivityData().getActivitySubtype()!=null){
-                    ActivityData ad = ed.getActivityData();
-                    String st = ad.getActivitySubtype();
-                    if (!st.equalsIgnoreCase(null)) {
-                        in.putExtra("subtype", st);
-                    }
+            if(jsonObj.has("notificationName")) {
+                String notiName = (String) jsonObj.get("notificationName");
+                if (notiName.equalsIgnoreCase("messageFromPlayer")) {
+                    in.putExtra("playerMessage", true);
                 }
             }
 
-            if(jsonObj.has("playerMessage") || payload == null){
-                in.putExtra("playerMessage", true);
+            if(jsonObj.has("eventName")) {
+                String eName = (String) jsonObj.get("eventName");
+                if (!eName.equalsIgnoreCase(null)) {
+                        in.putExtra("subtype", eName);
+                    }
             }
+
+//            if(jsonObj.has("event")) {
+//                ed.toJson((JSONObject) jsonObj.get("event"));
+//            } else {
+//                ed.toJson(jsonObj);
+//            }
+//            if(ed.getActivityData()!=null){
+//                if(ed.getActivityData().getActivitySubtype()!=null){
+//                    ActivityData ad = ed.getActivityData();
+//                    String st = ad.getActivitySubtype();
+//                    if (!st.equalsIgnoreCase(null)) {
+//                        in.putExtra("subtype", st);
+//                    }
+//                }
+//            }
+//
+//            if(jsonObj.has("playerMessage") || payload == null){
+//                in.putExtra("playerMessage", true);
+//            }
             if(alert!=null && alert.length()>0){
                 in.putExtra("message", alert);
             }

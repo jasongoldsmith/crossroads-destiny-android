@@ -112,6 +112,34 @@ public class ControlManager implements Observer{
         }
     }
 
+    public void getEventList() {
+        try {
+            eventListNtwrk = new EventListNetwork(mCurrentAct);
+            eventListNtwrk.addObserver(this);
+            eventListNtwrk.getEvents();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public EventData getEventObj(String eId) {
+        if(eData!=null && (!eData.isEmpty())) {
+            for (int i=0; i<eData.size(); i++) {
+                if (eData.get(i)!=null) {
+                    if(eData.get(i).getEventId()!=null) {
+                        if(eData.get(i).getEventId().equalsIgnoreCase(eId)) {
+                            EventData event = new EventData();
+                            event = eData.get(i);
+                            return event;
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
     public void postJoinEvent(Activity activity, RequestParams params) {
         try {
             eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(activity);

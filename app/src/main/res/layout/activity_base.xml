@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.sharmha.travelerfordestiny.BaseActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/error_layout"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/black"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/error"
+            android:src="@drawable/icon_error"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="22dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/error_text"
+            android:text="MISADVENTURE"
+            android:textSize="12sp"
+            android:textColor="#ff0000"
+            android:layout_toRightOf="@+id/error"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="13dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/error_sub"
+            android:textSize="12sp"
+            android:textColor="@color/trimbe_white"
+            android:layout_toRightOf="@+id/error"
+            android:layout_below="@+id/error_text"
+            android:layout_marginBottom="14dp"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="30dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/err_close"
+            android:src="@drawable/icon_close_sm"
+            android:layout_alignParentRight="true"
+            android:onClick="closeView"
+            android:layout_marginTop="9dp"
+            android:layout_marginEnd="7dp"/>
+    </RelativeLayout>
+
+</RelativeLayout>
