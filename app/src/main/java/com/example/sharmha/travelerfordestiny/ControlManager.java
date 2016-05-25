@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.view.View;
 
 import com.example.sharmha.travelerfordestiny.data.ActivityData;
 import com.example.sharmha.travelerfordestiny.data.ActivityList;
@@ -18,6 +19,7 @@ import com.example.sharmha.travelerfordestiny.network.EventRelationshipHandlerNe
 import com.example.sharmha.travelerfordestiny.network.EventSendMessageNetwork;
 import com.example.sharmha.travelerfordestiny.network.ForgotPasswordNetwork;
 import com.example.sharmha.travelerfordestiny.network.GetVersion;
+import com.example.sharmha.travelerfordestiny.network.GroupListNetwork;
 import com.example.sharmha.travelerfordestiny.network.LogoutNetwork;
 import com.example.sharmha.travelerfordestiny.network.ReportCrashNetwork;
 import com.example.sharmha.travelerfordestiny.network.postGcmNetwork;
@@ -67,6 +69,7 @@ public class ControlManager implements Observer{
 
     private static ControlManager mInstance;
     private ForgotPasswordNetwork forgotPasswordNetwork;
+    private GroupListNetwork groupListNtwrk;
 
     public ControlManager() {
     }
@@ -120,6 +123,27 @@ public class ControlManager implements Observer{
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void getGroupList(ListActivityFragment act) {
+        try{
+            groupListNtwrk = new GroupListNetwork(act);
+            groupListNtwrk.addObserver(act);
+            groupListNtwrk.getGroups();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void postSetGroup(ListActivityFragment act, RequestParams params) {
+        try{
+        groupListNtwrk = new GroupListNetwork(act);
+        groupListNtwrk.addObserver(act);
+        groupListNtwrk.addObserver(this);
+        groupListNtwrk.postSelectGroup(params);
+    } catch (JSONException e) {
+        e.printStackTrace();
+    }
     }
 
     public EventData getEventObj(String eId) {
@@ -333,6 +357,35 @@ public class ControlManager implements Observer{
         }
     }
 
+    public Intent decideToOpenActivity(Intent contentIntent) {
+
+        Intent regIntent;
+        if (contentIntent != null ) {
+            regIntent = new Intent(mCurrentAct.getApplicationContext(),
+                    ListActivityFragment.class);
+            regIntent.putExtra("eventIntent", contentIntent);
+        } else {
+            if(user.getPsnVerify()!=null && user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                if(user.getClanId()!=null && user.getClanId().equalsIgnoreCase(Constants.CLAN_NOT_SET)) {
+                    regIntent = new Intent(mCurrentAct.getApplicationContext(),
+                            ListActivityFragment.class);
+                } else {
+                    if(this.eData!=null && (!this.eData.isEmpty())) {
+                        regIntent = new Intent(mCurrentAct.getApplicationContext(),
+                                ListActivityFragment.class);
+                    } else {
+                        regIntent = new Intent(mCurrentAct.getApplicationContext(),
+                                CreateNewEvent.class);
+                    }
+                }
+            } else {
+                regIntent = new Intent(mCurrentAct.getApplicationContext(),
+                        CreateNewEvent.class);
+            }
+        }
+        return regIntent;
+    }
+
     public void setCurrentActivity(Activity act) {
         this.mCurrentAct = act;
     }
@@ -401,6 +454,8 @@ public class ControlManager implements Observer{
                 }
 
             }
+        } else if(observable instanceof GroupListNetwork) {
+            setUserdata((UserData) data);
         }
     }
 
@@ -451,5 +506,16 @@ public class ControlManager implements Observer{
             e.printStackTrace();
         }
 
+
+    }
+
+    public void postChangePassword(ChangePassword activity, RequestParams params) {
+        try {
+            forgotPasswordNetwork = new ForgotPasswordNetwork(activity);
+            forgotPasswordNetwork.addObserver(activity);
+            forgotPasswordNetwork.doChangePassword(params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,7 +1,6 @@
 package com.example.sharmha.travelerfordestiny;
 
 import android.annotation.TargetApi;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +9,9 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+
+import com.example.sharmha.travelerfordestiny.data.GroupData;
+import com.example.sharmha.travelerfordestiny.network.GroupListNetwork;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -18,13 +20,12 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
 import android.util.SparseArray;
 import android.util.TypedValue;
@@ -34,11 +35,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.sharmha.travelerfordestiny.data.ActivityData;
 import com.example.sharmha.travelerfordestiny.data.CurrentEventDataHolder;
 import com.example.sharmha.travelerfordestiny.data.EventData;
 import com.example.sharmha.travelerfordestiny.data.EventList;
@@ -97,6 +96,12 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     private EventData pushEventObject;
 
     private RelativeLayout unverifiedUserScreen;
+    private TextView verify_username;
+    private TextView verify_user_bottom_text;
+    private ImageView appIcon;
+
+    private GroupDrawerAdapter gpAct;
+    private TextView changePassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,12 +135,17 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
         Firebase.setAndroidContext(this);
         setupEventListener();
-        //registerFirbase();
+        registerFirbase();
 
         if (user.getPsnVerify()!=null) {
             if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
                 unverifiedUserScreen = (RelativeLayout) findViewById(R.id.verify_fail);
-                //unverifiedUserScreen.setVisibility(View.VISIBLE);
+                verify_username = (TextView) findViewById(R.id.top_text);
+                verify_user_bottom_text = (TextView) findViewById(R.id.verify_bottom_text);
+                verify_user_bottom_text.setText(Html.fromHtml((getString(R.string.verify_accnt_bottomtext))));
+                verify_user_bottom_text.setMovementMethod(LinkMovementMethod.getInstance());
+                verify_username.setText("Welcome " + user.getUser() + "!");
+                unverifiedUserScreen.setVisibility(View.VISIBLE);
             }
         }
 
@@ -144,9 +154,11 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         userProfileDrawer = (CircularImageView) findViewById(R.id.profile_avatar);
         userNameDrawer = (TextView) findViewById(R.id.profile_name);
 
+        appIcon = (ImageView) findViewById(R.id.badge_icon);
+
         if (user.getImageUrl()!=null) {
             Util.picassoLoadIcon(this, userProfile, user.getImageUrl(), R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.avatar);
-            Util.picassoLoadIcon(this, userProfileDrawer, user.getImageUrl(), R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.avatar);
+            Util.picassoLoadIcon(this, userProfileDrawer, user.getImageUrl(), R.dimen.player_profile_drawer_hgt, R.dimen.player_profile_drawer_width, R.drawable.avatar);
         }
 
         if (user.getUser()!=null){
@@ -198,6 +210,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+                drawerView.bringToFront();
             }
         };
 
@@ -205,6 +218,13 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         this.drawerLayout.setDrawerListener(mDrawerToggle);
 
         userProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openProfileDrawer(Gravity.LEFT);
+            }
+        });
+
+        appIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openProfileDrawer(Gravity.RIGHT);
@@ -249,6 +269,17 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             }
         });
 
+        changePassword = (TextView) findViewById(R.id.reset);
+
+        changePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // go to create new event page
+                Intent regIntent = new Intent(getApplicationContext(),
+                        ChangePassword.class);
+                startActivity(regIntent);
+            }
+        });
         crash_report = (TextView) findViewById(R.id.crash_btn);
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
@@ -269,7 +300,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
         showVersion = (TextView) findViewById(R.id.build_version);
         if(Util.getApplicationVersionCode(ListActivityFragment.this)!=null){
-            showVersion.setText("Version - " + Util.getApplicationVersionCode(ListActivityFragment.this));
+            showVersion.setText("Version - " + Util.getApplicationVersionCode(ListActivityFragment.this) + "   |   Legal");
         }
 
         viewPager.setOnTouchListener(new View.OnTouchListener() {
@@ -310,6 +341,23 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                 startActivity(regIntent);
             }
         });
+
+        gpAct = new GroupDrawerAdapter(this);
+
+        checkClanSet();
+
+    }
+
+    private void checkClanSet() {
+        if (user != null) {
+            if (user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                if (user.getClanId() != null) {
+                    if (user.getClanId().equalsIgnoreCase(Constants.CLAN_NOT_SET)) {
+                        openProfileDrawer(Gravity.RIGHT);
+                    }
+                }
+            }
+        }
     }
 
     private void getExistingList() {
@@ -332,6 +380,10 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             refFirebase.removeEventListener(listener);
             refFirebase.removeValue();
         }
+    }
+
+    private void registerUserFirebase() {
+
     }
 
     private void setupEventListener() {
@@ -429,11 +481,15 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     }
 
     private void closeProfileDrawer(int gravity) {
-        this.drawerLayout.closeDrawer(gravity);
+        if(this.drawerLayout.isDrawerOpen(gravity)) {
+            this.drawerLayout.closeDrawer(gravity);
+        }
     }
 
     public void showError(String err) {
         hideProgress();
+        closeProfileDrawer(Gravity.RIGHT);
+        closeProfileDrawer(Gravity.LEFT);
         errLayout.setVisibility(View.GONE);
         errLayout.setVisibility(View.VISIBLE);
         errText.setText(err);
@@ -450,7 +506,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             mManager.getEventList(this);
         }
 
-        registerFirbase();
+        //registerFirbase();
 
     }
 
@@ -458,7 +514,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     public void onPause() {
         super.onPause();
 
-        unregisterFirebase();
+        //unregisterFirebase();
     }
 
     @Override
@@ -470,6 +526,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     @Override
     public void onStop() {
         super.onStop();
+        unregisterFirebase();
         unregisterReceiver(ReceivefromService);
     }
 
@@ -597,6 +654,15 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                 }
                 //to update all lists in the background
                 mManager.getEventList(ListActivityFragment.this);
+            } else if(observable instanceof GroupListNetwork) {
+                if (data instanceof UserData) {
+                    mManager.getEventList(this);
+                    hideProgress();
+                    closeProfileDrawer(Gravity.RIGHT);
+                    mManager.getGroupList(this);
+                }else {
+                    gpAct.update(data);
+                }
             }
         }
     }

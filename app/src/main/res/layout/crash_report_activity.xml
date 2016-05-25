@@ -36,6 +36,9 @@
         android:layout_below="@id/crash_text"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="26dp"
+        android:layout_marginLeft="57dp"
+        android:layout_marginRight="57dp"
+        android:gravity="center"
         android:text="@string/feedback_text"
         android:textColor="@color/trimbe_white"
         android:textSize="20sp"/>

@@ -103,6 +103,7 @@ public class LoginActivity extends BaseActivity implements Observer {
                         params.put("userName", username);
                         params.put("passWord", password);
                         dialog.show();
+                        dialog.setCancelable(false);
                         mManager.postLogin(LoginActivity.this, params, Constants.LOGIN);
                     } else {
                         if(username.length()==0){
@@ -207,14 +208,17 @@ public class LoginActivity extends BaseActivity implements Observer {
             dialog.dismiss();
             //decide landing page based on push notification available or not
             Intent regIntent;
-            if(localPushEvent!=null) {
-                regIntent = new Intent(getApplicationContext(),
-                        ListActivityFragment.class);
-                regIntent.putExtra("eventIntent", localPushEvent);
-            } else {
-                regIntent = new Intent(getApplicationContext(),
-                        CreateNewEvent.class);
-            }
+
+            //decide activity to open
+            regIntent = mManager.decideToOpenActivity(localPushEvent);
+//            if(localPushEvent!=null) {
+//                regIntent = new Intent(getApplicationContext(),
+//                        ListActivityFragment.class);
+//                regIntent.putExtra("eventIntent", localPushEvent);
+//            } else {
+//                regIntent = new Intent(getApplicationContext(),
+//                        CreateNewEvent.class);
+//            }
             regIntent.putExtra("userdata", ud);
 
             startActivity(regIntent);

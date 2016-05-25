@@ -21,6 +21,7 @@ public class ForgotPasswordNetwork extends Observable {
     private Context mContext;
     private NetworkEngine ntwrk;
     private String url = "auth/request/resetPassword";
+    private String changePswrdUrl = "a/user/updatePassword";
     private ControlManager mManager;
 
     public ForgotPasswordNetwork(Context c) {
@@ -42,6 +43,25 @@ public class ForgotPasswordNetwork extends Observable {
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
 //                    Toast.makeText(mContext, "Signup error from server  - " + statusCode,
 //                            Toast.LENGTH_LONG).show();
+                    mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
+                }
+            });
+        }else {
+            Util.createNoNetworkDialogue(mContext);
+        }
+    }
+
+    public void doChangePassword(RequestParams params) throws JSONException {
+        if (Util.isNetworkAvailable(mContext)) {
+            ntwrk.post(changePswrdUrl, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    setChanged();
+                    notifyObservers();
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                     mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
                 }
             });

@@ -41,7 +41,14 @@
     <string name="server_error">Server request failed. Please wait a few seconds and refresh.</string>
     <string name="title_activity_base">BaseActivity</string>
 
-    <string name="feedback_text">Need help with something? \nWant to send us feedback? \n"              Let us know!"</string>
-    <string name="forgotlogin_text">"  Forgot your password? We will" \nsend instructions to your Bungie \n"    account with how to reset it."</string>
+    <string name="feedback_text">Need help with something? Want to send us feedback? Let us know!</string>
+    <string name="forgotlogin_text">Forgot your password? We will send instructions to your Bungie account with how to reset it.</string>
+    <string name="verify_accnt_toptext">Welcome !</string>
+    <string name="verify_accnt_bottomtext">Thanks for signing up for Traveler, the Destiny Fireteam Finder mobile app! An account verification message has been sent to your <![CDATA[<a href="http://www.bungie.net">bungie.net</a>]]> account. Click the link in the message to verify your PSN ID. </string>
+    <string name="title_activity_group">GroupActivity</string>
+    <string name="group_top_text">Which group would you like to play with?"</string>
+    <string name="group_other_text">YOUR PS4 BUNGIE GROUPS: (SELECT ONE)</string>
+    <string name="change_password">Change Password</string>
+    <string name="nogroup_text">Traveler for Destiny matches you with people from your existing <![CDATA[<a href="http://www.bungie.net">bungie.net</a>]]> groups. \n\nIt looks like you are not a member of any group. Please join a group for fully experiencing the app.</string>
 
 </resources>

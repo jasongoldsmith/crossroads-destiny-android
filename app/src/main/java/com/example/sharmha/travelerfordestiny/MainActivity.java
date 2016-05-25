@@ -163,14 +163,18 @@ public class MainActivity extends Activity implements Observer {
                 ud.setPassword(p);
                 mManager.setUserdata(ud);
                 Intent regIntent;
-                if (contentIntent != null) {
-                    regIntent = new Intent(getApplicationContext(),
-                            ListActivityFragment.class);
-                    regIntent.putExtra("eventIntent", contentIntent);
-                } else {
-                    regIntent = new Intent(getApplicationContext(),
-                            CreateNewEvent.class);
-                }
+
+                //decide for activity
+                regIntent = mManager.decideToOpenActivity(contentIntent);
+
+//                if (contentIntent != null) {
+//                    regIntent = new Intent(getApplicationContext(),
+//                            ListActivityFragment.class);
+//                    regIntent.putExtra("eventIntent", contentIntent);
+//                } else {
+//                    regIntent = new Intent(getApplicationContext(),
+//                            CreateNewEvent.class);
+//                }
                 regIntent.putExtra("userdata", ud);
                 startActivity(regIntent);
                 finish();

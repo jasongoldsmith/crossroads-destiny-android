@@ -169,11 +169,10 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
         Bundle b = getIntent().getExtras();
         user = b.getParcelable("userdata");
 
-        if (user.getPsnVerify()!=null) {
-            if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
-                //launchListActivityAndFinish();
-            }
-        }
+        checkIfPSNVerified();
+
+        checkIfClanSet();
+
         if(b.containsKey("eventIntent")) {
             localPushEventObj = (Intent) b.get("eventIntent");
         }
@@ -499,6 +498,26 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                 showDialog(TIME_DIALOG_ID);
             }
         });
+    }
+
+    private void checkIfPSNVerified() {
+        if(user!=null) {
+            if (user.getPsnVerify() != null) {
+                if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                    launchListActivityAndFinish();
+                }
+            }
+        }
+    }
+
+    private void checkIfClanSet() {
+        if (user!=null) {
+            if (user.getClanId()!=null) {
+                if (user.getClanId().equalsIgnoreCase(Constants.CLAN_NOT_SET)) {
+                    launchListActivityAndFinish();
+                }
+            }
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

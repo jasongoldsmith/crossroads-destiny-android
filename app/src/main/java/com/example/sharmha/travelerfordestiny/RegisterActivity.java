@@ -178,6 +178,7 @@ public class RegisterActivity extends BaseActivity implements Observer {
                     params.put("passWord", password);
                     params.put("psnId", psnid);
                     dialog.show();
+                    dialog.setCancelable(false);
                     mManager.postLogin(RegisterActivity.this, params, Constants.REGISTER);
                 } else {
                     if(username.length()==0){
@@ -224,9 +225,10 @@ public class RegisterActivity extends BaseActivity implements Observer {
             mManager.setUserdata(ud);
             //dismiss dialog
             dialog.dismiss();
-            // go to logout page
-            Intent regIntent = new Intent(getApplicationContext(),
-                    CreateNewEvent.class);
+            // decide the activity to open
+            Intent regIntent = mManager.decideToOpenActivity(null);
+//            Intent regIntent = new Intent(getApplicationContext(),
+//                    CreateNewEvent.class);
             regIntent.putExtra("userdata", ud);
             startActivity(regIntent);
             finish();

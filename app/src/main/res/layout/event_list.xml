@@ -34,19 +34,21 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/img_traveler_badge_icon"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginBottom="48dp"/>
+                android:id="@+id/badge_icon"
+                android:src="@drawable/icon_groups"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="48dp"
+                android:layout_alignParentRight="true"/>
 
             <com.example.sharmha.travelerfordestiny.utils.CircularImageView
                 android:layout_width="@dimen/player_profile_width"
                 android:layout_height="@dimen/player_profile_hgt"
                 android:id="@+id/userProfile"
                 android:src="@drawable/img_avatar_you"
-                android:layout_marginEnd="11dp"
-                android:layout_marginTop="28dp"
-                android:layout_alignParentRight="true" />
+                android:layout_marginLeft="11dp"
+                android:layout_marginTop="30dp"
+                android:layout_alignParentLeft="true" />
 
             <!--<RelativeLayout-->
                 <!--android:layout_width="180dp"-->
@@ -235,13 +237,62 @@
             android:layout_alignParentBottom="true"
             android:gravity="center"/>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:id="@+id/error_layout"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/black"
+            android:layout_marginTop="24dp"
+            android:visibility="gone">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/error"
+                android:src="@drawable/icon_error"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="22dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/error_text"
+                android:text="MISADVENTURE"
+                android:textSize="12sp"
+                android:textColor="#ff0000"
+                android:layout_toRightOf="@+id/error"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="13dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/error_sub"
+                android:text="Your Username or Password do not match"
+                android:textSize="12sp"
+                android:textColor="@color/trimbe_white"
+                android:layout_toRightOf="@+id/error"
+                android:layout_below="@+id/error_text"
+                android:layout_marginBottom="14dp"
+                android:layout_marginLeft="13dp"
+                android:layout_marginRight="30dp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/err_close"
+                android:src="@drawable/icon_close_sm"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="9dp"
+                android:layout_marginEnd="7dp"/>
+        </RelativeLayout>
+
     </RelativeLayout>
 
-    <!-- The navigation drawer -->
+    <!-- The navigation drawer left-->
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="end|bottom"
+        android:layout_gravity="start|bottom"
         android:background="@drawable/profile_bg_image"
         android:clickable="true">
         <LinearLayout
@@ -288,7 +339,9 @@
                 android:src="@drawable/profile_image"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="20dp"
-                android:layout_marginTop="81dp"/>
+                android:layout_marginTop="81dp"
+                app:borderColor="#37646d"
+                app:border="true"/>
 
             <TextView
                 android:id="@+id/profile_name"
@@ -299,33 +352,43 @@
                 android:layout_below="@+id/profile_avatar"
                 android:layout_gravity="bottom"
                 android:gravity="center_horizontal"/>
-
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/travelerid"-->
-                <!--android:layout_below="@+id/profile_name"-->
-                <!--android:textSize="10sp"-->
-                <!--android:layout_marginTop="5dp"-->
-                <!--android:text="TRAVELER ID"-->
-                <!--android:layout_centerHorizontal="true" />-->
         </RelativeLayout>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
             android:layout_below="@+id/profile_header"
             android:id="@+id/reset"
-            android:src="@drawable/btn_reset_password"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="44dp"
-            android:visibility="gone"/>
+            android:layout_marginTop="37dp"
+            android:background="@color/logout_btn_background"
+            android:text="@string/change_password"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:layout_marginRight="37dp"
+            android:layout_marginLeft="37dp"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:id="@+id/crash_btn"
+            android:layout_below="@+id/reset"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:text="@string/report_crash"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:layout_marginRight="37dp"
+            android:layout_marginLeft="37dp"
+            android:gravity="center"
+            android:background="@color/logout_btn_background"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:id="@+id/logout_btn"
-            android:layout_below="@+id/reset"
+            android:layout_below="@+id/crash_btn"
             android:background="@color/logout_btn_background"
             android:text="@string/logout"
             android:textSize="14sp"
@@ -334,29 +397,137 @@
             android:layout_marginLeft="37dp"
             android:gravity="center"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="55dp"/>
+            android:layout_marginTop="10dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/build_version"
-            android:layout_above="@+id/crash_btn"
+            android:layout_alignParentBottom="true"
             android:textSize="12sp"
             android:textColor="@color/edit_clip_text"
             android:layout_centerInParent="true"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"/>
 
+    </RelativeLayout>
+
+    <!-- The navigation drawer right-->
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end|bottom"
+        android:background="#233a3e"
+        android:clickable="true">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/group_layout">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/img_logo_badge"
+                android:id="@+id/img_logo"
+                android:layout_marginTop="40dp"
+                android:layout_centerHorizontal="true"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/group_top_text"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/img_logo"
+                android:layout_marginTop="14dp"
+                android:textColor="@color/trimbe_white"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:text="@string/group_top_text"
+                android:layout_marginLeft="55dp"
+                android:layout_marginRight="55dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:id="@+id/group_bottom_text"
+                android:layout_below="@+id/group_top_text"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:textColor="#00b6e7"
+                android:textSize="12sp"
+                android:text="@string/group_other_text"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/save_grp_layout">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/save_group_btn"
+                    android:background="#355966"
+                    android:text="SAVE GROUP"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="bold"
+                    android:textColor="#d8d8d8"
+                    android:textSize="14sp"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/save_group_btn_ready"
+                    android:background="@color/app_theme_color"
+                    android:text="SAVE GROUP"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="bold"
+                    android:textColor="@color/trimbe_white"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:visibility="gone"/>
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/group_recycler"
+                android:background="@android:color/transparent"
+                android:layout_below="@+id/group_bottom_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_above="@+id/save_grp_layout">
+            </android.support.v7.widget.RecyclerView>
+        </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/empty_group_layout"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_nogroups"
+            android:id="@+id/img_logo_empty"
+            android:layout_marginTop="40dp"
+            android:layout_centerHorizontal="true"/>
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:id="@+id/crash_btn"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="20dp"
-            android:layout_centerInParent="true"
-            android:text="@string/report_crash"
-            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColorLink="@color/app_theme_color"
+            android:id="@+id/empty_grp_text"
+            android:layout_marginTop="28dp"
             android:gravity="center"
-            android:background="@color/logout_btn_background"/>
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/img_logo_empty"
+            android:layout_marginRight="34dp"
+            android:layout_marginLeft="34dp"
+            android:textColor="@color/trimbe_white"
+            android:textSize="20sp"
+            android:text="@string/nogroup_text"/>
+    </RelativeLayout>
 
     </RelativeLayout>
 
@@ -378,66 +549,60 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="24dp"
-        android:id="@+id/error_layout"
-        android:layout_alignParentTop="true"
-        android:background="@android:color/black"
-        android:visibility="gone">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/error"
-            android:src="@drawable/icon_error"
-            android:layout_alignParentLeft="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="22dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/error_text"
-            android:text="MISADVENTURE"
-            android:textSize="12sp"
-            android:textColor="#ff0000"
-            android:layout_toRightOf="@+id/error"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="13dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/error_sub"
-            android:text="Your Username or Password do not match"
-            android:textSize="12sp"
-            android:textColor="@color/trimbe_white"
-            android:layout_toRightOf="@+id/error"
-            android:layout_below="@+id/error_text"
-            android:layout_marginBottom="14dp"
-            android:layout_marginLeft="13dp"
-            android:layout_marginRight="30dp"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/err_close"
-            android:src="@drawable/icon_close_sm"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="9dp"
-            android:layout_marginEnd="7dp"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/trimbe_white"
+        android:background="@drawable/img_background_map"
         android:visibility="gone"
         android:id="@+id/verify_fail">
-        <Button
-            android:layout_width="120dp"
-            android:layout_height="40dp"
-            android:layout_centerInParent="true"
-            android:background="@color/app_theme_color"
-            android:text="User not verified"
-            android:textColor="@color/trimbe_white"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/traveller_bdg"
+            android:src="@drawable/img_traveler_badge"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="70dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VERIFY ACCOUNT"
+            android:id="@+id/verify_text"
+            android:textColor="@color/trimbe_white"
+            android:layout_below="@+id/traveller_bdg"
+            android:textStyle="bold"
+            android:layout_marginTop="40dp"
+            android:layout_centerHorizontal="true"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_below="@+id/verify_text"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="14dp"
+            android:background="#B3000000">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/top_text"
+                android:layout_marginTop="24dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/trimbe_white"
+                android:text="@string/verify_accnt_toptext"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/verify_bottom_text"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/top_text"
+                android:textColorLink="@color/app_theme_color"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:layout_marginTop="15dp"
+                android:paddingBottom="24dp"
+                android:textColor="@color/trimbe_white"
+                android:text="@string/verify_accnt_bottomtext"/>
+
+        </RelativeLayout>
     </RelativeLayout>
 
 </android.support.v4.widget.DrawerLayout>

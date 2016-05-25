@@ -31,7 +31,7 @@
     <color name="tour_skip_text_color">#3ea5d7</color>
     <color name="edit_text">#6DA2B1</color>
     <color name="profile_logout">#6DA2B1</color>
-    <color name="edit_clip_text">#89a2b1</color>
+    <color name="edit_clip_text">#00b6e7</color>
     <color name="edit_clip_layout_bg">#eceff1</color>
     <color name="related_title_bg">#4c5659</color>
     <color name="related_videos_list_bg">#434c4f</color>
@@ -47,7 +47,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="logout_btn_background">#1f323b</color>
+    <color name="logout_btn_background">#131f23</color>
 
     <color name="createnewevent_topbar">#19282c</color>
 </resources>

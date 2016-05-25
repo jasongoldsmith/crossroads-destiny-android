@@ -12,10 +12,17 @@
     <dimen name="player_icon_hgt">40dp</dimen>
     <dimen name="player_icon_width">40dp</dimen>
 
+    <dimen name="group_icon_hgt">66dp</dimen>
+    <dimen name="group_icon_width">66dp</dimen>
+
     <dimen name="player_profile_hgt">36dp</dimen>
     <dimen name="player_profile_width">36dp</dimen>
     <dimen name="eventdetail_player_profile_hgt">36dp</dimen>
     <dimen name="eventdetail_player_profile_width">36dp</dimen>
     <dimen name="activity_profile_icon_hgt">30dp</dimen>
     <dimen name="activity_profile_icon_width">30dp</dimen>
+
+    <dimen name="player_profile_drawer_hgt">96dp</dimen>
+    <dimen name="player_profile_drawer_width">96dp</dimen>
+
 </resources>

@@ -46,4 +46,7 @@ public class Constants {
     public static String PSN_NOT_INITIATED = "NOT_INITIATED";
     public static String PSN_INITIATED = "INITIATED";
     public static String PSN_FAILED_INITIATED = "FAILED_INITIATION";
+
+    //clan id keys
+    public static String CLAN_NOT_SET = "clan_id_not_set";
 }
