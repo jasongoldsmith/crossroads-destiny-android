@@ -197,7 +197,7 @@ public class LoginActivity extends BaseActivity implements Observer {
         UserData ud = (UserData)data;
         if (ud.getAuthenticationId()==Constants.LOGIN) {
 
-            mManager.getEventList();
+            //mManager.getEventList();
             //save in preferrence
             Util.setDefaults("user", username, getApplicationContext());
             Util.setDefaults("password", password, getApplicationContext());

@@ -2,14 +2,25 @@ package com.example.sharmha.travelerfordestiny;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.method.MovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.URLSpan;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -45,12 +56,14 @@ public class RegisterActivity extends BaseActivity implements Observer {
     private String username;
     private String password;
     private String psnid;
+    private TextView privacyTerms;
 
 //    private RelativeLayout errLayout;
 //    private TextView errText;
 //    private ImageView close_err;
 
     private ProgressDialog dialog;
+    private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +82,17 @@ public class RegisterActivity extends BaseActivity implements Observer {
         pswd_signup = (EditText) findViewById(R.id.signup_pswrd);
         psnid_signup = (EditText) findViewById(R.id.signup_psn);
         signup_btn = (ImageView) findViewById(R.id.signup_btn);
+        privacyTerms = (TextView) findViewById(R.id.privacy_terms);
+
+        webView = (WebView) findViewById(R.id.web);
+
+        //Spanned s = Html.fromHtml(getString(R.string.terms_conditions));
+
+        setTextViewHTML(privacyTerms, getString(R.string.terms_conditions));
+//        privacyTerms.setText(Html.fromHtml(getString(R.string.terms_conditions)));
+//        privacyTerms.setMovementMethod(LinkMovementMethod.getInstance());
+//
+        //webView.setWebViewClient(new MyWebViewClient());
 
 //        errLayout = (RelativeLayout) findViewById(R.id.error_layout);
 //        errText = (TextView) findViewById(R.id.error_sub);
@@ -157,7 +181,10 @@ public class RegisterActivity extends BaseActivity implements Observer {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
                     // the user is done typing.
-                    signup_btn.performClick();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    //to hide it, call the method again
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                    //signup_btn.performClick();
                 }
                 return false;
             }
@@ -197,6 +224,34 @@ public class RegisterActivity extends BaseActivity implements Observer {
         });
     }
 
+    protected void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span)
+    {
+        int start = strBuilder.getSpanStart(span);
+        int end = strBuilder.getSpanEnd(span);
+        int flags = strBuilder.getSpanFlags(span);
+        ClickableSpan clickable = new ClickableSpan() {
+            public void onClick(View view) {
+                // Do something with span.getURL() to handle the link click...
+                webView.setVisibility(View.VISIBLE);
+                webView.loadUrl(span.getURL());
+            }
+        };
+        strBuilder.setSpan(clickable, start, end, flags);
+        strBuilder.removeSpan(span);
+    }
+
+    protected void setTextViewHTML(TextView text, String html)
+    {
+        CharSequence sequence = Html.fromHtml(html);
+        SpannableStringBuilder strBuilder = new SpannableStringBuilder(sequence);
+        URLSpan[] urls = strBuilder.getSpans(0, sequence.length(), URLSpan.class);
+        for(URLSpan span : urls) {
+            makeLinkClickable(strBuilder, span);
+        }
+        text.setText(strBuilder);
+        text.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
     public void showError(String err) {
         dialog.dismiss();
         signup_btn.setEnabled(true);
@@ -219,6 +274,7 @@ public class RegisterActivity extends BaseActivity implements Observer {
 
         if (ud.getAuthenticationId()==Constants.REGISTER) {
             //save in preferrence
+            Util.clearDefaults(getApplicationContext());
             Util.setDefaults("user", username, getApplicationContext());
             Util.setDefaults("password", password, getApplicationContext());
 
@@ -235,51 +291,27 @@ public class RegisterActivity extends BaseActivity implements Observer {
         }
     }
 
-//    private void doSignup(RequestParams params) throws JSONException {
-//        ntwrk.post(url, params, new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//
-//                //post gcm token
-//                postGcm();
-//
-//                if (user != null) {
-//                    user.toJson(response);
-//                    //user.setUser(username);
-//                    user.setPassword(password);
-//
-//                    //save in preferrence
-//                    Util.setDefaults("user", username, getApplicationContext());
-//                    Util.setDefaults("password", password, getApplicationContext());
-//
-////                    //save in preferrence
-////                    SharedPreferences.Editor prefsEditor = mPrefs.edit();
-////                    Gson gson = new Gson();
-////                    String json = gson.toJson(user); // myObject - instance of MyObject
-////                    prefsEditor.putString("userdata", json);
-////                    prefsEditor.commit();
-//                }
-//                // If the response is JSONObject instead of expected JSONArray
-////                Toast.makeText(RegisterActivity.this, "Signup Success",
-////                        Toast.LENGTH_SHORT).show();
-//                Intent regIntent = new Intent(getApplicationContext(),
-//                        LogoutActivity.class);
-//                regIntent.putExtra("userdata", user);
-//                startActivity(regIntent);
-//                finish();
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                Toast.makeText(RegisterActivity.this, "Signup error from server  - " + statusCode,
-//                        Toast.LENGTH_LONG).show();
-//            }
-//        });
-//    }
+    private class MyWebViewClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.setVisibility(View.VISIBLE);
+            if (url.contains(Constants.TERMS_OF_SERVICE)) {
+                return super.shouldOverrideUrlLoading(view, Constants.TERMS_OF_SERVICE);
+            } else if (url.contains(Constants.PRIVACY_POLICY)) {
+                return super.shouldOverrideUrlLoading(view, Constants.PRIVACY_POLICY);
+            } else {
+                view.loadUrl(url); // load url in webview
+                return true;
+            }
+        }
+    }
 
-//    private void postGcm() {
-//        //post gcm token
-//        Util.getGCMToken(this, mManager);
-//    }
-
+    @Override
+    public void onBackPressed() {
+        if(webView!=null && webView.getVisibility()==View.VISIBLE) {
+            webView.setVisibility(View.GONE);
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

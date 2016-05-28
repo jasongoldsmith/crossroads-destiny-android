@@ -124,6 +124,12 @@ public class GroupListNetwork extends Observable {
             user.setClanId(clanId);
             user.setPsnVerify(psnVer);
 
+            //todo changing current controlmanager user obj and later userobject will change and only one parser will do that
+            if (mManager.getUserData()!=null) {
+                UserData u = mManager.getUserData();
+                u.setClanId(clanId);
+            }
+
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

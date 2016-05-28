@@ -26,16 +26,23 @@ public class Constants {
     public final static int REGISTER = 2;
 
     public static final String TRAVELER_NOTIFICATION_INTENT = "com.example.sharmha.travelerfordestiny";
+
+    // terms of services, legal and privacy policy url links
+    public static final String LEGAL = "https://www.crossroadsapp.co/legal";
+    public static final String LICENCE = "https://www.crossroadsapp.co/license";
+    public static final String TERMS_OF_SERVICE = "https://www.crossroadsapp.co/terms";
+    public static final String PRIVACY_POLICY = "https://www.crossroadsapp.co/privacy";
+
     public static String NOTIFICATION_INTENT_CHANNEL = "com.example.sharmha.notificationintent";
     public static int INTENT_ID = 9999;
 
     //firebase url
-    public static String FIREBASE_DEV_URL = "https://traveler-development.firebaseio.com/events";
-    public static String FIREBASE_PROD_URL = "https://traveler-production.firebaseio.com/events";
+    public static String FIREBASE_DEV_URL = "https://crossroadsapp-dev.firebaseio.com/";
+    public static String FIREBASE_PROD_URL = "https://crossroadsapp-live.firebaseio.com/";
 
     //network base url
     public static String NETWORK_DEV_BASE_URL = "https://travelerbackend.herokuapp.com/api/v1/";
-    public static String NETWORK_PROD_BASE_URL = "https://travelerbackendproduction.herokuapp.com/api/v1/";
+    public static String NETWORK_PROD_BASE_URL = "https://live.crossroadsapp.co/api/v1/";
 
     //app download links
     public static String DOWNLOAD_DEV_BUILD = "https://goo.gl/6vQpFn";
@@ -48,5 +55,5 @@ public class Constants {
     public static String PSN_FAILED_INITIATED = "FAILED_INITIATION";
 
     //clan id keys
-    public static String CLAN_NOT_SET = "clan_id_not_set";
+    public static String CLAN_NOT_SET = "clan_id_not";
 }

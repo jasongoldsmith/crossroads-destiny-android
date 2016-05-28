@@ -199,6 +199,16 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="45dp"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp"
+        android:textColor="@color/copyright_text"
+        android:textSize="12sp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/copyright_string"/>
+
     <include layout="@layout/activity_base" />
 
 </RelativeLayout>

@@ -34,6 +34,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -98,10 +99,15 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     private RelativeLayout unverifiedUserScreen;
     private TextView verify_username;
     private TextView verify_user_bottom_text;
-    private ImageView appIcon;
+    protected ImageView appIcon;
 
     private GroupDrawerAdapter gpAct;
     private TextView changePassword;
+    private ValueEventListener userListener;
+    private Firebase refUFirebase;
+    private ImageView grpIcon;
+
+    private WebView legalView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +121,11 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         mManager.setCurrentActivity(this);
 
         Bundle b = getIntent().getExtras();
-        user = b.getParcelable("userdata");
+        //user = b.getParcelable("userdata");
+        if(mManager.getUserData()!=null) {
+            user = mManager.getUserData();
+        }
+
         if(b.containsKey("eventIntent")){
             Intent localPushEventObj = (Intent)b.get("eventIntent");
             if(localPushEventObj.hasExtra("message")) {
@@ -133,26 +143,27 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
         mManager.getEventList(this);
 
+        mManager.getGroupList(this);
+
         Firebase.setAndroidContext(this);
-        setupEventListener();
+
+        //register event listener
         registerFirbase();
 
-        if (user.getPsnVerify()!=null) {
-            if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
-                unverifiedUserScreen = (RelativeLayout) findViewById(R.id.verify_fail);
-                verify_username = (TextView) findViewById(R.id.top_text);
-                verify_user_bottom_text = (TextView) findViewById(R.id.verify_bottom_text);
-                verify_user_bottom_text.setText(Html.fromHtml((getString(R.string.verify_accnt_bottomtext))));
-                verify_user_bottom_text.setMovementMethod(LinkMovementMethod.getInstance());
-                verify_username.setText("Welcome " + user.getUser() + "!");
-                unverifiedUserScreen.setVisibility(View.VISIBLE);
-            }
-        }
+//        //register user listener
+//        registerUserFirebase();
+
+        unverifiedUserScreen = (RelativeLayout) findViewById(R.id.verify_fail);
+
+        //check user erification
+        checkUserPSNVerification();
 
         progress = (RelativeLayout) findViewById(R.id.progress_bar_layout);
         userProfile = (ImageView) findViewById(R.id.userProfile);
         userProfileDrawer = (CircularImageView) findViewById(R.id.profile_avatar);
         userNameDrawer = (TextView) findViewById(R.id.profile_name);
+
+        legalView = (WebView) findViewById(R.id.legal_web);
 
         appIcon = (ImageView) findViewById(R.id.badge_icon);
 
@@ -284,8 +295,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         viewPager = (ViewPager) findViewById(R.id.viewpager);
-        pagerAdapter =
-                new PagerAdapter(getSupportFragmentManager(), ListActivityFragment.this);
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), ListActivityFragment.this);
         viewPager.setAdapter(pagerAdapter);
 
         // Give the TabLayout the ViewPager
@@ -302,6 +312,17 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         if(Util.getApplicationVersionCode(ListActivityFragment.this)!=null){
             showVersion.setText("Version - " + Util.getApplicationVersionCode(ListActivityFragment.this) + "   |   Legal");
         }
+
+        showVersion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(legalView!=null) {
+                    closeProfileDrawer(Gravity.LEFT);
+                    legalView.setVisibility(View.VISIBLE);
+                    legalView.loadUrl(Constants.LEGAL);
+                }
+            }
+        });
 
         viewPager.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -346,16 +367,51 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
         checkClanSet();
 
+        setGroupImageUrl();
+
+    }
+
+    private void checkUserPSNVerification() {
+        if (user.getPsnVerify()!=null) {
+            if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                //register user listener
+                registerUserFirebase();
+                verify_username = (TextView) findViewById(R.id.top_text);
+                verify_user_bottom_text = (TextView) findViewById(R.id.verify_bottom_text);
+                verify_user_bottom_text.setText(Html.fromHtml((getString(R.string.verify_accnt_bottomtext))));
+                verify_user_bottom_text.setMovementMethod(LinkMovementMethod.getInstance());
+                verify_username.setText("Welcome " + user.getUser() + "!");
+                unverifiedUserScreen.setVisibility(View.VISIBLE);
+            } else {
+                if (unverifiedUserScreen!=null) {
+                    unverifiedUserScreen.setVisibility(View.GONE);
+                    checkClanSet();
+                }
+                unregisterUserFirebase();
+            }
+        }
     }
 
     private void checkClanSet() {
         if (user != null) {
             if (user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
                 if (user.getClanId() != null) {
-                    if (user.getClanId().equalsIgnoreCase(Constants.CLAN_NOT_SET)) {
+                    if (user.getAuthenticationId()==Constants.REGISTER) {
                         openProfileDrawer(Gravity.RIGHT);
+                    } else {
+                        setGroupImageUrl();
                     }
                 }
+            }
+        }
+    }
+
+    private void setGroupImageUrl() {
+        GroupData gd = mManager.getGroupObj(user.getClanId());
+        if(gd!=null) {
+            String imageUrl = gd.getGroupImageUrl();
+            if(imageUrl!=null) {
+                setgrpIcon(imageUrl);
             }
         }
     }
@@ -369,7 +425,8 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     }
 
     private void registerFirbase() {
-        refFirebase = new Firebase(Util.getFirebaseUrl(this.user.getClanId()));
+        setupEventListener();
+        refFirebase = new Firebase(Util.getFirebaseUrl(this.user.getClanId(), 1));
         if(listener!=null) {
             refFirebase.addValueEventListener(listener);
         }
@@ -383,7 +440,41 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     }
 
     private void registerUserFirebase() {
+        setupUserListener();
+        refUFirebase = new Firebase(Util.getFirebaseUrl(this.user.getUserId(), 2));
+        if(userListener!=null) {
+            refUFirebase.addValueEventListener(userListener);
+        }
+    }
 
+    private void unregisterUserFirebase() {
+        if(userListener!=null) {
+            refUFirebase.removeEventListener(userListener);
+            refUFirebase.removeValue();
+        }
+    }
+
+    private void setupUserListener() {
+        userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                System.out.println("Hardik user " + " " +snapshot.getValue());
+
+                String psnV = (String) snapshot.child("psnVerified").getValue();
+
+                if (psnV!=null && psnV.equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                    if(mManager!=null && mManager.getUserData()!=null) {
+                    UserData u = mManager.getUserData();
+                    u.setPsnVerify(psnV);
+                    }
+                    checkUserPSNVerification();
+                }
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        };
     }
 
     private void setupEventListener() {
@@ -477,6 +568,10 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     }
 
     private void openProfileDrawer(int gravity) {
+        if(gravity==Gravity.RIGHT && gpAct!=null) {
+            gpAct.setSelectedGroup();
+        }
+        mManager.getGroupList(this);
         this.drawerLayout.openDrawer(gravity);
     }
 
@@ -505,9 +600,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             getExistingList();
             mManager.getEventList(this);
         }
-
         //registerFirbase();
-
     }
 
     @Override
@@ -527,6 +620,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     public void onStop() {
         super.onStop();
         unregisterFirebase();
+        unregisterUserFirebase();
         unregisterReceiver(ReceivefromService);
     }
 
@@ -552,6 +646,14 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             }
         }
     };
+
+    public void setgrpIcon(String groupImageUrl) {
+        if(appIcon!=null) {
+            if(groupImageUrl!=null) {
+                Util.picassoLoadIcon(this, appIcon, groupImageUrl, R.dimen.group_icon_list_hgt, R.dimen.group_icon_list_width, R.drawable.img_logo_badge_group);
+            }
+        }
+    }
 
     class PagerAdapter extends FragmentPagerAdapter {
 
@@ -660,7 +762,9 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                     hideProgress();
                     closeProfileDrawer(Gravity.RIGHT);
                     mManager.getGroupList(this);
+                    gpAct.setSelectedGroup();
                 }else {
+                    setGroupImageUrl();
                     gpAct.update(data);
                 }
             }
@@ -687,9 +791,14 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        Intent in = new Intent(this, SendBackpressBroadcast.class);
-        this.startService(in);
-        finish();
+        if(legalView.getVisibility()==View.VISIBLE) {
+            legalView.setVisibility(View.GONE);
+            openProfileDrawer(Gravity.LEFT);
+        }else {
+            super.onBackPressed();
+            Intent in = new Intent(this, SendBackpressBroadcast.class);
+            this.startService(in);
+            finish();
+        }
     }
 }

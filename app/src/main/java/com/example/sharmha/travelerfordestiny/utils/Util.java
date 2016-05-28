@@ -44,7 +44,7 @@ public class Util {
 
     //To switch between production and development server links
     //where 1 points to development and 2 points to production
-    private static final int network_connection = 1;
+    private static final int network_connection = 2;
 
     private static final String TAG = Util.class.getName();
     public static final String trimbleDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -57,15 +57,21 @@ public class Util {
         return Constants.NETWORK_DEV_BASE_URL;
     }
 
-    public static String getFirebaseUrl(String clanId) {
-        String url, tempUrl;
+    public static String getFirebaseUrl(String clanId, int channel) {
+        String url;
         if (network_connection==2) {
             url = Constants.FIREBASE_PROD_URL;
         } else {
             url = Constants.FIREBASE_DEV_URL;
         }
-        if (clanId!=null && (!clanId.equalsIgnoreCase("null")) ) {
-            url = url + "/" + clanId;
+        if (channel==1) {
+            if (clanId != null && (!clanId.equalsIgnoreCase("null"))) {
+                url = url + "events/" + clanId;
+            }
+        } else if(channel==2) {
+            if (clanId != null && (!clanId.equalsIgnoreCase("null"))) {
+                url = url + "users/" + clanId;
+            }
         }
         return url;
     }
@@ -89,6 +95,12 @@ public class Util {
             userData.setUser(user);
             userData.setPassword(pass);
         }
+    }
+
+    public static void clearSharedPreference(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
     }
 
     public static void setDefaults(String key, String value, Context context) {

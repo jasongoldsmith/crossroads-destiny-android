@@ -456,78 +456,165 @@
                 android:textSize="12sp"
                 android:text="@string/group_other_text"/>
 
-            <RelativeLayout
+            <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:id="@+id/save_grp_layout">-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:id="@+id/save_group_btn"-->
+                    <!--android:background="#355966"-->
+                    <!--android:text="SAVE GROUP"-->
+                    <!--android:fontFamily="sans-serif"-->
+                    <!--android:textStyle="bold"-->
+                    <!--android:textColor="#d8d8d8"-->
+                    <!--android:textSize="14sp"-->
+                    <!--android:gravity="center"/>-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:id="@+id/save_group_btn_ready"-->
+                    <!--android:background="@color/app_theme_color"-->
+                    <!--android:text="SAVE GROUP"-->
+                    <!--android:fontFamily="sans-serif"-->
+                    <!--android:textStyle="bold"-->
+                    <!--android:textColor="@color/trimbe_white"-->
+                    <!--android:textSize="14sp"-->
+                    <!--android:gravity="center"-->
+                    <!--android:visibility="gone"/>-->
+            <!--</RelativeLayout>-->
+
+            <android.support.v7.widget.CardView
+                xmlns:conversation="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="68dp"
+                android:layout_below="@+id/group_bottom_text"
+                android:id="@+id/group_selected"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp"
+                conversation:cardBackgroundColor="@android:color/transparent"
+                conversation:cardElevation="0dp">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="#131f23"
+                    android:id="@+id/group_selected_mainlayout">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:id="@+id/group_selected_image"
+                        android:src="@drawable/img_logo_badge"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:id="@+id/group_selected_name"
+                        android:textColor="@color/trimbe_white"
+                        android:layout_toRightOf="@+id/group_selected_image"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="9dp"
+                        android:layout_marginLeft="11dp"
+                        android:text="Group name missing"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/group_selected_members"
+                        android:textSize="14sp"
+                        android:textColor="#00b6e7"
+                        android:layout_marginTop="0dp"
+                        android:layout_toRightOf="@+id/group_selected_image"
+                        android:layout_below="@+id/group_selected_name"
+                        android:layout_marginLeft="11dp"
+                        android:text="0 Members"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/group_selected_events"
+                        android:textSize="14sp"
+                        android:textColor="#00b6e7"
+                        android:layout_marginTop="0dp"
+                        android:layout_toRightOf="@+id/group_selected_image"
+                        android:layout_below="@+id/group_selected_members"
+                        android:layout_marginLeft="11dp"
+                        android:text="0 Events" />
+
+                    <CheckBox style="@android:style/Widget.CompoundButton.RadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/group_selected_radio_btn"
+                        android:checked="true"
+                        android:buttonTint="@color/app_theme_color"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="14dp"/>
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/app_theme_color"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_below="@+id/group_selected"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/group_recycler"
+                android:background="@android:color/transparent"
+                android:layout_below="@+id/group_selected"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_marginBottom="5dp">
+            </android.support.v7.widget.RecyclerView>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/empty_group_layout"
                 android:layout_alignParentBottom="true"
-                android:id="@+id/save_grp_layout">
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/save_group_btn"
-                    android:background="#355966"
-                    android:text="SAVE GROUP"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="bold"
-                    android:textColor="#d8d8d8"
-                    android:textSize="14sp"
-                    android:gravity="center"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/save_group_btn_ready"
+                    android:layout_height="50dp"
+                    android:id="@+id/goto_bungie"
                     android:background="@color/app_theme_color"
-                    android:text="SAVE GROUP"
+                    android:text="GO TO BUNGIE.NET"
                     android:fontFamily="sans-serif"
                     android:textStyle="bold"
                     android:textColor="@color/trimbe_white"
                     android:textSize="14sp"
                     android:gravity="center"
-                    android:visibility="gone"/>
+                    android:layout_alignParentBottom="true"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColorLink="@color/app_theme_color"
+                    android:id="@+id/empty_grp_text"
+                    android:gravity="center"
+                    android:layout_above="@+id/goto_bungie"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="19dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:textColor="@color/trimbe_white"
+                    android:textSize="16sp"
+                    android:text="@string/nogroup_text"/>
+
             </RelativeLayout>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/group_recycler"
-                android:background="@android:color/transparent"
-                android:layout_below="@+id/group_bottom_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"
-                android:layout_above="@+id/save_grp_layout">
-            </android.support.v7.widget.RecyclerView>
         </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/empty_group_layout"
-        android:visibility="gone">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/img_nogroups"
-            android:id="@+id/img_logo_empty"
-            android:layout_marginTop="40dp"
-            android:layout_centerHorizontal="true"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColorLink="@color/app_theme_color"
-            android:id="@+id/empty_grp_text"
-            android:layout_marginTop="28dp"
-            android:gravity="center"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/img_logo_empty"
-            android:layout_marginRight="34dp"
-            android:layout_marginLeft="34dp"
-            android:textColor="@color/trimbe_white"
-            android:textSize="20sp"
-            android:text="@string/nogroup_text"/>
-    </RelativeLayout>
 
     </RelativeLayout>
 
@@ -603,6 +690,14 @@
                 android:text="@string/verify_accnt_bottomtext"/>
 
         </RelativeLayout>
+
     </RelativeLayout>
+
+    <WebView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/legal_web"
+        android:visibility="gone">
+    </WebView>
 
 </android.support.v4.widget.DrawerLayout>

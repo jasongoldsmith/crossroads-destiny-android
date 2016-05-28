@@ -12,6 +12,8 @@ import com.example.sharmha.travelerfordestiny.data.ActivityData;
 import com.example.sharmha.travelerfordestiny.data.ActivityList;
 import com.example.sharmha.travelerfordestiny.data.AppVersion;
 import com.example.sharmha.travelerfordestiny.data.EventData;
+import com.example.sharmha.travelerfordestiny.data.GroupData;
+import com.example.sharmha.travelerfordestiny.data.GroupList;
 import com.example.sharmha.travelerfordestiny.data.UserData;
 import com.example.sharmha.travelerfordestiny.network.ActivityListNetwork;
 import com.example.sharmha.travelerfordestiny.network.EventListNetwork;
@@ -62,7 +64,9 @@ public class ControlManager implements Observer{
     private static final String TAG = ControlManager.class.getSimpleName();
 
     private EventList eList;
+    private GroupList gList;
     private ArrayList<EventData> eData;
+    private ArrayList<GroupData> gData;
     private ArrayList<ActivityData> activityList;
     private ArrayList<ActivityData> raidActivityList;
     private ArrayList<ActivityData> crucibleActivityList;
@@ -126,9 +130,15 @@ public class ControlManager implements Observer{
     }
 
     public void getGroupList(ListActivityFragment act) {
-        try{
-            groupListNtwrk = new GroupListNetwork(act);
-            groupListNtwrk.addObserver(act);
+        try {
+            if (act != null) {
+                groupListNtwrk = new GroupListNetwork(act);
+                groupListNtwrk.addObserver(this);
+                groupListNtwrk.addObserver(act);
+            } else {
+                groupListNtwrk = new GroupListNetwork(mCurrentAct);
+                groupListNtwrk.addObserver(this);
+            }
             groupListNtwrk.getGroups();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -276,6 +286,7 @@ public class ControlManager implements Observer{
     public void postLogin(Activity activity, RequestParams params, int postId) {
         try {
             loginNetwork = new LoginNetwork(activity);
+            loginNetwork.addObserver(this);
             if (postId== Constants.LOGIN) {
                 if (activity instanceof LoginActivity) {
                     loginNetwork.addObserver((LoginActivity) activity);
@@ -455,8 +466,39 @@ public class ControlManager implements Observer{
 
             }
         } else if(observable instanceof GroupListNetwork) {
-            setUserdata((UserData) data);
+            if(data instanceof UserData) {
+                setUserdata((UserData) data);
+            } else {
+                gData = new ArrayList<GroupData>();
+                gData = (ArrayList<GroupData>) data;
+            }
+        } else if(observable instanceof LoginNetwork) {
+            getEventList();
+            getGroupList(null);
         }
+    }
+
+    public ArrayList<GroupData> getCurrentGroupList() {
+        if(this.gData!=null) {
+            return this.gData;
+        }
+        return null;
+    }
+
+    public GroupData getGroupObj(String id) {
+        if (this.gData!=null) {
+            for (int i =0; i<gData.size(); i++) {
+                if(gData.get(i)!=null) {
+                    if (gData.get(i).getGroupId()!=null) {
+                        if (gData.get(i).getGroupId().equalsIgnoreCase(id)) {
+                            return gData.get(i);
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     public void postCreateEvent(String activityId, String creator_id, int minP, int maxP, String dateTime, CreateNewEvent activity) {

@@ -33,6 +33,7 @@ public class MainActivity extends Activity implements Observer {
     @Override
     protected void onCreate(Bundle outState) {
         super.onCreate(outState);
+        setContentView(R.layout.splash_loading);
         u= Util.getDefaults("user", getApplicationContext());
         p = Util.getDefaults("password", getApplicationContext());
 
@@ -53,7 +54,6 @@ public class MainActivity extends Activity implements Observer {
             }
         }
 
-        setContentView(R.layout.splash_loading);
         //check android version
         mManager.getAndroidVersion(this);
 
@@ -63,6 +63,7 @@ public class MainActivity extends Activity implements Observer {
         if (u != null && p!= null && !u.isEmpty() && !p.isEmpty()) {
             //todo check how to minimize api calls to get full event list in future from multiple locations
             mManager.getEventList();
+            mManager.getGroupList(null);
             Util.storeUserData(userData, u, p);
             RequestParams params = new RequestParams();
             params.put("userName", u);

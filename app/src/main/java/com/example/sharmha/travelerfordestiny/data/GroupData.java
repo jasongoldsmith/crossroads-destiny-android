@@ -54,7 +54,10 @@ public class GroupData {
     }
 
     public String getGroupImageUrl() {
-        return this.groupImageUrl;
+        if(this.groupImageUrl!=null) {
+            return this.groupImageUrl;
+        }
+        return null;
     }
 
     public void setGroupClanEnabled(boolean clan) {
