@@ -34,13 +34,23 @@
         android:paddingTop="8dp"
         android:layout_alignParentStart="true"/>
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/globe"
+            android:src="@drawable/img_globe_icon"
+            android:layout_marginTop="45dp"
+            android:layout_below="@id/forgotlogin_text"
+            android:layout_centerHorizontal="true"
+            />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/forgotlogin_subtext"
-        android:layout_below="@id/forgotlogin_text"
+        android:layout_below="@id/globe"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="74dp"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="35dp"
         android:layout_marginRight="35dp"
         android:text="@string/forgotlogin_text"
@@ -52,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:id="@+id/psnid_forgot_layout"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="27dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:background="#4f000000"

@@ -44,14 +44,17 @@
     <string name="feedback_text">Need help with something? Want to send us feedback? Let us know!</string>
     <string name="forgotlogin_text">Forgot your password? We will send instructions to your Bungie account with how to reset it.</string>
     <string name="verify_accnt_toptext">Welcome !</string>
-    <string name="verify_accnt_bottomtext">Thanks for signing up for Traveler, the Destiny Fireteam Finder mobile app! An account verification message has been sent to your <![CDATA[<a href="http://www.bungie.net">bungie.net</a>]]> account. Click the link in the message to verify your PSN ID. </string>
+    <string name="verify_accnt_bottomtext">Thanks for signing up for Traveler, Destiny Fireteam Finder! An account verification message has been sent to your <![CDATA[<a href="http://www.bungie.net">bungie.net</a>]]> account. Click the link in the message to verify your PSN ID. </string>
     <string name="title_activity_group">GroupActivity</string>
     <string name="group_top_text">Which group would you like to play with?"</string>
-    <string name="group_other_text">YOUR PS4 BUNGIE GROUPS: (SELECT ONE)</string>
+    <string name="group_other_text">YOUR BUNGIE GROUPS: (SELECT ONE)</string>
     <string name="change_password">Change Password</string>
     <string name="nogroup_text">It looks like you are not a member of any group. Feel free to freelance with us or head to <![CDATA[<a href="http://www.bungie.net">Bungie.net</a>]]> to join a group and fully experience the Crossroads for Destiny app.</string>
     <string name="copyright_string">&#169; Catalyst Foundry 2016</string>
 
     <string name="terms_conditions">By clicking the button below, I have read and agree to the Crossroads <![CDATA[<a href="https://www.crossroadsapp.co/terms">Terms of Service</a>]]> and <![CDATA[<a href="https://www.crossroadsapp.co/privacy">Privacy Policy</a>]]>.</string>
+    <string name="terms_string"><u>Terms of Service</u>  |</string>
+    <string name="privacy_string">  <u>Privacy Policy</u> </string>
+    <string name="license_string"> |  <u>Licenses</u></string>
 
 </resources>

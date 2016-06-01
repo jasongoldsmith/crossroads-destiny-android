@@ -29,7 +29,7 @@ public class Constants {
 
     // terms of services, legal and privacy policy url links
     public static final String LEGAL = "https://www.crossroadsapp.co/legal";
-    public static final String LICENCE = "https://www.crossroadsapp.co/license";
+    public static final String LICENCE = "https://www.crossroadsapp.co/license"; //"http://68.140.240.194:3000/license"
     public static final String TERMS_OF_SERVICE = "https://www.crossroadsapp.co/terms";
     public static final String PRIVACY_POLICY = "https://www.crossroadsapp.co/privacy";
 

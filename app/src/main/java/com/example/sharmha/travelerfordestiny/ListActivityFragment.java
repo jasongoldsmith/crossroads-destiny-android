@@ -3,6 +3,7 @@ package com.example.sharmha.travelerfordestiny;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -23,6 +24,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -108,6 +110,9 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     private ImageView grpIcon;
 
     private WebView legalView;
+    private TextView termsService;
+    private TextView privacy;
+    private TextView license;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,11 +191,25 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RequestParams rp = new RequestParams();
-                if (user.getUser() != null) {
-                    rp.put("userName", user.getUser());
-                }
-                mManager.postLogout(ListActivityFragment.this, rp);
+                // alert dailogue
+                new AlertDialog.Builder(ListActivityFragment.this)
+                        .setMessage("Are you sure you want to log out?")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // continue with delete
+                                RequestParams rp = new RequestParams();
+                                if (user.getUser() != null) {
+                                    rp.put("userName", user.getUser());
+                                }
+                                mManager.postLogout(ListActivityFragment.this, rp);
+                            }
+                        })
+                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -310,19 +329,44 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
         showVersion = (TextView) findViewById(R.id.build_version);
         if(Util.getApplicationVersionCode(ListActivityFragment.this)!=null){
-            showVersion.setText("Version - " + Util.getApplicationVersionCode(ListActivityFragment.this) + "   |   Legal");
+            showVersion.setText(Util.getApplicationVersionCode(ListActivityFragment.this));
         }
 
-        showVersion.setOnClickListener(new View.OnClickListener() {
+        termsService = (TextView) findViewById(R.id.legal1);
+        privacy = (TextView) findViewById(R.id.legal2);
+        license = (TextView) findViewById(R.id.legal3);
+
+        termsService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(legalView!=null) {
-                    closeProfileDrawer(Gravity.LEFT);
-                    legalView.setVisibility(View.VISIBLE);
-                    legalView.loadUrl(Constants.LEGAL);
-                }
+                showLegalWebView(Constants.TERMS_OF_SERVICE);
             }
         });
+
+        privacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLegalWebView(Constants.PRIVACY_POLICY);
+            }
+        });
+
+        license.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLegalWebView(Constants.LICENCE);
+            }
+        });
+
+//        showVersion.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(legalView!=null) {
+//                    closeProfileDrawer(Gravity.LEFT);
+//                    legalView.setVisibility(View.VISIBLE);
+//                    legalView.loadUrl(Constants.LEGAL);
+//                }
+//            }
+//        });
 
         viewPager.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -367,8 +411,16 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
         checkClanSet();
 
-        setGroupImageUrl();
+        //setGroupImageUrl();
 
+    }
+
+    private void showLegalWebView(final String service) {
+                if(legalView!=null) {
+                    closeProfileDrawer(Gravity.LEFT);
+                    legalView.setVisibility(View.VISIBLE);
+                    legalView.loadUrl(service);
+                }
     }
 
     private void checkUserPSNVerification() {
@@ -651,6 +703,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         if(appIcon!=null) {
             if(groupImageUrl!=null) {
                 Util.picassoLoadIcon(this, appIcon, groupImageUrl, R.dimen.group_icon_list_hgt, R.dimen.group_icon_list_width, R.drawable.img_logo_badge_group);
+                appIcon.invalidate();
             }
         }
     }

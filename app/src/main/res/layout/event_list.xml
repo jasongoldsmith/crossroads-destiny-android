@@ -32,11 +32,11 @@
             android:layout_alignParentTop="true">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:id="@+id/badge_icon"
-                android:src="@drawable/icon_groups"
-                android:layout_marginTop="20dp"
+                android:background="@drawable/group_image_shape"
+                android:layout_marginTop="30dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="48dp"
                 android:layout_alignParentRight="true"/>
@@ -48,7 +48,10 @@
                 android:src="@drawable/img_avatar_you"
                 android:layout_marginLeft="11dp"
                 android:layout_marginTop="30dp"
-                android:layout_alignParentLeft="true" />
+                android:layout_alignParentLeft="true"
+                app:border="true"
+                app:borderColor="@color/trimbe_white"
+                app:circularBorderWidth="1dp"/>
 
             <!--<RelativeLayout-->
                 <!--android:layout_width="180dp"-->
@@ -399,16 +402,50 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"/>
 
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/legal_layout"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:id="@+id/legal1"
+                android:textSize="12sp"
+                android:textColor="@color/trimbe_white"
+                android:text="@string/terms_string"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/legal2"
+                android:paddingBottom="16dp"
+                android:textSize="12sp"
+                android:layout_toRightOf="@+id/legal1"
+                android:textColor="@color/trimbe_white"
+                android:text="@string/privacy_string"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/legal3"
+                android:layout_toRightOf="@+id/legal2"
+                android:textSize="12sp"
+                android:textColor="@color/trimbe_white"
+                android:text="@string/license_string"/>
+
+        </RelativeLayout>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/build_version"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@+id/legal_layout"
             android:textSize="12sp"
-            android:textColor="@color/edit_clip_text"
-            android:layout_centerInParent="true"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="20dp"/>
+            android:textColor="@color/trimbe_white"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"/>
 
     </RelativeLayout>
 
@@ -576,7 +613,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginLeft="7dp"
                 android:layout_marginRight="7dp"
-                android:layout_marginBottom="5dp">
+                android:layout_marginBottom="50dp">
             </android.support.v7.widget.RecyclerView>
 
             <RelativeLayout
@@ -690,6 +727,10 @@
                 android:text="@string/verify_accnt_bottomtext"/>
 
         </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </RelativeLayout>
 

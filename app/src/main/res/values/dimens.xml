@@ -15,8 +15,8 @@
     <dimen name="group_icon_hgt">66dp</dimen>
     <dimen name="group_icon_width">66dp</dimen>
 
-    <dimen name="group_icon_list_hgt">44dp</dimen>
-    <dimen name="group_icon_list_width">44dp</dimen>
+    <dimen name="group_icon_list_hgt">30dp</dimen>
+    <dimen name="group_icon_list_width">30dp</dimen>
 
     <dimen name="player_profile_hgt">36dp</dimen>
     <dimen name="player_profile_width">36dp</dimen>

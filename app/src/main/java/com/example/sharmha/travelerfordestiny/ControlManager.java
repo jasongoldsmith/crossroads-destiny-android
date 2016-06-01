@@ -148,8 +148,8 @@ public class ControlManager implements Observer{
     public void postSetGroup(ListActivityFragment act, RequestParams params) {
         try{
         groupListNtwrk = new GroupListNetwork(act);
+            groupListNtwrk.addObserver(this);
         groupListNtwrk.addObserver(act);
-        groupListNtwrk.addObserver(this);
         groupListNtwrk.postSelectGroup(params);
     } catch (JSONException e) {
         e.printStackTrace();
