@@ -693,15 +693,18 @@
             android:textColor="@color/trimbe_white"
             android:layout_below="@+id/traveller_bdg"
             android:textStyle="bold"
+            android:visibility="gone"
             android:layout_marginTop="40dp"
             android:layout_centerHorizontal="true"/>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_below="@+id/verify_text"
-            android:layout_marginTop="14dp"
-            android:layout_marginBottom="14dp"
+            android:id="@+id/welcome_text"
+            android:layout_below="@+id/traveller_bdg"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:background="#B3000000">
             <TextView
                 android:layout_width="wrap_content"
@@ -730,7 +733,43 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:id="@+id/verify_logout"
+            android:layout_below="@+id/welcome_text"
+            android:text="@string/verify_logout_text"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginRight="37dp"
+            android:layout_marginLeft="37dp"
+            android:layout_centerHorizontal="true"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bottom_text"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="0dp"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/app_theme_color"
+            android:textSize="14sp"
+            android:text="support@crossroadsapp.co"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/bottom_text"
+            android:id="@+id/send_msg_again"
+            android:layout_alignParentBottom="true"
+            android:textSize="14sp"
+            android:layout_marginBottom="10dp"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:textColor="@android:color/darker_gray"
+            android:gravity="center"
+            android:text="@string/message_missing_tryagain"/>
 
     </RelativeLayout>
 

@@ -8,8 +8,8 @@ android {
         applicationId "com.example.sharmha.travellerdestiny"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 42
-        versionName "1.41.0"
+        versionCode 1
+        versionName "0.9.0"
     }
     buildTypes {
         release {
@@ -18,7 +18,7 @@ android {
 
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
-                    String formattedString = "travelerfordestiny";
+                    String formattedString = "crossroads";
                     output.outputFile = new File(output.outputFile.parent, output.outputFile.name.replace("app-debug", formattedString))
                 }
             }

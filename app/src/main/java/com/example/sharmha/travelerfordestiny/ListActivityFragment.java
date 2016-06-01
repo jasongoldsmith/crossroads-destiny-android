@@ -93,6 +93,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     private TextView showVersion;
     private RelativeLayout progress;
     private ValueEventListener listener;
+    private TextView verify_logout;
 
     private Firebase refFirebase;
 
@@ -113,6 +114,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     private TextView termsService;
     private TextView privacy;
     private TextView license;
+    private TextView sendMsgAgain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,25 +193,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // alert dailogue
-                new AlertDialog.Builder(ListActivityFragment.this)
-                        .setMessage("Are you sure you want to log out?")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // continue with delete
-                                RequestParams rp = new RequestParams();
-                                if (user.getUser() != null) {
-                                    rp.put("userName", user.getUser());
-                                }
-                                mManager.postLogout(ListActivityFragment.this, rp);
-                            }
-                        })
-                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // do nothing
-                            }
-                        })
-                        .show();
+                showLogoutDialog();
             }
         });
 
@@ -284,6 +268,18 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                 errLayout.setVisibility(View.GONE);
             }
         });
+
+        verify_logout = (TextView) findViewById(R.id.verify_logout);
+
+        verify_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLogoutDialog();
+            }
+        });
+
+        sendMsgAgain = (TextView) findViewById(R.id.send_msg_again);
+        //sendMsgAgain.setText(Html.fromHtml(String.valueOf(R.string.message_missing_tryagain)));
 
         createNewEventBtn = (TextView) findViewById(R.id.create_new_event);
 
@@ -413,6 +409,28 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
         //setGroupImageUrl();
 
+    }
+
+    private void showLogoutDialog() {
+        // alert dailogue
+        new AlertDialog.Builder(ListActivityFragment.this)
+                .setMessage("Are you sure you want to log out?")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                        RequestParams rp = new RequestParams();
+                        if (user.getUser() != null) {
+                            rp.put("userName", user.getUser());
+                        }
+                        mManager.postLogout(ListActivityFragment.this, rp);
+                    }
+                })
+                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .show();
     }
 
     private void showLegalWebView(final String service) {

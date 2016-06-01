@@ -56,5 +56,7 @@
     <string name="terms_string"><u>Terms of Service</u>  |</string>
     <string name="privacy_string">  <u>Privacy Policy</u> </string>
     <string name="license_string"> |  <u>Licenses</u></string>
+    <string name="verify_logout_text">Sign in with a different account?</string>
+    <string name="message_missing_tryagain">If you have not received a message within 10 minutes, contact us at <font color='#0086d0'>support@crossroadsapp.co</font></string>
 
 </resources>
