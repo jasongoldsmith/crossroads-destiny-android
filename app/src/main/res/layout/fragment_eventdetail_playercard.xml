@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="36dp">
 
-            <com.example.sharmha.travelerfordestiny.utils.CircularImageView
+            <co.crossroadsapp.sharmha.destiny.utils.CircularImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:id="@+id/event_detail_player_profile"

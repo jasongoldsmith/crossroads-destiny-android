@@ -41,7 +41,7 @@
                 android:layout_marginBottom="48dp"
                 android:layout_alignParentRight="true"/>
 
-            <com.example.sharmha.travelerfordestiny.utils.CircularImageView
+            <co.crossroadsapp.sharmha.destiny.utils.CircularImageView
                 android:layout_width="@dimen/player_profile_width"
                 android:layout_height="@dimen/player_profile_hgt"
                 android:id="@+id/userProfile"
@@ -335,7 +335,7 @@
                 <!--android:onClick="updateProfileAvatar"-->
                 <!--android:src="@drawable/img_i_c_o_n_r_a_i_d" />-->
 
-            <com.example.sharmha.travelerfordestiny.utils.CircularImageView
+            <co.crossroadsapp.sharmha.destiny.utils.CircularImageView
                 android:layout_width="96dp"
                 android:layout_height="96dp"
                 android:id="@+id/profile_avatar"

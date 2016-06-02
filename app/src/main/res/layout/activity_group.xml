@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/trimbe_black"
-    tools:context="com.example.sharmha.travelerfordestiny.GroupDrawerAdapter">
+    tools:context="co.crossroadsapp.sharmha.destiny.GroupDrawerAdapter">
 
     <android.support.v7.widget.CardView
         xmlns:conversation="http://schemas.android.com/apk/res-auto"

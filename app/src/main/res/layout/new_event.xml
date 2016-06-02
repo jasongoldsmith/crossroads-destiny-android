@@ -10,7 +10,7 @@
         android:layout_alignParentTop="true"
         android:background="@color/createnewevent_topbar">
 
-        <com.example.sharmha.travelerfordestiny.utils.CircularImageView
+        <co.crossroadsapp.sharmha.destiny.utils.CircularImageView
             android:layout_width="@dimen/player_profile_width"
             android:layout_height="@dimen/player_profile_hgt"
             android:id="@+id/userCreatePageProfile"

@@ -77,7 +77,7 @@
             android:paddingBottom="20dp"
             android:paddingRight="20dp"
             android:layout_alignParentLeft="true"/>
-        <com.example.sharmha.travelerfordestiny.utils.CircularImageView
+        <co.crossroadsapp.sharmha.destiny.utils.CircularImageView
             android:layout_width="@dimen/player_profile_width"
             android:layout_height="@dimen/player_profile_hgt"
             android:id="@+id/userProfile_event"
@@ -167,7 +167,7 @@
         android:layout_below="@+id/notification_bar"
         android:layout_marginTop="22dp">
 
-        <com.example.sharmha.travelerfordestiny.utils.CircularImageView
+        <co.crossroadsapp.sharmha.destiny.utils.CircularImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/event_detail_icon"

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.sharmha.travelerfordestiny.BaseActivity">
+    tools:context="co.crossroadsapp.sharmha.destiny.BaseActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

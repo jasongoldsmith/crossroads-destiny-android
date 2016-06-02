@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.sharmha.travellerdestiny">
+    package="co.crossroadsapp.destiny">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -11,7 +11,7 @@
         android:icon="@drawable/img_traveler_badge_icon"
         android:label="@string/app_name">
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.SplashActivity"
+            android:name="co.crossroadsapp.destiny.SplashActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar">
@@ -22,43 +22,43 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.MainActivity"
+            android:name="co.crossroadsapp.destiny.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.RegisterActivity"
+            android:name="co.crossroadsapp.destiny.RegisterActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.CrashReport"
+            android:name="co.crossroadsapp.destiny.CrashReport"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.LoginActivity"
+            android:name="co.crossroadsapp.destiny.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.EventDetailActivity"
+            android:name="co.crossroadsapp.destiny.EventDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.ForgotLoginActivity"
+            android:name="co.crossroadsapp.destiny.ForgotLoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <receiver
-            android:name="com.example.sharmha.travelerfordestiny.MyGcmBroadcastReceiver"
+            android:name="co.crossroadsapp.destiny.MyGcmBroadcastReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
@@ -67,30 +67,30 @@
         </receiver>
 
         <service
-            android:name="com.example.sharmha.travelerfordestiny.NotificationService"
+            android:name="co.crossroadsapp.destiny.NotificationService"
             android:exported="false" />
 
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.LogoutActivity"
+            android:name="co.crossroadsapp.destiny.LogoutActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.ListActivityFragment"
+            android:name="co.crossroadsapp.destiny.ListActivityFragment"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.CreateNewEvent"
+            android:name="co.crossroadsapp.destiny.CreateNewEvent"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/MyTheme" />
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.BaseActivity"
+            android:name="co.crossroadsapp.destiny.BaseActivity"
             android:label="@string/title_activity_base"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
-        <activity android:name="com.example.sharmha.travelerfordestiny.ChangePassword"
+        <activity android:name="co.crossroadsapp.destiny.ChangePassword"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"></activity>
