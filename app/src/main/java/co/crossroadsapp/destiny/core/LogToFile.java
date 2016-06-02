@@ -1,4 +1,4 @@
-//package com.example.sharmha.travellerdestiny.core;
+package co.crossroadsapp.destiny.core;//package com.example.sharmha.travellerdestiny.core;
 //
 ///**
 // * Created by sharmha on 2/24/16.

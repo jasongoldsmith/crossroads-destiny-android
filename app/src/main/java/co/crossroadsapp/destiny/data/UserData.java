@@ -119,7 +119,7 @@ public class UserData implements Parcelable {
         }
     }
 
-    public static final Parcelable.Creator<UserData> CREATOR = new Parcelable.Creator<UserData>() {
+    public static final Creator<UserData> CREATOR = new Creator<UserData>() {
         @Override
         public UserData createFromParcel(Parcel in) {
             return new UserData(in);

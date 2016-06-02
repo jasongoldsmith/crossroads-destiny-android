@@ -17,6 +17,7 @@ import co.crossroadsapp.destiny.R;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
 import com.loopj.android.http.RequestParams;
+
 import java.util.Observable;
 import java.util.Observer;
 

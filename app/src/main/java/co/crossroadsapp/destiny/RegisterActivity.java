@@ -271,7 +271,7 @@ public class RegisterActivity extends BaseActivity implements Observer {
     public void update(Observable observable, Object data) {
         UserData ud = (UserData)data;
 
-        if (ud.getAuthenticationId()==Constants.REGISTER) {
+        if (ud.getAuthenticationId()== Constants.REGISTER) {
             //save in preferrence
             Util.clearDefaults(getApplicationContext());
             Util.setDefaults("user", username, getApplicationContext());

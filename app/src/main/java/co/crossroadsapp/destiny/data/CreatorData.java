@@ -6,7 +6,7 @@ import org.json.JSONObject;
 /**
  * Created by sharmha on 2/29/16.
  */
-public class CreatorData extends PlayerData{
+public class CreatorData extends PlayerData {
     public CreatorData() {
         super();
     }

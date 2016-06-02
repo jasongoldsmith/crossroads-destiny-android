@@ -18,8 +18,7 @@ import co.crossroadsapp.destiny.utils.Util;
 import co.crossroadsapp.destiny.R;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
-
-import com.loopj.android.http.*;
+import com.loopj.android.http.RequestParams;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -193,7 +192,7 @@ public class LoginActivity extends BaseActivity implements Observer {
     @Override
     public void update(Observable observable, Object data) {
         UserData ud = (UserData)data;
-        if (ud.getAuthenticationId()==Constants.LOGIN) {
+        if (ud.getAuthenticationId()== Constants.LOGIN) {
 
             //mManager.getEventList();
             //save in preferrence

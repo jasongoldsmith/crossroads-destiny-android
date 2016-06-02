@@ -476,7 +476,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         if (user != null) {
             if (user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
                 if (user.getClanId() != null) {
-                    if (user.getAuthenticationId()==Constants.REGISTER) {
+                    if (user.getAuthenticationId()== Constants.REGISTER) {
                         openProfileDrawer(Gravity.RIGHT);
                     } else {
                         setGroupImageUrl();

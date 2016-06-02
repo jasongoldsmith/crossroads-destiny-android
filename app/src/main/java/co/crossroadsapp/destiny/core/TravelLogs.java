@@ -1,4 +1,4 @@
-//package com.example.sharmha.travellerdestiny.core;
+package co.crossroadsapp.destiny.core;//package com.example.sharmha.travellerdestiny.core;
 //
 //import android.app.Activity;
 //import android.util.Log;
