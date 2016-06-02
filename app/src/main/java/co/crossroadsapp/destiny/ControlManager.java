@@ -361,24 +361,24 @@ public class ControlManager implements Observer{
     }
 
     public void getAndroidVersion(ListActivityFragment activity) {
-        getVersionNetwork = new GetVersion(activity);
-        getVersionNetwork.addObserver(this);
-        try {
-            getVersionNetwork.getAppVer();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        getVersionNetwork = new GetVersion(activity);
+//        getVersionNetwork.addObserver(this);
+//        try {
+//            getVersionNetwork.getAppVer();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void getAndroidVersion(MainActivity activity) {
-        getVersionNetwork = new GetVersion(activity);
-        getVersionNetwork.addObserver(activity);
-        getVersionNetwork.addObserver(this);
-        try {
-            getVersionNetwork.getAppVer();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        getVersionNetwork = new GetVersion(activity);
+//        getVersionNetwork.addObserver(activity);
+//        getVersionNetwork.addObserver(this);
+//        try {
+//            getVersionNetwork.getAppVer();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public Intent decideToOpenActivity(Intent contentIntent) {
