@@ -41,7 +41,7 @@
                 android:layout_marginBottom="48dp"
                 android:layout_alignParentRight="true"/>
 
-            <com.example.sharmha.travelerfordestiny.utils.CircularImageView
+            <co.crossroadsapp.destiny.utils.CircularImageView
                 android:layout_width="@dimen/player_profile_width"
                 android:layout_height="@dimen/player_profile_hgt"
                 android:id="@+id/userProfile"
@@ -335,7 +335,7 @@
                 <!--android:onClick="updateProfileAvatar"-->
                 <!--android:src="@drawable/img_i_c_o_n_r_a_i_d" />-->
 
-            <com.example.sharmha.travelerfordestiny.utils.CircularImageView
+            <co.crossroadsapp.destiny.utils.CircularImageView
                 android:layout_width="96dp"
                 android:layout_height="96dp"
                 android:id="@+id/profile_avatar"
@@ -655,21 +655,21 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/sample_background"
-        android:id="@+id/progress_bar_layout"
-        android:clickable="true"
-        android:visibility="gone">
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:indeterminateDrawable="@drawable/progress" />
-    </RelativeLayout>
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="@drawable/sample_background"-->
+        <!--android:id="@+id/progress_bar_layout"-->
+        <!--android:clickable="true"-->
+        <!--android:visibility="gone">-->
+        <!--<ProgressBar-->
+            <!--android:id="@+id/progressBar"-->
+            <!--style="?android:attr/progressBarStyleLarge"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:indeterminateDrawable="@drawable/progress" />-->
+    <!--</RelativeLayout>-->
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -771,6 +771,22 @@
             android:gravity="center"
             android:text="@string/message_missing_tryagain"/>
 
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/sample_background"
+        android:id="@+id/progress_bar_layout"
+        android:clickable="true"
+        android:visibility="gone">
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminateDrawable="@drawable/progress" />
     </RelativeLayout>
 
     <WebView

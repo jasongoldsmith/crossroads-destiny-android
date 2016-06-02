@@ -167,7 +167,6 @@
             android:singleLine="true"
             android:imeOptions="actionDone"
             android:inputType="textPassword"
-            android:password="true"
             android:nextFocusDown="@id/login_btn"
             android:textSize="14sp"
             android:layout_toRightOf="@+id/pswrd_icon"

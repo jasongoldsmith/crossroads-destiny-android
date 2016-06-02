@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.sharmha.travellerdestiny">
+    package="co.crossroadsapp.destiny">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -11,7 +11,7 @@
         android:icon="@drawable/img_traveler_badge_icon"
         android:label="@string/app_name">
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.SplashActivity"
+            android:name=".SplashActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar">
@@ -22,43 +22,43 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.RegisterActivity"
+            android:name=".RegisterActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.CrashReport"
+            android:name=".CrashReport"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.LoginActivity"
+            android:name=".LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.EventDetailActivity"
+            android:name=".EventDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.ForgotLoginActivity"
+            android:name=".ForgotLoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <receiver
-            android:name="com.example.sharmha.travelerfordestiny.MyGcmBroadcastReceiver"
+            android:name=".MyGcmBroadcastReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
@@ -67,30 +67,30 @@
         </receiver>
 
         <service
-            android:name="com.example.sharmha.travelerfordestiny.NotificationService"
+            android:name=".NotificationService"
             android:exported="false" />
 
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.LogoutActivity"
+            android:name=".LogoutActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.ListActivityFragment"
+            android:name=".ListActivityFragment"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.CreateNewEvent"
+            android:name=".CreateNewEvent"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/MyTheme" />
         <activity
-            android:name="com.example.sharmha.travelerfordestiny.BaseActivity"
+            android:name=".BaseActivity"
             android:label="@string/title_activity_base"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
-        <activity android:name="com.example.sharmha.travelerfordestiny.ChangePassword"
+        <activity android:name=".ChangePassword"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"></activity>

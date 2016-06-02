@@ -167,7 +167,6 @@
             android:background="@null"
             android:singleLine="true"
             android:inputType="textPassword"
-            android:password="true"
             android:imeOptions="actionNext"
             android:textColor="@android:color/white"
             android:textSize="14sp"

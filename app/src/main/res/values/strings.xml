@@ -14,7 +14,7 @@
     <string name="time_default">Time - Now</string>
 
     <string name="leave_event">LEAVE EVENT</string>
-    <string name="join_event">JOIN</string>
+    <string name="join_event">JOIN EVENT</string>
     <string name="message_all">MESSAGE ALL</string>
 
     <string name="logout">Logout</string>
@@ -44,7 +44,7 @@
     <string name="feedback_text">Need help with something? Want to send us feedback? Let us know!</string>
     <string name="forgotlogin_text">Forgot your password? We will send instructions to your Bungie account with how to reset it.</string>
     <string name="verify_accnt_toptext">Welcome !</string>
-    <string name="verify_accnt_bottomtext">Thanks for signing up for Traveler, Destiny Fireteam Finder! An account verification message has been sent to your <![CDATA[<a href="http://www.bungie.net">bungie.net</a>]]> account. Click the link in the message to verify your PSN ID. </string>
+    <string name="verify_accnt_bottomtext">Thanks for signing up for Crossroads, Destiny Fireteam Finder! An account verification message has been sent to your <![CDATA[<a href="http://www.bungie.net">bungie.net</a>]]> account. Click the link in the message to verify your PSN ID. </string>
     <string name="title_activity_group">GroupActivity</string>
     <string name="group_top_text">Which group would you like to play with?"</string>
     <string name="group_other_text">YOUR BUNGIE GROUPS: (SELECT ONE)</string>
@@ -57,6 +57,6 @@
     <string name="privacy_string">  <u>Privacy Policy</u> </string>
     <string name="license_string"> |  <u>Licenses</u></string>
     <string name="verify_logout_text">Sign in with a different account?</string>
-    <string name="message_missing_tryagain">If you have not received a message within 10 minutes, contact us at <font color='#0086d0'>support@crossroadsapp.co</font></string>
+    <string name="message_missing_tryagain">If you have not received a message within 10 minutes, <u>send the message again</u>. If the problem persists, contact us at <font color='#0086d0'>support@crossroadsapp.co</font></string>
 
 </resources>

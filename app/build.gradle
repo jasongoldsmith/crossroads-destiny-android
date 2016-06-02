@@ -5,11 +5,11 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.example.sharmha.travellerdestiny"
+        applicationId "co.crossroadsapp.destiny"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 1
-        versionName "0.9.0"
+        versionCode 3
+        versionName "1.0.0 (2)"
     }
     buildTypes {
         release {
@@ -19,7 +19,7 @@ android {
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
                     String formattedString = "crossroads";
-                    output.outputFile = new File(output.outputFile.parent, output.outputFile.name.replace("app-debug", formattedString))
+                    output.outputFile = new File(output.outputFile.parent, output.outputFile.name.replace("app-release", formattedString))
                 }
             }
         }

@@ -8,6 +8,8 @@
       <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.prolificinteractive/material-calendarview/1.2.0/res" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.prolificinteractive/material-calendarview/1.2.0/9b20241827ccc2e253ebac150524bf64939e0479/material-calendarview-1.2.0-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>
