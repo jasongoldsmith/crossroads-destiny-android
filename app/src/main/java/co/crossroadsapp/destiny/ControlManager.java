@@ -25,6 +25,7 @@ import co.crossroadsapp.destiny.network.GroupListNetwork;
 import co.crossroadsapp.destiny.network.LogoutNetwork;
 import co.crossroadsapp.destiny.network.ReportCrashNetwork;
 import co.crossroadsapp.destiny.network.ResendBungieVerification;
+import co.crossroadsapp.destiny.network.VerifyConsoleIDNetwork;
 import co.crossroadsapp.destiny.network.postGcmNetwork;
 import co.crossroadsapp.destiny.utils.Util;
 import co.crossroadsapp.destiny.R;
@@ -76,6 +77,7 @@ public class ControlManager implements Observer{
     private static ControlManager mInstance;
     private ForgotPasswordNetwork forgotPasswordNetwork;
     private GroupListNetwork groupListNtwrk;
+    private VerifyConsoleIDNetwork verifyConsoleNetwork;
 
     public ControlManager() {
     }
@@ -316,6 +318,16 @@ public class ControlManager implements Observer{
         }
     }
 
+    public void verifyBungieId(ConsoleSelectionActivity activity, RequestParams params) {
+        try {
+            verifyConsoleNetwork = new VerifyConsoleIDNetwork(activity);
+            verifyConsoleNetwork.addObserver(activity);
+            verifyConsoleNetwork.doVerifyConsoleId(params);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void postResetPassword(ForgotLoginActivity activity, RequestParams params) {
         try {
             forgotPasswordNetwork = new ForgotPasswordNetwork(activity);
@@ -350,12 +362,15 @@ public class ControlManager implements Observer{
             } else if(mCurrentAct instanceof ListActivityFragment) {
                 ((ListActivityFragment) mCurrentAct).showError(err);
             } else if(mCurrentAct instanceof CreateNewEvent){
-                ((CreateNewEvent) mCurrentAct).dismissProgressBar();
                 ((CreateNewEvent) mCurrentAct).showError(err);
             } else if (mCurrentAct instanceof EventDetailActivity){
                 ((EventDetailActivity) mCurrentAct).showError(err);
             } else if (mCurrentAct instanceof ForgotLoginActivity){
                 ((ForgotLoginActivity) mCurrentAct).showError(err);
+            } else if (mCurrentAct instanceof ConsoleSelectionActivity) {
+                ((ConsoleSelectionActivity) mCurrentAct).showError(err);
+            } else if(mCurrentAct instanceof ChangePassword) {
+                ((ChangePassword) mCurrentAct).showError(err);
             }
         }
     }

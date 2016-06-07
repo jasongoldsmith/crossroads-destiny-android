@@ -6,13 +6,8 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Html;
-import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
-import android.text.method.LinkMovementMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.text.style.ClickableSpan;
-import android.text.style.URLSpan;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -21,15 +16,19 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import co.crossroadsapp.destiny.utils.Util;
-import co.crossroadsapp.destiny.R;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.network.NetworkEngine;
 import co.crossroadsapp.destiny.utils.Constants;
 import com.loopj.android.http.RequestParams;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -46,33 +45,36 @@ public class RegisterActivity extends BaseActivity implements Observer {
     private Util util;
     private UserData user;
     SharedPreferences mPrefs;
+    private TextView consoleIdText;
 
     private ControlManager mManager;
 
     private String username;
     private String password;
     private String psnid;
-    private TextView privacyTerms;
-
-//    private RelativeLayout errLayout;
-//    private TextView errText;
-//    private ImageView close_err;
 
     private ProgressDialog dialog;
-    private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Bundle b = getIntent().getExtras();
-        user = b.getParcelable("userdata");
+        //user = b.getParcelable("userdata");
+
+        final String consoleType = Util.getDefaults("consoleType", getApplicationContext());
+        final String memId = Util.getDefaults("membershipId", getApplicationContext());
+        final String consoleId = Util.getDefaults("consoleId", getApplicationContext());
 
 //        mPrefs = getPreferences(MODE_PRIVATE);
 
         setContentView(R.layout.register);
 
         dialog = new ProgressDialog(this);
+
+        consoleIdText = (TextView) findViewById(R.id.psn);
+
+        setConsoleIdText(consoleType, consoleId);
 
         name_signup = (EditText) findViewById(R.id.signup_name);
         pswd_signup = (EditText) findViewById(R.id.signup_pswrd);
@@ -81,13 +83,18 @@ public class RegisterActivity extends BaseActivity implements Observer {
 
         psnid_signup = (EditText) findViewById(R.id.signup_psn);
         signup_btn = (ImageView) findViewById(R.id.signup_btn);
-        privacyTerms = (TextView) findViewById(R.id.privacy_terms);
 
-        webView = (WebView) findViewById(R.id.web);
+        if((consoleId!=null) && (!consoleId.isEmpty())) {
+            psnid_signup.setText(consoleId);
+            psnid_signup.setEnabled(false);
+        }
+//        privacyTerms = (TextView) findViewById(R.id.privacy_terms);
+//
+//        webView = (WebView) findViewById(R.id.web);
 
         //Spanned s = Html.fromHtml(getString(R.string.terms_conditions));
 
-        setTextViewHTML(privacyTerms, getString(R.string.terms_conditions));
+//        setTextViewHTML(privacyTerms, getString(R.string.terms_conditions));
 //        privacyTerms.setText(Html.fromHtml(getString(R.string.terms_conditions)));
 //        privacyTerms.setMovementMethod(LinkMovementMethod.getInstance());
 //
@@ -160,7 +167,7 @@ public class RegisterActivity extends BaseActivity implements Observer {
             }
         });
 
-        psnid_signup.addTextChangedListener(new TextWatcher() {
+        pswd_signup.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable arg0) {
                 enableSubmitIfReady();
@@ -202,7 +209,17 @@ public class RegisterActivity extends BaseActivity implements Observer {
                     RequestParams params = new RequestParams();
                     params.put("userName", username);
                     params.put("passWord", password);
-                    params.put("psnId", psnid);
+                    //params.put("psnId", psnid);
+
+                    //testing params for array list
+                    List<Map<String, String>> consoles = new ArrayList<Map<String,
+                                                String>>();
+                    Map<String, String> user1 = new HashMap<String, String>();
+                    user1.put("consoleType", consoleType);
+                    user1.put("consoleId", consoleId);
+                    consoles.add(user1);
+                    params.put("consoles", consoles);
+                    params.put("bungieMemberShipId", memId);
                     dialog.show();
                     dialog.setCancelable(false);
                     mManager.postLogin(RegisterActivity.this, params, Constants.REGISTER);
@@ -223,33 +240,50 @@ public class RegisterActivity extends BaseActivity implements Observer {
         });
     }
 
-    protected void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span)
-    {
-        int start = strBuilder.getSpanStart(span);
-        int end = strBuilder.getSpanEnd(span);
-        int flags = strBuilder.getSpanFlags(span);
-        ClickableSpan clickable = new ClickableSpan() {
-            public void onClick(View view) {
-                // Do something with span.getURL() to handle the link click...
-                webView.setVisibility(View.VISIBLE);
-                webView.loadUrl(span.getURL());
+    private void setConsoleIdText(String consoleType, String consoleId) {
+        if ((consoleType!=null) && (consoleId!=null) && (!consoleId.isEmpty())) {
+            switch (consoleType)
+            {
+                case "PS3" :
+                case "PS4" :
+                    consoleIdText.setText("PLAYSTATION ID");
+                    break;
+                case "XBOXONE":
+                case "XBOX360":
+                    consoleIdText.setText("XBOX GAMERTAG");
+                    break;
+
             }
-        };
-        strBuilder.setSpan(clickable, start, end, flags);
-        strBuilder.removeSpan(span);
+        }
     }
 
-    protected void setTextViewHTML(TextView text, String html)
-    {
-        CharSequence sequence = Html.fromHtml(html);
-        SpannableStringBuilder strBuilder = new SpannableStringBuilder(sequence);
-        URLSpan[] urls = strBuilder.getSpans(0, sequence.length(), URLSpan.class);
-        for(URLSpan span : urls) {
-            makeLinkClickable(strBuilder, span);
-        }
-        text.setText(strBuilder);
-        text.setMovementMethod(LinkMovementMethod.getInstance());
-    }
+//    protected void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span)
+//    {
+//        int start = strBuilder.getSpanStart(span);
+//        int end = strBuilder.getSpanEnd(span);
+//        int flags = strBuilder.getSpanFlags(span);
+//        ClickableSpan clickable = new ClickableSpan() {
+//            public void onClick(View view) {
+//                // Do something with span.getURL() to handle the link click...
+//                webView.setVisibility(View.VISIBLE);
+//                webView.loadUrl(span.getURL());
+//            }
+//        };
+//        strBuilder.setSpan(clickable, start, end, flags);
+//        strBuilder.removeSpan(span);
+//    }
+
+//    protected void setTextViewHTML(TextView text, String html)
+//    {
+//        CharSequence sequence = Html.fromHtml(html);
+//        SpannableStringBuilder strBuilder = new SpannableStringBuilder(sequence);
+//        URLSpan[] urls = strBuilder.getSpans(0, sequence.length(), URLSpan.class);
+//        for(URLSpan span : urls) {
+//            makeLinkClickable(strBuilder, span);
+//        }
+//        text.setText(strBuilder);
+//        text.setMovementMethod(LinkMovementMethod.getInstance());
+//    }
 
     public void showError(String err) {
         dialog.dismiss();
@@ -307,10 +341,6 @@ public class RegisterActivity extends BaseActivity implements Observer {
 
     @Override
     public void onBackPressed() {
-        if(webView!=null && webView.getVisibility()==View.VISIBLE) {
-            webView.setVisibility(View.GONE);
-        } else {
-            super.onBackPressed();
-        }
+        super.onBackPressed();
     }
 }

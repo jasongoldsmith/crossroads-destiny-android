@@ -80,7 +80,8 @@ public class GroupListNetwork extends Observable {
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
 //                        Toast.makeText(mContext, "List error from server  - " + statusCode + " " + errorResponse.getString("message"),
 //                                Toast.LENGTH_LONG).show();
-                    mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
+//                    mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
+                    mManager.showErrorDialogue(null);
                 }
             });
         }else {
@@ -105,35 +106,57 @@ public class GroupListNetwork extends Observable {
     private void parseUserObj(JSONObject response) {
         UserData user = new UserData();
         //todo debug change
-        try {
-            String n = response.getString("userName");
-//            String p = jsonData.getString("passWord");
-            String psnId = response.getString("psnId");
-            String profileImg = response.getString("imageUrl");
-            String uId = response.getString("_id");
-            String clanId = response.getString("clanId");
-            String psnVer = response.getString("psnVerified");
-
-            if (n!=null && !n.isEmpty()){
-                user.setUser(n);
-            }
-
-            user.setPsnId(psnId);
-            user.setImageUrl(profileImg);
-            user.setUserId(uId);
-            user.setClanId(clanId);
-            user.setPsnVerify(psnVer);
+//        try {
+            user.toJson(response);
+//            String n = response.getString("userName");
+////            String p = jsonData.getString("passWord");
+//            String psnId=null;
+//            String psnVer=null;
+//            //String psnId = response.getString("psnId");
+//            String profileImg = response.getString("imageUrl");
+//            String uId = response.getString("_id");
+//            String clanId = response.getString("clanId");
+//            //String psnVer = response.getString("psnVerified");
+//
+//            if (n!=null && !n.isEmpty()){
+//                user.setUser(n);
+//            }
+//
+//            JSONArray conArray = response.optJSONArray("consoles");
+//            JSONObject conData = (JSONObject) conArray.get(0);
+////            if(conData.has("consoleType")) {
+////                String cType = conData.getString("consoleType");
+////                setConsoleType(cType);
+////            }
+//
+//            if(conData.has("consoleId")) {
+//                psnId = conData.getString("consoleId");
+//                //setPsnId(id);
+//            }
+//
+//            if(conData.has("verifyStatus")){
+//                psnVer = conData.getString("verifyStatus");
+//                //setPsnVerify(verifyS);
+//            }
+//
+//            user.setPsnId(psnId);
+//            user.setImageUrl(profileImg);
+//            user.setUserId(uId);
+//            user.setClanId(clanId);
+//            user.setPsnVerify(psnVer);
 
             //todo changing current controlmanager user obj and later userobject will change and only one parser will do that
             if (mManager.getUserData()!=null) {
                 UserData u = mManager.getUserData();
-                u.setClanId(clanId);
+                if(user!=null && user.getClanId()!=null) {
+                    u.setClanId(user.getClanId());
+                }
             }
 
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+//        } catch (JSONException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
 
         //user.toJson(response);
         //user.setAuthenticationId(Constants.LOGIN);

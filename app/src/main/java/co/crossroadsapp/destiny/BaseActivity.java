@@ -12,6 +12,7 @@ public class BaseActivity extends Activity {
 
     protected RelativeLayout errLayout;
     protected TextView errText;
+    private RelativeLayout progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,23 @@ public class BaseActivity extends Activity {
     public void closeView(View view) {
         if(errLayout!=null) {
             errLayout.setVisibility(View.GONE);
+        }
+    }
+
+    protected void showProgressBar() {
+        if(progress == null) {
+            progress = (RelativeLayout) findViewById(R.id.progress_base_layout);
+        }
+
+        if(progress!=null) {
+            hideProgressBar();
+            progress.setVisibility(View.VISIBLE);
+        }
+    }
+
+    protected void hideProgressBar() {
+        if(progress!=null) {
+            progress.setVisibility(View.GONE);
         }
     }
 }

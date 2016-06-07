@@ -68,10 +68,10 @@ public class ForgotLoginActivity extends BaseActivity implements Observer {
                         dialog.show();
                         resetPassword.setEnabled(false);
                         RequestParams params = new RequestParams();
-                        params.put("psnId", psnString);
+                        params.put("userName", psnString);
                         mManager.postResetPassword(ForgotLoginActivity.this, params);
                     } else {
-                        showError("Please enter complete PSN ID");
+                        showError("Please enter complete USERNAME");
                     }
                 }
             }

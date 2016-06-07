@@ -29,6 +29,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -40,6 +41,7 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import co.crossroadsapp.destiny.data.CurrentEventDataHolder;
 import co.crossroadsapp.destiny.data.EventData;
@@ -55,10 +57,12 @@ import co.crossroadsapp.destiny.utils.Util;
 import co.crossroadsapp.destiny.R;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -285,8 +289,8 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         sendMsgAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                hideProgress();
-//                showProgress();
+                hideProgress();
+                showProgress();
                 mManager.resendBungieMsg(ListActivityFragment.this);
             }
         });
@@ -427,6 +431,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                 .setMessage("Are you sure you want to log out?")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        showProgress();
                         // continue with delete
                         RequestParams rp = new RequestParams();
                         if (user.getUser() != null) {
@@ -474,12 +479,14 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
     private void checkClanSet() {
         if (user != null) {
-            if (user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
-                if (user.getClanId() != null) {
-                    if (user.getAuthenticationId()== Constants.REGISTER) {
-                        openProfileDrawer(Gravity.RIGHT);
-                    } else {
-                        setGroupImageUrl();
+            if(user.getPsnVerify()!=null) {
+                if (user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                    if (user.getClanId() != null) {
+                        if (user.getAuthenticationId() == Constants.REGISTER) {
+                            openProfileDrawer(Gravity.RIGHT);
+                        } else {
+                            setGroupImageUrl();
+                        }
                     }
                 }
             }
@@ -538,15 +545,43 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         userListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+                if(snapshot!=null) {
+                    UserData ud = new UserData();
+                    String psnV = null;
+                    if (snapshot.hasChild("value")) {
+                            JSONObject userObj = new JSONObject ((HashMap)snapshot.getValue());
+                            ud.toJson(userObj);
+                            if(ud.getPsnVerify()!=null) {
+                                psnV = ud.getPsnVerify();
+                            }
 
-                String psnV = (String) snapshot.child("psnVerified").getValue();
-
-                if (psnV!=null && psnV.equalsIgnoreCase(Constants.PSN_VERIFIED)) {
-                    if(mManager!=null && mManager.getUserData()!=null) {
-                    UserData u = mManager.getUserData();
-                    u.setPsnVerify(psnV);
+                            ////todo uncomment after parsing done
+                            if (psnV != null && psnV.equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                                if (mManager != null && mManager.getUserData() != null) {
+                                    UserData u = mManager.getUserData();
+                                    u.setPsnVerify(psnV);
+                                }
+                                checkUserPSNVerification();
+                            }
                     }
-                    checkUserPSNVerification();
+                    //todo firebase response without value
+//                    if (snapshot.hasChild("consoles")) {
+//                        ArrayList v = (ArrayList) snapshot.child("consoles").getValue();
+//                    if (snapshot.child("consoles") != null) {
+//                        HashMap n = (HashMap) v.get(0);
+//                        if (n.containsKey("verifyStatus")) {
+//                            psnV = (String) n.get("verifyStatus");
+////todo uncomment after parsing done
+//                            if (psnV != null && psnV.equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+//                                if (mManager != null && mManager.getUserData() != null) {
+//                                    UserData u = mManager.getUserData();
+//                                    u.setPsnVerify(psnV);
+//                                }
+//                                checkUserPSNVerification();
+//                            }
+//                        }
+//                    }
+//                }
                 }
             }
             @Override
@@ -811,58 +846,64 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
     @Override
     public void update(Observable observable, Object data) {
-        if (data != null) {
             if (observable instanceof EventListNetwork) {
-                eList = (EventList) data;
-                if (eData != null) {
-                    eData.clear();
+                if (data != null) {
+                    eList = (EventList) data;
+                    if (eData != null) {
+                        eData.clear();
+                    }
+                    eData = eList.getEventList();
+                    createUpcomingCurrentList(eData);
+                    //Checking if current launch happened due to push notification click
+                    if (pushEventObject != null) {
+                        launchPushEventDetail();
+                        pushEventObject = null;
+                    }
+                    updateCurrentFrag();
                 }
-                eData = eList.getEventList();
-                createUpcomingCurrentList(eData);
-                //Checking if current launch happened due to push notification click
-                if (pushEventObject != null) {
-                    launchPushEventDetail();
-                    pushEventObject = null;
-                }
-                updateCurrentFrag();
             } else if (observable instanceof EventRelationshipHandlerNetwork) {
-                EventData ed = new EventData();
-                ed = (EventData) data;
-                if (this.eData != null) {
-                    for (int i = 0; i < this.eData.size(); i++) {
-                        if (ed.getEventId().equalsIgnoreCase(this.eData.get(i).getEventId())) {
-                            if (ed.getMaxPlayer() > 0) {
-                                this.eData.remove(i);
-                                this.eData.add(i, ed);
-                            } else {
-                                this.eData.remove(i);
+                if (data != null) {
+                    EventData ed = new EventData();
+                    ed = (EventData) data;
+                    if (this.eData != null) {
+                        for (int i = 0; i < this.eData.size(); i++) {
+                            if (ed.getEventId().equalsIgnoreCase(this.eData.get(i).getEventId())) {
+                                if (ed.getMaxPlayer() > 0) {
+                                    this.eData.remove(i);
+                                    this.eData.add(i, ed);
+                                } else {
+                                    this.eData.remove(i);
+                                }
+                                createUpcomingCurrentList(eData);
+                                updateCurrentFrag();
+                                hideProgress();
+                                break;
                             }
-                            createUpcomingCurrentList(eData);
-                            updateCurrentFrag();
-                            hideProgress();
-                            break;
                         }
                     }
+                    //to update all lists in the background
+                    mManager.getEventList(ListActivityFragment.this);
                 }
-                //to update all lists in the background
-                mManager.getEventList(ListActivityFragment.this);
             } else if(observable instanceof GroupListNetwork) {
-                if (data instanceof UserData) {
-                    mManager.getEventList(this);
-                    hideProgress();
-                    closeProfileDrawer(Gravity.RIGHT);
-                    mManager.getGroupList(this);
-                    //gpAct.setSelectedGroup();
-                }else {
-                    //setGroupImageUrl();
-                    if(drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
-                        gpAct.update(data);
+                if (data != null) {
+                    if (data instanceof UserData) {
+                        mManager.getEventList(this);
+                        hideProgress();
+                        closeProfileDrawer(Gravity.RIGHT);
+                        mManager.getGroupList(this);
+                        //gpAct.setSelectedGroup();
+                    } else {
+                        //setGroupImageUrl();
+                        if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+                            gpAct.update(data);
+                        }
                     }
                 }
             } else if(observable instanceof ResendBungieVerification) {
                 hideProgress();
+                Toast.makeText(this, "Message send again to your bungie.net account for account verification",
+                        Toast.LENGTH_LONG).show();
             }
-        }
     }
 
     private void createUpcomingCurrentList(ArrayList<EventData> currentEventList) {

@@ -421,9 +421,9 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
             }
         });
 
-        progress = new ProgressDialog(this);
+        //progress = new ProgressDialog(this);
         // CAST THE LINEARLAYOUT HOLDING THE MAIN PROGRESS (SPINNER)
-        linlaHeaderProgress = (RelativeLayout) findViewById(R.id.linlaHeaderProgress);
+        //linlaHeaderProgress = (RelativeLayout) findViewById(R.id.linlaHeaderProgress);
 
         createNewEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -439,7 +439,9 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                                 ArrayList<String> players = new ArrayList<String>();
                                 players.add(creator_id);
                                 if (activityId != null && creator_id != null) {
-                                    linlaHeaderProgress.setVisibility(View.VISIBLE);
+                                    hideProgressBar();
+                                    showProgressBar();
+                                    //linlaHeaderProgress.setVisibility(View.VISIBLE);
                                     String dateTime = getCreateEventDateTime();
                                     mCntrlMngr.postCreateEvent(activityId, creator_id, minP, maxP, dateTime, CreateNewEvent.this);
                                 }
@@ -628,7 +630,8 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
     }
 
     public void showError(String err) {
-        dismissProgressBar();
+        hideProgressBar();
+        //dismissProgressBar();
 //        errLayout.setVisibility(View.VISIBLE);
 //        errText.setText(err);
         //setErrText(err);
@@ -864,7 +867,8 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
             aData = activityList.getActivityList();
         } else if (observable instanceof EventRelationshipHandlerNetwork) {
             //EventData ed = (EventData)data;
-            dismissProgressBar();
+            hideProgressBar();
+            //dismissProgressBar();
 //            progress.dismiss();
             launchListActivityAndFinish();
 //            finish();
@@ -880,10 +884,10 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
         startActivity(regIntent);
     }
 
-    public void dismissProgressBar(){
-        // To dismiss the dialog
-        linlaHeaderProgress.setVisibility(View.GONE);
-    }
+//    public void dismissProgressBar(){
+//        // To dismiss the dialog
+//        linlaHeaderProgress.setVisibility(View.GONE);
+//    }
 
     @Override
     public void onResume() {

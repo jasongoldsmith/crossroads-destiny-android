@@ -246,108 +246,110 @@ public class GroupDrawerAdapter {
         public void onBindViewHolder(final MyGroupViewHolder holder, final int position) {
             if(glistLocal.size()>0) {
                 objGroup = glistLocal.get(position);
-                if (user != null && (!user.getClanId().equalsIgnoreCase(Constants.CLAN_NOT_SET))) {
-                    if (!objGroup.getGroupId().equalsIgnoreCase(user.getClanId())) {
+                if (user != null) {
+                    if (user.getClanId()!=null) {
+                    if ((!user.getClanId().equalsIgnoreCase(Constants.CLAN_NOT_SET))) {
+                        if (!objGroup.getGroupId().equalsIgnoreCase(user.getClanId())) {
 
-                        if (holder.empty_group_layout != null) {
-                            holder.empty_group_layout.setVisibility(View.GONE);
-                        }
-                        if (holder.group_layout != null) {
-                            holder.group_layout.setVisibility(View.VISIBLE);
-                        }
-
-                        String gName = null;
-                        int count = 0;
-                        int eCount = 0;
-                        String url = null;
-                        //boolean clan = true;
-                        if (glistLocal.get(position) != null) {
-                            if (objGroup.getGroupName() != null) {
-                                gName = objGroup.getGroupName();
+                            if (holder.empty_group_layout != null) {
+                                holder.empty_group_layout.setVisibility(View.GONE);
                             }
-                            if (objGroup.getMemberCount() >= 0) {
-                                count = objGroup.getMemberCount();
+                            if (holder.group_layout != null) {
+                                holder.group_layout.setVisibility(View.VISIBLE);
                             }
-                            if (objGroup.getEventCount() > 0) {
-                                eCount = objGroup.getEventCount();
+
+                            String gName = null;
+                            int count = 0;
+                            int eCount = 0;
+                            String url = null;
+                            //boolean clan = true;
+                            if (glistLocal.get(position) != null) {
+                                if (objGroup.getGroupName() != null) {
+                                    gName = objGroup.getGroupName();
+                                }
+                                if (objGroup.getMemberCount() >= 0) {
+                                    count = objGroup.getMemberCount();
+                                }
+                                if (objGroup.getEventCount() > 0) {
+                                    eCount = objGroup.getEventCount();
+                                }
+                                if (objGroup.getGroupImageUrl() != null) {
+                                    url = objGroup.getGroupImageUrl();
+                                }
                             }
-                            if (objGroup.getGroupImageUrl() != null) {
-                                url = objGroup.getGroupImageUrl();
+
+                            if (holder.groupName != null && gName != null) {
+                                holder.groupName.setText(gName);
                             }
-                        }
 
-                        if (holder.groupName != null && gName != null) {
-                            holder.groupName.setText(gName);
-                        }
-
-                        if (holder.groupMemberCount != null) {
-                            holder.groupMemberCount.setText(count + " Members");
-                        }
-                        if (holder.groupImage != null) {
-                            Util.picassoLoadIcon(c, holder.groupImage, url, R.dimen.group_icon_hgt, R.dimen.group_icon_width, R.drawable.img_logo_badge);
-                        }
-
-                        if (holder.groupEventCount != null) {
-                            holder.groupEventCount.setText(eCount + " Events");
-                        }
-
-                        //in some cases, it will prevent unwanted situations
-                        holder.groupBtn.setOnCheckedChangeListener(null);
-
-                        //if true, your checkbox will be selected, else unselected
-                        holder.groupBtn.setChecked(objGroup.isSelected);
-
-                        holder.groupCard.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                holder.groupBtn.performClick();
+                            if (holder.groupMemberCount != null) {
+                                holder.groupMemberCount.setText(count + " Members");
                             }
-                        });
+                            if (holder.groupImage != null) {
+                                Util.picassoLoadIcon(c, holder.groupImage, url, R.dimen.group_icon_hgt, R.dimen.group_icon_width, R.drawable.img_logo_badge);
+                            }
 
-                        holder.groupBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                                //set your object's last status
-                                if (isChecked) {
-                                    for (int y = 0; y < glistLocal.size(); y++) {
-                                        if (y == position) continue;
-                                        objGroup = glistLocal.get(y);
-                                        if (objGroup.isSelected) {
-                                            objGroup.setGroupSelected(false);
-                                            notifyItemChanged(y);
-                                        }
-                                    }
-                                    glistLocal.get(position).setGroupSelected(isChecked);
-                                    notifyItemChanged(position);
+                            if (holder.groupEventCount != null) {
+                                holder.groupEventCount.setText(eCount + " Events");
+                            }
 
-                                    //change grp icon
-                                    ((ListActivityFragment) c).setgrpIcon(glistLocal.get(position).getGroupImageUrl());
+                            //in some cases, it will prevent unwanted situations
+                            holder.groupBtn.setOnCheckedChangeListener(null);
 
-                                    //save selected grp
-                                    RequestParams params = new RequestParams();
-                                    if (mCntrlMngr != null) {
-                                        if (mCntrlMngr.getUserData() != null) {
-                                            UserData user = mCntrlMngr.getUserData();
-                                            if (user.getUserId() != null) {
-                                                params.add("id", user.getUserId());
+                            //if true, your checkbox will be selected, else unselected
+                            holder.groupBtn.setChecked(objGroup.isSelected);
+
+                            holder.groupCard.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    holder.groupBtn.performClick();
+                                }
+                            });
+
+                            holder.groupBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                    //set your object's last status
+                                    if (isChecked) {
+                                        for (int y = 0; y < glistLocal.size(); y++) {
+                                            if (y == position) continue;
+                                            objGroup = glistLocal.get(y);
+                                            if (objGroup.isSelected) {
+                                                objGroup.setGroupSelected(false);
+                                                notifyItemChanged(y);
                                             }
-
-                                            params.add("clanId", glistLocal.get(position).getGroupId());
-
-                                            ((ListActivityFragment) c).hideProgress();
-                                            ((ListActivityFragment) c).showProgress();
-                                            mCntrlMngr.postSetGroup((ListActivityFragment) c, params);
                                         }
-                                    }
+                                        glistLocal.get(position).setGroupSelected(isChecked);
+                                        notifyItemChanged(position);
 
-                                    //show save button ready state
+                                        //change grp icon
+                                        ((ListActivityFragment) c).setgrpIcon(glistLocal.get(position).getGroupImageUrl());
+
+                                        //save selected grp
+                                        RequestParams params = new RequestParams();
+                                        if (mCntrlMngr != null) {
+                                            if (mCntrlMngr.getUserData() != null) {
+                                                UserData user = mCntrlMngr.getUserData();
+                                                if (user.getUserId() != null) {
+                                                    params.add("id", user.getUserId());
+                                                }
+
+                                                params.add("clanId", glistLocal.get(position).getGroupId());
+
+                                                ((ListActivityFragment) c).hideProgress();
+                                                ((ListActivityFragment) c).showProgress();
+                                                mCntrlMngr.postSetGroup((ListActivityFragment) c, params);
+                                            }
+                                        }
+
+                                        //show save button ready state
 //                            holder.saveGrpBtn.setVisibility(View.GONE);
 //                            holder.saveGrpBtnReady.setVisibility(View.VISIBLE);
-                                } else {
-                                    //show save button ready state
+                                    } else {
+                                        //show save button ready state
 //                            holder.saveGrpBtn.setVisibility(View.VISIBLE);
 //                            holder.saveGrpBtnReady.setVisibility(View.GONE);
-                                }
+                                    }
 //                        objGroup.setGroupSelected(isChecked);
 //                        for (int y=0;y<glistLocal.size();y++) {
 //                            if((!objGroup.getGroupId().equalsIgnoreCase(glistLocal.get(y).getGroupId())) && isChecked) {
@@ -355,10 +357,10 @@ public class GroupDrawerAdapter {
 //                                notifyItemChanged(y);
 //                            }
 //                        }
-                            }
-                        });
-                        holder.groupEventCount.invalidate();
-                        holder.groupMemberCount.invalidate();
+                                }
+                            });
+                            holder.groupEventCount.invalidate();
+                            holder.groupMemberCount.invalidate();
 //                holder.saveGrpBtnReady.setOnClickListener(new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View v) {
@@ -388,7 +390,9 @@ public class GroupDrawerAdapter {
 //                    }
 //                    }
 //                });
+                        }
                     }
+                }
             } else {
                     //setSelectedGroup();
                 }

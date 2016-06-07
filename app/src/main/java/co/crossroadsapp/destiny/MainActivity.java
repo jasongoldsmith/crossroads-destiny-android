@@ -81,8 +81,10 @@ public class MainActivity extends Activity implements Observer {
             register_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+//                    Intent regIntent = new Intent(getApplicationContext(),
+//                            RegisterActivity.class);
                     Intent regIntent = new Intent(getApplicationContext(),
-                            RegisterActivity.class);
+                            ConsoleSelectionActivity.class);
                     regIntent.putExtra("userdata", userData);
                     startActivity(regIntent);
                 }

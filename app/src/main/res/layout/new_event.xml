@@ -688,21 +688,21 @@
         </TimePicker>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/sample_background"
-        android:id="@+id/linlaHeaderProgress"
-        android:clickable="true"
-        android:visibility="gone">
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:indeterminateDrawable="@drawable/progress" />
-    </RelativeLayout>
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="@drawable/sample_background"-->
+        <!--android:id="@+id/linlaHeaderProgress"-->
+        <!--android:clickable="true"-->
+        <!--android:visibility="gone">-->
+        <!--<ProgressBar-->
+            <!--android:id="@+id/progressBar"-->
+            <!--style="?android:attr/progressBarStyleLarge"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:indeterminateDrawable="@drawable/progress" />-->
+    <!--</RelativeLayout>-->
 
     <include layout="@layout/activity_base" />
 

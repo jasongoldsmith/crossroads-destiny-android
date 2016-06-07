@@ -1,5 +1,6 @@
 package co.crossroadsapp.destiny.data;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -48,9 +49,25 @@ public class PlayerData {
     public void toJson(JSONObject jsonobject) {
         if (jsonobject!= null) {
             try {
-                if (!jsonobject.isNull("psnId")) {
-                    setPsnId(jsonobject.getString("psnId"));
+                JSONArray conArray = jsonobject.optJSONArray("consoles");
+                JSONObject conData = (JSONObject) conArray.get(0);
+//                if(conData.has("consoleType")) {
+//                    String cType = conData.getString("consoleType");
+//                    setConsoleType(cType);
+//                }
+
+                if(conData.has("consoleId")) {
+                    String id = conData.getString("consoleId");
+                    setPsnId(id);
                 }
+
+//                if(conData.has("verifyStatus")){
+//                    String verifyS = conData.getString("verifyStatus");
+//                    setPsnVerify(verifyS);
+//                }
+//                if (!jsonobject.isNull("psnId")) {
+//                    setPsnId(jsonobject.getString("psnId"));
+//                }
                 setUsername(jsonobject.getString("userName"));
                 setPlayerId(jsonobject.getString("_id"));
                 setPlayerImageUrl(jsonobject.getString("imageUrl"));

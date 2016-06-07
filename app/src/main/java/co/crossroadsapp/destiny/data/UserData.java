@@ -3,21 +3,26 @@ package co.crossroadsapp.destiny.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Map;
 
 /**
  * Created by sharmha on 2/23/16.
  */
 public class UserData implements Parcelable {
 
-    private String user;
-    private String password;
-    private String psnId;
-    private String imageUrl;
-    private String userId;
-    private String clanId;
-    private String psnVerify;
+    private String user=null;
+    private String password=null;
+    private String psnId=null;
+    private String imageUrl=null;
+    private String userId=null;
+    private String clanId=null;
+    private String psnVerify=null;
+    private String membershipId=null;
+    private String consoleType=null;
     private int authenticationId;
 
     public UserData() {
@@ -37,11 +42,27 @@ public class UserData implements Parcelable {
     }
 
     public void setPsnVerify(String psnVeri) {
-        psnVerify = psnVeri;
+        this.psnVerify = psnVeri;
     }
 
     public String getPsnVerify() {
-        return this.psnVerify;
+        return psnVerify;
+    }
+
+    public void setMembershipId(String memId) {
+        this.membershipId = memId;
+    }
+
+    public String getMembershipId() {
+        return membershipId;
+    }
+
+    public void setConsoleType(String cType) {
+        this.consoleType = cType;
+    }
+
+    public String getConsoleType() {
+        return consoleType;
     }
 
     public void setClanId(String id) {
@@ -94,24 +115,47 @@ public class UserData implements Parcelable {
 
     public void toJson(JSONObject json) {
         try {
-            JSONObject jsonData = json.optJSONObject("value");
-            String n = jsonData.getString("userName");
+            if(json.has("value")) {
+                JSONObject jsonData = json.optJSONObject("value");
+                String n = jsonData.getString("userName");
 //            String p = jsonData.getString("passWord");
-            String psnId = jsonData.getString("psnId");
-            String profileImg = jsonData.getString("imageUrl");
-            String uId = jsonData.getString("_id");
-            String clanId = jsonData.getString("clanId");
-            String psnVer = jsonData.getString("psnVerified");
+                //String psnId = jsonData.getString("psnId");
+                if (jsonData.has("bungieMemberShipId")) {
+                    String memid = jsonData.getString("bungieMemberShipId");
+                    setMembershipId(memid);
+                }
+                String clanId = jsonData.getString("clanId");
+                String profileImg = jsonData.getString("imageUrl");
+                String uId = jsonData.getString("_id");
+                JSONArray conArray = jsonData.optJSONArray("consoles");
+                JSONObject conData = (JSONObject) conArray.get(0);
+                if (conData.has("consoleType")) {
+                    String cType = conData.getString("consoleType");
+                    setConsoleType(cType);
+                }
 
-            if (n!=null && !n.isEmpty()){
-                setUser(n);
+                if (conData.has("consoleId")) {
+                    String id = conData.getString("consoleId");
+                    setPsnId(id);
+                }
+
+                if (conData.has("verifyStatus")) {
+                    String verifyS = conData.getString("verifyStatus");
+                    setPsnVerify(verifyS);
+                }
+
+                //String psnVer = jsonData.getString("psnVerified");
+
+                if (n != null && !n.isEmpty()) {
+                    setUser(n);
+                }
+
+                //setPsnId(psnId);
+                setImageUrl(profileImg);
+                setUserId(uId);
+                setClanId(clanId);
+                //setPsnVerify(psnVer);
             }
-
-            setPsnId(psnId);
-            setImageUrl(profileImg);
-            setUserId(uId);
-            setClanId(clanId);
-            setPsnVerify(psnVer);
 
         } catch (JSONException e) {
             // TODO Auto-generated catch block
@@ -139,6 +183,8 @@ public class UserData implements Parcelable {
         this.userId = in.readString();
         this.clanId = in.readString();
         this.psnVerify = in.readString();
+        this.consoleType = in.readString();
+        this.membershipId = in.readString();
     }
 
     @Override
@@ -155,5 +201,7 @@ public class UserData implements Parcelable {
         dest.writeString(this.userId);
         dest.writeString(this.clanId);
         dest.writeString(this.psnVerify);
+        dest.writeString(this.consoleType);
+        dest.writeString(this.membershipId);
     }
 }

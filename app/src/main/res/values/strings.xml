@@ -13,8 +13,8 @@
     <string name="date_default">Date - Today</string>
     <string name="time_default">Time - Now</string>
 
-    <string name="leave_event">LEAVE EVENT</string>
-    <string name="join_event">JOIN EVENT</string>
+    <string name="leave_event">LEAVE ACTIVITY</string>
+    <string name="join_event">JOIN ACTIVITY</string>
     <string name="message_all">MESSAGE ALL</string>
 
     <string name="logout">Logout</string>
@@ -58,5 +58,17 @@
     <string name="license_string"> |  <u>Licenses</u></string>
     <string name="verify_logout_text">Sign in with a different account?</string>
     <string name="message_missing_tryagain">If you have not received a message within 10 minutes, <u>send the message again</u>. If the problem persists, contact us at <font color='#0086d0'>support@crossroadsapp.co</font></string>
+    <string name="choose_console">CHOOSE YOUR CONSOLE</string>
+
+    <string name="console_prompt">PLAYSTATION 4</string>
+    <string name="username_text">USERNAME</string>
+    <string name="username_hint">Enter Username</string>
+
+    <string-array name="console_arrays">
+        <item>PLAYSTATION 4</item>
+        <item>PLAYSTATION 3</item>
+        <item>XBOXONE</item>
+        <item>XBOX360</item>
+    </string-array>
 
 </resources>
