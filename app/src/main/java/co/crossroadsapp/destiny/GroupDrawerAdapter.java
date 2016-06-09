@@ -141,8 +141,10 @@ public class GroupDrawerAdapter {
                 GroupData gd = mCntrlMngr.getGroupObj(user.getClanId());
                 if (gd != null) {
                     if (gd.getGroupImageUrl() != null) {
-                        groupSelectedEventCount.setText(gd.getEventCount() + " Events");
-                        groupSelectedMemberCount.setText(gd.getMemberCount() + " Members");
+                        String first_gm = gd.getMemberCount() + c.getResources().getQuantityString(R.plurals.grp_member, gd.getMemberCount());
+                        String first_ge = gd.getEventCount() + c.getResources().getQuantityString(R.plurals.grp_event, gd.getEventCount());
+                        groupSelectedEventCount.setText(first_ge);
+                        groupSelectedMemberCount.setText(first_gm);
                         groupSelectedName.setText(gd.getGroupName());
                         Util.picassoLoadIcon(c, groupSelectedImage, gd.getGroupImageUrl(), R.dimen.group_icon_hgt, R.dimen.group_icon_width, R.drawable.img_logo_badge);
                     }
@@ -283,14 +285,16 @@ public class GroupDrawerAdapter {
                             }
 
                             if (holder.groupMemberCount != null) {
-                                holder.groupMemberCount.setText(count + " Members");
+                                String gm = count + c.getResources().getQuantityString(R.plurals.grp_member, count);
+                                holder.groupMemberCount.setText(gm);
                             }
                             if (holder.groupImage != null) {
                                 Util.picassoLoadIcon(c, holder.groupImage, url, R.dimen.group_icon_hgt, R.dimen.group_icon_width, R.drawable.img_logo_badge);
                             }
 
                             if (holder.groupEventCount != null) {
-                                holder.groupEventCount.setText(eCount + " Events");
+                                String ge = eCount + c.getResources().getQuantityString(R.plurals.grp_event, eCount);
+                                holder.groupEventCount.setText(ge);
                             }
 
                             //in some cases, it will prevent unwanted situations
@@ -324,6 +328,9 @@ public class GroupDrawerAdapter {
 
                                         //change grp icon
                                         ((ListActivityFragment) c).setgrpIcon(glistLocal.get(position).getGroupImageUrl());
+
+                                        //close drawer
+                                        ((ListActivityFragment) c).closeAllDrawers();
 
                                         //save selected grp
                                         RequestParams params = new RequestParams();

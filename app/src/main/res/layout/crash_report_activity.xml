@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/crash_text"
         android:layout_centerHorizontal="true"
-        android:text="Send Feedback"
+        android:text="@string/contact_us"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         android:layout_marginTop="16dp"/>

@@ -21,7 +21,7 @@ import com.loopj.android.http.RequestParams;
 import java.util.Observable;
 import java.util.Observer;
 
-public class MainActivity extends Activity implements Observer {
+public class MainActivity extends BaseActivity implements Observer {
 
     private View register_layout;
     private View signin_layout;
@@ -62,6 +62,12 @@ public class MainActivity extends Activity implements Observer {
 
     }
 
+    public void showError(String err) {
+        Util.clearDefaults(this);
+        launchLogin();
+        finish();
+    }
+
     private void forwardAfterVersionCheck() {
         if (u != null && p!= null && !u.isEmpty() && !p.isEmpty()) {
             //todo check how to minimize api calls to get full event list in future from multiple locations
@@ -93,16 +99,20 @@ public class MainActivity extends Activity implements Observer {
             signin_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent signinIntent = new Intent(getApplicationContext(),
-                            LoginActivity.class);
-                    signinIntent.putExtra("userdata", userData);
-                    if(contentIntent!=null) {
-                        signinIntent.putExtra("eventIntent", contentIntent);
-                    }
-                    startActivity(signinIntent);
+                    launchLogin();
                 }
             });
         }
+    }
+
+    private void launchLogin() {
+        Intent signinIntent = new Intent(getApplicationContext(),
+                LoginActivity.class);
+        signinIntent.putExtra("userdata", userData);
+        if(contentIntent!=null) {
+            signinIntent.putExtra("eventIntent", contentIntent);
+        }
+        startActivity(signinIntent);
     }
 
     @Override
@@ -146,6 +156,7 @@ public class MainActivity extends Activity implements Observer {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         finish();
     }
 

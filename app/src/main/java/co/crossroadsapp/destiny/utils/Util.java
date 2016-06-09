@@ -11,7 +11,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import co.crossroadsapp.destiny.ControlManager;
 import co.crossroadsapp.destiny.data.UserData;
@@ -87,12 +90,6 @@ public class Util {
             userData.setUser(user);
             userData.setPassword(pass);
         }
-    }
-
-    public static void clearSharedPreference(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.clear();
     }
 
     public static void setDefaults(String key, String value, Context context) {
@@ -248,7 +245,7 @@ public class Util {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        format = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
+        format = new SimpleDateFormat("EEE, MMM dd - hh:mm a");
         String date = format.format(newDate);
         return date;
     }
@@ -346,6 +343,26 @@ public class Util {
                             TravellerLog.w(TAG, "error");
                         }
                     });
+        }
+    }
+
+    public static void showErrorMsg(final RelativeLayout errLayout, TextView errText, String errorText) {
+        if(errLayout!=null) {
+            errLayout.setVisibility(View.GONE);
+            errLayout.setVisibility(View.VISIBLE);
+
+            if(errorText!=null && errText!=null) {
+                errText.setText(errorText);
+            }
+
+            //put timer to make the error message gone after 5 seconds
+            errLayout.postDelayed(new Runnable() {
+                public void run() {
+                    if(errLayout!=null) {
+                        errLayout.setVisibility(View.GONE);
+                    }
+                }
+            }, 5000);
         }
     }
 }

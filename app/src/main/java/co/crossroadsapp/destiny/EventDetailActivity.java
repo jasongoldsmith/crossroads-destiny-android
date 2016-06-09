@@ -159,7 +159,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         });
 
         if(currEvent.getActivityData().getActivityIconUrl()!=null) {
-            Util.picassoLoadIcon(EventDetailActivity.this, eventProfileImg, currEvent.getActivityData().getActivityIconUrl(), R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.img_r_a_i_d_i_c_o_n);
+            Util.picassoLoadIcon(EventDetailActivity.this, eventProfileImg, currEvent.getActivityData().getActivityIconUrl(), R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.icon_ghost_default);
         }
 
         if (currEvent.getActivityData().getActivitySubtype()!=null) {
@@ -167,7 +167,9 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         }
 
         if (currEvent.getActivityData().getActivityLight()> 0) {
-            eventLight.setText("+" + currEvent.getActivityData().getActivityLight());
+            // unicode to show star
+            String st = "\u2726";
+            eventLight.setText(st + currEvent.getActivityData().getActivityLight());
         } else if(currEvent.getActivityData().getActivityLevel()>0) {
             eventLight.setText("lvl " + currEvent.getActivityData().getActivityLevel());
         }

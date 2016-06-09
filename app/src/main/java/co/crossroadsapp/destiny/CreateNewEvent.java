@@ -31,6 +31,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import co.crossroadsapp.destiny.data.ActivityData;
@@ -46,6 +47,8 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -549,6 +552,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
             case TIME_DIALOG_ID:
                 // set time picker as current time
                 TimePickerDialog tpd = new TimePickerDialog(this, timePickerListener, hour, minute,false);
+
                 tpd.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
@@ -591,17 +595,35 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                 //mManager.getEventList(ListActivityFragment.this);
             }
             notiBar.setVisibility(View.VISIBLE);
+            //put timer to make the notification message gone after 5 seconds
+            notiBar.postDelayed(new Runnable() {
+                public void run() {
+                    if(notiBar!=null) {
+                        notiBar.setVisibility(View.GONE);
+                    }
+                }
+            }, 7000);
         }
     };
 
     protected TimePickerDialog.OnTimeSetListener timePickerListener =  new TimePickerDialog.OnTimeSetListener() {
 
         public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
+            Calendar c = Calendar.getInstance();
             hour = selectedHour;
             minute = selectedMinute;
-            // set current time into textview
-            String aTime = Util.updateTime(hour, minute);
-            if(aTime!=null) {
+            String aTime=null;
+
+            if (hour >= c.get(Calendar.HOUR_OF_DAY) && minute >= c.get(Calendar.MINUTE)) {
+
+                // set current time into textview
+                aTime = Util.updateTime(hour, minute);
+
+            } else {
+                Toast.makeText(getApplicationContext(), "Cannot set previous time for today.", Toast.LENGTH_SHORT).show();
+                aTime = Util.updateTime(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE));
+            }
+            if (aTime != null) {
                 time_display.setText(aTime);
             }
         }
@@ -609,10 +631,36 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
 
     private void intializeCalendar() {
         calendar.setOnDateChangedListener(new OnDateSelectedListener() {
+
             @Override
             public void onDateSelected(MaterialCalendarView materialCalendarView, CalendarDay calendarDay, boolean b) {
                 int m = calendarDay.getMonth();
                 int d = calendarDay.getDay();
+                int y = calendarDay.getYear();
+
+                //todo will change with new calendar but for now hacking to reset date if user selects previous date
+                String date=null;
+                Calendar c = Calendar.getInstance();
+                int currentMonth = c.get(Calendar.MONTH);
+                int currentYear = c.get(Calendar.YEAR);
+                int currentDay = c.get(Calendar.DAY_OF_MONTH);
+                Date currentDate = new Date(currentYear, currentMonth, currentDay);
+
+                Date selectedDate = new Date(y, m, d);
+
+                if(selectedDate.compareTo(currentDate)<0){
+                    Toast.makeText(getApplicationContext(), "Cannot set previous date.", Toast.LENGTH_SHORT).show();
+                    m =  currentMonth;
+                    d = currentDay;
+                    y = currentYear;
+
+                    date = currentMonth + "-" + currentDay + "-" + currentYear;
+                }
+                else {
+                    date = m + "-" + d
+                            + "-" + calendarDay.getYear();
+                }
+
                 if (m == 1 && d > 29) {
                     m = 3;
                     if (d == 30) {
@@ -623,18 +671,37 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                 } else {
                     m = m + 1;
                 }
+//                String selectedD = checkIfPreviousDate(m,d,calendarDay.getYear());
                 date_display.setText(m + "-" + d
-                        + "-" + calendarDay.getYear());
+                        + "-" + y);
             }
         });
     }
 
+    private String checkIfPreviousDate(int m, int d, int year) {
+        String date=null;
+        Calendar c = Calendar.getInstance();
+        int currentMonth = c.get(Calendar.MONTH);
+        int currentYear = c.get(Calendar.YEAR);
+        int currentDay = c.get(Calendar.DAY_OF_MONTH);
+        Date currentDate = new Date(currentYear, currentMonth, currentDay);
+
+        Date selectedDate = new Date(year, m, d);
+
+        if(selectedDate.compareTo(currentDate)<0){
+            Toast.makeText(getApplicationContext(), "Cannot set previous datetime.", Toast.LENGTH_SHORT).show();
+            date = currentMonth + "-" + currentDay + "-" + currentYear;
+        }
+        else {
+            date = m + "-" + d
+                    + "-" + year;
+        }
+        return date;
+    }
+
     public void showError(String err) {
         hideProgressBar();
-        //dismissProgressBar();
-//        errLayout.setVisibility(View.VISIBLE);
-//        errText.setText(err);
-        //setErrText(err);
+        setErrText(err);
     }
 
     public GradientDrawable backgroundWithBorder(int bgcolor, int brdcolor) {
@@ -803,7 +870,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
         }
         createAvtivityNameText.setText(activity_custom_name);
         //createActivityIconview.
-        Util.picassoLoadIcon(CreateNewEvent.this, createActivityIconview, currentActivity.getActivityIconUrl(), R.dimen.activity_icon_hgt_createevent, R.dimen.activity_icon_width_createevent, R.drawable.img_featured_icon);
+        Util.picassoLoadIcon(CreateNewEvent.this, createActivityIconview, currentActivity.getActivityIconUrl(), R.dimen.activity_icon_hgt_createevent, R.dimen.activity_icon_width_createevent, R.drawable.icon_ghost_default);
         createNewEventBtn.setBackgroundColor(getResources().getColor(R.color.create_new_event_green));
         vf.showNext();
     }
@@ -905,6 +972,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                     calendar_layout.setVisibility(View.GONE);
                 }else {
                     vf.setDisplayedChild(vf.getDisplayedChild() - 1);
+                    setCalendarToDefault();
                     createNewEventBtn.setBackgroundColor(getResources().getColor(R.color.event_user_image_background));
                 }
             }else {
@@ -912,6 +980,16 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
             }
         }else {
             launchListActivityAndFinish();
+        }
+    }
+
+    private void setCalendarToDefault() {
+        if(date_display!=null) {
+            date_display.setText(getResources().getString(R.string.date_default));
+        }
+
+        if(time_display!=null) {
+            time_display.setText(getResources().getString(R.string.time_default));
         }
     }
 

@@ -52,4 +52,5 @@
     <color name="createnewevent_topbar">#19282c</color>
 
     <color name="copyright_text">#adc7ce</color>
+    <color name="player_circ_img_border">#979797</color>
 </resources>

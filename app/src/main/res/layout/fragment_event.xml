@@ -14,6 +14,9 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="6dp"
         conversation:cardBackgroundColor="@android:color/transparent"
+        app:border="true"
+        app:borderColor="#979797"
+        app:circularBorderWidth="1dp"
         conversation:cardElevation="0dp">
 
         <RelativeLayout
@@ -130,9 +133,9 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginLeft="60dp"
-                app:border="false"
-                app:borderColor="#EEEEEE"
-                app:circularBorderWidth="0dp"
+                app:border="true"
+                app:borderColor="#979797"
+                app:circularBorderWidth="1dp"
                 app:shadow="true"/>
 
             <co.crossroadsapp.destiny.utils.CircularImageView
@@ -142,10 +145,10 @@
                 android:layout_alignParentTop="true"
                 android:layout_toRightOf="@+id/player_picture_1"
                 android:layout_marginLeft="6dp"
-                app:border="false"
+                app:border="true"
+                app:borderColor="#979797"
+                app:circularBorderWidth="1dp"
                 android:padding="6dp"
-                app:borderColor="#EEEEEE"
-                app:circularBorderWidth="0dp"
                 app:shadow="true"
                 android:visibility="gone"/>
 
@@ -163,9 +166,9 @@
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_centerInParent="true"
-                    app:border="false"
-                    app:borderColor="#EEEEEE"
-                    app:circularBorderWidth="0dp"
+                    app:border="true"
+                    app:borderColor="#979797"
+                    app:circularBorderWidth="1dp"
                     app:shadow="true"
                     android:visibility="gone"/>
 

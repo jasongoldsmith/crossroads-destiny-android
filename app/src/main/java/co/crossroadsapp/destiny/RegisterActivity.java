@@ -16,7 +16,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import co.crossroadsapp.destiny.utils.Util;
@@ -324,23 +323,9 @@ public class RegisterActivity extends BaseActivity implements Observer {
         }
     }
 
-    private class MyWebViewClient extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.setVisibility(View.VISIBLE);
-            if (url.contains(Constants.TERMS_OF_SERVICE)) {
-                return super.shouldOverrideUrlLoading(view, Constants.TERMS_OF_SERVICE);
-            } else if (url.contains(Constants.PRIVACY_POLICY)) {
-                return super.shouldOverrideUrlLoading(view, Constants.PRIVACY_POLICY);
-            } else {
-                view.loadUrl(url); // load url in webview
-                return true;
-            }
-        }
-    }
-
     @Override
     public void onBackPressed() {
+        Util.clearDefaults(getApplicationContext());
         super.onBackPressed();
     }
 }

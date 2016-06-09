@@ -2,6 +2,7 @@ package co.crossroadsapp.destiny;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.view.KeyEvent;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import co.crossroadsapp.destiny.R;
 import com.loopj.android.http.RequestParams;
@@ -100,6 +102,16 @@ public class ForgotLoginActivity extends BaseActivity implements Observer {
     @Override
     public void update(Observable observable, Object data) {
         dialog.dismiss();
-        finish();
+        Toast.makeText(this, "Instructions for resetting your password have been sent to your Bungie.net account. Follow the instructions to choose a new password.",
+                Toast.LENGTH_LONG).show();
+        long timeInMillisecondTheToastIsShowingFor = 3000;
+        (new Handler())
+                .postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                // finish this activity here
+                                finish();
+                            }
+                        }, timeInMillisecondTheToastIsShowingFor);
     }
 }

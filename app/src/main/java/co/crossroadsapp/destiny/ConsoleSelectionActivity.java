@@ -96,7 +96,7 @@ public class ConsoleSelectionActivity extends BaseActivity implements AdapterVie
         });
 
         // Array of console types
-        final String[] objects = { "PlayStation 4", "PlayStation 3", "XBOXONE", "XBOX360"};
+        final String[] objects = { "PlayStation 4", "PlayStation 3", "Xbox One", "Xbox 360"};
 
         // Initializing an ArrayAdapter
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,
@@ -211,18 +211,22 @@ public class ConsoleSelectionActivity extends BaseActivity implements AdapterVie
             {
                 case "PlayStation 3" :
                     console_name.setText("PLAYSTATION ID");
-                    user_id.setHint("Enter Your PlayStation ID");
+                    user_id.setHint("Enter PlayStation ID");
                     console = "PS3";
                     break;
                 case "PlayStation 4" :
                     console_name.setText("PLAYSTATION ID");
-                    user_id.setHint("Enter Your PlayStation ID");
+                    user_id.setHint("Enter PlayStation ID");
                     console = "PS4";
                     break;
-                case "XBOXONE":
-                case "XBOX360":
+                case "Xbox One":
                     console_name.setText("XBOX GAMERTAG");
-                    user_id.setHint("Enter Your Xbox Gamertag");
+                    user_id.setHint("Enter Xbox Gamertag");
+                    console = "XBOXONE";
+                case "Xbox 360":
+                    console_name.setText("XBOX GAMERTAG");
+                    user_id.setHint("Enter Xbox Gamertag");
+                    console = "XBOX360";
                     break;
 
             }
@@ -258,6 +262,7 @@ public class ConsoleSelectionActivity extends BaseActivity implements AdapterVie
             }
         }
         startActivity(regIntent);
+        finish();
     }
 
     @Override

@@ -301,6 +301,7 @@ public class BlankFragment extends Fragment {
 
                 holder.eventaLight.setText("");
                 if (l > 0) {
+                    // unicode to show star
                     String st = "\u2726";
                     holder.eventaLight.setText(st + String.valueOf(l));
                 } else if(level>0) {
@@ -317,7 +318,7 @@ public class BlankFragment extends Fragment {
                 holder.checkpointText.invalidate();
                 holder.eventDate.invalidate();
 
-                Util.picassoLoadIcon(mContext, holder.eventIcon, url, R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.img_i_c_o_n_r_a_i_d);
+                Util.picassoLoadIcon(mContext, holder.eventIcon, url, R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.icon_ghost_default);
             }
         }
 

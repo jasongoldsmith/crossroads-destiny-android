@@ -7,11 +7,11 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:id="@+id/error_layout"
         android:layout_alignParentTop="true"
-        android:background="@android:color/black"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:background="@android:color/black">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,18 +30,6 @@
             android:layout_toRightOf="@+id/error"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="13dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/error_sub"
-            android:textSize="12sp"
-            android:textColor="@color/trimbe_white"
-            android:layout_toRightOf="@+id/error"
-            android:layout_below="@+id/error_text"
-            android:layout_marginBottom="14dp"
-            android:layout_marginLeft="13dp"
-            android:layout_marginRight="30dp"/>
-
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,8 +37,21 @@
             android:src="@drawable/icon_close_sm"
             android:layout_alignParentRight="true"
             android:onClick="closeView"
-            android:layout_marginTop="9dp"
-            android:layout_marginEnd="7dp"/>
+            android:padding="9dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/error_sub"
+            android:textSize="12sp"
+            android:lines="3"
+            android:textColor="@color/trimbe_white"
+            android:layout_toRightOf="@+id/error"
+            android:layout_toLeftOf="@+id/err_close"
+            android:layout_below="@+id/error_text"
+            android:layout_marginBottom="14dp"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="30dp"/>
+
     </RelativeLayout>
 
     <RelativeLayout

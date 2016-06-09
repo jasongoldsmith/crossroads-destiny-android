@@ -2,6 +2,7 @@ package co.crossroadsapp.destiny;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.view.KeyEvent;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.R;
@@ -64,9 +66,23 @@ public class CrashReport extends Activity {
                     if(user.getUserId()!=null) {
                         controlManager.postCrash(CrashReport.this, user.getUserId(), crash_text.getText().toString());
                     }
-                    finish();
+                    showToastAndClose();
                 }
             }
         });
+    }
+
+    private void showToastAndClose() {
+        Toast.makeText(this, "Message Sent",
+                Toast.LENGTH_SHORT).show();
+        long timeInMillisecondTheToastIsShowingFor = 1000;
+        (new Handler())
+                .postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                // finish this activity here
+                                finish();
+                            }
+                        }, timeInMillisecondTheToastIsShowingFor);
     }
 }

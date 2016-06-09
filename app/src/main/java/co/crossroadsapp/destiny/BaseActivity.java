@@ -7,6 +7,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import co.crossroadsapp.destiny.R;
+import co.crossroadsapp.destiny.utils.Util;
 
 public class BaseActivity extends Activity {
 
@@ -27,11 +28,24 @@ public class BaseActivity extends Activity {
         if (errLayout==null) {
             errLayout = (RelativeLayout) findViewById(R.id.error_layout);
         }
-        if(errText!=null && errLayout!=null) {
-            errLayout.setVisibility(View.GONE);
-            errLayout.setVisibility(View.VISIBLE);
-            errText.setText(errorText);
-        }
+
+        // show timed error message
+        Util.showErrorMsg(errLayout, errText, errorText);
+
+//        if(errText!=null && errLayout!=null) {
+//            errLayout.setVisibility(View.GONE);
+//            errLayout.setVisibility(View.VISIBLE);
+//            errText.setText(errorText);
+//
+//            //put timer to make the error message gone after 5 seconds
+//            errLayout.postDelayed(new Runnable() {
+//                public void run() {
+//                    if(errLayout!=null) {
+//                        errLayout.setVisibility(View.GONE);
+//                    }
+//                }
+//            }, 5000);
+//        }
     }
 
     public void closeView(View view) {

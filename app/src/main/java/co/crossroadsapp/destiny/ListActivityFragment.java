@@ -27,8 +27,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
@@ -169,6 +173,10 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
         unverifiedUserScreen = (RelativeLayout) findViewById(R.id.verify_fail);
 
+        sendMsgAgain = (TextView) findViewById(R.id.send_msg_again);
+
+        sendMsgAgain.setText(Html.fromHtml(getResources().getString(R.string.message_missing_tryagain)));
+
         //check user erification
         checkUserPSNVerification();
 
@@ -285,7 +293,6 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             }
         });
 
-        sendMsgAgain = (TextView) findViewById(R.id.send_msg_again);
         sendMsgAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -428,9 +435,10 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     private void showLogoutDialog() {
         // alert dailogue
         new AlertDialog.Builder(ListActivityFragment.this)
-                .setMessage("Are you sure you want to log out?")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setMessage(getResources().getString(R.string.logout_popup_msg))
+                .setPositiveButton(getResources().getString(R.string.ok_btn), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        closeProfileDrawer(Gravity.LEFT);
                         showProgress();
                         // continue with delete
                         RequestParams rp = new RequestParams();
@@ -440,7 +448,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                         mManager.postLogout(ListActivityFragment.this, rp);
                     }
                 })
-                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.cancel_btn), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // do nothing
                     }
@@ -555,7 +563,6 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                                 psnV = ud.getPsnVerify();
                             }
 
-                            ////todo uncomment after parsing done
                             if (psnV != null && psnV.equalsIgnoreCase(Constants.PSN_VERIFIED)) {
                                 if (mManager != null && mManager.getUserData() != null) {
                                     UserData u = mManager.getUserData();
@@ -564,24 +571,6 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                                 checkUserPSNVerification();
                             }
                     }
-                    //todo firebase response without value
-//                    if (snapshot.hasChild("consoles")) {
-//                        ArrayList v = (ArrayList) snapshot.child("consoles").getValue();
-//                    if (snapshot.child("consoles") != null) {
-//                        HashMap n = (HashMap) v.get(0);
-//                        if (n.containsKey("verifyStatus")) {
-//                            psnV = (String) n.get("verifyStatus");
-////todo uncomment after parsing done
-//                            if (psnV != null && psnV.equalsIgnoreCase(Constants.PSN_VERIFIED)) {
-//                                if (mManager != null && mManager.getUserData() != null) {
-//                                    UserData u = mManager.getUserData();
-//                                    u.setPsnVerify(psnV);
-//                                }
-//                                checkUserPSNVerification();
-//                            }
-//                        }
-//                    }
-//                }
                 }
             }
             @Override
@@ -694,14 +683,35 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         }
     }
 
+    protected void closeAllDrawers(){
+        if(drawerLayout!=null) {
+            if(drawerLayout.isDrawerOpen(Gravity.LEFT)) {
+                closeProfileDrawer(Gravity.LEFT);
+            } else if(drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+                closeProfileDrawer(Gravity.RIGHT);
+            }
+        }
+    }
+
     public void showError(String err) {
         hideProgress();
         closeProfileDrawer(Gravity.RIGHT);
         closeProfileDrawer(Gravity.LEFT);
-        errLayout.setVisibility(View.GONE);
-        errLayout.setVisibility(View.VISIBLE);
-        errText.setText(err);
-        //setErrText(err);
+
+        //show timed error message
+        Util.showErrorMsg(errLayout, errText, err);
+
+//        errLayout.setVisibility(View.GONE);
+//        errLayout.setVisibility(View.VISIBLE);
+//        errText.setText(err);
+//        //timer for error msg visibility
+//        errLayout.postDelayed(new Runnable() {
+//            public void run() {
+//                if(errLayout!=null) {
+//                    errLayout.setVisibility(View.GONE);
+//                }
+//            }
+//        }, 5000);
     }
 
     @Override
@@ -756,6 +766,14 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                     mManager.getEventList(ListActivityFragment.this);
                 }
                 notiBar.setVisibility(View.VISIBLE);
+                //put timer to make the notification message gone after 5 seconds
+                notiBar.postDelayed(new Runnable() {
+                    public void run() {
+                        if(notiBar!=null) {
+                            notiBar.setVisibility(View.GONE);
+                        }
+                    }
+                }, 7000);
             }
         }
     };
@@ -901,7 +919,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                 }
             } else if(observable instanceof ResendBungieVerification) {
                 hideProgress();
-                Toast.makeText(this, "Message send again to your bungie.net account for account verification",
+                Toast.makeText(this, "Verification Message Sent to Your Bungie.net Account",
                         Toast.LENGTH_LONG).show();
             }
     }
@@ -924,11 +942,22 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         }
     }
 
+    private boolean checkDrawerOpen() {
+        if(drawerLayout!=null) {
+            if(drawerLayout.isDrawerOpen(Gravity.RIGHT) || drawerLayout.isDrawerOpen(Gravity.LEFT)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void onBackPressed() {
         if(legalView.getVisibility()==View.VISIBLE) {
             legalView.setVisibility(View.GONE);
             openProfileDrawer(Gravity.LEFT);
+        } else if(checkDrawerOpen()){
+            closeAllDrawers();
         }else {
             super.onBackPressed();
             Intent in = new Intent(this, SendBackpressBroadcast.class);

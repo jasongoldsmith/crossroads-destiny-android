@@ -144,7 +144,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:id="@+id/next_btn"
-        android:background="#0086d0"
+        android:background="@color/bubble_color"
         android:text="NEXT"
         android:fontFamily="sans-serif"
         android:textStyle="bold"

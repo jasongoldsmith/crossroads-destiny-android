@@ -112,7 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/login_pswrd"
-            android:hint="Enter Password"
+            android:hint="@string/password_hint"
             android:textColor="@android:color/white"
             android:textCursorDrawable="@drawable/cursor_draw"
             android:background="@null"

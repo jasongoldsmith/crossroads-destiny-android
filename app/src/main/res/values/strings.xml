@@ -6,6 +6,7 @@
 
     <string name="spinner_title">Checkpoint</string>
     <string name="ok_btn">OK</string>
+    <string name="cancel_btn">CANCEL</string>
     <string name="download_btn">Download</string>
     <string name="later_btn">Later</string>
 
@@ -18,6 +19,7 @@
     <string name="message_all">MESSAGE ALL</string>
 
     <string name="logout">Logout</string>
+    <string name="logout_popup_msg">Are you sure you want to log out?</string>
     <string name="report_crash">Contact Us</string>
 
     <!-- Create event card text strings-->
@@ -44,10 +46,11 @@
     <string name="feedback_text">Need help with something? Want to send us feedback? Let us know!</string>
     <string name="forgotlogin_text">Forgot your password? We will send instructions to your Bungie account with how to reset it.</string>
     <string name="verify_accnt_toptext">Welcome !</string>
-    <string name="verify_accnt_bottomtext">Thanks for signing up for Crossroads, Destiny Fireteam Finder! An account verification message has been sent to your <![CDATA[<a href="http://www.bungie.net">bungie.net</a>]]> account. Click the link in the message to verify your PSN ID. </string>
+    <string name="verify_accnt_bottomtext">Thanks for signing up for Crossroads, Destiny Fireteam Finder! An account verification message has been sent to your <![CDATA[<a href="http://www.bungie.net">Bungie.net</a>]]> account. Click the link in the message to verify your account. </string>
+    <string name="verify_accnt_bottomtext_xbox">Thanks for signing up for Crossroads, Destiny Fireteam Finder! An account verification message has been sent to your <![CDATA[<a href="http://www.bungie.net">Bungie.net</a>]]> account. Click the link in the message to verify your account. </string>
     <string name="title_activity_group">GroupActivity</string>
     <string name="group_top_text">Which group would you like to play with?"</string>
-    <string name="group_other_text">YOUR BUNGIE GROUPS: (SELECT ONE)</string>
+    <string name="group_other_text">YOUR BUNGIE.NET GROUPS: (SELECT ONE)</string>
     <string name="change_password">Change Password</string>
     <string name="nogroup_text">It looks like you are not a member of any group. Feel free to freelance with us or head to <![CDATA[<a href="http://www.bungie.net">Bungie.net</a>]]> to join a group and fully experience the Crossroads for Destiny app.</string>
     <string name="copyright_string">&#169; Catalyst Foundry 2016</string>
@@ -57,12 +60,28 @@
     <string name="privacy_string">  <u>Privacy Policy</u> </string>
     <string name="license_string"> |  <u>Licenses</u></string>
     <string name="verify_logout_text">Sign in with a different account?</string>
-    <string name="message_missing_tryagain">If you have not received a message within 10 minutes, <u>send the message again</u>. If the problem persists, contact us at <font color='#0086d0'>support@crossroadsapp.co</font></string>
+    <string name="message_missing_tryagain">If you have not received a message within 10 minutes, <![CDATA[<u><font color=#0086d0>send the message again</u>]]>. If the problem persists, contact us at <![CDATA[<font color=#0086d0>support@crossroadsapp.co]]></string>
     <string name="choose_console">CHOOSE YOUR CONSOLE</string>
 
     <string name="console_prompt">PLAYSTATION 4</string>
     <string name="username_text">USERNAME</string>
-    <string name="username_hint">Enter Username</string>
+    <string name="username_hint">Enter username</string>
+
+    <string name="add_activity">ADD ACTIVITY</string>
+    <string name="support_link"> support@crossroadsapp.co</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="password_hint">Enter password</string>
+    <string name="create_crossroads_accnt">CREATE CROSSROADS ACCOUNT</string>
+
+    <plurals name="grp_member">
+        <item quantity="one"> &#160;Member</item>
+        <item quantity="other"> &#160;Members</item>
+    </plurals>
+
+    <plurals name="grp_event">
+        <item quantity="one"> &#160;Event</item>
+        <item quantity="other"> &#160;Events</item>
+    </plurals>
 
     <string-array name="console_arrays">
         <item>PLAYSTATION 4</item>

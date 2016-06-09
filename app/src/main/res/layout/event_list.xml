@@ -232,7 +232,7 @@
             android:layout_height="50dp"
             android:id="@+id/create_new_event"
             android:background="#0086d0"
-            android:text="ADD ACTIVITY"
+            android:text="@string/add_activity"
             android:fontFamily="sans-serif"
             android:textStyle="bold"
             android:textColor="@android:color/white"
@@ -242,7 +242,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:id="@+id/error_layout"
             android:layout_alignParentTop="true"
             android:background="@android:color/black"
@@ -271,6 +271,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/error_sub"
                 android:textSize="12sp"
+                android:lines="3"
                 android:textColor="@color/trimbe_white"
                 android:layout_toRightOf="@+id/error"
                 android:layout_below="@+id/error_text"
@@ -444,7 +445,7 @@
             android:textSize="12sp"
             android:textColor="@color/trimbe_white"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="5dp"/>
 
     </RelativeLayout>
 
@@ -674,7 +675,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/img_background_map"
-        android:visibility="gone"
         android:id="@+id/verify_fail">
 
         <ImageView
@@ -687,20 +687,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="VERIFY ACCOUNT"
+            android:text="VERIFY YOUR ACCOUNT"
             android:id="@+id/verify_text"
             android:textColor="@color/trimbe_white"
             android:layout_below="@+id/traveller_bdg"
             android:textStyle="bold"
-            android:visibility="gone"
             android:layout_marginTop="40dp"
             android:layout_centerHorizontal="true"/>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/welcome_text"
-            android:layout_below="@+id/traveller_bdg"
-            android:layout_marginTop="25dp"
+            android:layout_below="@+id/verify_text"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
@@ -744,28 +743,28 @@
             android:paddingBottom="10dp"
             android:paddingTop="10dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/bottom_text"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="0dp"
-            android:layout_centerHorizontal="true"
-            android:textColor="@color/app_theme_color"
-            android:textSize="14sp"
-            android:text="support@crossroadsapp.co"/>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/bottom_text"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:layout_marginTop="0dp"-->
+            <!--android:visibility="gone"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:textColor="@color/app_theme_color"-->
+            <!--android:textSize="14sp"-->
+            <!--android:text="support@crossroadsapp.co"/>-->
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/bottom_text"
-            android:id="@+id/send_msg_again"
             android:layout_alignParentBottom="true"
+            android:id="@+id/send_msg_again"
             android:textSize="14sp"
-            android:layout_marginBottom="10dp"
             android:paddingLeft="40dp"
             android:paddingRight="40dp"
+            android:layout_marginBottom="10dp"
             android:textColor="@android:color/darker_gray"
             android:gravity="center"
             android:text="@string/message_missing_tryagain"/>

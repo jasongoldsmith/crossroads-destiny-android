@@ -54,6 +54,12 @@ public class Constants {
     public static String PSN_INITIATED = "INITIATED";
     public static String PSN_FAILED_INITIATED = "FAILED_INITIATION";
 
+    public static String CONSOLEXBOXONE = "XBOXONE";
+    public static String CONSOLEXBOX360 = "XBOX360";
+    public static String CONSOLEPS4 = "PS4";
+    public static String CONSOLEPS3 = "PS3";
+
+
     //clan id keys
     public static String CLAN_NOT_SET = "clan_id_not";
 }

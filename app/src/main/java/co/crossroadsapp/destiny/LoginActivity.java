@@ -46,7 +46,11 @@ public class LoginActivity extends BaseActivity implements Observer {
         setContentView(R.layout.login);
 
         Bundle b = getIntent().getExtras();
-        user = b.getParcelable("userdata");
+        if(b!=null) {
+            if(b.getParcelable("userdata")!=null) {
+                user = b.getParcelable("userdata");
+            }
+        }
 
         if(b.containsKey("eventIntent")) {
             localPushEvent = (Intent) b.get("eventIntent");

@@ -371,6 +371,8 @@ public class ControlManager implements Observer{
                 ((ConsoleSelectionActivity) mCurrentAct).showError(err);
             } else if(mCurrentAct instanceof ChangePassword) {
                 ((ChangePassword) mCurrentAct).showError(err);
+            } else if(mCurrentAct instanceof MainActivity) {
+                ((MainActivity) mCurrentAct).showError(err);
             }
         }
     }
