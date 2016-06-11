@@ -330,8 +330,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/sendmsg_background"
-        android:background="@drawable/sample_background"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:background="@drawable/sample_background">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -362,6 +362,14 @@
                     android:layout_marginLeft="2dp"
                     android:textSize="13sp"
                     android:textColor="@android:color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/character_count"
+                    android:layout_alignParentRight="true"
+                    android:textSize="13sp"
+                    android:paddingRight="20dp"
+                    android:text="80"/>
 
             </RelativeLayout>
 
@@ -389,7 +397,7 @@
                     android:paddingRight="10dp"
                     android:textSize="13sp"
                     android:inputType="textMultiLine"
-                    android:maxLength="140"/>
+                    android:maxLength="80"/>
 
                 <ImageView
                     android:layout_width="wrap_content"

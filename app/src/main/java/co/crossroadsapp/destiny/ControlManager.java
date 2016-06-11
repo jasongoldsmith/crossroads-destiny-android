@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 
 import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.ActivityList;
@@ -16,6 +17,7 @@ import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.GroupList;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.network.ActivityListNetwork;
+import co.crossroadsapp.destiny.network.EventByIdNetwork;
 import co.crossroadsapp.destiny.network.EventListNetwork;
 import co.crossroadsapp.destiny.network.EventRelationshipHandlerNetwork;
 import co.crossroadsapp.destiny.network.EventSendMessageNetwork;
@@ -28,8 +30,6 @@ import co.crossroadsapp.destiny.network.ResendBungieVerification;
 import co.crossroadsapp.destiny.network.VerifyConsoleIDNetwork;
 import co.crossroadsapp.destiny.network.postGcmNetwork;
 import co.crossroadsapp.destiny.utils.Util;
-import co.crossroadsapp.destiny.R;
-import co.crossroadsapp.destiny.data.EventList;
 import co.crossroadsapp.destiny.network.LoginNetwork;
 import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.ErrorShowDialog;
@@ -38,6 +38,7 @@ import co.crossroadsapp.destiny.utils.Version;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -78,6 +79,7 @@ public class ControlManager implements Observer{
     private ForgotPasswordNetwork forgotPasswordNetwork;
     private GroupListNetwork groupListNtwrk;
     private VerifyConsoleIDNetwork verifyConsoleNetwork;
+    private EventByIdNetwork eventById;
 
     public ControlManager() {
     }
@@ -341,8 +343,19 @@ public class ControlManager implements Observer{
     public void postLogout(ListActivityFragment act, RequestParams params) {
         try {
             logoutNetwork = new LogoutNetwork(act);
-            logoutNetwork.addObserver(this);
+            //logoutNetwork.addObserver(this);
+            logoutNetwork.addObserver(act);
             logoutNetwork.doLogout(params);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void postEventById(ListActivityFragment listActivityFragment, RequestParams param) {
+        try {
+            eventById = new EventByIdNetwork(listActivityFragment);
+            eventById.addObserver(listActivityFragment);
+            eventById.getEventById(param);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -445,7 +458,7 @@ public class ControlManager implements Observer{
             EventList eList = (EventList) data;
             eData = eList.getEventList();
         } else if (observable instanceof LogoutNetwork){
-            mCurrentAct.finish();
+            //mCurrentAct.finish();
         } else if (observable instanceof EventRelationshipHandlerNetwork) {
             EventData ed = (EventData) data;
             if (eData!= null) {

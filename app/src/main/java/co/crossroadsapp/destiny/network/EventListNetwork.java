@@ -43,43 +43,28 @@ public class EventListNetwork extends Observable{
     }
 
     public void getEvents() throws JSONException {
-        PersistentCookieStore a = ntwrk.getCookie();
         if (Util.isNetworkAvailable(mContext)) {
             ntwrk.get(url, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    // If the response is JSONObject instead of expected JSONArray
-//                    Toast.makeText(mContext, "List server call Success",
-//                            Toast.LENGTH_SHORT).show();
-
                 }
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    // If the response is JSONObject instead of expected JSONArray
-//                    Toast.makeText(mContext, "List server call Success",
-//                            Toast.LENGTH_SHORT).show();
-
-
                     try {
                         parseEventList(response);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-//                    Toast.makeText(mContext, "List error from server  - " + statusCode + " ",
-//                            Toast.LENGTH_LONG).show();
                     mManager.showErrorDialogue(statusCode + " - server failed");
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                        Toast.makeText(mContext, "List error from server  - " + statusCode + " " + errorResponse.getString("message"),
-//                                Toast.LENGTH_LONG).show();
                     mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
                 }
             });

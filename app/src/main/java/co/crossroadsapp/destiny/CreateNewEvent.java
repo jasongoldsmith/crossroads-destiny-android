@@ -23,6 +23,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
@@ -37,7 +38,6 @@ import android.widget.ViewFlipper;
 import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.ActivityList;
 import co.crossroadsapp.destiny.network.EventRelationshipHandlerNetwork;
-import co.crossroadsapp.destiny.R;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.network.ActivityListNetwork;
 import co.crossroadsapp.destiny.utils.Constants;
@@ -273,7 +273,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                 final_act_icon_view.setImageResource(R.drawable.img_featured_icon);
                 final_act_text_view.setText(Constants.ACTIVITY_FEATURED);
                 ArrayList<ActivityData> thirdActivity = mCntrlMngr.getCustomActivityList(Constants.ACTIVITY_FEATURED);
-                vf.showNext();
+                vfShowNext();
                 if (thirdActivity != null) {
                     setActivityRecyclerView(thirdActivity);
                 }
@@ -311,7 +311,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                         setActivityRecyclerView(filterRaidActivity);
                     }
                 }
-                vf.showNext();
+                vfShowNext();
             }
         });
 
@@ -348,7 +348,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                     }
                     //}
                 }
-                vf.showNext();
+                vfShowNext();
             }
         });
 
@@ -358,7 +358,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                 final_act_icon_view.setImageResource(R.drawable.img_crucible_icon);
                 final_act_text_view.setText(Constants.ACTIVITY_CRUCIBLE);
                     ArrayList<ActivityData> thirdActivity = mCntrlMngr.getCustomActivityList(fourthActivityType.getText().toString());
-                    vf.showNext();
+                    vfShowNext();
                     if (thirdActivity != null) {
                         setActivityRecyclerView(thirdActivity);
                     }
@@ -372,7 +372,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                 final_act_icon_view.setImageResource(R.drawable.img_strikes_icon);
                 final_act_text_view.setText(Constants.ACTIVITY_STRIKES);
                 ArrayList<ActivityData> thirdActivity = mCntrlMngr.getCustomActivityList("Strike");
-                vf.showNext();
+                vfShowNext();
                 if (thirdActivity != null) {
                     setActivityRecyclerView(thirdActivity);
                 }
@@ -413,7 +413,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                     }
                     //}
                 }
-                vf.showNext();
+                vfShowNext();
             }
         });
 
@@ -492,6 +492,24 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                 showDialog(TIME_DIALOG_ID);
             }
         });
+    }
+
+    private void setVfNextAnimation() {
+        if(vf!=null) {
+            // Next screen comes in from left.
+            vf.setInAnimation(this, R.anim.slide_in_from_right);
+            // Current screen goes out from right.
+            vf.setOutAnimation(this, R.anim.slide_out_to_left);
+        }
+    }
+
+    private void setVfPrevAnimation() {
+        if(vf!=null) {
+            // Next screen comes in from left.
+            vf.setInAnimation(this, R.anim.slide_in_from_left);
+            // Current screen goes out from right.
+            vf.setOutAnimation(this, R.anim.slide_out_to_right);
+        }
     }
 
     private void checkIfPSNVerified() {
@@ -589,20 +607,20 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                 notiMessage.setVisibility(View.VISIBLE);
                 notiMessage.setText(msg);
             }else {
-                notiEventText.setText("Your Fireteam is ready!");
+                notiEventText.setText(msg);
                 notiTopText.setText(subtype);
                 notiMessage.setVisibility(View.GONE);
                 //mManager.getEventList(ListActivityFragment.this);
             }
             notiBar.setVisibility(View.VISIBLE);
             //put timer to make the notification message gone after 5 seconds
-            notiBar.postDelayed(new Runnable() {
-                public void run() {
-                    if(notiBar!=null) {
-                        notiBar.setVisibility(View.GONE);
-                    }
-                }
-            }, 7000);
+//            notiBar.postDelayed(new Runnable() {
+//                public void run() {
+//                    if(notiBar!=null) {
+//                        notiBar.setVisibility(View.GONE);
+//                    }
+//                }
+//            }, 7000);
         }
     };
 
@@ -872,7 +890,14 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
         //createActivityIconview.
         Util.picassoLoadIcon(CreateNewEvent.this, createActivityIconview, currentActivity.getActivityIconUrl(), R.dimen.activity_icon_hgt_createevent, R.dimen.activity_icon_width_createevent, R.drawable.icon_ghost_default);
         createNewEventBtn.setBackgroundColor(getResources().getColor(R.color.create_new_event_green));
-        vf.showNext();
+        vfShowNext();
+    }
+
+    private void vfShowNext() {
+        if (vf!=null) {
+            setVfNextAnimation();
+            vf.showNext();
+        }
     }
 
     public class CustomAdapter extends BaseAdapter {
@@ -971,11 +996,14 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                 if(calendar_layout.getVisibility()==View.VISIBLE){
                     calendar_layout.setVisibility(View.GONE);
                 }else {
+                    setVfPrevAnimation();
+                    //todo fix the hack to reset date, time and checkpoint
+                    setCalendarCheckpointToDefault();
                     vf.setDisplayedChild(vf.getDisplayedChild() - 1);
-                    setCalendarToDefault();
                     createNewEventBtn.setBackgroundColor(getResources().getColor(R.color.event_user_image_background));
                 }
             }else {
+                vf.clearAnimation();
                 launchListActivityAndFinish();
             }
         }else {
@@ -983,13 +1011,21 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
         }
     }
 
-    private void setCalendarToDefault() {
-        if(date_display!=null) {
-            date_display.setText(getResources().getString(R.string.date_default));
-        }
+    private void setCalendarCheckpointToDefault() {
+        if(vf!=null){
+            if(vf.getDisplayedChild()==2) {
+                if(date_display!=null) {
+                    date_display.setText(getResources().getString(R.string.date_default));
+                }
 
-        if(time_display!=null) {
-            time_display.setText(getResources().getString(R.string.time_default));
+                if(time_display!=null) {
+                    time_display.setText(getResources().getString(R.string.time_default));
+                }
+                //todo hack to fix for bug showing checkpoint for wrong event
+                if(checkpointLayout!=null) {
+                    checkpointLayout.setVisibility(View.GONE);
+                }
+            }
         }
     }
 

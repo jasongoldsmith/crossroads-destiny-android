@@ -289,7 +289,7 @@ public class GroupDrawerAdapter {
                                 holder.groupMemberCount.setText(gm);
                             }
                             if (holder.groupImage != null) {
-                                Util.picassoLoadIcon(c, holder.groupImage, url, R.dimen.group_icon_hgt, R.dimen.group_icon_width, R.drawable.img_logo_badge);
+                                Util.picassoLoadIcon(c, holder.groupImage, url, R.dimen.group_icon_hgt, R.dimen.group_icon_width, R.drawable.img_logo_badge_group);
                             }
 
                             if (holder.groupEventCount != null) {

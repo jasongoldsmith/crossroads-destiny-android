@@ -9,6 +9,8 @@ import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import co.crossroadsapp.destiny.data.CurrentEventDataHolder;
 import co.crossroadsapp.destiny.data.EventData;
@@ -77,6 +80,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private ImageView notif_close;
     private RelativeLayout progressBar;
     private TextView eventCheckpoint;
+    private TextView mCharacter;
 //    private RelativeLayout errLayout;
 //    private TextView errText;
 //    private ImageView close_err;
@@ -142,6 +146,10 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         });
 
         editText = (EditText) findViewById(R.id.edittext);
+        editText.addTextChangedListener(mTextEditorWatcher);
+
+        mCharacter = (TextView) findViewById(R.id.character_count);
+
         sendBtn = (ImageView) findViewById(R.id.send_btn);
 
         notiBar = (RelativeLayout) findViewById(R.id.notification_bar);
@@ -255,6 +263,19 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         });
 
     }
+
+    private final TextWatcher mTextEditorWatcher = new TextWatcher() {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            //This sets a textview to the current length
+            mCharacter.setText(String.valueOf(80 - s.toString().length()));
+        }
+
+        public void afterTextChanged(Editable s) {
+        }
+    };
 
     @Override
     public void onStart() {

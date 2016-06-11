@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import co.crossroadsapp.destiny.data.GroupData;
+import co.crossroadsapp.destiny.network.EventByIdNetwork;
 import co.crossroadsapp.destiny.network.GroupListNetwork;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -27,13 +28,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
-import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -42,6 +38,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -53,6 +50,7 @@ import co.crossroadsapp.destiny.data.EventList;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.network.EventListNetwork;
 import co.crossroadsapp.destiny.network.EventRelationshipHandlerNetwork;
+import co.crossroadsapp.destiny.network.LogoutNetwork;
 import co.crossroadsapp.destiny.network.ResendBungieVerification;
 import co.crossroadsapp.destiny.utils.CircularImageView;
 import co.crossroadsapp.destiny.utils.Constants;
@@ -460,6 +458,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                 if(legalView!=null) {
                     closeProfileDrawer(Gravity.LEFT);
                     legalView.setVisibility(View.VISIBLE);
+                    legalView.setWebViewClient(new WebViewClient());
                     legalView.loadUrl(service);
                 }
     }
@@ -535,17 +534,21 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     }
 
     private void registerUserFirebase() {
-        setupUserListener();
-        refUFirebase = new Firebase(Util.getFirebaseUrl(this.user.getUserId(), 2));
-        if(userListener!=null) {
-            refUFirebase.addValueEventListener(userListener);
+        if(user.getUserId()!=null) {
+            setupUserListener();
+            refUFirebase = new Firebase(Util.getFirebaseUrl(this.user.getUserId(), 2));
+            if (userListener != null) {
+                refUFirebase.addValueEventListener(userListener);
+            }
         }
     }
 
     private void unregisterUserFirebase() {
         if(userListener!=null) {
-            refUFirebase.removeEventListener(userListener);
-            refUFirebase.removeValue();
+            if(refUFirebase!=null) {
+                refUFirebase.removeEventListener(userListener);
+                refUFirebase.removeValue();
+            }
         }
     }
 
@@ -627,6 +630,10 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                 if(mManager!=null) {
                     if(mManager.getEventObj(id)!=null) {
                         pushEventObject = mManager.getEventObj(id);
+                    } else {
+                        RequestParams param = new RequestParams();
+                        param.add("id", id);
+                        mManager.postEventById(this, param);
                     }
                 }
             } else {
@@ -723,7 +730,14 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             getExistingList();
             mManager.getEventList(this);
         }
-        //registerFirbase();
+
+        //registerFirbase
+        if (user!=null && user.getPsnVerify()!=null) {
+            if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                //register user listener
+                registerUserFirebase();
+            }
+        }
     }
 
     @Override
@@ -731,6 +745,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         super.onPause();
 
         //unregisterFirebase();
+        unregisterUserFirebase();
     }
 
     @Override
@@ -743,7 +758,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     public void onStop() {
         super.onStop();
         unregisterFirebase();
-        unregisterUserFirebase();
+        //unregisterUserFirebase();
         unregisterReceiver(ReceivefromService);
     }
 
@@ -760,20 +775,20 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                     notiMessage.setVisibility(View.VISIBLE);
                     notiMessage.setText(msg);
                 } else {
-                    notiEventText.setText("Your Fireteam is ready!");
-                    notiTopText.setText(subtype);
+                    notiEventText.setText(msg);
+                    notiTopText.setText(subtype.toUpperCase());
                     notiMessage.setVisibility(View.GONE);
                     mManager.getEventList(ListActivityFragment.this);
                 }
                 notiBar.setVisibility(View.VISIBLE);
                 //put timer to make the notification message gone after 5 seconds
-                notiBar.postDelayed(new Runnable() {
-                    public void run() {
-                        if(notiBar!=null) {
-                            notiBar.setVisibility(View.GONE);
-                        }
-                    }
-                }, 7000);
+//                notiBar.postDelayed(new Runnable() {
+//                    public void run() {
+//                        if(notiBar!=null) {
+//                            notiBar.setVisibility(View.GONE);
+//                        }
+//                    }
+//                }, 7000);
             }
         }
     };
@@ -921,6 +936,18 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                 hideProgress();
                 Toast.makeText(this, "Verification Message Sent to Your Bungie.net Account",
                         Toast.LENGTH_LONG).show();
+            } else if(observable instanceof EventByIdNetwork) {
+                if(data!=null) {
+                    pushEventObject = new EventData();
+                    pushEventObject = (EventData) data;
+                    launchPushEventDetail();
+                    pushEventObject = null;
+                }
+            } else if(observable instanceof LogoutNetwork) {
+                Intent regIntent = new Intent(getApplicationContext(),
+                        MainActivity.class);
+                startActivity(regIntent);
+                finish();
             }
     }
 

@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -176,6 +177,7 @@ public class ConsoleSelectionActivity extends BaseActivity implements AdapterVie
             public void onClick(View view) {
                 // Do something with span.getURL() to handle the link click...
                 webView.setVisibility(View.VISIBLE);
+                webView.setWebViewClient(new WebViewClient());
                 webView.loadUrl(span.getURL());
             }
         };
