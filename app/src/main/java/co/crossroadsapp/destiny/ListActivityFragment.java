@@ -989,8 +989,8 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             closeAllDrawers();
         }else {
             super.onBackPressed();
-            Intent in = new Intent(this, SendBackpressBroadcast.class);
-            this.startService(in);
+//            Intent in = new Intent(this, SendBackpressBroadcast.class);
+//            this.startService(in);
             finish();
         }
     }

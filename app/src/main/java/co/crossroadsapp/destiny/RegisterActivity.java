@@ -332,5 +332,9 @@ public class RegisterActivity extends BaseActivity implements Observer {
     public void onBackPressed() {
         Util.clearDefaults(getApplicationContext());
         super.onBackPressed();
+        Intent intent = new Intent(getApplicationContext(),
+                MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

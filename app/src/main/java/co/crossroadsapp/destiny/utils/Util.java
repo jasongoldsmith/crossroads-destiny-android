@@ -39,7 +39,7 @@ public class Util {
 
     //To switch between production and development server links
     //where 1 points to development and 2 points to production
-    private static final int network_connection = 1;
+    private static final int network_connection = 2;
 
     private static final String TAG = Util.class.getName();
     public static final String trimbleDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
