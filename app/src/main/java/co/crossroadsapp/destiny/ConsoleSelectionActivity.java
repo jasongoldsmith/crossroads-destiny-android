@@ -273,6 +273,14 @@ public class ConsoleSelectionActivity extends BaseActivity implements AdapterVie
             webView.setVisibility(View.GONE);
         } else {
             super.onBackPressed();
+            gotoMainActivity();
         }
+    }
+
+    private void gotoMainActivity() {
+        Intent signinIntent = new Intent(getApplicationContext(),
+                MainActivity.class);
+        startActivity(signinIntent);
+        finish();
     }
 }

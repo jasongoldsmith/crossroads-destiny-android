@@ -115,47 +115,61 @@ public class UserData implements Parcelable {
 
     public void toJson(JSONObject json) {
         try {
-            if(json.has("value")) {
+            if (json.has("value")) {
                 JSONObject jsonData = json.optJSONObject("value");
-                String n = jsonData.getString("userName");
-//            String p = jsonData.getString("passWord");
-                //String psnId = jsonData.getString("psnId");
+                if (jsonData!=null) {
+                    if (json.has("userName")) {
+                        String n = jsonData.getString("userName");
+                        setUser(n);
+                    }
                 if (jsonData.has("bungieMemberShipId")) {
                     String memid = jsonData.getString("bungieMemberShipId");
                     setMembershipId(memid);
                 }
-                String clanId = jsonData.getString("clanId");
-                String profileImg = jsonData.getString("imageUrl");
-                String uId = jsonData.getString("_id");
-                JSONArray conArray = jsonData.optJSONArray("consoles");
-                JSONObject conData = (JSONObject) conArray.get(0);
-                if (conData.has("consoleType")) {
-                    String cType = conData.getString("consoleType");
-                    setConsoleType(cType);
+
+                if (jsonData.has("clanId")) {
+                    String clanId = jsonData.getString("clanId");
+                    setClanId(clanId);
+                }
+                if (jsonData.has("imageUrl")) {
+                    String profileImg = jsonData.getString("imageUrl");
+                    setImageUrl(profileImg);
+                }
+                if (jsonData.has("_id")) {
+                    String uId = jsonData.getString("_id");
+                    setUserId(uId);
+                }
+                if (jsonData.has("consoles")) {
+                    JSONArray conArray = jsonData.optJSONArray("consoles");
+                    if (conArray != null) {
+                        JSONObject conData = (JSONObject) conArray.get(0);
+                        if (conData != null) {
+                            if (conData.has("consoleType")) {
+                                String cType = conData.getString("consoleType");
+                                setConsoleType(cType);
+                            }
+
+                            if (conData.has("consoleId")) {
+                                String id = conData.getString("consoleId");
+                                setPsnId(id);
+                            }
+
+                            if (conData.has("verifyStatus")) {
+                                String verifyS = conData.getString("verifyStatus");
+                                setPsnVerify(verifyS);
+                            }
+                        }
+                    }
                 }
 
-                if (conData.has("consoleId")) {
-                    String id = conData.getString("consoleId");
-                    setPsnId(id);
-                }
-
-                if (conData.has("verifyStatus")) {
-                    String verifyS = conData.getString("verifyStatus");
-                    setPsnVerify(verifyS);
-                }
 
                 //String psnVer = jsonData.getString("psnVerified");
 
-                if (n != null && !n.isEmpty()) {
-                    setUser(n);
-                }
-
                 //setPsnId(psnId);
-                setImageUrl(profileImg);
-                setUserId(uId);
-                setClanId(clanId);
+
                 //setPsnVerify(psnVer);
             }
+        }
 
         } catch (JSONException e) {
             // TODO Auto-generated catch block

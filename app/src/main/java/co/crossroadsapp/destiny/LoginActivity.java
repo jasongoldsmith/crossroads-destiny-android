@@ -194,24 +194,40 @@ public class LoginActivity extends BaseActivity implements Observer {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        gotoMainActivity();
+    }
+
+    private void gotoMainActivity() {
+        Intent signinIntent = new Intent(getApplicationContext(),
+                MainActivity.class);
+        startActivity(signinIntent);
+        finish();
+    }
+
+    @Override
     public void update(Observable observable, Object data) {
-        UserData ud = (UserData)data;
-        if (ud.getAuthenticationId()== Constants.LOGIN) {
+        //dismiss progress
+        dialog.dismiss();
+        if (data!=null) {
+            UserData ud = (UserData) data;
+            if (ud!=null && ud.getUserId()!=null) {
+                if(ud.getAuthenticationId() == Constants.LOGIN) {
+                //mManager.getEventList();
+                //save in preferrence
+                Util.setDefaults("user", username, getApplicationContext());
+                Util.setDefaults("password", password, getApplicationContext());
 
-            //mManager.getEventList();
-            //save in preferrence
-            Util.setDefaults("user", username, getApplicationContext());
-            Util.setDefaults("password", password, getApplicationContext());
+                ud.setPassword(password);
+                mManager.setUserdata(ud);
+                //dismiss progress
+                dialog.dismiss();
+                //decide landing page based on push notification available or not
+                Intent regIntent;
 
-            ud.setPassword(password);
-            mManager.setUserdata(ud);
-            //dismiss progress
-            dialog.dismiss();
-            //decide landing page based on push notification available or not
-            Intent regIntent;
-
-            //decide activity to open
-            regIntent = mManager.decideToOpenActivity(localPushEvent);
+                //decide activity to open
+                regIntent = mManager.decideToOpenActivity(localPushEvent);
 //            if(localPushEvent!=null) {
 //                regIntent = new Intent(getApplicationContext(),
 //                        ListActivityFragment.class);
@@ -220,10 +236,12 @@ public class LoginActivity extends BaseActivity implements Observer {
 //                regIntent = new Intent(getApplicationContext(),
 //                        CreateNewEvent.class);
 //            }
-            regIntent.putExtra("userdata", ud);
+                regIntent.putExtra("userdata", ud);
 
-            startActivity(regIntent);
-            finish();
+                startActivity(regIntent);
+                finish();
+            }
+            }
         }
     }
 }

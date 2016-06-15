@@ -520,8 +520,10 @@ public class ControlManager implements Observer{
                 gData = (ArrayList<GroupData>) data;
             }
         } else if(observable instanceof LoginNetwork) {
-            getEventList();
-            getGroupList(null);
+            if (data!=null) {
+                getEventList();
+                getGroupList(null);
+            }
         }
     }
 

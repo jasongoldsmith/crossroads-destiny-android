@@ -11,6 +11,7 @@ import android.view.View;
 import co.crossroadsapp.destiny.data.AppVersion;
 import co.crossroadsapp.destiny.network.GetVersion;
 import co.crossroadsapp.destiny.network.LoginNetwork;
+import co.crossroadsapp.destiny.utils.TravellerLog;
 import co.crossroadsapp.destiny.utils.Util;
 import co.crossroadsapp.destiny.utils.Version;
 import co.crossroadsapp.destiny.R;
@@ -35,6 +36,7 @@ public class MainActivity extends BaseActivity implements Observer {
     protected void onCreate(Bundle outState) {
         super.onCreate(outState);
         setContentView(R.layout.splash_loading);
+        TravellerLog.w(this, "MainActivity.onCreate starts...");
         u= Util.getDefaults("user", getApplicationContext());
         p = Util.getDefaults("password", getApplicationContext());
 
@@ -45,6 +47,7 @@ public class MainActivity extends BaseActivity implements Observer {
 
         // getting contentIntent from push notification click
         if (this.getIntent().hasExtra(Constants.TRAVELER_NOTIFICATION_INTENT)) {
+            TravellerLog.w(this, "Push notification intent present");
             Intent messageIntent = (Intent) this.getIntent().getExtras().get(Constants.TRAVELER_NOTIFICATION_INTENT);
             if (messageIntent == null) {
                 return;
@@ -60,6 +63,7 @@ public class MainActivity extends BaseActivity implements Observer {
 
         forwardAfterVersionCheck();
 
+        TravellerLog.w(this, "MainActivity.onCreate ends...");
     }
 
     public void showError(String err) {
@@ -71,6 +75,7 @@ public class MainActivity extends BaseActivity implements Observer {
     private void forwardAfterVersionCheck() {
         if (u != null && p!= null && !u.isEmpty() && !p.isEmpty()) {
             //todo check how to minimize api calls to get full event list in future from multiple locations
+            TravellerLog.w(this, "Logging user in the background as user data available");
             mManager.getEventList();
             mManager.getGroupList(null);
             Util.storeUserData(userData, u, p);
@@ -79,6 +84,7 @@ public class MainActivity extends BaseActivity implements Observer {
             params.put("passWord", p);
             mManager.postLogin(MainActivity.this, params, Constants.LOGIN);
         }else {
+            TravellerLog.w(this, "Show main activity layout as user data not available");
             setContentView(R.layout.activity_main);
 
             register_layout = findViewById(R.id.register);
@@ -89,16 +95,19 @@ public class MainActivity extends BaseActivity implements Observer {
                 public void onClick(View v) {
 //                    Intent regIntent = new Intent(getApplicationContext(),
 //                            RegisterActivity.class);
+                    TravellerLog.w(this, "Launch console selection page activity");
                     Intent regIntent = new Intent(getApplicationContext(),
                             ConsoleSelectionActivity.class);
                     regIntent.putExtra("userdata", userData);
                     startActivity(regIntent);
+                    finish();
                 }
             });
 
             signin_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    TravellerLog.w(this, "Launch login page activity");
                     launchLogin();
                 }
             });
@@ -113,6 +122,7 @@ public class MainActivity extends BaseActivity implements Observer {
             signinIntent.putExtra("eventIntent", contentIntent);
         }
         startActivity(signinIntent);
+        finish();
     }
 
     @Override
@@ -123,6 +133,7 @@ public class MainActivity extends BaseActivity implements Observer {
     @Override
     public void onStart() {
         super.onStart();
+        TravellerLog.w(this, "Registering ReceivefromBackpressService ");
         registerReceiver(ReceivefromBackpressService, new IntentFilter("backpress_flag"));
     }
 
@@ -136,6 +147,7 @@ public class MainActivity extends BaseActivity implements Observer {
     @Override
     protected void onStop() {
         super.onStop();
+        TravellerLog.w(this, "Unregistering ReceivefromBackpressService ");
         unregisterReceiver(ReceivefromBackpressService);
     }
 
@@ -163,6 +175,7 @@ public class MainActivity extends BaseActivity implements Observer {
     @Override
     public void update(Observable observable, Object data) {
         if(observable instanceof GetVersion) {
+            TravellerLog.w(this, "Update observer for getversion network call response");
             AppVersion ver = (AppVersion) data;
             String currVer = Util.getApplicationVersionCode(this);
             String latestVer = ver.getVersion();
@@ -174,15 +187,17 @@ public class MainActivity extends BaseActivity implements Observer {
                 forwardAfterVersionCheck();
             }
         } else if(observable instanceof LoginNetwork) {
-            UserData ud = (UserData) data;
-            if (ud.getAuthenticationId() == Constants.LOGIN) {
+            if (data!=null) {
+                TravellerLog.w(this, "Update observer for LoginNetwork network call response");
+                UserData ud = (UserData) data;
+                if (ud!=null && ud.getUserId()!=null) {
+                    if((ud.getAuthenticationId() == Constants.LOGIN)) {
+                    ud.setPassword(p);
+                    mManager.setUserdata(ud);
+                    Intent regIntent;
 
-                ud.setPassword(p);
-                mManager.setUserdata(ud);
-                Intent regIntent;
-
-                //decide for activity
-                regIntent = mManager.decideToOpenActivity(contentIntent);
+                    //decide for activity
+                    regIntent = mManager.decideToOpenActivity(contentIntent);
 
 //                if (contentIntent != null) {
 //                    regIntent = new Intent(getApplicationContext(),
@@ -192,9 +207,18 @@ public class MainActivity extends BaseActivity implements Observer {
 //                    regIntent = new Intent(getApplicationContext(),
 //                            CreateNewEvent.class);
 //                }
-                regIntent.putExtra("userdata", ud);
-                startActivity(regIntent);
-                finish();
+                    regIntent.putExtra("userdata", ud);
+                    startActivity(regIntent);
+                    finish();
+                } else {
+                        setContentView(R.layout.activity_main);
+                    }
+                } else {
+                    setContentView(R.layout.activity_main);
+                }
+            } else {
+                TravellerLog.w(this, "Show main activity layout as user data not available from login response");
+                setContentView(R.layout.activity_main);
             }
         }
     }

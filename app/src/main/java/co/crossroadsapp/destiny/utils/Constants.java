@@ -62,4 +62,7 @@ public class Constants {
 
     //clan id keys
     public static String CLAN_NOT_SET = "clan_id_not";
+
+    public static int USER_CHANNEL = 2;
+    public static int EVENT_CHANNEL = 1;
 }

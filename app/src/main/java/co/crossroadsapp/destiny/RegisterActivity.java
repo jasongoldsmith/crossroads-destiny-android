@@ -302,24 +302,29 @@ public class RegisterActivity extends BaseActivity implements Observer {
 
     @Override
     public void update(Observable observable, Object data) {
-        UserData ud = (UserData)data;
+        //dismiss dialog
+        dialog.dismiss();
+        if(data!=null) {
+            UserData ud = (UserData) data;
 
-        if (ud.getAuthenticationId()== Constants.REGISTER) {
-            //save in preferrence
-            Util.clearDefaults(getApplicationContext());
-            Util.setDefaults("user", username, getApplicationContext());
-            Util.setDefaults("password", password, getApplicationContext());
+            if (ud != null && ud.getUserId()!=null) {
+                if(ud.getAuthenticationId() == Constants.REGISTER) {
+                //save in preferrence
+                Util.clearDefaults(getApplicationContext());
+                Util.setDefaults("user", username, getApplicationContext());
+                Util.setDefaults("password", password, getApplicationContext());
 
-            mManager.setUserdata(ud);
-            //dismiss dialog
-            dialog.dismiss();
-            // decide the activity to open
-            Intent regIntent = mManager.decideToOpenActivity(null);
+                mManager.setUserdata(ud);
+
+                // decide the activity to open
+                Intent regIntent = mManager.decideToOpenActivity(null);
 //            Intent regIntent = new Intent(getApplicationContext(),
 //                    CreateNewEvent.class);
-            regIntent.putExtra("userdata", ud);
-            startActivity(regIntent);
-            finish();
+                regIntent.putExtra("userdata", ud);
+                startActivity(regIntent);
+                finish();
+            }
+        }
         }
     }
 

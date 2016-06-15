@@ -28,7 +28,7 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_loading);
         cManager = ControlManager.getmInstance();
-        cManager.setCurrentActivity(this);
+        //cManager.setCurrentActivity(this);
 //        errLayout = (RelativeLayout) findViewById(R.id.error_layout);
 //        errText = (TextView) findViewById(R.id.error_sub);
 //        close_err = (ImageView) findViewById(R.id.err_close);

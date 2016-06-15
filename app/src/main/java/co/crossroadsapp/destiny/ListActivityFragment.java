@@ -520,9 +520,11 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
     private void registerFirbase() {
         setupEventListener();
-        refFirebase = new Firebase(Util.getFirebaseUrl(this.user.getClanId(), 1));
-        if(listener!=null) {
-            refFirebase.addValueEventListener(listener);
+        if(user!=null && user.getClanId()!=null) {
+            refFirebase = new Firebase(Util.getFirebaseUrl(this.user.getClanId(), Constants.EVENT_CHANNEL));
+            if (listener != null) {
+                refFirebase.addValueEventListener(listener);
+            }
         }
     }
 
@@ -536,7 +538,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     private void registerUserFirebase() {
         if(user.getUserId()!=null) {
             setupUserListener();
-            refUFirebase = new Firebase(Util.getFirebaseUrl(this.user.getUserId(), 2));
+            refUFirebase = new Firebase(Util.getFirebaseUrl(this.user.getUserId(), Constants.USER_CHANNEL));
             if (userListener != null) {
                 refUFirebase.addValueEventListener(userListener);
             }

@@ -219,8 +219,10 @@ public class BlankFragment extends Fragment {
                     String n = this.elistLocal.get(position).getPlayerData().get(y).getPsnId();
                     String profileUrl = this.elistLocal.get(position).getPlayerData().get(y).getPlayerImageUrl();
                     String pId = this.elistLocal.get(position).getPlayerData().get(y).getPlayerId();
-                    if (user.getUserId().equalsIgnoreCase(pId)) {
-                        CreatorIn = true;
+                    if(user!=null && user.getUserId()!=null) {
+                        if (user.getUserId().equalsIgnoreCase(pId)) {
+                            CreatorIn = true;
+                        }
                     }
 
 //                    if (i>1 && y<i-1) {
