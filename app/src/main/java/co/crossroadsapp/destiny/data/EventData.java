@@ -11,15 +11,15 @@ import java.util.ArrayList;
  */
 public class EventData {
 
-    private String eventId;
-    private String eventStatus;
-    private int minPlayer;
-    private int maxPlayer;
+    private String eventId=null;
+    private String eventStatus=null;
+    private int minPlayer=0;
+    private int maxPlayer=0;
     private ActivityData activityData;
     private ArrayList<PlayerData> playerDataList;
     private CreatorData creatorData;
-    private String launchDate;
-    private String launchStatus;
+    private String launchDate=null;
+    private String launchStatus=null;
     //private PlayerData playerData;
 
     public EventData () {
@@ -106,36 +106,46 @@ public class EventData {
 
     public void toJson(JSONObject json) {
         try {
-            String id = json.getString("_id");
-            setEventId(id);
-            if (json.has("status")) {
-                String status = json.getString("status");
-                int minPlayers = json.getInt("minPlayers");
-                int maxPlayers = json.getInt("maxPlayers");
-
-                JSONObject actData = json.optJSONObject("eType");
-                JSONObject creator = json.optJSONObject("creator");
-                JSONArray playerD = json.optJSONArray("players");
-
-                setEventStatus(status);
-                setMinPlayer(minPlayers);
-                setMaxPlayer(maxPlayers);
-                if(json.has("launchDate")){
-                    setLaunchDate(json.getString("launchDate"));
+            if(json!=null) {
+                if (json.has("_id")) {
+                    String id = json.getString("_id");
+                    setEventId(id);
                 }
-                if(json.has("launchStatus")) {
-                    setLaunchEventStatus(json.getString("launchStatus"));
+                if (json.has("status")) {
+                    String status = json.getString("status");
+                    setEventStatus(status);
                 }
-
-                activityData.toJson(actData);
-                creatorData.toJson(creator);
-
-                for (int i = 0; i < playerD.length(); i++) {
-                    JSONObject jsonobject = playerD.getJSONObject(i);
-                    PlayerData pData = new PlayerData();
-                    pData.toJson(jsonobject);
-                    playerDataList.add(pData);
-                }
+                    if (json.has("minPlayers")) {
+                        int minPlayers = json.getInt("minPlayers");
+                        setMinPlayer(minPlayers);
+                    }
+                    if (json.has("maxPlayers")) {
+                        int maxPlayers = json.getInt("maxPlayers");
+                        setMaxPlayer(maxPlayers);
+                    }
+                    if (json.has("eType")) {
+                        JSONObject actData = json.optJSONObject("eType");
+                        activityData.toJson(actData);
+                    }
+                    if (json.has("creator")) {
+                        JSONObject creator = json.optJSONObject("creator");
+                        creatorData.toJson(creator);
+                    }
+                    if (json.has("players")) {
+                        JSONArray playerD = json.optJSONArray("players");
+                        for (int i = 0; i < playerD.length(); i++) {
+                            JSONObject jsonobject = playerD.getJSONObject(i);
+                            PlayerData pData = new PlayerData();
+                            pData.toJson(jsonobject);
+                            playerDataList.add(pData);
+                        }
+                    }
+                    if (json.has("launchDate")) {
+                        setLaunchDate(json.getString("launchDate"));
+                    }
+                    if (json.has("launchStatus")) {
+                        setLaunchEventStatus(json.getString("launchStatus"));
+                    }
             }
 
         } catch (JSONException e) {

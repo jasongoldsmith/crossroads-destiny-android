@@ -630,12 +630,14 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             if(jsonObj.has("eventId")) {
                 String id = (String) jsonObj.get("eventId");
                 if(mManager!=null) {
-                    if(mManager.getEventObj(id)!=null) {
-                        pushEventObject = mManager.getEventObj(id);
-                    } else {
-                        RequestParams param = new RequestParams();
-                        param.add("id", id);
-                        mManager.postEventById(this, param);
+                    if(id!=null) {
+                        if (mManager.getEventObj(id) != null) {
+                            pushEventObject = mManager.getEventObj(id);
+                        } else {
+                            RequestParams param = new RequestParams();
+                            param.add("id", id);
+                            mManager.postEventById(this, param);
+                        }
                     }
                 }
             } else {
