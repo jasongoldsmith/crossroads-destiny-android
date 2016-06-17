@@ -118,7 +118,7 @@ public class UserData implements Parcelable {
             if (json.has("value")) {
                 JSONObject jsonData = json.optJSONObject("value");
                 if (jsonData!=null) {
-                    if (json.has("userName")) {
+                    if (jsonData.has("userName")) {
                         String n = jsonData.getString("userName");
                         setUser(n);
                     }

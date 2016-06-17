@@ -631,21 +631,30 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
             hour = selectedHour;
             minute = selectedMinute;
             String aTime=null;
+            int currHour = c.get(Calendar.HOUR_OF_DAY);
+            int currMin = c.get(Calendar.MINUTE);
 
-            if (hour >= c.get(Calendar.HOUR_OF_DAY) && minute >= c.get(Calendar.MINUTE)) {
-
-                // set current time into textview
-                aTime = Util.updateTime(hour, minute);
-
+            if (hour >= currHour) {
+                if (hour==currHour && minute < currMin) {
+                    aTime = getCurrentTime(currHour, currMin);
+                } else {
+                    // set current time into textview
+                    aTime = Util.updateTime(hour, minute);
+                }
             } else {
-                Toast.makeText(getApplicationContext(), "Cannot set previous time for today.", Toast.LENGTH_SHORT).show();
-                aTime = Util.updateTime(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE));
+                aTime = getCurrentTime(currHour, currMin);
             }
             if (aTime != null) {
                 time_display.setText(aTime);
             }
         }
     };
+
+    private String getCurrentTime(int h, int m) {
+        Toast.makeText(getApplicationContext(), "Cannot set previous time for today.", Toast.LENGTH_SHORT).show();
+        String t =  Util.updateTime(h, m);
+        return t;
+    }
 
     private void intializeCalendar() {
         calendar.setOnDateChangedListener(new OnDateSelectedListener() {
