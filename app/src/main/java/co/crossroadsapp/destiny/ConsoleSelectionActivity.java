@@ -225,6 +225,7 @@ public class ConsoleSelectionActivity extends BaseActivity implements AdapterVie
                     console_name.setText("XBOX GAMERTAG");
                     user_id.setHint("Enter Xbox Gamertag");
                     console = "XBOXONE";
+                    break;
                 case "Xbox 360":
                     console_name.setText("XBOX GAMERTAG");
                     user_id.setHint("Enter Xbox Gamertag");
