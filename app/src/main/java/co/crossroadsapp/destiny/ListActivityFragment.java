@@ -491,9 +491,8 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                     if (user.getClanId() != null) {
                         if (user.getAuthenticationId() == Constants.REGISTER) {
                             openProfileDrawer(Gravity.RIGHT);
-                        } else {
-                            setGroupImageUrl();
                         }
+                        setGroupImageUrl();
                     }
                 }
             }
@@ -501,11 +500,13 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     }
 
     private void setGroupImageUrl() {
-        GroupData gd = mManager.getGroupObj(user.getClanId());
-        if(gd!=null) {
-            String imageUrl = gd.getGroupImageUrl();
-            if(imageUrl!=null) {
-                setgrpIcon(imageUrl);
+        if (user!=null && user.getClanId()!=null) {
+            GroupData gd = mManager.getGroupObj(user.getClanId());
+            if (gd != null) {
+                String imageUrl = gd.getGroupImageUrl();
+                if (imageUrl != null) {
+                    setgrpIcon(imageUrl);
+                }
             }
         }
     }

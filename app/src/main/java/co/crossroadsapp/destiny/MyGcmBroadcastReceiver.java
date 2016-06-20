@@ -16,7 +16,9 @@ import co.crossroadsapp.destiny.utils.TravellerLog;
 
 import org.json.JSONObject;
 
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by sharmha on 3/14/16.
@@ -67,7 +69,7 @@ public class MyGcmBroadcastReceiver extends BroadcastReceiver {
                     mBuilder.setSmallIcon(R.drawable.img_traveler_badge_icon).setContentIntent(resultIntent).setContentText("New Message Received").setContentTitle(context.getResources().getString(R.string.app_name));
                 }
                 NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotificationManager.notify(1, mBuilder.build());
+                mNotificationManager.notify(UUID.randomUUID().hashCode(), mBuilder.build());
                 //Utils.storeNewNotificationCount(notificationCounter);
             }
         }
