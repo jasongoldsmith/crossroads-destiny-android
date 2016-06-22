@@ -141,7 +141,8 @@ public class GroupDrawerAdapter {
                 GroupData gd = mCntrlMngr.getGroupObj(user.getClanId());
                 if (gd != null) {
                     if (gd.getGroupImageUrl() != null) {
-                        String first_gm = gd.getMemberCount() + c.getResources().getQuantityString(R.plurals.grp_member, gd.getMemberCount());
+                        //String first_gm = gd.getMemberCount() + c.getResources().getQuantityString(R.plurals.grp_member, gd.getMemberCount());
+                        String first_gm = gd.getMemberCount() + c.getResources().getString(R.string.grp_member);
                         String first_ge = gd.getEventCount() + c.getResources().getQuantityString(R.plurals.grp_event, gd.getEventCount());
                         groupSelectedEventCount.setText(first_ge);
                         groupSelectedMemberCount.setText(first_gm);
@@ -285,7 +286,8 @@ public class GroupDrawerAdapter {
                             }
 
                             if (holder.groupMemberCount != null) {
-                                String gm = count + c.getResources().getQuantityString(R.plurals.grp_member, count);
+                                //String gm = count + c.getResources().getQuantityString(R.plurals.grp_member, count);
+                                String gm = count + c.getResources().getString(R.string.grp_member);
                                 holder.groupMemberCount.setText(gm);
                             }
                             if (holder.groupImage != null) {

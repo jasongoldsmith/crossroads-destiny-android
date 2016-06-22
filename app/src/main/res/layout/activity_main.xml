@@ -38,7 +38,7 @@
                 android:textColor="@android:color/white"
                 android:fontFamily="sans-serif"
                 android:textStyle="bold"
-                android:text="CREATE ACCOUNT"
+                android:text="SIGN UP"
                 android:textSize="11sp"/>
         </RelativeLayout>
         <RelativeLayout
@@ -57,7 +57,7 @@
                 android:textColor="@android:color/white"
                 android:fontFamily="sans-serif"
                 android:textStyle="bold"
-                android:text="SIGN IN"
+                android:text="LOG IN"
                 android:textSize="11sp"/>
         </RelativeLayout>
     </LinearLayout>

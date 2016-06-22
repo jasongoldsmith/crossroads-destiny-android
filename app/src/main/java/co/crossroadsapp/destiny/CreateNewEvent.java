@@ -1,6 +1,7 @@
 package co.crossroadsapp.destiny;
 
 import android.annotation.TargetApi;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
@@ -21,12 +22,13 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -46,6 +48,8 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -129,6 +133,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
     private TextView time_display;
 
     static final int TIME_DIALOG_ID = 999;
+    static final int DATE_DIALOG_ID = 888;
     private int hour;
     private int minute;
 
@@ -140,6 +145,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
     private ImageView createActivityIconview;
     private RelativeLayout checkpointLayout;
     Intent localPushEventObj;
+    private DatePickerDialog mDatePickerDai;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -424,10 +430,6 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
             }
         });
 
-        //progress = new ProgressDialog(this);
-        // CAST THE LINEARLAYOUT HOLDING THE MAIN PROGRESS (SPINNER)
-        //linlaHeaderProgress = (RelativeLayout) findViewById(R.id.linlaHeaderProgress);
-
         createNewEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -462,24 +464,13 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
         checkpointItems = new ArrayList<String>();
         dropdown.setOnItemSelectedListener(this);
 
-        calendar_layout = (RelativeLayout) findViewById(R.id.calendar_layout);
-        calendar = (MaterialCalendarView) findViewById(R.id.calendar);
         date = (RelativeLayout) findViewById(R.id.date);
-        time = (RelativeLayout) findViewById(R.id.time);
         date_display = (TextView) findViewById(R.id.date_text);
-
-        calendar_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                calendar_layout.setVisibility(View.GONE);
-            }
-        });
 
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calendar_layout.setVisibility(View.VISIBLE);
-                intializeCalendar();
+                showDialog(DATE_DIALOG_ID);
             }
         });
 
@@ -493,6 +484,81 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
             }
         });
     }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        // TODO Auto-generated method stub
+        switch (id) {
+            case TIME_DIALOG_ID:
+                // set time picker as current time
+                TimePickerDialog tpd = new TimePickerDialog(this, timePickerListener, hour, minute,false);
+
+                tpd.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                    }
+                });
+                return tpd;
+
+            case DATE_DIALOG_ID:
+                Date d = Util.getCurrentCalendar();
+                mDatePickerDai = new DatePickerDialog(this, myDateListener, d.getYear(), d.getMonth(), d.getDate());
+                //disable previous dates for datepicker
+                mDatePickerDai.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                return mDatePickerDai;
+                //return new DatePickerDialog(this, myDateListener, d.getYear(), d.getMonth(), d.getDate());
+
+            default: return null;
+        }
+    }
+
+    private DatePickerDialog.OnDateSetListener myDateListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3) {
+            // TODO Auto-generated method stub
+//            date_display.setText(arg1 + "-" + arg2+1
+//                    + "-" + arg3);
+            //showDate(arg1, arg2+1, arg3);
+
+            int m = arg2;
+            int d = arg3;
+            int y = arg1;
+
+            //todo will change with new calendar but for now hacking to reset date if user selects previous date
+            String date=null;
+            Date currentDate = Util.getCurrentCalendar();
+
+            Date selectedDate = new Date(y, m, d);
+
+            if(selectedDate.compareTo(currentDate)<0){
+                Toast.makeText(getApplicationContext(), "Cannot set previous date.", Toast.LENGTH_SHORT).show();
+                m =  currentDate.getMonth();
+                d = currentDate.getDate();
+                y = currentDate.getYear();
+
+                //set datepicker view to current date
+                updateDatePickerCalendar();
+            }
+//            else {
+            date = m + "-" + d
+                        + "-" + y;
+//            }
+
+            if (m == 1 && d > 29) {
+                m = 3;
+                if (d == 30) {
+                    d = 1;
+                } else {
+                    d = 2;
+                }
+            } else {
+                m = m + 1;
+            }
+            date_display.setText(m + "-" + d
+                    + "-" + y);
+            Util.checkTimePicker(date_display, time_display, CreateNewEvent.this);
+        }
+    };
 
     private void setVfNextAnimation() {
         if(vf!=null) {
@@ -565,25 +631,6 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
     }
 
     @Override
-    protected Dialog onCreateDialog(int id){
-        switch (id) {
-            case TIME_DIALOG_ID:
-                // set time picker as current time
-                TimePickerDialog tpd = new TimePickerDialog(this, timePickerListener, hour, minute,false);
-
-                tpd.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        //time_layout.setVisibility(View.GONE);
-                    }
-                });
-                return tpd;
-        }
-        return null;
-
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
         registerReceiver(ReceivefromService, new IntentFilter("subtype_flag"));
@@ -625,7 +672,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
     };
 
     protected TimePickerDialog.OnTimeSetListener timePickerListener =  new TimePickerDialog.OnTimeSetListener() {
-
+        @Override
         public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
             Calendar c = Calendar.getInstance();
             hour = selectedHour;
@@ -634,97 +681,26 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
             int currHour = c.get(Calendar.HOUR_OF_DAY);
             int currMin = c.get(Calendar.MINUTE);
 
-            if (hour >= currHour) {
-                if (hour==currHour && minute < currMin) {
-                    aTime = getCurrentTime(currHour, currMin);
-                } else {
-                    // set current time into textview
-                    aTime = Util.updateTime(hour, minute);
+            if(Util.isPresentDay(CreateNewEvent.this, date_display)) {
+                if (hour >= currHour) {
+                    if (hour == currHour && minute < currMin) {
+                        aTime = Util.getCurrentTime(currHour, currMin, CreateNewEvent.this);
+                    } else {
+                        // set current time into textview
+                        aTime = Util.updateTime(hour, minute);
+                    }
+                }else {
+                    aTime = Util.getCurrentTime(currHour, currMin, CreateNewEvent.this);
                 }
-            } else {
-                aTime = getCurrentTime(currHour, currMin);
+            }else {
+                // set current time into textview
+                aTime = Util.updateTime(hour, minute);
             }
             if (aTime != null) {
                 time_display.setText(aTime);
             }
         }
     };
-
-    private String getCurrentTime(int h, int m) {
-        Toast.makeText(getApplicationContext(), "Cannot set previous time for today.", Toast.LENGTH_SHORT).show();
-        String t =  Util.updateTime(h, m);
-        return t;
-    }
-
-    private void intializeCalendar() {
-        calendar.setOnDateChangedListener(new OnDateSelectedListener() {
-
-            @Override
-            public void onDateSelected(MaterialCalendarView materialCalendarView, CalendarDay calendarDay, boolean b) {
-                int m = calendarDay.getMonth();
-                int d = calendarDay.getDay();
-                int y = calendarDay.getYear();
-
-                //todo will change with new calendar but for now hacking to reset date if user selects previous date
-                String date=null;
-                Calendar c = Calendar.getInstance();
-                int currentMonth = c.get(Calendar.MONTH);
-                int currentYear = c.get(Calendar.YEAR);
-                int currentDay = c.get(Calendar.DAY_OF_MONTH);
-                Date currentDate = new Date(currentYear, currentMonth, currentDay);
-
-                Date selectedDate = new Date(y, m, d);
-
-                if(selectedDate.compareTo(currentDate)<0){
-                    Toast.makeText(getApplicationContext(), "Cannot set previous date.", Toast.LENGTH_SHORT).show();
-                    m =  currentMonth;
-                    d = currentDay;
-                    y = currentYear;
-
-                    date = currentMonth + "-" + currentDay + "-" + currentYear;
-                }
-                else {
-                    date = m + "-" + d
-                            + "-" + calendarDay.getYear();
-                }
-
-                if (m == 1 && d > 29) {
-                    m = 3;
-                    if (d == 30) {
-                        d = 1;
-                    } else {
-                        d = 2;
-                    }
-                } else {
-                    m = m + 1;
-                }
-//                String selectedD = checkIfPreviousDate(m,d,calendarDay.getYear());
-                date_display.setText(m + "-" + d
-                        + "-" + y);
-            }
-        });
-    }
-
-    private String checkIfPreviousDate(int m, int d, int year) {
-        String date=null;
-        Calendar c = Calendar.getInstance();
-        int currentMonth = c.get(Calendar.MONTH);
-        int currentYear = c.get(Calendar.YEAR);
-        int currentDay = c.get(Calendar.DAY_OF_MONTH);
-        Date currentDate = new Date(currentYear, currentMonth, currentDay);
-
-        Date selectedDate = new Date(year, m, d);
-
-        if(selectedDate.compareTo(currentDate)<0){
-            Toast.makeText(getApplicationContext(), "Cannot set previous datetime.", Toast.LENGTH_SHORT).show();
-            date = currentMonth + "-" + currentDay + "-" + currentYear;
-        }
-        else {
-            date = m + "-" + d
-                    + "-" + year;
-        }
-        return date;
-    }
 
     public void showError(String err) {
         hideProgressBar();
@@ -1002,15 +978,15 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
     public void onBackPressed() {
         if (vf!=null) {
             if(vf.getDisplayedChild()>0){
-                if(calendar_layout.getVisibility()==View.VISIBLE){
-                    calendar_layout.setVisibility(View.GONE);
-                }else {
+//                if(calendar_layout.getVisibility()==View.VISIBLE){
+//                    calendar_layout.setVisibility(View.GONE);
+//                }else {
                     setVfPrevAnimation();
                     //todo fix the hack to reset date, time and checkpoint
                     setCalendarCheckpointToDefault();
                     vf.setDisplayedChild(vf.getDisplayedChild() - 1);
                     createNewEventBtn.setBackgroundColor(getResources().getColor(R.color.event_user_image_background));
-                }
+//                }
             }else {
                 vf.clearAnimation();
                 launchListActivityAndFinish();
@@ -1025,6 +1001,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
             if(vf.getDisplayedChild()==2) {
                 if(date_display!=null) {
                     date_display.setText(getResources().getString(R.string.date_default));
+                    updateDatePickerCalendar();
                 }
 
                 if(time_display!=null) {
@@ -1034,6 +1011,15 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                 if(checkpointLayout!=null) {
                     checkpointLayout.setVisibility(View.GONE);
                 }
+            }
+        }
+    }
+
+    private void updateDatePickerCalendar() {
+        if(mDatePickerDai!=null) {
+            if (mDatePickerDai.getDatePicker() != null) {
+                Date d = Util.getCurrentCalendar();
+                mDatePickerDai.getDatePicker().updateDate(d.getYear(), d.getMonth(), d.getDate());
             }
         }
     }

@@ -221,8 +221,6 @@ public class LoginActivity extends BaseActivity implements Observer {
 
                 ud.setPassword(password);
                 mManager.setUserdata(ud);
-                //dismiss progress
-                dialog.dismiss();
                 //decide landing page based on push notification available or not
                 Intent regIntent;
 

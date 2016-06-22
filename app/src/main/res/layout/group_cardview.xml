@@ -45,7 +45,7 @@
                 android:layout_toRightOf="@+id/group_image"
                 android:layout_below="@+id/group_name"
                 android:layout_marginLeft="11dp"
-                android:text="0 Members"/>
+                android:text="0 in Orbit"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
                 android:layout_toRightOf="@+id/group_image"
                 android:layout_below="@+id/group_members"
                 android:layout_marginLeft="11dp"
-                android:text="0 Events" />
+                android:text="0 Activities" />
 
             <CheckBox style="@android:style/Widget.CompoundButton.RadioButton"
                 android:layout_width="wrap_content"

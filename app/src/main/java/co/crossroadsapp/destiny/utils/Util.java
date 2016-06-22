@@ -15,8 +15,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import co.crossroadsapp.destiny.ControlManager;
+import co.crossroadsapp.destiny.CreateNewEvent;
+import co.crossroadsapp.destiny.R;
 import co.crossroadsapp.destiny.data.UserData;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
@@ -331,10 +334,64 @@ public class Util {
 
     public static String getCurrentDate() {
         Calendar c = Calendar.getInstance();
-
         SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy");
         String formattedDate = df.format(c.getTime());
         return formattedDate;
+    }
+
+    public static Date getCurrentCalendar() {
+        Calendar c = Calendar.getInstance();
+        Date currentDate = new Date(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        return currentDate;
+    }
+
+    public static void checkTimePicker(TextView date_display, TextView time_display, CreateNewEvent c) {
+        if (date_display!=null && time_display!=null) {
+            if (isPresentDay(c, date_display)) {
+                if (!time_display.getText().toString().equalsIgnoreCase(c.getResources().getString(R.string.time_default))) {
+                    try {
+                        String t = time_display.getText().toString();
+                        String t1 = Util.getCurrentTime();
+                        SimpleDateFormat df = new SimpleDateFormat("hh:mm a");
+                        Date d1 = df.parse(t);
+                        Date d2 = df.parse(t1);
+                        if (d1.getTime() - d2.getTime() < 0) {
+                            time_display.setText(getCurrentTime(d2.getHours(), d2.getMinutes(), c));
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        }
+    }
+    public static String getCurrentTime(int h, int m, CreateNewEvent c) {
+        Toast.makeText(c.getApplicationContext(), "Cannot set previous time for today.", Toast.LENGTH_SHORT).show();
+        String t =  updateTime(h, m);
+        return t;
+    }
+
+    public static boolean isPresentDay(CreateNewEvent c, TextView date_display) {
+        if (date_display!=null) {
+            if (date_display.getText().toString().equalsIgnoreCase(c.getResources().getString(R.string.date_default))) {
+                return true;
+            } else {
+                try {
+                    String s = date_display.getText().toString();
+                    String z = getCurrentDate();
+                    SimpleDateFormat sdf = new SimpleDateFormat( "dd-MM-yyyy" );
+                    Date d1 = sdf.parse( s );
+                    Date d2 = sdf.parse( z);
+                    if (d1.getTime()-d2.getTime()==0) {
+                        return true;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
     }
 
     public static void picassoLoadIcon(Context c, ImageView eventIcon, String url, int height, int width, int avatar) {

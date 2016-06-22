@@ -46,8 +46,8 @@
     <string name="feedback_text">Need help with something? Want to send us feedback? Let us know!</string>
     <string name="forgotlogin_text">Forgot your password? We will send instructions to your Bungie account with how to reset it.</string>
     <string name="verify_accnt_toptext">Welcome !</string>
-    <string name="verify_accnt_bottomtext">Thanks for signing up for Crossroads, Destiny Fireteam Finder! An account verification message has been sent to your <![CDATA[<a href="http://www.bungie.net">Bungie.net</a>]]> account. Click the link in the message to verify your account. </string>
-    <string name="verify_accnt_bottomtext_xbox">Thanks for signing up for Crossroads, Destiny Fireteam Finder! An account verification message has been sent to your <![CDATA[<a href="http://www.bungie.net">Bungie.net</a>]]> account. Click the link in the message to verify your account. </string>
+    <string name="verify_accnt_bottomtext">Welcome to Crossroads, Destiny Fireteam Finder! Check your <![CDATA[<a href="http://www.bungie.net">Bungie.net</a>]]> inbox for a verification message. It will also appear in your Destiny companion app. </string>
+    <string name="verify_accnt_bottomtext_xbox">Welcome to Crossroads, Destiny Fireteam Finder! Check your <![CDATA[<a href="http://www.bungie.net">Bungie.net</a>]]> inbox for a verification message. It will also appear in your Destiny companion app. </string>
     <string name="title_activity_group">GroupActivity</string>
     <string name="group_top_text">Which group would you like to play with?"</string>
     <string name="group_other_text">YOUR BUNGIE.NET GROUPS: (SELECT ONE)</string>
@@ -74,14 +74,16 @@
     <string name="create_crossroads_accnt">CREATE CROSSROADS ACCOUNT</string>
     <string name="animation_speed">400</string>
 
-    <plurals name="grp_member">
-        <item quantity="one"> &#160;Member</item>
-        <item quantity="other"> &#160;Members</item>
-    </plurals>
+    <!--<plurals name="grp_member">-->
+        <!--<item quantity="one"> &#160;Member</item>-->
+        <!--<item quantity="other"> &#160;Members</item>-->
+    <!--</plurals>-->
+
+    <string name="grp_member"> &#160;in Orbit</string>
 
     <plurals name="grp_event">
-        <item quantity="one"> &#160;Event</item>
-        <item quantity="other"> &#160;Events</item>
+        <item quantity="one"> &#160;Activity</item>
+        <item quantity="other"> &#160;Activities</item>
     </plurals>
 
     <string-array name="console_arrays">

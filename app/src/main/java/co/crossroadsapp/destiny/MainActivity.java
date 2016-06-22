@@ -58,7 +58,7 @@ public class MainActivity extends BaseActivity implements Observer {
             }
         }
 
-        //check android version
+        //check android version for dev builds
         mManager.getAndroidVersion(this);
 
         forwardAfterVersionCheck();

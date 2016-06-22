@@ -8,8 +8,8 @@ android {
         applicationId "co.crossroadsapp.destiny"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 17
-        versionName "1.0.3"
+        versionCode 18
+        versionName "1.0.4(1)"
     }
     buildTypes {
         release {
@@ -20,6 +20,15 @@ android {
                 variant.outputs.each { output ->
                     String formattedString = "crossroads";
                     output.outputFile = new File(output.outputFile.parent, output.outputFile.name.replace("app-release", formattedString))
+                }
+            }
+        }
+        debug {
+            applicationIdSuffix ".debug"
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    String formattedString = "crossroads_dev";
+                    output.outputFile = new File(output.outputFile.parent, output.outputFile.name.replace("app-debug", formattedString))
                 }
             }
         }
