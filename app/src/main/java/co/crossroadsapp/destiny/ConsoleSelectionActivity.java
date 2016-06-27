@@ -246,26 +246,29 @@ public class ConsoleSelectionActivity extends BaseActivity implements AdapterVie
         hideProgressBar();
         ConsoleData cdata = (ConsoleData) data;
         Intent regIntent = new Intent(getApplicationContext(),
-                            RegisterActivity.class);
-        if(cdata!=null) {
-            if(cdata.getcId()!=null){
-                String id = cdata.getcId();
-                Util.setDefaults("consoleId", id, getApplicationContext());
-                //regIntent.putExtra("consoleId", id);
-            }
-            if(cdata.getMembershipId()!=null) {
-                String memId = cdata.getMembershipId();
-                Util.setDefaults("membershipId", memId, getApplicationContext());
-                //regIntent.putExtra("membershipId", memId);
-            }
-            if(cdata.getcType()!=null) {
-                String cType = cdata.getcType();
-                Util.setDefaults("consoleType", cType, getApplicationContext());
-                //regIntent.putExtra("consoleType", cType);
+                RegisterActivity.class);
+        if (cdata != null) {
+            String id = null;
+            String memId = null;
+            String cType = null;
+            if (cdata.getcId() != null) {
+                if (cdata.getMembershipId() != null) {
+                    if (cdata.getcType() != null) {
+                        id = cdata.getcId();
+                        Util.setDefaults("consoleId", id, getApplicationContext());
+
+                        memId = cdata.getMembershipId();
+                        Util.setDefaults("membershipId", memId, getApplicationContext());
+
+                        cType = cdata.getcType();
+                        Util.setDefaults("consoleType", cType, getApplicationContext());
+
+                        startActivity(regIntent);
+                        finish();
+                    }
+                }
             }
         }
-        startActivity(regIntent);
-        finish();
     }
 
     @Override

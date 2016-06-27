@@ -38,8 +38,10 @@
     <color name="related_video_divider_color">#738388</color>
     <color name="event_user_image_background">#365d65</color>
     <color name="create_new_event_green">#60b800</color>
+    <color name="orbit_text_color">#989898</color>
 
     <color name="activity_light_color">#ffc600</color>
+    <color name="freelancer_background">#035166</color>
 
     <color name="app_theme_color">#0086d0</color>
 

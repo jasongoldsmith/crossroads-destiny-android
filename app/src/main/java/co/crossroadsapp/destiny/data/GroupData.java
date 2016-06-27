@@ -8,13 +8,14 @@ import org.json.JSONObject;
  */
 public class GroupData {
 
-    private String groupId;
-    private String groupName;
-    private int memberCount;
-    private boolean clanEnabled;
-    private String groupImageUrl;
-    public boolean isSelected;
-    private int eventCount;
+    private String groupId=null;
+    private String groupName=null;
+    private int memberCount=0;
+    private boolean clanEnabled=false;
+    private String groupImageUrl=null;
+    public boolean isSelected=false;
+    private int eventCount=0;
+    private boolean muteNotification=false;
 
 
     public void setGroupId(String id) {
@@ -68,6 +69,14 @@ public class GroupData {
         return this.isSelected;
     }
 
+    public void setMuteNotification(boolean mute) {
+        this.muteNotification = mute;
+    }
+
+    public boolean getMuteNotification() {
+        return muteNotification;
+    }
+
     public void setGroupSelected(boolean selected) {
         isSelected = selected;
     }
@@ -84,6 +93,9 @@ public class GroupData {
                 }
                 if (jsonobject.has("groupName")) {
                     setGroupName(jsonobject.getString("groupName"));
+                }
+                if(jsonobject.has("muteNotification")) {
+                    setMuteNotification(jsonobject.getBoolean("muteNotification"));
                 }
                 if (jsonobject.has("memberCount")) {
                     setMemberCount(jsonobject.getInt("memberCount"));

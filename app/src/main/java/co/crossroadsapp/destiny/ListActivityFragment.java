@@ -684,14 +684,17 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     private void openProfileDrawer(int gravity) {
         if(gravity==Gravity.RIGHT && gpAct!=null) {
             gpAct.setSelectedGroup();
+            mManager.getGroupList(this);
         }
-        mManager.getGroupList(this);
         this.drawerLayout.openDrawer(gravity);
     }
 
     private void closeProfileDrawer(int gravity) {
         if(this.drawerLayout.isDrawerOpen(gravity)) {
             this.drawerLayout.closeDrawer(gravity);
+            if(gravity==Gravity.RIGHT) {
+                mManager.getGroupList(this);
+            }
         }
     }
 

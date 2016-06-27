@@ -110,14 +110,12 @@
             android:fontFamily="sans-serif"
             android:layout_marginLeft="25dp"
             android:layout_marginTop="13dp"
-            android:textSize="10sp"
-            android:text="PSN ID"/>
+            android:textSize="10sp"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/signup_psn"
             android:textCursorDrawable="@drawable/cursor_draw"
-            android:hint="Enter PSN ID"
             android:textColor="@android:color/white"
             android:singleLine="true"
             android:imeOptions="actionDone"

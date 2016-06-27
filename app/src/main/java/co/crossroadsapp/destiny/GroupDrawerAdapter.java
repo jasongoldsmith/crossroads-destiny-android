@@ -17,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.UserData;
@@ -33,6 +34,7 @@ public class GroupDrawerAdapter {
     private final TextView groupSelectedName;
     private final TextView groupSelectedMemberCount;
     private final TextView groupSelectedEventCount;
+    private final ToggleButton groupSelectedMute;
     //private final CheckBox groupSelectedBtn;
     private ArrayList<GroupData> localGroupList;
     private RecyclerView mRecyclerView;
@@ -44,25 +46,7 @@ public class GroupDrawerAdapter {
     private RelativeLayout empty_group_layout;
     private TextView emptyGrpText;
     private TextView gotoBungie;
-
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_group);
-//
-//        mCntrlMngr = ControlManager.getmInstance();
-//        mCntrlMngr.getGroupList(this);
-//
-//        localGroupList = new ArrayList<GroupData>();
-//        //recyclerview for activity list
-//        mRecyclerView = (RecyclerView) findViewById(R.id.group_recycler);
-//
-//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//
-//        mAdapter = new ActivityGroupViewAdapter();
-//
-//        mRecyclerView.setAdapter(mAdapter);
-//    }
+    private RelativeLayout selectedGrpCard;
 
     public GroupDrawerAdapter(ListActivityFragment act) {
         c = act;
@@ -81,6 +65,8 @@ public class GroupDrawerAdapter {
         groupSelectedName = (TextView) act.findViewById(R.id.group_selected_name);
         groupSelectedMemberCount = (TextView) act.findViewById(R.id.group_selected_members);
         groupSelectedEventCount = (TextView) act.findViewById(R.id.group_selected_events);
+        groupSelectedMute = (ToggleButton) act.findViewById(R.id.mute_toggle);
+        selectedGrpCard = (RelativeLayout) act.findViewById(R.id.group_selected_mainlayout);
 
         empty_group_layout = (RelativeLayout) act.findViewById(R.id.empty_group_layout);
         emptyGrpText = (TextView) act.findViewById(R.id.empty_grp_text);
@@ -134,6 +120,28 @@ public class GroupDrawerAdapter {
         }
     }
 
+    private void setMuteButton(final ToggleButton mute, boolean mn, final String id) {
+        if (mute!=null) {
+            mute.setChecked(mn);
+
+            mute.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (id != null) {
+                        RequestParams muteParams = new RequestParams();
+                        muteParams.add("groupId", id);
+                        if (mute.isChecked()) {
+                            muteParams.add("muteNotification", "true");
+                        } else {
+                            muteParams.add("muteNotification", "false");
+                        }
+                        mCntrlMngr.postMuteNoti((ListActivityFragment) c, muteParams);
+                    }
+                }
+            });
+        }
+    }
+
     public void setSelectedGroup() {
         if(mCntrlMngr.getUserData()!=null) {
             user = mCntrlMngr.getUserData();
@@ -141,12 +149,28 @@ public class GroupDrawerAdapter {
                 GroupData gd = mCntrlMngr.getGroupObj(user.getClanId());
                 if (gd != null) {
                     if (gd.getGroupImageUrl() != null) {
+                        int ge_num = gd.getEventCount();
+                        int gm_num = gd.getMemberCount();
+                        boolean mute = gd.getMuteNotification();
                         //String first_gm = gd.getMemberCount() + c.getResources().getQuantityString(R.plurals.grp_member, gd.getMemberCount());
-                        String first_gm = gd.getMemberCount() + c.getResources().getString(R.string.grp_member);
-                        String first_ge = gd.getEventCount() + c.getResources().getQuantityString(R.plurals.grp_event, gd.getEventCount());
+                        String first_gm = gm_num+ c.getResources().getString(R.string.grp_member);
+                        String first_ge = ge_num + c.getResources().getQuantityString(R.plurals.grp_event, ge_num);
                         groupSelectedEventCount.setText(first_ge);
                         groupSelectedMemberCount.setText(first_gm);
+                        if (ge_num>0) {
+                            groupSelectedEventCount.setTextColor(c.getResources().getColor(R.color.activity_light_color));
+                        }
                         groupSelectedName.setText(gd.getGroupName());
+                        if (gd.getGroupId()!=null) {
+                            setMuteButton(groupSelectedMute, mute, gd.getGroupId());
+                            if (selectedGrpCard!=null) {
+                                if (gd.getGroupId().equalsIgnoreCase(Constants.FREELANCER_GROUP)) {
+                                    selectedGrpCard.setBackgroundColor(c.getResources().getColor(R.color.freelancer_background));
+                                } else {
+                                    selectedGrpCard.setBackgroundColor(c.getResources().getColor(R.color.logout_btn_background));
+                                }
+                            }
+                        }
                         Util.picassoLoadIcon(c, groupSelectedImage, gd.getGroupImageUrl(), R.dimen.group_icon_hgt, R.dimen.group_icon_width, R.drawable.img_logo_badge);
                     }
                 }
@@ -177,11 +201,7 @@ public class GroupDrawerAdapter {
                         if(u.getClanId()!=null && (!u.getClanId().equalsIgnoreCase(Constants.CLAN_NOT_SET))) {
                             if(u.getClanId().equalsIgnoreCase(localGroupList.get(i).getGroupId())) {
                                 localGroupList.get(i).setGroupSelected(true);
-                                Log.d("BAsant","the control manger before remove, gdata="+mCntrlMngr.getCurrentGroupList());
-                                Log.d("BAsant","the control manger before remove, gdata length="+mCntrlMngr.getCurrentGroupList().size());
                                 localGroupList.remove(i);
-                                Log.d("BAsant","the control manger after remove, gdata="+mCntrlMngr.getCurrentGroupList());
-                                Log.d("BAsant","the control manger after remove, gdata length="+mCntrlMngr.getCurrentGroupList().size());
 
                             }
                         }
@@ -210,6 +230,7 @@ public class GroupDrawerAdapter {
 
         public class MyGroupViewHolder extends RecyclerView.ViewHolder{
             protected CardView groupCard;
+            protected RelativeLayout groupCardLayout;
             protected ImageView groupImage;
             protected TextView groupName;
             protected TextView groupMemberCount;
@@ -217,6 +238,7 @@ public class GroupDrawerAdapter {
             protected CheckBox groupBtn;
             protected TextView gotoBungie;
             protected TextView saveGrpBtnReady;
+            protected ToggleButton muteBtn;
             protected TextView emptyGrpText;
             protected RelativeLayout group_layout;
             protected RelativeLayout empty_group_layout;
@@ -225,11 +247,13 @@ public class GroupDrawerAdapter {
                 super(itemView);
                 view = itemView;
                 groupCard = (CardView) view.findViewById(R.id.groups);
+                groupCardLayout = (RelativeLayout) view.findViewById(R.id.group_mainlayout);
                 groupImage = (ImageView) view.findViewById(R.id.group_image);
                 groupName = (TextView) view.findViewById(R.id.group_name);
                 groupMemberCount = (TextView) view.findViewById(R.id.group_members);
                 groupEventCount = (TextView) view.findViewById(R.id.group_events);
-                groupBtn = (CheckBox) view.findViewById(R.id.group_radio_btn);
+                //groupBtn = (CheckBox) view.findViewById(R.id.group_radio_btn);
+                muteBtn = (ToggleButton) view.findViewById(R.id.mute_toggle);
                 emptyGrpText = (TextView) view.findViewById(R.id.empty_grp_text);
                 //saveGrpBtnReady = (TextView) ((ListActivityFragment)c).findViewById(R.id.save_group_btn_ready);
                 gotoBungie = (TextView) view.findViewById(R.id.goto_bungie);
@@ -254,6 +278,12 @@ public class GroupDrawerAdapter {
                     if ((!user.getClanId().equalsIgnoreCase(Constants.CLAN_NOT_SET))) {
                         if (!objGroup.getGroupId().equalsIgnoreCase(user.getClanId())) {
 
+                            if ((objGroup.getGroupId().equalsIgnoreCase(Constants.FREELANCER_GROUP))) {
+                                holder.groupCardLayout.setBackgroundColor(c.getResources().getColor(R.color.freelancer_background));
+                            } else {
+                                holder.groupCardLayout.setBackgroundColor(c.getResources().getColor(R.color.logout_btn_background));
+                            }
+
                             if (holder.empty_group_layout != null) {
                                 holder.empty_group_layout.setVisibility(View.GONE);
                             }
@@ -262,14 +292,17 @@ public class GroupDrawerAdapter {
                             }
 
                             String gName = null;
+                            //String id = null;
                             int count = 0;
                             int eCount = 0;
                             String url = null;
+                            boolean mn = false;
                             //boolean clan = true;
                             if (glistLocal.get(position) != null) {
                                 if (objGroup.getGroupName() != null) {
                                     gName = objGroup.getGroupName();
                                 }
+                                mn = objGroup.getMuteNotification();
                                 if (objGroup.getMemberCount() >= 0) {
                                     count = objGroup.getMemberCount();
                                 }
@@ -279,6 +312,9 @@ public class GroupDrawerAdapter {
                                 if (objGroup.getGroupImageUrl() != null) {
                                     url = objGroup.getGroupImageUrl();
                                 }
+//                                if (objGroup.getGroupId()!=null) {
+//                                    id = objGroup.getGroupId();
+//                                }
                             }
 
                             if (holder.groupName != null && gName != null) {
@@ -295,110 +331,86 @@ public class GroupDrawerAdapter {
                             }
 
                             if (holder.groupEventCount != null) {
+                                if (eCount>0) {
+                                    holder.groupEventCount.setTextColor(c.getResources().getColor(R.color.activity_light_color));
+                                }else {
+                                    holder.groupEventCount.setTextColor(c.getResources().getColor(R.color.orbit_text_color));
+                                }
                                 String ge = eCount + c.getResources().getQuantityString(R.plurals.grp_event, eCount);
                                 holder.groupEventCount.setText(ge);
                             }
 
+                            setMuteButton(holder.muteBtn, mn, glistLocal.get(position).getGroupId());
+
+//                            if (holder.muteBtn!=null) {
+//                                holder.muteBtn.setChecked(mn);
+//
+//                                holder.muteBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                                    @Override
+//                                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                                        if (id != null) {
+//                                            RequestParams muteParams = new RequestParams();
+//                                            muteParams.add("groupId", id);
+//                                            if (!isChecked) {
+//                                                muteParams.add("muteNotification", "1");
+//                                            } else {
+//                                                muteParams.add("muteNotification", "0");
+//                                            }
+//                                            mCntrlMngr.postMuteNoti((ListActivityFragment) c, muteParams);
+//                                        }
+//                                    }
+//                                });
+//                            }
+
                             //in some cases, it will prevent unwanted situations
-                            holder.groupBtn.setOnCheckedChangeListener(null);
+                            //holder.groupBtn.setOnCheckedChangeListener(null);
 
                             //if true, your checkbox will be selected, else unselected
-                            holder.groupBtn.setChecked(objGroup.isSelected);
+                            //holder.groupBtn.setChecked(objGroup.isSelected);
 
                             holder.groupCard.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    holder.groupBtn.performClick();
-                                }
-                            });
-
-                            holder.groupBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                                @Override
-                                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                                    //set your object's last status
-                                    if (isChecked) {
-                                        for (int y = 0; y < glistLocal.size(); y++) {
-                                            if (y == position) continue;
-                                            objGroup = glistLocal.get(y);
-                                            if (objGroup.isSelected) {
-                                                objGroup.setGroupSelected(false);
-                                                notifyItemChanged(y);
-                                            }
+                                    //holder.groupBtn.performClick();
+                                    for (int y = 0; y < glistLocal.size(); y++) {
+                                        if (y == position) continue;
+                                        objGroup = glistLocal.get(y);
+                                        if (objGroup.isSelected) {
+                                            objGroup.setGroupSelected(false);
+                                            notifyItemChanged(y);
                                         }
-                                        glistLocal.get(position).setGroupSelected(isChecked);
-                                        notifyItemChanged(position);
-
-                                        //change grp icon
-                                        ((ListActivityFragment) c).setgrpIcon(glistLocal.get(position).getGroupImageUrl());
-
-                                        //close drawer
-                                        ((ListActivityFragment) c).closeAllDrawers();
-
-                                        //save selected grp
-                                        RequestParams params = new RequestParams();
-                                        if (mCntrlMngr != null) {
-                                            if (mCntrlMngr.getUserData() != null) {
-                                                UserData user = mCntrlMngr.getUserData();
-                                                if (user.getUserId() != null) {
-                                                    params.add("id", user.getUserId());
-                                                }
-
-                                                params.add("clanId", glistLocal.get(position).getGroupId());
-
-                                                ((ListActivityFragment) c).hideProgress();
-                                                ((ListActivityFragment) c).showProgress();
-                                                mCntrlMngr.postSetGroup((ListActivityFragment) c, params);
-                                            }
-                                        }
-
-                                        //show save button ready state
-//                            holder.saveGrpBtn.setVisibility(View.GONE);
-//                            holder.saveGrpBtnReady.setVisibility(View.VISIBLE);
-                                    } else {
-                                        //show save button ready state
-//                            holder.saveGrpBtn.setVisibility(View.VISIBLE);
-//                            holder.saveGrpBtnReady.setVisibility(View.GONE);
                                     }
-//                        objGroup.setGroupSelected(isChecked);
-//                        for (int y=0;y<glistLocal.size();y++) {
-//                            if((!objGroup.getGroupId().equalsIgnoreCase(glistLocal.get(y).getGroupId())) && isChecked) {
-//                                glistLocal.get(y).setGroupSelected(false);
-//                                notifyItemChanged(y);
-//                            }
-//                        }
+                                    glistLocal.get(position).setGroupSelected(true);
+                                    notifyItemChanged(position);
+
+                                    //change grp icon
+                                    ((ListActivityFragment) c).setgrpIcon(glistLocal.get(position).getGroupImageUrl());
+
+                                    //close drawer
+                                    ((ListActivityFragment) c).closeAllDrawers();
+
+                                    //save selected grp
+                                    RequestParams params = new RequestParams();
+                                    if (mCntrlMngr != null) {
+                                        if (mCntrlMngr.getUserData() != null) {
+                                            UserData user = mCntrlMngr.getUserData();
+                                            if (user.getUserId() != null) {
+                                                params.add("id", user.getUserId());
+                                            }
+
+                                            params.add("clanId", glistLocal.get(position).getGroupId());
+
+                                            ((ListActivityFragment) c).hideProgress();
+                                            ((ListActivityFragment) c).showProgress();
+                                            mCntrlMngr.postSetGroup((ListActivityFragment) c, params);
+                                        }
+                                    }
                                 }
                             });
+
                             holder.groupEventCount.invalidate();
                             holder.groupMemberCount.invalidate();
-//                holder.saveGrpBtnReady.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        RequestParams params = new RequestParams();
-//                        if(mCntrlMngr!=null) {
-//                        if(mCntrlMngr.getUserData()!=null) {
-//                            UserData user = mCntrlMngr.getUserData();
-//                            if (user.getUserId() != null) {
-//                                params.add("id", user.getUserId());
-//                            }
-//
-//                            for (int y=0;y<glistLocal.size();y++) {
-//                                if (glistLocal.get(y).isSelected) {
-//                                    objGroup = glistLocal.get(y);
-//                                }
-//                            }
-//
-//                            if (objGroup != null) {
-//                                if (objGroup.getGroupId() != null) {
-//                                    params.add("clanId", objGroup.getGroupId());
-//                                }
-//                            }
-//                            ((ListActivityFragment) c).hideProgress();
-//                            ((ListActivityFragment) c).showProgress();
-//                            mCntrlMngr.postSetGroup((ListActivityFragment) c, params);
-//                        }
-//                    }
-//                    }
-//                });
+                            holder.muteBtn.invalidate();
                         }
                     }
                 }

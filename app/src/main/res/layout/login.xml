@@ -29,7 +29,7 @@
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="44dp"
-            android:text="SIGN IN"
+            android:text="LOG IN"
             android:textSize="12sp"/>
     </RelativeLayout>
 
