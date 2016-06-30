@@ -52,7 +52,7 @@
     <color name="logout_btn_background">#131f23</color>
 
     <color name="createnewevent_topbar">#19282c</color>
-
+    <color name="group_drawer_background">#233a3e</color>
     <color name="copyright_text">#adc7ce</color>
     <color name="player_circ_img_border">#979797</color>
 </resources>

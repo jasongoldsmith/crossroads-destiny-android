@@ -161,16 +161,8 @@ public class UserData implements Parcelable {
                         }
                     }
                 }
-
-
-                //String psnVer = jsonData.getString("psnVerified");
-
-                //setPsnId(psnId);
-
-                //setPsnVerify(psnVer);
             }
         }
-
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

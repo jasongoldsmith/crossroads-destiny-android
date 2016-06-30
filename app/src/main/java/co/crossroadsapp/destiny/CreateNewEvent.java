@@ -89,6 +89,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
     private ActivityData currentActivity;
 
     private TextView createNewEventBtn;
+    private RelativeLayout createNewEventLayout;
 
     private ArrayList<ActivityData> aData;
 
@@ -189,10 +190,8 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
         createAvtivityNameText = (TextView) findViewById(R.id.event_creation_first);
         createActivityIconview = (ImageView) findViewById(R.id.firstcard_img);
 
-//        nextBtn = (Button) findViewById(R.id.event_next);
-//        cancelBtn = (Button) findViewById(R.id.event_cancel);
-
         createNewEventBtn = (TextView) findViewById(R.id.create_new_event_activity);
+        createNewEventLayout = (RelativeLayout) findViewById(R.id.create_new_event_activity_layout);
 
         firstActivityLayout = (RelativeLayout) findViewById(R.id.first_img_layout);
         secondActivityLayout = (RelativeLayout) findViewById(R.id.second_img_layout);
@@ -200,17 +199,6 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
         fourthActivityLayout = (RelativeLayout) findViewById(R.id.fourth_img_layout);
         fifthActivityLayout = (RelativeLayout) findViewById(R.id.fifth_img_layout);
         sixthActivityLayout = (RelativeLayout) findViewById(R.id.sixth_img_layout);
-
-//        errLayout = (RelativeLayout) findViewById(R.id.error_layout);
-//        errText = (TextView) findViewById(R.id.error_sub);
-//        close_err = (ImageView) findViewById(R.id.err_close);
-//
-//        close_err.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                errLayout.setVisibility(View.GONE);
-//            }
-//        });
 
         firstActivityType = (TextView) findViewById(R.id.first);
         secondActivityType = (TextView) findViewById(R.id.second);
@@ -601,9 +589,6 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setTRansparentStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            getWindow().getDecorView().setSystemUiVisibility(
-//                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             getWindow().setStatusBarColor(getResources().getColor(R.color.createnewevent_topbar));
         }
     }
@@ -772,11 +757,6 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                 int aLight = aList.get(position).getActivityLight();
                 String aFinalLight=" ";
 
-                //till decided app not showing light level in selecting activity subtype
-//                if(aLight>0) {
-//                    aFinalLight = String.valueOf(aList.get(position).getActivityLight() + " Light");
-//                }
-
                 if (diff==null || diff.equalsIgnoreCase("null")){
                     diff = "";
                 } else {
@@ -784,10 +764,6 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                 }
 
                 final String activity_custom_name = aList.get(position).getActivitySubtype()+ diff +" "+ aFinalLight;
-
-//                if (iconUrl!=null){
-//                    Util.picassoLoadIcon(CreateNewEvent.this, holder.activity_icon, iconUrl, R.dimen.activity_profile_icon_hgt, R.dimen.activity_profile_icon_width, R.drawable.img_traveler_badge_icon);
-//                }
 
                 if (!activity_custom_name.isEmpty()) {
                     holder.activity_detail_name.setText(activity_custom_name);
@@ -817,9 +793,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
 
                 for (int i = 0; i < checkpointActList.size(); i++) {
                     if (checkpointActList.get(i).getActivityCheckpoint() != null && !checkpointActList.get(i).getActivityCheckpoint().equalsIgnoreCase("null")) {
-                        //adapterCheckpoint.add(checkpointActList.get(i).getActivityCheckpoint());
                         checkpointItems.add(checkpointActList.get(i).getActivityCheckpoint());
-                        //currentCheckpointActivityPosition = i;
                     }
                 }
 
@@ -846,25 +820,11 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                         }
 
                         public View getDropDownView(int position, View convertView, ViewGroup parent) {
-
-                            //View v = super.getDropDownView(position, convertView,parent);
-
                             return getCustomView(position, convertView, parent, checkpointItems);
-
-//                        ((TextView) v).setGravity(Gravity.CENTER);
-//
-//                        v.setBackgroundColor(getResources().getColor(R.color.app_theme_color));
-//                        ((TextView) v).setTextColor(getResources().getColor(R.color.trimbe_white));
-//                        ((TextView) v).setHeight(Util.dpToPx(50, CreateNewEvent.this));
-//
-//                        return v;
-
                         }
                     };
                 adapterCheckpoint.setDropDownViewResource(R.layout.empty_layout);
                 dropdown.setAdapter(adapterCheckpoint);
-//                adapterCheckpoint.clear();
-//                adapterCheckpoint.addAll(checkpointItems);
                 adapterCheckpoint.notifyDataSetChanged();
             } else {
                     checkpointLayout.setVisibility(View.GONE);
@@ -874,7 +834,9 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
         createAvtivityNameText.setText(activity_custom_name);
         //createActivityIconview.
         Util.picassoLoadIcon(CreateNewEvent.this, createActivityIconview, currentActivity.getActivityIconUrl(), R.dimen.activity_icon_hgt_createevent, R.dimen.activity_icon_width_createevent, R.drawable.icon_ghost_default);
-        createNewEventBtn.setBackgroundColor(getResources().getColor(R.color.create_new_event_green));
+        if(createNewEventLayout!=null) {
+            createNewEventLayout.setVisibility(View.VISIBLE);
+        }
         vfShowNext();
     }
 
@@ -885,43 +847,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
         }
     }
 
-    public class CustomAdapter extends BaseAdapter {
-
-        private ArrayList<String> checkpoint;
-
-        public CustomAdapter() {
-            if (checkpoint==null) {
-                checkpoint = new ArrayList<String>();
-            }
-        }
-
-        protected void addItem(ArrayList<String> a) {
-            this.checkpoint.addAll(a);
-        }
-
-        @Override
-        public int getCount() {
-            return checkpoint.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return checkpoint.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            return getCustomView(position, convertView, parent, checkpoint);
-        }
-    }
-
     public View getCustomView(int position, View convertView, ViewGroup parent, ArrayList<String> adapterCheckpoint) {
-
         LayoutInflater inflater=getLayoutInflater();
         View row=inflater.inflate(R.layout.fragment_checkpoint, parent, false);
         TextView label=(TextView)row.findViewById(R.id.activity_checkpoint_text);
@@ -943,28 +869,10 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
             activityList = (ActivityList) data;
             aData = activityList.getActivityList();
         } else if (observable instanceof EventRelationshipHandlerNetwork) {
-            //EventData ed = (EventData)data;
             hideProgressBar();
-            //dismissProgressBar();
-//            progress.dismiss();
             launchListActivityAndFinish();
-//            finish();
         }
-//        mAdapter.addItem(aData);
-//        mAdapter.notifyDataSetChanged();
     }
-
-    private void startListActivity() {
-        Intent regIntent = new Intent(getApplicationContext(),
-                ListActivityFragment.class);
-        regIntent.putExtra("userdata", user);
-        startActivity(regIntent);
-    }
-
-//    public void dismissProgressBar(){
-//        // To dismiss the dialog
-//        linlaHeaderProgress.setVisibility(View.GONE);
-//    }
 
     @Override
     public void onResume() {
@@ -978,15 +886,10 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
     public void onBackPressed() {
         if (vf!=null) {
             if(vf.getDisplayedChild()>0){
-//                if(calendar_layout.getVisibility()==View.VISIBLE){
-//                    calendar_layout.setVisibility(View.GONE);
-//                }else {
-                    setVfPrevAnimation();
-                    //todo fix the hack to reset date, time and checkpoint
-                    setCalendarCheckpointToDefault();
-                    vf.setDisplayedChild(vf.getDisplayedChild() - 1);
-                    createNewEventBtn.setBackgroundColor(getResources().getColor(R.color.event_user_image_background));
-//                }
+                setVfPrevAnimation();
+                //todo fix the hack to reset date, time and checkpoint
+                setCalendarCheckpointToDefault();
+                vf.setDisplayedChild(vf.getDisplayedChild() - 1);
             }else {
                 vf.clearAnimation();
                 launchListActivityAndFinish();
@@ -1011,6 +914,10 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                 if(checkpointLayout!=null) {
                     checkpointLayout.setVisibility(View.GONE);
                 }
+
+                if(createNewEventLayout!=null) {
+                    createNewEventLayout.setVisibility(View.GONE);
+                }
             }
         }
     }
@@ -1033,5 +940,4 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
         startActivity(i);
         finish();
     }
-
 }

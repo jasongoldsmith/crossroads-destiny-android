@@ -110,6 +110,15 @@ public class GroupListNetwork extends Observable {
         notifyObservers(user);
     }
 
+    private void parseGrpData(JSONObject response) {
+        if (response!=null) {
+            GroupData eData = new GroupData();
+            eData.toJson(response);
+            setChanged();
+            notifyObservers(eData);
+        }
+    }
+
     public void postSelectGroup(RequestParams params) throws JSONException {
         if (Util.isNetworkAvailable(mContext)) {
             ntwrk.post(selectedGroupUrl, params, new JsonHttpResponseHandler() {
@@ -139,14 +148,14 @@ public class GroupListNetwork extends Observable {
         }
     }
 
+
+
     public void postMuteNotification(RequestParams params) throws JSONException {
         if (Util.isNetworkAvailable(mContext)) {
             ntwrk.post(groupMuteUrl, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    // If the response is JSONObject instead of expected JSONArray
-                    setChanged();
-                    notifyObservers(null);
+                    parseGrpData(response);
                 }
 
                 @Override

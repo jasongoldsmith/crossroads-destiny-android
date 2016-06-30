@@ -2,6 +2,7 @@ package co.crossroadsapp.destiny;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -84,12 +85,7 @@ public class GroupDrawerAdapter {
 
         localGroupList = new ArrayList<GroupData>();
 
-        if(mCntrlMngr.getCurrentGroupList()!=null) {
-            ArrayList<GroupData> ll = mCntrlMngr.getCurrentGroupList();
-            for (int i=0;i<ll.size();i++) {
-                localGroupList.add(ll.get(i));
-            }
-        }
+        getGrpList();
 
         checkSignleGrpView();
 
@@ -108,6 +104,15 @@ public class GroupDrawerAdapter {
 
     }
 
+    private void getGrpList() {
+        if(mCntrlMngr.getCurrentGroupList()!=null) {
+            ArrayList<GroupData> ll = mCntrlMngr.getCurrentGroupList();
+            for (int i=0;i<ll.size();i++) {
+                localGroupList.add(ll.get(i));
+            }
+        }
+    }
+
     private void checkSignleGrpView() {
         if(localGroupList!=null && localGroupList.size()==0) {
             if (empty_group_layout != null) {
@@ -122,7 +127,8 @@ public class GroupDrawerAdapter {
 
     private void setMuteButton(final ToggleButton mute, boolean mn, final String id) {
         if (mute!=null) {
-            mute.setChecked(mn);
+            mute.setEnabled(true);
+            mute.setChecked(!mn);
 
             mute.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -131,9 +137,9 @@ public class GroupDrawerAdapter {
                         RequestParams muteParams = new RequestParams();
                         muteParams.add("groupId", id);
                         if (mute.isChecked()) {
-                            muteParams.add("muteNotification", "true");
-                        } else {
                             muteParams.add("muteNotification", "false");
+                        } else {
+                            muteParams.add("muteNotification", "true");
                         }
                         mCntrlMngr.postMuteNoti((ListActivityFragment) c, muteParams);
                     }
@@ -211,6 +217,22 @@ public class GroupDrawerAdapter {
         }
     }
 
+    public void updateGrpData(Object data) {
+        GroupData gd = (GroupData) data;
+        if (mAdapter.glistLocal!=null) {
+            for (int i = 0; i < mAdapter.glistLocal.size(); i++) {
+                if (gd.getGroupId() != null) {
+                    if (mAdapter.glistLocal.get(i)!=null && mAdapter.glistLocal.get(i).getGroupId()!=null) {
+                        if (gd.getGroupId().equalsIgnoreCase(mAdapter.glistLocal.get(i).getGroupId())) {
+                            mAdapter.glistLocal.get(i).setMuteNotification(gd.getMuteNotification());
+                            mAdapter.notifyItemChanged(i);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private class ActivityGroupViewAdapter extends RecyclerView.Adapter<ActivityGroupViewAdapter.MyGroupViewHolder> {
 
         private ArrayList<GroupData> glistLocal;
@@ -228,6 +250,13 @@ public class GroupDrawerAdapter {
             this.glistLocal.addAll(a);
         }
 
+        protected ArrayList<GroupData> getList() {
+            if (glistLocal!=null) {
+                return glistLocal;
+            }
+            return null;
+        }
+
         public class MyGroupViewHolder extends RecyclerView.ViewHolder{
             protected CardView groupCard;
             protected RelativeLayout groupCardLayout;
@@ -242,6 +271,7 @@ public class GroupDrawerAdapter {
             protected TextView emptyGrpText;
             protected RelativeLayout group_layout;
             protected RelativeLayout empty_group_layout;
+            protected ImageView grp_overlay;
 
             public MyGroupViewHolder(View itemView) {
                 super(itemView);
@@ -259,6 +289,7 @@ public class GroupDrawerAdapter {
                 gotoBungie = (TextView) view.findViewById(R.id.goto_bungie);
                 group_layout = (RelativeLayout) view.findViewById(R.id.group_layout);
                 empty_group_layout = (RelativeLayout) view.findViewById(R.id.empty_group_layout);
+                grp_overlay = (ImageView) view.findViewById(R.id.grp_overlay);
             }
         }
         @Override
@@ -290,7 +321,9 @@ public class GroupDrawerAdapter {
                             if (holder.group_layout != null) {
                                 holder.group_layout.setVisibility(View.VISIBLE);
                             }
-
+                            if(holder.grp_overlay!=null) {
+                                holder.grp_overlay.setVisibility(View.GONE);
+                            }
                             String gName = null;
                             //String id = null;
                             int count = 0;
@@ -407,7 +440,6 @@ public class GroupDrawerAdapter {
                                     }
                                 }
                             });
-
                             holder.groupEventCount.invalidate();
                             holder.groupMemberCount.invalidate();
                             holder.muteBtn.invalidate();
@@ -418,25 +450,32 @@ public class GroupDrawerAdapter {
                     //setSelectedGroup();
                 }
             } else {
-//                if (holder.empty_group_layout != null) {
-//                    holder.empty_group_layout.setVisibility(View.VISIBLE);
-//                }
-//                holder.emptyGrpText.setText(Html.fromHtml((c.getString(R.string.nogroup_text))));
-//                holder.emptyGrpText.setMovementMethod(LinkMovementMethod.getInstance());
-//                holder.gotoBungie.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
-//                        c.startActivity(browserIntent);
-//                    }
-//                });
+                if(holder.grp_overlay!=null) {
+                    holder.grp_overlay.setVisibility(View.VISIBLE);
+                }
+                if (holder.groupMemberCount != null) {
+                    String gm_dummy = 82 + c.getResources().getString(R.string.grp_member);
+                    holder.groupMemberCount.setText(gm_dummy);
+                }
+                if (holder.groupEventCount != null) {
+                    holder.groupEventCount.setTextColor(c.getResources().getColor(R.color.activity_light_color));
+                    String ge_dummy = 4 + c.getResources().getQuantityString(R.plurals.grp_event, 4);
+                    holder.groupEventCount.setText(ge_dummy);
+                }
+                if (holder.muteBtn!=null) {
+                    holder.muteBtn.setEnabled(false);
+                }
             }
         }
 
         @Override
         public int getItemCount() {
             if(glistLocal!=null) {
-                return this.glistLocal.size();
+                if (glistLocal.size()==0 || glistLocal.size()==1) {
+                    return 1;
+                } else {
+                    return this.glistLocal.size();
+                }
             }
             return 0;
         }

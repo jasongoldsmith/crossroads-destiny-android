@@ -178,7 +178,7 @@ public class ControlManager implements Observer{
             if(groupListNtwrk==null) {
                 groupListNtwrk = new GroupListNetwork(act);
             }
-            //groupListNtwrk.addObserver(act);
+            groupListNtwrk.addObserver(act);
             groupListNtwrk.postMuteNotification(params);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -523,6 +523,8 @@ public class ControlManager implements Observer{
         } else if(observable instanceof GroupListNetwork) {
             if(data instanceof UserData) {
                 setUserdata((UserData) data);
+            } else if(data instanceof GroupData) {
+                //
             } else {
                 if(gData!=null) {
                     gData.clear();

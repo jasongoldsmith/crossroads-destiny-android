@@ -89,7 +89,9 @@ public class GroupData {
         if (jsonobject!= null) {
             try {
                 if (!jsonobject.isNull("groupId")) {
-                    setGroupId(jsonobject.getString("groupId"));
+                    if (jsonobject.has("groupId")) {
+                        setGroupId(jsonobject.getString("groupId"));
+                    }
                 }
                 if (jsonobject.has("groupName")) {
                     setGroupName(jsonobject.getString("groupName"));

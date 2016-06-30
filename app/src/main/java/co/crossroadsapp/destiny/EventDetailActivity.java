@@ -81,7 +81,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private RelativeLayout progressBar;
     private TextView eventCheckpoint;
     private TextView mCharacter;
-//    private RelativeLayout errLayout;
+    private RelativeLayout bottomBtnLayout;
 //    private TextView errText;
 //    private ImageView close_err;
 
@@ -96,6 +96,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         joinBtn = (TextView) findViewById(R.id.join_btn);
         leaveBtn = (TextView) findViewById(R.id.leave_btn);
         msgallBtn = (TextView) findViewById(R.id.messageall_btn);
+        bottomBtnLayout = (RelativeLayout) findViewById(R.id.detail_bottom_btn);
 
         progressBar = (RelativeLayout) findViewById(R.id.progress_bar_eventdetail_layout);
 
@@ -313,19 +314,23 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private void setBottomButtonSelection() {
         if(checkUserIsCreator()){
             if((this.currEvent.getPlayerData()!=null) && this.currEvent.getPlayerData().size()>1) {
+                bottomBtnLayout.setVisibility(View.VISIBLE);
                 leaveBtn.setVisibility(View.GONE);
                 joinBtn.setVisibility(View.GONE);
                 msgallBtn.setVisibility(View.VISIBLE);
             } else {
+                bottomBtnLayout.setVisibility(View.VISIBLE);
                 leaveBtn.setVisibility(View.VISIBLE);
                 joinBtn.setVisibility(View.GONE);
                 msgallBtn.setVisibility(View.GONE);
             }
         } else if (checkUserIsPlayer()) {
+            bottomBtnLayout.setVisibility(View.VISIBLE);
             leaveBtn.setVisibility(View.VISIBLE);
             joinBtn.setVisibility(View.GONE);
             msgallBtn.setVisibility(View.GONE);
         } else if(!currEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)){
+            bottomBtnLayout.setVisibility(View.VISIBLE);
             leaveBtn.setVisibility(View.GONE);
             joinBtn.setVisibility(View.VISIBLE);
             msgallBtn.setVisibility(View.GONE);

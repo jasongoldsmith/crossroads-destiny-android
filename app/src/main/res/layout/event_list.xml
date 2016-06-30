@@ -455,7 +455,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="end|bottom"
-        android:background="#233a3e"
+        android:background="@color/group_drawer_background"
         android:clickable="true">
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -642,8 +642,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"
                 android:layout_marginBottom="50dp">
             </android.support.v7.widget.RecyclerView>
 
@@ -652,7 +650,9 @@
                 android:src="@drawable/img_dropshadow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-68dp"/>
+                android:layout_marginTop="-68dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp"/>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -660,6 +660,17 @@
                 android:id="@+id/empty_group_layout"
                 android:layout_alignParentBottom="true"
                 android:visibility="gone">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/empty_grp_card"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginRight="7dp"
+                    android:layout_marginBottom="50dp">
+
+                </FrameLayout>
 
                 <TextView
                     android:layout_width="match_parent"

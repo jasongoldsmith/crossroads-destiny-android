@@ -30,6 +30,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -627,11 +628,10 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         pushEventObject = new EventData();
         try {
             JSONObject jsonObj = new JSONObject(payload);
-
             if(jsonObj.has("eventId")) {
-                String id = (String) jsonObj.get("eventId");
+                String id = ((jsonObj.get("eventId") == null) ? "null" : jsonObj.get("eventId").toString());//jsonObj.get("eventId");
                 if(mManager!=null) {
-                    if(id!=null) {
+                    if((id!=null) && (!id.equalsIgnoreCase("null"))) {
                         if (mManager.getEventObj(id) != null) {
                             pushEventObject = mManager.getEventObj(id);
                         } else {
@@ -644,11 +644,6 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             } else {
                 pushEventObject.toJson(jsonObj);
             }
-//            if(jsonObj.has("event")) {
-//                pushEventObject.toJson((JSONObject) jsonObj.get("event"));
-//            } else {
-//                pushEventObject.toJson(jsonObj);
-//            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -682,18 +677,22 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     }
 
     private void openProfileDrawer(int gravity) {
-        if(gravity==Gravity.RIGHT && gpAct!=null) {
-            gpAct.setSelectedGroup();
-            mManager.getGroupList(this);
+        if(gravity==Gravity.RIGHT || gravity==Gravity.LEFT ) {
+            if (gravity == Gravity.RIGHT && gpAct != null) {
+                gpAct.setSelectedGroup();
+                mManager.getGroupList(this);
+            }
+            this.drawerLayout.openDrawer(gravity);
         }
-        this.drawerLayout.openDrawer(gravity);
     }
 
     private void closeProfileDrawer(int gravity) {
-        if(this.drawerLayout.isDrawerOpen(gravity)) {
-            this.drawerLayout.closeDrawer(gravity);
-            if(gravity==Gravity.RIGHT) {
-                mManager.getGroupList(this);
+        if(gravity==Gravity.RIGHT || gravity==Gravity.LEFT ) {
+            if (this.drawerLayout.isDrawerOpen(gravity)) {
+                this.drawerLayout.closeDrawer(gravity);
+                if (gravity == Gravity.RIGHT) {
+                    mManager.getGroupList(this);
+                }
             }
         }
     }
@@ -889,6 +888,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     public void update(Observable observable, Object data) {
             if (observable instanceof EventListNetwork) {
                 if (data != null) {
+
                     eList = (EventList) data;
                     if (eData != null) {
                         eData.clear();
@@ -933,6 +933,10 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                         closeProfileDrawer(Gravity.RIGHT);
                         mManager.getGroupList(this);
                         //gpAct.setSelectedGroup();
+                    } else if(data instanceof GroupData) {
+                        if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+                            gpAct.updateGrpData(data);
+                        }
                     } else {
                         //setGroupImageUrl();
                         if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {

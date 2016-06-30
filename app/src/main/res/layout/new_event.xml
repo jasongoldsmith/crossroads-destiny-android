@@ -152,7 +152,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/notification_bar"
-        android:layout_above="@+id/create_new_event_activity">
+        android:layout_above="@+id/create_new_event_activity_layout">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -422,7 +422,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/create_new_event_activity">
+            android:layout_above="@+id/create_new_event_activity_layout">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -638,72 +638,24 @@
 
     </ViewFlipper>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:id="@+id/create_new_event_activity"
-        android:background="@color/event_user_image_background"
-        android:text="@string/add_activity"
-        android:fontFamily="sans-serif-medium"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:clickable="false"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"/>
-
-    <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:background="#A8000000"-->
-        <!--android:orientation="vertical"-->
-        <!--android:id="@+id/calendar_layout"-->
-        <!--android:visibility="gone">-->
-        <!--<com.prolificinteractive.materialcalendarview.MaterialCalendarView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:background="@color/trimbe_white"-->
-            <!--android:padding="20dp"-->
-            <!--android:layout_marginTop="94dp"-->
-            <!--android:layout_marginRight="20dp"-->
-            <!--android:layout_marginLeft="20dp"-->
-            <!--android:layout_marginBottom="69dp"-->
-            <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-            <!--app:mcv_showOtherDates="all"-->
-            <!--app:mcv_selectionColor="@color/app_theme_color"-->
-            <!--android:id="@+id/calendar">-->
-        <!--</com.prolificinteractive.materialcalendarview.MaterialCalendarView>-->
-    <!--</RelativeLayout>-->
-
-    <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:background="#A8000000"-->
-        <!--android:orientation="vertical"-->
-        <!--android:id="@+id/time_layout"-->
-        <!--android:visibility="gone">-->
-        <!--<TimePicker-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerInParent="true"-->
-            <!--android:id="@+id/timePicker">-->
-        <!--</TimePicker>-->
-    <!--</RelativeLayout>-->
-
-    <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:background="@drawable/sample_background"-->
-        <!--android:id="@+id/linlaHeaderProgress"-->
-        <!--android:clickable="true"-->
-        <!--android:visibility="gone">-->
-        <!--<ProgressBar-->
-            <!--android:id="@+id/progressBar"-->
-            <!--style="?android:attr/progressBarStyleLarge"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerInParent="true"-->
-            <!--android:indeterminateDrawable="@drawable/progress" />-->
-    <!--</RelativeLayout>-->
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/create_new_event_activity_layout"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/create_new_event_activity"
+            android:background="@color/create_new_event_green"
+            android:text="@string/add_activity"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:clickable="false"
+            android:gravity="center"/>
+    </RelativeLayout>
 
     <include layout="@layout/activity_base" />
 
