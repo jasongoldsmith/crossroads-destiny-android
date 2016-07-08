@@ -24,6 +24,7 @@ import co.crossroadsapp.destiny.network.EventSendMessageNetwork;
 import co.crossroadsapp.destiny.network.ForgotPasswordNetwork;
 import co.crossroadsapp.destiny.network.GetVersion;
 import co.crossroadsapp.destiny.network.GroupListNetwork;
+import co.crossroadsapp.destiny.network.HelmetUpdateNetwork;
 import co.crossroadsapp.destiny.network.LogoutNetwork;
 import co.crossroadsapp.destiny.network.ReportCrashNetwork;
 import co.crossroadsapp.destiny.network.ResendBungieVerification;
@@ -80,6 +81,7 @@ public class ControlManager implements Observer{
     private GroupListNetwork groupListNtwrk;
     private VerifyConsoleIDNetwork verifyConsoleNetwork;
     private EventByIdNetwork eventById;
+    private HelmetUpdateNetwork helmetUpdateNetwork;
 
     public ControlManager() {
     }
@@ -363,10 +365,24 @@ public class ControlManager implements Observer{
         }
     }
 
-    public void postEventById(ListActivityFragment listActivityFragment, RequestParams param) {
+    public void postHelmet(ListActivityFragment act) {
+        try {
+            helmetUpdateNetwork = new HelmetUpdateNetwork(act);
+            helmetUpdateNetwork.addObserver(act);
+            helmetUpdateNetwork.getHelmet();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void postEventById(Activity listActivityFragment, RequestParams param) {
         try {
             eventById = new EventByIdNetwork(listActivityFragment);
-            eventById.addObserver(listActivityFragment);
+            if(listActivityFragment instanceof ListActivityFragment) {
+                eventById.addObserver((ListActivityFragment)listActivityFragment);
+            } else if(listActivityFragment instanceof EventDetailActivity) {
+                eventById.addObserver((EventDetailActivity)listActivityFragment);
+            }
             eventById.getEventById(param);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -561,7 +577,6 @@ public class ControlManager implements Observer{
                 }
             }
         }
-
         return null;
     }
 

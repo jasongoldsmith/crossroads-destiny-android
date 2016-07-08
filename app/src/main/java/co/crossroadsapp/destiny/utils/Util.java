@@ -55,7 +55,7 @@ public class Util {
         return Constants.NETWORK_DEV_BASE_URL;
     }
 
-    public static String getFirebaseUrl(String clanId, int channel) {
+    public static String getFirebaseUrl(String clanId, String eventId, int channel) {
         String url;
         if (network_connection==2) {
             url = Constants.FIREBASE_PROD_URL;
@@ -64,7 +64,11 @@ public class Util {
         }
         if (channel==1) {
             if (clanId != null && (!clanId.equalsIgnoreCase("null"))) {
-                url = url + "events/" + clanId;
+                if (eventId!=null && (!eventId.equalsIgnoreCase("null"))) {
+                    url = url + "events/" + clanId +"/" +eventId;
+                } else {
+                    url = url + "events/" + clanId;
+                }
             }
         } else if(channel==2) {
             if (clanId != null && (!clanId.equalsIgnoreCase("null"))) {

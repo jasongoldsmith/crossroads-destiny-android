@@ -20,6 +20,7 @@ public class EventData {
     private CreatorData creatorData;
     private String launchDate=null;
     private String launchStatus=null;
+    private String clanId=null;
     //private PlayerData playerData;
 
     public EventData () {
@@ -94,6 +95,14 @@ public class EventData {
         return this.activityData;
     }
 
+    public void setClanId(String cId) {
+        clanId = cId;
+    }
+
+    public String getClanId() {
+        return this.clanId;
+    }
+
     public void setPlayerData(PlayerData pData) {
         if (playerDataList != null) {
             playerDataList.add(pData);
@@ -114,6 +123,10 @@ public class EventData {
                 if (json.has("status")) {
                     String status = json.getString("status");
                     setEventStatus(status);
+                }
+                if(json.has("clanId")) {
+                    String clId = json.getString("clanId");
+                    setClanId(clId);
                 }
                     if (json.has("minPlayers")) {
                         int minPlayers = json.getInt("minPlayers");

@@ -26,12 +26,18 @@ import co.crossroadsapp.destiny.data.CurrentEventDataHolder;
 import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.PlayerData;
 import co.crossroadsapp.destiny.data.UserData;
+import co.crossroadsapp.destiny.network.EventByIdNetwork;
 import co.crossroadsapp.destiny.network.EventRelationshipHandlerNetwork;
 import co.crossroadsapp.destiny.network.EventSendMessageNetwork;
 import co.crossroadsapp.destiny.utils.CircularImageView;
 import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import co.crossroadsapp.destiny.R;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
@@ -82,6 +88,8 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private TextView eventCheckpoint;
     private TextView mCharacter;
     private RelativeLayout bottomBtnLayout;
+    private ValueEventListener listener;
+    private Firebase refFirebase;
 //    private TextView errText;
 //    private ImageView close_err;
 
@@ -125,6 +133,8 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         eventLight = (TextView) findViewById(R.id.activity_aLight_detail);
         back = (ImageView) findViewById(R.id.eventdetail_backbtn);
         eventDetailDate = (TextView) findViewById(R.id.eventDetailDate);
+
+        //Firebase.setAndroidContext(this);
 
 //        errLayout = (RelativeLayout) findViewById(R.id.error_layout);
 //        errText = (TextView) findViewById(R.id.error_sub);
@@ -263,6 +273,8 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             }
         });
 
+        registerFirbase();
+
     }
 
     private final TextWatcher mTextEditorWatcher = new TextWatcher() {
@@ -288,6 +300,53 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     public void onStop() {
         super.onStop();
         unregisterReceiver(ReceivefromService);
+        unregisterFirebase();
+    }
+
+    private void registerFirbase() {
+        setupEventListener();
+        if(controlManager!=null) {
+            if(controlManager.getUserData()!=null) {
+                this.user = controlManager.getUserData();
+            }
+        }
+        if(user!=null && user.getClanId()!=null) {
+            if(currEvent!=null && currEvent.getEventId()!=null && currEvent.getClanId()!=null) {
+                refFirebase = new Firebase(Util.getFirebaseUrl(currEvent.getClanId(), currEvent.getEventId(), Constants.EVENT_CHANNEL));
+                if (listener != null) {
+                    refFirebase.addValueEventListener(listener);
+                }
+            }
+        }
+    }
+
+    private void setupEventListener() {
+        listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if(snapshot.exists()) {
+                            if(currEvent!=null && currEvent.getEventId()!=null) {
+                                String id = currEvent.getEventId();
+                                RequestParams param = new RequestParams();
+                                param.add("id", id);
+                                controlManager.postEventById(EventDetailActivity.this, param);
+                            }
+                } else {
+                    launchListActivityAndFinish();
+                }
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        };
+    }
+
+    private void unregisterFirebase() {
+        if(listener!=null) {
+            refFirebase.removeEventListener(listener);
+            //refFirebase.removeValue();
+        }
     }
 
     private BroadcastReceiver ReceivefromService = new BroadcastReceiver() {
@@ -400,7 +459,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     @Override
     public void update(Observable observable, Object data) {
             hideProgress();
-            if (observable instanceof EventRelationshipHandlerNetwork) {
+            if (observable instanceof EventRelationshipHandlerNetwork || observable instanceof EventByIdNetwork) {
                 this.currEvent = (EventData) data;
                 if (currEvent != null) {
                     if ((currEvent.getPlayerData() != null) && (currEvent.getPlayerData().size()>0)) {
@@ -412,7 +471,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                         setPlayerNames();
                         setBottomButtonSelection();
                     } else {
-                        finish();
+                        launchListActivityAndFinish();
                     }
                 }
             } else if (observable instanceof EventSendMessageNetwork) {
@@ -504,7 +563,8 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             if(playerLocal!=null) {
                 if (position >= playerLocal.size() && getMaxPlayer() > playerLocal.size() ) {
                     holder.playerName.setText("searching...");
-                    //holder.playerProfile.setBackground(getResources().getDrawable(R.drawable.img_profile_blank));
+                    holder.message.setVisibility(View.GONE);
+                    holder.playerProfile.setImageResource(R.drawable.img_profile_blank);
                 } else {
                     if (playerLocal.get(position) != null) {
                         if (playerLocal.get(position).getPlayerId() != null) {
@@ -512,7 +572,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                         }
                         if (playerLocal.get(position).getPlayerImageUrl() != null) {
                             Util.picassoLoadIcon(EventDetailActivity.this, holder.playerProfile, playerLocal.get(position).getPlayerImageUrl(),
-                                    R.dimen.eventdetail_player_profile_hgt, R.dimen.eventdetail_player_profile_width, R.drawable.avatar36);
+                                    R.dimen.eventdetail_player_profile_hgt, R.dimen.eventdetail_player_profile_width, R.drawable.img_profile_blank);
                         }
                         if (playerLocal.get(position).getPsnId() != null) {
                             holder.playerName.setText(playerLocal.get(position).getPsnId());
@@ -551,6 +611,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                                 }
                             }
                         });
+                        holder.playerProfile.invalidate();
                     }
                 }
             }
@@ -622,13 +683,21 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 //        }
     }
 
+    private void launchListActivityAndFinish() {
+        Intent i=new Intent (this, ListActivityFragment.class);
+        i.putExtra("userdata", user);
+        startActivity(i);
+        currEvent = null;
+        finish();
+    }
+
     @Override
     public void onBackPressed() {
         if(sendmsg_bckgrnd.getVisibility()==View.VISIBLE){
             sendmsg_bckgrnd.setVisibility(View.GONE);
             hideKeyboard();
         } else {
-            super.onBackPressed();
+            launchListActivityAndFinish();
         }
     }
 }
