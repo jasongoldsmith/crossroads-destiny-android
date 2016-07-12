@@ -571,7 +571,6 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     private void unregisterFirebase() {
         if(listener!=null) {
             refFirebase.removeEventListener(listener);
-            //refFirebase.removeValue();
         }
     }
 
@@ -589,7 +588,6 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         if(userListener!=null) {
             if(refUFirebase!=null) {
                 refUFirebase.removeEventListener(userListener);
-                //refUFirebase.removeValue();
             }
         }
     }
@@ -996,8 +994,10 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                 finish();
             } else if(observable instanceof HelmetUpdateNetwork) {
                 findViewById(R.id.loadingImg).setVisibility(View.GONE);
-                updateUserProfileImage(data.toString());
-                mManager.getEventList(this);
+                if(data!=null) {
+                    updateUserProfileImage(data.toString());
+                    mManager.getEventList(this);
+                }
             }
     }
 

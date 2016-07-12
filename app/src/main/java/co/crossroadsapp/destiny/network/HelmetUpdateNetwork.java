@@ -3,7 +3,6 @@ package co.crossroadsapp.destiny.network;
 import android.content.Context;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;

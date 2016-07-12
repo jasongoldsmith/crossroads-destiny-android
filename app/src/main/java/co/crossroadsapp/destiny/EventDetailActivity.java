@@ -134,25 +134,12 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         back = (ImageView) findViewById(R.id.eventdetail_backbtn);
         eventDetailDate = (TextView) findViewById(R.id.eventDetailDate);
 
-        //Firebase.setAndroidContext(this);
-
-//        errLayout = (RelativeLayout) findViewById(R.id.error_layout);
-//        errText = (TextView) findViewById(R.id.error_sub);
-//        close_err = (ImageView) findViewById(R.id.err_close);
-//
-//        close_err.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                errLayout.setVisibility(View.GONE);
-//            }
-//        });
-
         sendmsg_bckgrnd = (RelativeLayout) findViewById(R.id.sendmsg_background);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
             }
         });
 
@@ -345,7 +332,6 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private void unregisterFirebase() {
         if(listener!=null) {
             refFirebase.removeEventListener(listener);
-            //refFirebase.removeValue();
         }
     }
 

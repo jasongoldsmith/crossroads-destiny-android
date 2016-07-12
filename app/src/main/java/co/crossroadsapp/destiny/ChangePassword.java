@@ -1,8 +1,10 @@
 package co.crossroadsapp.destiny;
 
 import android.app.ProgressDialog;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -49,6 +51,12 @@ public class ChangePassword extends BaseActivity implements Observer {
 
         oldPswrd = (EditText) findViewById(R.id.pswrd_edit);
         newPswrd = (EditText) findViewById(R.id.pswrd_edit_new);
+
+        //hint configuration
+        oldPswrd.setTypeface(Typeface.DEFAULT);
+        oldPswrd.setTransformationMethod(new PasswordTransformationMethod());
+        newPswrd.setTypeface(Typeface.DEFAULT);
+        newPswrd.setTransformationMethod(new PasswordTransformationMethod());
 
         newPswrd.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

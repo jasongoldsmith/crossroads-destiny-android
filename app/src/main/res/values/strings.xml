@@ -18,7 +18,7 @@
     <string name="join_event">JOIN ACTIVITY</string>
     <string name="message_all">MESSAGE ALL</string>
 
-    <string name="logout">Logout</string>
+    <string name="logout">Log Out</string>
     <string name="logout_popup_msg">Are you sure you want to log out?</string>
     <string name="report_crash">Contact Us</string>
 

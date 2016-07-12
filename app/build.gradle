@@ -13,37 +13,48 @@ android {
         applicationId  = theApplicationId
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 27
-        versionName "1.0.4"
+        versionCode 30
+        versionName "1.0.4(8)"
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            applicationVariants.all { variant ->
-                variant.outputs.each { output ->
-                    String formattedString = "crossroads";
-                    output.outputFile = new File(output.outputFile.parent, output.outputFile.name.replace("app-dev-release", formattedString))
-                }
-            }
+//            applicationVariants.all { variant ->
+//                variant.outputs.each { output ->
+//                    String formattedString = "crossroads";
+//                    output.outputFile = new File(output.outputFile.parent, output.outputFile.name.replace("app-dev-release", formattedString))
+//                }
+//            }
         }
         debug {
-            applicationIdSuffix ".debug"
-            applicationVariants.all { variant ->
-                variant.outputs.each { output ->
-                    String formattedString = "crossroads_dev";
-                    output.outputFile = new File(output.outputFile.parent, output.outputFile.name.replace("app-debug", formattedString))
-                }
-            }
+//            applicationVariants.all { variant ->
+//                variant.outputs.each { output ->
+//                    String formattedString = "dev_csrd";
+//                    output.outputFile = new File(output.outputFile.parent, output.outputFile.name.replace("app-dev-debug", formattedString))
+//                }
+//            }
         }
     }
 
     productFlavors {
-        dev {
+        rel {
             applicationId = theApplicationId
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    String formattedString = "crossroads";
+                    output.outputFile = new File(output.outputFile.parent, output.outputFile.name.replace("app-rel-release", formattedString))
+                }
+            }
         }
-        dev2 {
-            applicationId = theApplicationId + ".dev" + debugsuffix
+        dev {
+            applicationId = 'dev.crossroadsapp.destiny'
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    String formattedString = "dev_csrd";
+                    output.outputFile = new File(output.outputFile.parent, output.outputFile.name.replace("app-dev-release", formattedString))
+                }
+            }
         }
     }
 }
@@ -57,10 +68,14 @@ dependencies {
     compile 'com.android.support:design:23.0.1'
     compile 'com.android.support:cardview-v7:21.+'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.google.android.gms:play-services-gcm:7.5.0'
+    compile 'com.google.android.gms:play-services-gcm:9.0.0'
     compile 'com.android.support:support-v13:21.0.3'
     compile 'com.parse.bolts:bolts-android:1+'
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.android.support:design:23.1.0'
     compile 'com.prolificinteractive:material-calendarview:1.2.0'
+//    compile 'com.google.firebase:firebase-database:9.2.0'
+//    compile 'com.google.firebase:firebase-invites:9.2.0'
 }
+
+//apply plugin: 'com.google.gms.google-services'
