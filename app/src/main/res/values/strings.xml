@@ -44,7 +44,7 @@
     <string name="title_activity_base">BaseActivity</string>
 
     <string name="feedback_text">Need help with something? Want to send us feedback? Let us know!</string>
-    <string name="forgotlogin_text">Forgot your password? We will send instructions to your Bungie account with how to reset it.</string>
+    <string name="forgotlogin_text">Forgot your login? We will send instructions to your Bungie account with how to reset it.</string>
     <string name="verify_accnt_toptext">Welcome !</string>
     <string name="verify_accnt_bottomtext">Welcome to Crossroads, Destiny Fireteam Finder! Check your <![CDATA[<a href="http://www.bungie.net">Bungie.net</a>]]> inbox for a verification message. It will also appear in your Destiny companion app. </string>
     <string name="verify_accnt_bottomtext_xbox">Welcome to Crossroads, Destiny Fireteam Finder! Check your <![CDATA[<a href="http://www.bungie.net">Bungie.net</a>]]> inbox for a verification message. It will also appear in your Destiny companion app. </string>

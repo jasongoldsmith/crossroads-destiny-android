@@ -132,7 +132,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/forgot_login"
-        android:text="Forgot password?"
+        android:text="Forgot Login?"
         android:textSize="14sp"
         android:paddingTop="10dp"
         android:paddingRight="20dp"
