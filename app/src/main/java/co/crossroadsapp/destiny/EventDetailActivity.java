@@ -31,8 +31,13 @@ import co.crossroadsapp.destiny.network.EventRelationshipHandlerNetwork;
 import co.crossroadsapp.destiny.network.EventSendMessageNetwork;
 import co.crossroadsapp.destiny.utils.CircularImageView;
 import co.crossroadsapp.destiny.utils.Constants;
+import co.crossroadsapp.destiny.utils.TravellerLog;
 import co.crossroadsapp.destiny.utils.Util;
 import co.crossroadsapp.destiny.R;
+import io.branch.indexing.BranchUniversalObject;
+import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
+import io.branch.referral.util.LinkProperties;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -90,6 +95,8 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private RelativeLayout bottomBtnLayout;
     private ValueEventListener listener;
     private Firebase refFirebase;
+    private ImageView share;
+    private BranchUniversalObject branchUniversalObject;
 //    private TextView errText;
 //    private ImageView close_err;
 
@@ -100,6 +107,21 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         Bundle b = getIntent().getExtras();
         user = b.getParcelable("userdata");
+
+        // Create a BranchUniversal object for the content referred on this activity instance
+        branchUniversalObject = new BranchUniversalObject()
+                .setCanonicalIdentifier("item/12345")
+                .setCanonicalUrl("https://branch.io/deepviews")
+                .setTitle("My Content Title")
+                .setContentDescription("My Content Description ")
+                .setContentImageUrl("http://s9.postimg.org/n92phj9tr/image1.jpg")
+                .setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC)
+                .setContentType("application/vnd.businessobjects")
+                //.setContentExpiration(new Date(1476566432000L)) // set contents expiration time if applicable
+                .addKeyWord("My_Keyword1")
+                .addKeyWord("My_Keyword2")
+                .addContentMetadata("Metadata_Key1", "Metadata_value1")
+                .addContentMetadata("Metadata_Key2", "Metadata_value2");
 
         joinBtn = (TextView) findViewById(R.id.join_btn);
         leaveBtn = (TextView) findViewById(R.id.leave_btn);
@@ -132,6 +154,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         eventSubNameLF = (TextView) findViewById(R.id.activity_player_name_lf_detail);
         eventLight = (TextView) findViewById(R.id.activity_aLight_detail);
         back = (ImageView) findViewById(R.id.eventdetail_backbtn);
+        share = (ImageView) findViewById(R.id.eventdetail_sharebtn);
         eventDetailDate = (TextView) findViewById(R.id.eventDetailDate);
 
         sendmsg_bckgrnd = (RelativeLayout) findViewById(R.id.sendmsg_background);
@@ -140,6 +163,13 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareIt();
             }
         });
 
@@ -262,6 +292,55 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         registerFirbase();
 
+    }
+
+    private void shareIt() {
+//        //deeplink creation
+//        BranchUniversalObject branchUniversalObject = new BranchUniversalObject()
+//
+//                // The identifier is what Branch will use to de-dupe the content across many different Universal Objects
+//                .setCanonicalIdentifier("item/12345")
+//
+//                // The canonical URL for SEO purposes (optional)
+//                .setCanonicalUrl("https://branch.io/deepviews")
+//
+//                // This is where you define the open graph structure and how the object will appear on Facebook or in a deepview
+//                .setTitle("My Content Title")
+//                .setContentDescription("My Content Description")
+//
+//                // You use this to specify whether this content can be discovered publicly - default is public
+//                .setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC)
+//
+//                // Here is where you can add custom keys/values to the deep link data
+//                .addContentMetadata("property1", "blue")
+//                .addContentMetadata("property2", "red");
+
+        LinkProperties linkProperties = new LinkProperties()
+                .addTag("Tag1")
+                .setChannel("Sharing_Channel_name")
+                .setFeature("my_feature_name")
+                .addControlParameter("$android_url", "https://android.com")
+                .addControlParameter("$ios_url", "http://example.com/ios")
+                .setDuration(100);
+
+//        String urlString = null;
+        branchUniversalObject.generateShortUrl(this, linkProperties, new Branch.BranchLinkCreateListener() {
+            @Override
+            public void onLinkCreate(String url, BranchError error) {
+                if (error == null) {
+                    TravellerLog.i("MyApp", "got my Branch link to share: " + url);
+                    final Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                    sharingIntent.setType("text/plain");
+                    if(url!=null) {
+                        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, url);
+                        startActivity(Intent.createChooser(sharingIntent, "Share"));
+                    }
+                }
+            }
+        });
+//        urlString = branchUniversalObject.getShortUrl(EventDetailActivity.this, linkProperties);
+//        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, urlString);
+//        startActivity(Intent.createChooser(sharingIntent, "Share"));
     }
 
     private final TextWatcher mTextEditorWatcher = new TextWatcher() {

@@ -77,6 +77,16 @@
             android:paddingBottom="20dp"
             android:paddingRight="20dp"
             android:layout_alignParentLeft="true"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/eventdetail_sharebtn"
+            android:src="@drawable/icon_share"
+            android:paddingTop="9dp"
+            android:paddingBottom="20dp"
+            android:paddingRight="11dp"
+            android:paddingLeft="20dp"
+            android:layout_alignParentRight="true"/>
         <co.crossroadsapp.destiny.utils.CircularImageView
             android:layout_width="@dimen/player_profile_width"
             android:layout_height="@dimen/player_profile_hgt"

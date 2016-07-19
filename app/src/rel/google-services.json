@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "840583899707",
+    "firebase_url": "https://crossroadsapp-live.firebaseio.com",
+    "project_id": "crossroadsapp-live",
+    "storage_bucket": "crossroadsapp-live.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:840583899707:android:93fb747d996d5525",
+        "android_client_info": {
+          "package_name": "co.crossroadsapp.destiny"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "840583899707-ku6np9kebs7mvrs5hvh9mmtelg860djp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7urpi0m5qC_D5sGwruQK_w_dJObDdjII"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
