@@ -72,7 +72,7 @@ import java.util.Observer;
 /**
  * Created by sharmha on 4/8/16.
  */
-public class ListActivityFragment extends AppCompatActivity implements Observer {
+public class ListActivityFragment extends BaseActivity implements Observer {
 
     UserData user;
     ControlManager mManager;
@@ -428,6 +428,8 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         checkClanSet();
 
         //setGroupImageUrl();
+
+        showNotifications(this);
 
     }
 
