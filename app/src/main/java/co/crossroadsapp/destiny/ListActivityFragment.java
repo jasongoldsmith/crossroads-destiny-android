@@ -40,6 +40,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -123,6 +124,7 @@ public class ListActivityFragment extends BaseActivity implements Observer {
     private TextView privacy;
     private TextView license;
     private TextView sendMsgAgain;
+    private FrameLayout notiBarL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -260,6 +262,7 @@ public class ListActivityFragment extends BaseActivity implements Observer {
         });
 
         notiBar = (RelativeLayout) findViewById(R.id.notification_bar);
+        notiBarL = (FrameLayout) findViewById(R.id.notification_bar_layout);
         notiEventText = (TextView) findViewById(R.id.noti_text);
         notiTopText = (TextView) findViewById(R.id.noti_toptext);
         notiMessage = (TextView) findViewById(R.id.noti_subtext);
@@ -431,6 +434,13 @@ public class ListActivityFragment extends BaseActivity implements Observer {
 
         showNotifications(this);
 
+    }
+
+    @Override
+    public void removeNotifyLayout() {
+        if (notiBarL!=null) {
+            notiBarL.setVisibility(View.GONE);
+        }
     }
 
     private void showLogoutDialog() {

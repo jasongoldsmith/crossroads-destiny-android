@@ -70,6 +70,4 @@
             android:indeterminateDrawable="@drawable/progress" />
     </RelativeLayout>
 
-    <include layout="@layout/base_notification"/>
-
 </RelativeLayout>
