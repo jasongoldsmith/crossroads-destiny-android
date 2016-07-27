@@ -261,19 +261,19 @@ public class ListActivityFragment extends BaseActivity implements Observer {
             }
         });
 
-        notiBar = (RelativeLayout) findViewById(R.id.notification_bar);
-        notiBarL = (FrameLayout) findViewById(R.id.notification_bar_layout);
-        notiEventText = (TextView) findViewById(R.id.noti_text);
-        notiTopText = (TextView) findViewById(R.id.noti_toptext);
-        notiMessage = (TextView) findViewById(R.id.noti_subtext);
-        notiMessage.setMovementMethod(new ScrollingMovementMethod());
-        notif_close = (ImageView) findViewById(R.id.noti_close);
-        notif_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                notiBar.setVisibility(View.GONE);
-            }
-        });
+//        notiBar = (RelativeLayout) findViewById(R.id.notification_bar);
+//        notiBarL = (FrameLayout) findViewById(R.id.notification_bar_layout);
+//        notiEventText = (TextView) findViewById(R.id.noti_text);
+//        notiTopText = (TextView) findViewById(R.id.noti_toptext);
+//        notiMessage = (TextView) findViewById(R.id.noti_subtext);
+//        notiMessage.setMovementMethod(new ScrollingMovementMethod());
+//        notif_close = (ImageView) findViewById(R.id.noti_close);
+//        notif_close.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                notiBar.setVisibility(View.GONE);
+//            }
+//        });
 
         errLayout = (RelativeLayout) findViewById(R.id.error_layout);
         errText = (TextView) findViewById(R.id.error_sub);
@@ -497,6 +497,19 @@ public class ListActivityFragment extends BaseActivity implements Observer {
         }
     }
 
+    @Override
+    protected void goToDetail(String id) {
+        if (id!=null) {
+            if(mManager!=null) {
+                if((id!=null) && (!id.equalsIgnoreCase("null"))) {
+                        RequestParams param = new RequestParams();
+                        param.add("id", id);
+                        mManager.postEventById(this, param);
+                }
+            }
+        }
+    }
+
     private void checkClanSet() {
         if (user != null) {
             if(user.getPsnVerify()!=null) {
@@ -662,17 +675,22 @@ public class ListActivityFragment extends BaseActivity implements Observer {
     }
 
     private void launchPushEventDetail() {
-        if(pushEventObject!=null) {
-            if (pushEventObject.getActivityData() != null) {
-                if (pushEventObject.getActivityData().getActivitySubtype() != null) {
+        startEventDetail(pushEventObject);
+    }
+
+    private void startEventDetail(EventData eData) {
+        if (eData!=null) {
+            if (eData.getActivityData() != null) {
+                if (eData.getActivityData().getActivitySubtype() != null) {
                     CurrentEventDataHolder ins = CurrentEventDataHolder.getInstance();
-                    ins.setData(pushEventObject);
+                    ins.setData(eData);
                     //launch eventdetailactivity
                     //start new activity for event
                     Intent regIntent = new Intent(this,
                             EventDetailActivity.class);
                     regIntent.putExtra("userdata", user);
                     startActivity(regIntent);
+                    finish();
                 }
             }
         }
@@ -784,31 +802,31 @@ public class ListActivityFragment extends BaseActivity implements Observer {
     private BroadcastReceiver ReceivefromService = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (mManager.getCurrentActivity() == ListActivityFragment.this) {
-                String subtype = intent.getStringExtra("subtype");
-                boolean playerMsg = intent.getBooleanExtra("playerMessage", false);
-                String msg = intent.getStringExtra("message");
-                notiEventText.setText(subtype);
-                if (playerMsg) {
-                    notiTopText.setText("FIRETEAM MESSAGE");
-                    notiMessage.setVisibility(View.VISIBLE);
-                    notiMessage.setText(msg);
-                } else {
-                    notiEventText.setText(msg);
-                    notiTopText.setText(subtype.toUpperCase());
-                    notiMessage.setVisibility(View.GONE);
-                    mManager.getEventList(ListActivityFragment.this);
-                }
-                notiBar.setVisibility(View.VISIBLE);
-                //put timer to make the notification message gone after 5 seconds
-//                notiBar.postDelayed(new Runnable() {
-//                    public void run() {
-//                        if(notiBar!=null) {
-//                            notiBar.setVisibility(View.GONE);
-//                        }
-//                    }
-//                }, 7000);
-            }
+//            if (mManager.getCurrentActivity() == ListActivityFragment.this) {
+//                String subtype = intent.getStringExtra("subtype");
+//                boolean playerMsg = intent.getBooleanExtra("playerMessage", false);
+//                String msg = intent.getStringExtra("message");
+//                notiEventText.setText(subtype);
+//                if (playerMsg) {
+//                    notiTopText.setText("FIRETEAM MESSAGE");
+//                    notiMessage.setVisibility(View.VISIBLE);
+//                    notiMessage.setText(msg);
+//                } else {
+//                    notiEventText.setText(msg);
+//                    notiTopText.setText(subtype.toUpperCase());
+//                    notiMessage.setVisibility(View.GONE);
+//                    mManager.getEventList(ListActivityFragment.this);
+//                }
+//                notiBar.setVisibility(View.VISIBLE);
+//                //put timer to make the notification message gone after 5 seconds
+////                notiBar.postDelayed(new Runnable() {
+////                    public void run() {
+////                        if(notiBar!=null) {
+////                            notiBar.setVisibility(View.GONE);
+////                        }
+////                    }
+////                }, 7000);
+//            }
         }
     };
 
@@ -962,10 +980,14 @@ public class ListActivityFragment extends BaseActivity implements Observer {
                         Toast.LENGTH_LONG).show();
             } else if(observable instanceof EventByIdNetwork) {
                 if(data!=null) {
-                    pushEventObject = new EventData();
-                    pushEventObject = (EventData) data;
-                    launchPushEventDetail();
-                    pushEventObject = null;
+                    if(pushEventObject!=null) {
+                        pushEventObject = new EventData();
+                        pushEventObject = (EventData) data;
+                        launchPushEventDetail();
+                        pushEventObject = null;
+                    } else {
+                        startEventDetail((EventData) data);
+                    }
                 }
             } else if(observable instanceof LogoutNetwork) {
                 Intent regIntent = new Intent(getApplicationContext(),

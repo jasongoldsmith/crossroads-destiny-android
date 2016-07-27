@@ -142,7 +142,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                launchListActivityAndFinish();
             }
         });
 
@@ -153,19 +153,19 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         sendBtn = (ImageView) findViewById(R.id.send_btn);
 
-        notiBar = (RelativeLayout) findViewById(R.id.notification_bar);
-        notiEventText = (TextView) findViewById(R.id.noti_text);
-
-        notiTopText = (TextView) findViewById(R.id.noti_toptext);
-        notiMessage = (TextView) findViewById(R.id.noti_subtext);
-        notiMessage.setMovementMethod(new ScrollingMovementMethod());
-        notif_close = (ImageView) findViewById(R.id.noti_close);
-        notif_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                notiBar.setVisibility(View.GONE);
-            }
-        });
+//        notiBar = (RelativeLayout) findViewById(R.id.notification_bar);
+//        notiEventText = (TextView) findViewById(R.id.noti_text);
+//
+//        notiTopText = (TextView) findViewById(R.id.noti_toptext);
+//        notiMessage = (TextView) findViewById(R.id.noti_subtext);
+//        notiMessage.setMovementMethod(new ScrollingMovementMethod());
+//        notif_close = (ImageView) findViewById(R.id.noti_close);
+//        notif_close.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                notiBar.setVisibility(View.GONE);
+//            }
+//        });
 
         if(currEvent.getActivityData().getActivityIconUrl()!=null) {
             Util.picassoLoadIcon(EventDetailActivity.this, eventProfileImg, currEvent.getActivityData().getActivityIconUrl(), R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.icon_ghost_default);
@@ -263,6 +263,8 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             }
         });
 
+        showNotifications(this);
+
     }
 
     private final TextWatcher mTextEditorWatcher = new TextWatcher() {
@@ -293,21 +295,21 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private BroadcastReceiver ReceivefromService = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String subtype = intent.getStringExtra("subtype");
-            boolean playerMsg = intent.getBooleanExtra("playerMessage", false);
-            String msg = intent.getStringExtra("message");
-            notiEventText.setText(subtype);
-            if(playerMsg){
-                notiTopText.setText("FIRETEAM MESSAGE");
-                notiMessage.setVisibility(View.VISIBLE);
-                notiMessage.setText(msg);
-            }else {
-                notiEventText.setText("Your Fireteam is ready!");
-                notiTopText.setText(subtype);
-                notiMessage.setVisibility(View.GONE);
-                //mManager.getEventList(ListActivityFragment.this);
-            }
-            notiBar.setVisibility(View.VISIBLE);
+//            String subtype = intent.getStringExtra("subtype");
+//            boolean playerMsg = intent.getBooleanExtra("playerMessage", false);
+//            String msg = intent.getStringExtra("message");
+//            notiEventText.setText(subtype);
+//            if(playerMsg){
+//                notiTopText.setText("FIRETEAM MESSAGE");
+//                notiMessage.setVisibility(View.VISIBLE);
+//                notiMessage.setText(msg);
+//            }else {
+//                notiEventText.setText("Your Fireteam is ready!");
+//                notiTopText.setText(subtype);
+//                notiMessage.setVisibility(View.GONE);
+//                //mManager.getEventList(ListActivityFragment.this);
+//            }
+//            notiBar.setVisibility(View.VISIBLE);
         }
     };
 
@@ -431,6 +433,15 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         sendmsg_bckgrnd.setVisibility(View.GONE);
         hideKeyboard();
     }
+
+    private void launchListActivityAndFinish() {
+        Intent i=new Intent (this, ListActivityFragment.class);
+        i.putExtra("userdata", user);
+        startActivity(i);
+        currEvent = null;
+        finish();
+    }
+
 
     private boolean checkUserIsPlayer(){
         if(this.currEvent.getPlayerData()!=null) {
@@ -628,7 +639,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             sendmsg_bckgrnd.setVisibility(View.GONE);
             hideKeyboard();
         } else {
-            super.onBackPressed();
+            launchListActivityAndFinish();
         }
     }
 }

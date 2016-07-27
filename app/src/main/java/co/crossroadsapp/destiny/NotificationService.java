@@ -52,6 +52,20 @@ public class NotificationService extends Service {
                     }
             }
 
+            if(jsonObj.has("eventId")) {
+                String eId = (String) jsonObj.get("eventId");
+                if (!eId.equalsIgnoreCase(null)) {
+                    in.putExtra("eventId", eId);
+                }
+            }
+
+            if(jsonObj.has("eventUpdated")) {
+                String eUpdated = (String) jsonObj.get("eventUpdated");
+                if (!eUpdated.equalsIgnoreCase(null)) {
+                    in.putExtra("eventUpdated", eUpdated);
+                }
+            }
+
 //            if(jsonObj.has("event")) {
 //                ed.toJson((JSONObject) jsonObj.get("event"));
 //            } else {

@@ -145,7 +145,7 @@ public class MainActivity extends BaseActivity implements Observer {
     };
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         TravellerLog.w(this, "Unregistering ReceivefromBackpressService ");
         unregisterReceiver(ReceivefromBackpressService);

@@ -245,19 +245,19 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
 
         mCheckpointRecycler.setAdapter(mCheckpointAdapter);
 
-        notiBar = (RelativeLayout) findViewById(R.id.notification_bar);
-        notiEventText = (TextView) findViewById(R.id.noti_text);
-
-        notiTopText = (TextView) findViewById(R.id.noti_toptext);
-        notiMessage = (TextView) findViewById(R.id.noti_subtext);
-        notiMessage.setMovementMethod(new ScrollingMovementMethod());
-        notif_close = (ImageView) findViewById(R.id.noti_close);
-        notif_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                notiBar.setVisibility(View.GONE);
-            }
-        });
+//        notiBar = (RelativeLayout) findViewById(R.id.notification_bar);
+//        notiEventText = (TextView) findViewById(R.id.noti_text);
+//
+//        notiTopText = (TextView) findViewById(R.id.noti_toptext);
+//        notiMessage = (TextView) findViewById(R.id.noti_subtext);
+//        notiMessage.setMovementMethod(new ScrollingMovementMethod());
+//        notif_close = (ImageView) findViewById(R.id.noti_close);
+//        notif_close.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                notiBar.setVisibility(View.GONE);
+//            }
+//        });
 
         vf = (ViewFlipper) findViewById( R.id.viewFlipper );
 
@@ -630,21 +630,21 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
     private BroadcastReceiver ReceivefromService = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String subtype = intent.getStringExtra("subtype");
-            boolean playerMsg = intent.getBooleanExtra("playerMessage", false);
-            String msg = intent.getStringExtra("message");
-            notiEventText.setText(subtype);
-            if(playerMsg){
-                notiTopText.setText("FIRETEAM MESSAGE");
-                notiMessage.setVisibility(View.VISIBLE);
-                notiMessage.setText(msg);
-            }else {
-                notiEventText.setText(msg);
-                notiTopText.setText(subtype);
-                notiMessage.setVisibility(View.GONE);
-                //mManager.getEventList(ListActivityFragment.this);
-            }
-            notiBar.setVisibility(View.VISIBLE);
+//            String subtype = intent.getStringExtra("subtype");
+//            boolean playerMsg = intent.getBooleanExtra("playerMessage", false);
+//            String msg = intent.getStringExtra("message");
+//            notiEventText.setText(subtype);
+//            if(playerMsg){
+//                notiTopText.setText("FIRETEAM MESSAGE");
+//                notiMessage.setVisibility(View.VISIBLE);
+//                notiMessage.setText(msg);
+//            }else {
+//                notiEventText.setText(msg);
+//                notiTopText.setText(subtype);
+//                notiMessage.setVisibility(View.GONE);
+//                //mManager.getEventList(ListActivityFragment.this);
+//            }
+//            notiBar.setVisibility(View.VISIBLE);
             //put timer to make the notification message gone after 5 seconds
 //            notiBar.postDelayed(new Runnable() {
 //                public void run() {

@@ -12,7 +12,7 @@
         android:id="@+id/event"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="3dp"
         conversation:cardBackgroundColor="@android:color/transparent"
         app:border="true"
         app:borderColor="#979797"

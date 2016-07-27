@@ -1,9 +1,15 @@
 package co.crossroadsapp.destiny;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -13,25 +19,37 @@ import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.daprlabs.cardstack.SwipeDeck;
-import com.daprlabs.cardstack.SwipeFrameLayout;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import co.crossroadsapp.destiny.R;
+import co.crossroadsapp.destiny.data.EventData;
+import co.crossroadsapp.destiny.data.PushNotification;
 import co.crossroadsapp.destiny.utils.Util;
-import link.fls.swipestack.SwipeStack;
 
 public class BaseActivity extends FragmentActivity {
 
     protected RelativeLayout errLayout;
     protected TextView errText;
     private RelativeLayout progress;
+    private ControlManager mManager = ControlManager.getmInstance();
+    private static ArrayList<PushNotification> notiList;
+    private ArrayList<PushNotification> eventNotiList=new ArrayList<PushNotification>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        registerReceiver(ReceivefromService, new IntentFilter("subtype_flag"));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        unregisterReceiver(ReceivefromService);
     }
 
     protected void setErrText(String errorText) {
@@ -70,10 +88,10 @@ public class BaseActivity extends FragmentActivity {
 
     public class SwipeStackAdapter extends BaseAdapter {
 
-        private List<String> data;
+        private ArrayList<PushNotification> data;
         private Context context;
 
-        public SwipeStackAdapter(List<String> data, Context context) {
+        public SwipeStackAdapter(ArrayList<PushNotification> data, Context context) {
             this.data = data;
             this.context = context;
         }
@@ -98,86 +116,205 @@ public class BaseActivity extends FragmentActivity {
 
             View v = convertView;
             if(v == null) {
-                Display display = getWindowManager().getDefaultDisplay();
+//                Display display = getWindowManager().getDefaultDisplay();
                 LayoutInflater inflater = getLayoutInflater();
                 // normally use a viewholder
                 v = inflater.inflate(R.layout.base_notification_card, null);
-                ((TextView) v.findViewById(R.id.noti_toptext)).setText(data.get(position));
+                if(data!=null && data.get(position)!=null) {
+                    final String id = data.get(position).geteId();
+                    String name = data.get(position).geteName();
+                    String msg = data.get(position).getMessage();
+                    boolean typeM = data.get(position).getTypeMessage();
 
-                v.measure(display.getWidth(), display.getHeight());
-
-                v.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String item = (String) getItem(position);
-                        Log.i("BaseActivity", item);
+                    CardView card = (CardView) v.findViewById(R.id.base_test_card);
+                    card.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (id != null) {
+                                goToDetail(id);
+                            }
+                        }
+                    });
+                    TextView notiEventText = (TextView) v.findViewById(R.id.noti_text);
+                    TextView notiTopText = (TextView) v.findViewById(R.id.noti_toptext);
+                    TextView notiMessage = (TextView) v.findViewById(R.id.noti_subtext);
+                    if(name!=null) {
+                        notiEventText.setText(data.get(position).geteName());
                     }
-                });
-
-                System.out.println("Hardik card hght is " + v.getMeasuredHeight());
+                    if (typeM) {
+                        notiTopText.setText("FIRETEAM MESSAGE");
+                        notiMessage.setVisibility(View.VISIBLE);
+                        if(msg!=null) {
+                            notiMessage.setText(data.get(position).getMessage());
+                        }
+                    } else {
+                        if(msg!=null) {
+                            notiEventText.setText(data.get(position).getMessage());
+                        }
+                        if (name!=null) {
+                            notiTopText.setText(name.toUpperCase());
+                        }
+                        notiMessage.setVisibility(View.GONE);
+                        //mManager.getEventList(ListActivityFragment.this);
+                    }
+                }
             }
             return v;
         }
     }
 
-    protected void showNotifications(Context c) {
-        LayoutInflater inflater = getLayoutInflater();
-        View view = ((ListActivityFragment)c).getWindow().getDecorView().findViewById(android.R.id.content).getRootView();
+    protected void goToDetail(String s) {
+
+    }
+
+    private BroadcastReceiver ReceivefromService = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+  //          if (mManager.getCurrentActivity() == ListActivityFragment) {
+            PushNotification noti = new PushNotification();
+                String subtype = intent.getStringExtra("subtype");
+                boolean playerMsg = intent.getBooleanExtra("playerMessage", false);
+            String eventId = intent.getStringExtra("eventId");
+            String eventUpdated = intent.getStringExtra("eventUpdated");
+                String msg = intent.getStringExtra("message");
+            noti.seteId(eventId);
+            noti.seteName(subtype);
+            noti.seteUpdated(eventUpdated);
+            noti.setTypeMessage(playerMsg);
+            noti.setMessage(msg);
+            if(notiList==null) {
+                notiList = new ArrayList<PushNotification>();
+            }
+            notiList.add(noti);
+            if(context instanceof ListActivityFragment) {
+                showNotifications(context);
+            } else if(context instanceof EventDetailActivity) {
+                if(eventNotiList==null){
+                    eventNotiList = new ArrayList<PushNotification>();
+                }
+                if(noti.getTypeMessage()) {
+                    eventNotiList.add(noti);
+                    showNotifications(context);
+                }
+            }
+                //put timer to make the notification message gone after 5 seconds
+//                notiBar.postDelayed(new Runnable() {
+//                    public void run() {
+//                        if(notiBar!=null) {
+//                            notiBar.setVisibility(View.GONE);
+//                        }
+//                    }
+//                }, 7000);
+  //          }
+        }
+    };
+
+    SwipeStackAdapter adapter;
+    View view;
+
+    protected void showNotifications(final Context c) {
+//        LayoutInflater inflater = getLayoutInflater();
+        if(c instanceof ListActivityFragment) {
+            view = ((ListActivityFragment)c).getWindow().getDecorView().findViewById(android.R.id.content).getRootView();
+        } else if (c instanceof EventDetailActivity) {
+            view = ((EventDetailActivity)c).getWindow().getDecorView().findViewById(android.R.id.content).getRootView();
+            if(eventNotiList==null) {
+                eventNotiList = new ArrayList<PushNotification>();
+            }
+            if(((EventDetailActivity)c).currEvent!=null) {
+                getEventNotification(((EventDetailActivity)c).currEvent);
+            }
+        }
         if(view!=null) {
             //final View v = inflater.inflate(R.layout.base_notification, (ViewGroup) view);
-            final SwipeStack cardStack = (SwipeStack) view.findViewById(R.id.swipe_deck);
-
-            final ArrayList<String> testData = new ArrayList<>();
-            testData.add("0 nweuneq niqn klqnef ioenwklf nkljqne nqjn uqdn jkqbd kjebndjkbds fjwe njkebjen wefn jn");
-            testData.add("1");
-            testData.add("2");
-            testData.add("3kdnjncjenjenfjkn n jknejk bnejk bjkefn jkenf jkenfjkebn jkdbf jkenf jnlk ndlk nkldn lkrn kldn jkdn fjkbdjk fbejkbf jkeb fjkbe jkbejk fbejk hfjke bfenf jkenfnejkf  lkrn kldn jkdn fjkbdjk fbejkbf jkeb fjkbe jkbejk fbejk hfjke bfenf jkenfnejkf ndnfkjen jrnwjknd iunjk ");
-            testData.add("4");
-
-
-            final SwipeStackAdapter adapter = new SwipeStackAdapter(testData, c);
+            SwipeDeck cardStack = (SwipeDeck) view.findViewById(R.id.swipe_deck);
+            if(adapter != null) {
+                adapter = null;
+            }
+            if (notiList==null) {
+                notiList = new ArrayList<PushNotification>();
+            }
+            adapter = new SwipeStackAdapter(c instanceof ListActivityFragment?notiList:eventNotiList, c);
             cardStack.setAdapter(adapter);
-            //System.out.println("Hardik card hght outside adapter " + cardStack.getTopView().getMeasuredHeight() + "  " + cardStack.getTopView().getHeight());
-            cardStack.setListener(new SwipeStack.SwipeStackListener() {
+            adapter.notifyDataSetChanged();
+
+            cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
                 @Override
-                public void onViewSwipedToLeft(int position) {
+                public void cardSwipedLeft(int position) {
+                    checkAndRemoveNoti(c, position);
+                    //notiList.remove(position);
+
                 }
 
                 @Override
-                public void onViewSwipedToRight(int position) {
+                public void cardSwipedRight(int position) {
+                    checkAndRemoveNoti(c, position);
+                }
+
+                @Override
+                public void cardsDepleted() {
+                    //removeNotifyLayout();
+                }
+
+                @Override
+                public void cardActionDown() {
 
                 }
 
                 @Override
-                public void onStackEmpty() {
-                    removeNotifyLayout();
+                public void cardActionUp() {
+
                 }
             });
+        }
+    }
 
-//            cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
-//                @Override
-//                public void cardSwipedLeft(int position) {
-//                }
-//
-//                @Override
-//                public void cardSwipedRight(int position) {
-//                }
-//
-//                @Override
-//                public void cardsDepleted() {
-//                    removeNotifyLayout();
-//                }
-//
-//                @Override
-//                public void cardActionDown() {
-//
-//                }
-//
-//                @Override
-//                public void cardActionUp() {
-//
-//                }
-//            });
+    private void checkAndRemoveNoti(Context c, int position) {
+        if(c!=null) {
+            if (c instanceof ListActivityFragment) {
+                notiList.remove(position);
+            } else {
+                if(eventNotiList!=null && eventNotiList.get(position)!=null){
+                    if(eventNotiList.get(position)!=null) {
+                        notiList.remove(eventNotiList.get(position));
+                        //removeEventNotiFromNotiList(eventNotiList.get(position).geteId());
+                        eventNotiList.remove(position);
+                    }
+                }
+            }
+        }
+    }
+
+    private void removeEventNotiFromNotiList(String id) {
+        if (notiList!=null){
+            for (int i=0; i<notiList.size(); i++) {
+                if (notiList.get(i)!=null && notiList.get(i).geteId()!=null) {
+                    if(notiList.get(i).geteId().equalsIgnoreCase(id)) {
+                        notiList.remove(i);
+                        i--;
+                    }
+                }
+            }
+        }
+    }
+
+    private void getEventNotification(EventData currEvent) {
+        if(currEvent.getEventId()!=null) {
+            String id = currEvent.getEventId();
+            if (notiList!=null){
+                for (int i=0; i<notiList.size(); i++) {
+                    if (notiList.get(i)!=null && notiList.get(i).geteId()!=null) {
+                        if(notiList.get(i).geteId().equalsIgnoreCase(id)) {
+                            if(notiList.get(i).getTypeMessage()){
+                                eventNotiList.add(notiList.get(i));
+                            } else {
+                                notiList.remove(i);
+                                i--;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
