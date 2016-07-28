@@ -273,12 +273,14 @@ public class BaseActivity extends FragmentActivity {
         if(c!=null) {
             if (c instanceof ListActivityFragment) {
                 notiList.remove(position);
+                adapter.notifyDataSetChanged();
             } else {
                 if(eventNotiList!=null && eventNotiList.get(position)!=null){
                     if(eventNotiList.get(position)!=null) {
                         notiList.remove(eventNotiList.get(position));
                         //removeEventNotiFromNotiList(eventNotiList.get(position).geteId());
                         eventNotiList.remove(position);
+                        adapter.notifyDataSetChanged();
                     }
                 }
             }
