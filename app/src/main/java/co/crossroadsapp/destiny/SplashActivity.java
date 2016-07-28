@@ -21,8 +21,10 @@ import org.json.JSONObject;
 
 import co.crossroadsapp.destiny.R;
 import co.crossroadsapp.destiny.utils.TravellerLog;
+import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
+import io.branch.referral.util.LinkProperties;
 
 
 /**
@@ -123,12 +125,12 @@ public class SplashActivity extends BaseActivity{
         super.onStart();
 
         Branch branch = Branch.getInstance(getApplicationContext());
-        branch.initSession(new Branch.BranchReferralInitListener() {
+        branch.initSession(new Branch.BranchUniversalReferralInitListener(){
             @Override
-            public void onInitFinished(JSONObject referringParams, BranchError error) {
+            public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError error) {
                 if (error == null) {
                     // params are the deep linked params associated with the link that the user clicked before showing up
-                    TravellerLog.i("BranchConfigTest", "deep link data: " + referringParams.toString());
+                    TravellerLog.i("BranchConfigTest", "deep link data: " + branchUniversalObject.toString());
 //                    mHandler.postDelayed(new Runnable() {
 //                        @Override
 //                        public void run() {

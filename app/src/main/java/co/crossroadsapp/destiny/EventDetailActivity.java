@@ -108,21 +108,6 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         Bundle b = getIntent().getExtras();
         user = b.getParcelable("userdata");
 
-        // Create a BranchUniversal object for the content referred on this activity instance
-        branchUniversalObject = new BranchUniversalObject()
-                .setCanonicalIdentifier("item/12345")
-                .setCanonicalUrl("https://branch.io/deepviews")
-                .setTitle("My Content Title")
-                .setContentDescription("My Content Description ")
-                .setContentImageUrl("http://s9.postimg.org/n92phj9tr/image1.jpg")
-                .setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC)
-                .setContentType("application/vnd.businessobjects")
-                //.setContentExpiration(new Date(1476566432000L)) // set contents expiration time if applicable
-                .addKeyWord("My_Keyword1")
-                .addKeyWord("My_Keyword2")
-                .addContentMetadata("Metadata_Key1", "Metadata_value1")
-                .addContentMetadata("Metadata_Key2", "Metadata_value2");
-
         joinBtn = (TextView) findViewById(R.id.join_btn);
         leaveBtn = (TextView) findViewById(R.id.leave_btn);
         msgallBtn = (TextView) findViewById(R.id.messageall_btn);
@@ -147,6 +132,16 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         inst = CurrentEventDataHolder.getInstance();
         currEvent = inst.getData();
         //joinBtnActive = inst.getJoinVisible();
+
+        // Create a BranchUniversal object for the content referred on this activity instance
+        branchUniversalObject = new BranchUniversalObject()
+                .setCanonicalIdentifier("item/12345")
+                .setCanonicalUrl("https://branch.io/deepviews")
+                .setTitle(currEvent.getActivityData().getActivityType())
+                .setContentDescription(currEvent.getActivityData().getActivitySubtype())
+                .setContentImageUrl(currEvent.getActivityData().getActivityIconUrl())
+                //.setContentExpiration(new Date(1476566432000L)) // set contents expiration time if applicable
+                .addContentMetadata("eventId", currEvent.getEventId());
 
         eventProfileImg = (ImageView) findViewById(R.id.event_detail_icon);
         eventName = (TextView) findViewById(R.id.activity_name_detail);
@@ -316,11 +311,6 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 //                .addContentMetadata("property2", "red");
 
         LinkProperties linkProperties = new LinkProperties()
-                .addTag("Tag1")
-                .setChannel("Sharing_Channel_name")
-                .setFeature("my_feature_name")
-                .addControlParameter("$android_url", "https://android.com")
-                .addControlParameter("$ios_url", "http://example.com/ios")
                 .setDuration(100);
 
 //        String urlString = null;
