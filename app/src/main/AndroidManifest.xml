@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="co.crossroadsapp.destiny"
-    android:installLocation="auto">
+    android:installLocation="auto" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -10,29 +10,39 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/img_traveler_badge_icon"
-        android:label="@string/app_name">
+        android:label="@string/app_name" >
         <activity
             android:name=".SplashActivity"
             android:label="@string/app_name"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:launchMode="singleTask">
+            android:theme="@android:style/Theme.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <!-- AppLink example -->
-            <intent-filter android:autoVerify="true">
+            <intent-filter android:autoVerify="true" >
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- <data android:scheme="https" android:host="bnc.lt" android:pathPrefix="/your_app_id_obtained form Branch dash board " /> -->
-                <data android:scheme="https" android:host="bnc.lt" android:pathPrefix="/IfVq" /> <!-- Live App link-->
-                <data android:scheme="https" android:host="bnc.lt" android:pathPrefix="/fgVq" /> <!-- Test App link-->
+                <data
+                    android:host="bnc.lt"
+                    android:pathPrefix="/IfVq"
+                    android:scheme="https" /> <!-- Live App link -->
+                <data
+                    android:host="bnc.lt"
+                    android:pathPrefix="/fgVq"
+                    android:scheme="https" /> <!-- Test App link -->
             </intent-filter>
             <intent-filter>
                 <data android:scheme="dlcsrd" />
+
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
@@ -76,7 +86,7 @@
         <receiver
             android:name=".MyGcmBroadcastReceiver"
             android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND">
+            android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
@@ -117,7 +127,10 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
 
-        <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_ilh33QPvqAgDqnVVRh8iXcnnBBaLIp97" />
+        <meta-data
+            android:name="io.branch.sdk.BranchKey"
+            android:value="key_live_ilh33QPvqAgDqnVVRh8iXcnnBBaLIp97" />
+
     </application>
 
 </manifest>

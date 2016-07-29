@@ -100,6 +100,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
     private int reqPlayer;
     private BranchUniversalObject branchUniversalObject;
+    private String eventId;
 //    private TextView errText;
 //    private ImageView close_err;
 
@@ -182,28 +183,28 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             }
         });
 
-        if(currEvent.getActivityData().getActivityIconUrl()!=null) {
+        if (currEvent.getActivityData().getActivityIconUrl() != null) {
             Util.picassoLoadIcon(EventDetailActivity.this, eventProfileImg, currEvent.getActivityData().getActivityIconUrl(), R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.icon_ghost_default);
         }
 
-        if (currEvent.getActivityData().getActivitySubtype()!=null) {
+        if (currEvent.getActivityData().getActivitySubtype() != null) {
             eventName.setText(currEvent.getActivityData().getActivitySubtype());
         }
 
-        if (currEvent.getActivityData().getActivityLight()> 0) {
+        if (currEvent.getActivityData().getActivityLight() > 0) {
             // unicode to show star
             String st = "\u2726";
             eventLight.setText(st + currEvent.getActivityData().getActivityLight());
-        } else if(currEvent.getActivityData().getActivityLevel()>0) {
+        } else if (currEvent.getActivityData().getActivityLevel() > 0) {
             eventLight.setText("lvl " + currEvent.getActivityData().getActivityLevel());
         }
 
-        if(currEvent.getActivityData().getActivityCheckpoint()!=null && (!currEvent.getActivityData().getActivityCheckpoint().equalsIgnoreCase("null"))){
+        if (currEvent.getActivityData().getActivityCheckpoint() != null && (!currEvent.getActivityData().getActivityCheckpoint().equalsIgnoreCase("null"))) {
             eventCheckpoint.setVisibility(View.VISIBLE);
             eventCheckpoint.setText(currEvent.getActivityData().getActivityCheckpoint());
         }
 
-        if (user.getImageUrl()!=null){
+        if (user.getImageUrl() != null) {
             Util.picassoLoadIcon(EventDetailActivity.this, userProfile, user.getImageUrl(), R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.img_avatar_you);
         }
 
@@ -232,11 +233,11 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             }
         });
 
-        String upcomingDate=null;
+        String upcomingDate = null;
 
         if (currEvent.getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING)) {
-            upcomingDate  = Util.convertUTCtoReadable(currEvent.getLaunchDate());
-            if (upcomingDate!=null){
+            upcomingDate = Util.convertUTCtoReadable(currEvent.getLaunchDate());
+            if (upcomingDate != null) {
                 eventDetailDate.setText(upcomingDate);
             }
         } else {
@@ -251,7 +252,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                 .setCanonicalUrl("https://branch.io/deepviews")
                 .setTitle("Join My Fireteam")
                 .setContentDescription(getDeeplinkContent(upcomingDate))
-                .setContentImageUrl(Constants.DEEP_LINK_IMAGE)
+                .setContentImageUrl(Constants.DEEP_LINK_IMAGE + currEvent.getEventId()+".png")
                 //.setContentExpiration(new Date(1476566432000L)) // set contents expiration time if applicable
                 .addContentMetadata("eventId", currEvent.getEventId());
 

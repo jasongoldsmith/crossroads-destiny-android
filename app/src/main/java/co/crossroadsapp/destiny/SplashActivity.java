@@ -124,6 +124,15 @@ public class SplashActivity extends BaseActivity{
     public void onStart() {
         super.onStart();
 
+//        Branch.getInstance(getApplicationContext()).initSession(new Branch.BranchReferralInitListener(){
+//            @Override
+//            public void onInitFinished(JSONObject referringParams, BranchError error) {
+//                if(error==null) {
+//
+//                }
+//            }
+//        }, this.getIntent().getData(), this);
+
         Branch.getInstance(getApplicationContext()).initSession(new Branch.BranchUniversalReferralInitListener(){
             @Override
             public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError error) {
