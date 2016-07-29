@@ -465,13 +465,15 @@ public class GroupDrawerAdapter {
                 if (holder.muteBtn!=null) {
                     holder.muteBtn.setEnabled(false);
                 }
+
+                checkSignleGrpView();
             }
         }
 
         @Override
         public int getItemCount() {
             if(glistLocal!=null) {
-                if (glistLocal.size()==0 || glistLocal.size()==1) {
+                if (glistLocal.size()==0) {
                     return 1;
                 } else {
                     return this.glistLocal.size();

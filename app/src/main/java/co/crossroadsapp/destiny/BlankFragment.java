@@ -293,11 +293,16 @@ public class BlankFragment extends Fragment {
                             }
                             //setCurrEventData(currEvent);
                         }
-                        //start new activity for event
-                        Intent regIntent = new Intent(mContext,
-                                EventDetailActivity.class);
-                        regIntent.putExtra("userdata", user);
-                        startActivity(regIntent);
+                        if(mContext!=null) {
+                            //start new activity for event
+                            Intent regIntent = new Intent(mContext,
+                                    EventDetailActivity.class);
+                            if(regIntent!=null) {
+                                regIntent.putExtra("userdata", user);
+                                startActivity(regIntent);
+                                mContext.finish();
+                            }
+                        }
                     }
                 });
 

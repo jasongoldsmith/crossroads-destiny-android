@@ -66,4 +66,7 @@ public class Constants {
 
     public static int USER_CHANNEL = 2;
     public static int EVENT_CHANNEL = 1;
+
+    //urls
+    public static String DEEP_LINK_IMAGE = "http://w3.crossroadsapp.co/bungie/share/branch/v1/";
 }

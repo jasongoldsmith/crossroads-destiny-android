@@ -24,14 +24,26 @@ import android.widget.Toast;
 
 import co.crossroadsapp.destiny.data.CurrentEventDataHolder;
 import co.crossroadsapp.destiny.data.EventData;
+import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.PlayerData;
 import co.crossroadsapp.destiny.data.UserData;
+import co.crossroadsapp.destiny.network.EventByIdNetwork;
 import co.crossroadsapp.destiny.network.EventRelationshipHandlerNetwork;
 import co.crossroadsapp.destiny.network.EventSendMessageNetwork;
 import co.crossroadsapp.destiny.utils.CircularImageView;
 import co.crossroadsapp.destiny.utils.Constants;
+import co.crossroadsapp.destiny.utils.TravellerLog;
 import co.crossroadsapp.destiny.utils.Util;
 import co.crossroadsapp.destiny.R;
+import io.branch.indexing.BranchUniversalObject;
+import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
+import io.branch.referral.util.LinkProperties;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
@@ -82,6 +94,13 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private TextView eventCheckpoint;
     private TextView mCharacter;
     private RelativeLayout bottomBtnLayout;
+    private ValueEventListener listener;
+    private Firebase refFirebase;
+    private ImageView share;
+
+    private int reqPlayer;
+    private BranchUniversalObject branchUniversalObject;
+    private String eventId;
 //    private TextView errText;
 //    private ImageView close_err;
 
@@ -124,25 +143,22 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         eventSubNameLF = (TextView) findViewById(R.id.activity_player_name_lf_detail);
         eventLight = (TextView) findViewById(R.id.activity_aLight_detail);
         back = (ImageView) findViewById(R.id.eventdetail_backbtn);
+        share = (ImageView) findViewById(R.id.eventdetail_sharebtn);
         eventDetailDate = (TextView) findViewById(R.id.eventDetailDate);
-
-//        errLayout = (RelativeLayout) findViewById(R.id.error_layout);
-//        errText = (TextView) findViewById(R.id.error_sub);
-//        close_err = (ImageView) findViewById(R.id.err_close);
-//
-//        close_err.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                errLayout.setVisibility(View.GONE);
-//            }
-//        });
 
         sendmsg_bckgrnd = (RelativeLayout) findViewById(R.id.sendmsg_background);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
+            }
+        });
+
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareIt();
             }
         });
 
@@ -167,28 +183,28 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             }
         });
 
-        if(currEvent.getActivityData().getActivityIconUrl()!=null) {
+        if (currEvent.getActivityData().getActivityIconUrl() != null) {
             Util.picassoLoadIcon(EventDetailActivity.this, eventProfileImg, currEvent.getActivityData().getActivityIconUrl(), R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.icon_ghost_default);
         }
 
-        if (currEvent.getActivityData().getActivitySubtype()!=null) {
+        if (currEvent.getActivityData().getActivitySubtype() != null) {
             eventName.setText(currEvent.getActivityData().getActivitySubtype());
         }
 
-        if (currEvent.getActivityData().getActivityLight()> 0) {
+        if (currEvent.getActivityData().getActivityLight() > 0) {
             // unicode to show star
             String st = "\u2726";
             eventLight.setText(st + currEvent.getActivityData().getActivityLight());
-        } else if(currEvent.getActivityData().getActivityLevel()>0) {
+        } else if (currEvent.getActivityData().getActivityLevel() > 0) {
             eventLight.setText("lvl " + currEvent.getActivityData().getActivityLevel());
         }
 
-        if(currEvent.getActivityData().getActivityCheckpoint()!=null && (!currEvent.getActivityData().getActivityCheckpoint().equalsIgnoreCase("null"))){
+        if (currEvent.getActivityData().getActivityCheckpoint() != null && (!currEvent.getActivityData().getActivityCheckpoint().equalsIgnoreCase("null"))) {
             eventCheckpoint.setVisibility(View.VISIBLE);
             eventCheckpoint.setText(currEvent.getActivityData().getActivityCheckpoint());
         }
 
-        if (user.getImageUrl()!=null){
+        if (user.getImageUrl() != null) {
             Util.picassoLoadIcon(EventDetailActivity.this, userProfile, user.getImageUrl(), R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.img_avatar_you);
         }
 
@@ -217,16 +233,28 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             }
         });
 
+        String upcomingDate = null;
+
         if (currEvent.getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING)) {
-            String date  = Util.convertUTCtoReadable(currEvent.getLaunchDate());
-            if (date!=null){
-                eventDetailDate.setText(date);
+            upcomingDate = Util.convertUTCtoReadable(currEvent.getLaunchDate());
+            if (upcomingDate != null) {
+                eventDetailDate.setText(upcomingDate);
             }
         } else {
             eventDetailDate.setText("");
         }
 
         setPlayerNames();
+
+        // Create a BranchUniversal object for the content referred on this activity instance
+        branchUniversalObject = new BranchUniversalObject()
+                .setCanonicalIdentifier("item/12345")
+                .setCanonicalUrl("https://branch.io/deepviews")
+                .setTitle("Join My Fireteam")
+                .setContentDescription(getDeeplinkContent(upcomingDate))
+                .setContentImageUrl(Constants.DEEP_LINK_IMAGE + currEvent.getEventId()+".png")
+                //.setContentExpiration(new Date(1476566432000L)) // set contents expiration time if applicable
+                .addContentMetadata("eventId", currEvent.getEventId());
 
         userIsPlayer = checkUserIsPlayer();
 
@@ -263,6 +291,73 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             }
         });
 
+        registerFirbase();
+
+    }
+
+    private String getDeeplinkContent(String upcomingDate) {
+        String description=null;
+        String grpName=getGroupName();//= "<console>: I need <#> more for <activity> in the <group> group on Crossroads";
+        if(user!=null && user.getConsoleType()!=null) {
+            if(currEvent.getActivityData()!=null && currEvent.getActivityData().getActivitySubtype()!=null) {
+                if(grpName!=null) {
+                    if (reqPlayer > 0) {
+                        String desc = user.getConsoleType() + ": I need " + reqPlayer + " more for " + currEvent.getActivityData().getActivitySubtype();
+                        if (upcomingDate != null) {
+                            description = desc + " on " + upcomingDate + " in the " + grpName + " group on Crossroads";
+                        } else {
+                            description = desc + " in the " + grpName + " group on Crossroads";
+                        }
+                        return description;
+                    }
+                }
+            }
+        }
+
+        return "";
+    }
+
+    private void shareIt() {
+//        //deeplink creation
+//        BranchUniversalObject branchUniversalObject = new BranchUniversalObject()
+//
+//                // The identifier is what Branch will use to de-dupe the content across many different Universal Objects
+//                .setCanonicalIdentifier("item/12345")
+//
+//                // The canonical URL for SEO purposes (optional)
+//                .setCanonicalUrl("https://branch.io/deepviews")
+//
+//                // This is where you define the open graph structure and how the object will appear on Facebook or in a deepview
+//                .setTitle("My Content Title")
+//                .setContentDescription("My Content Description")
+//
+//                // You use this to specify whether this content can be discovered publicly - default is public
+//                .setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC)
+//
+//                // Here is where you can add custom keys/values to the deep link data
+//                .addContentMetadata("property1", "blue")
+//                .addContentMetadata("property2", "red");
+
+        LinkProperties linkProperties = new LinkProperties();
+
+//        String urlString = null;
+        branchUniversalObject.generateShortUrl(this, linkProperties, new Branch.BranchLinkCreateListener() {
+            @Override
+            public void onLinkCreate(String url, BranchError error) {
+                if (error == null) {
+                    TravellerLog.i("MyApp", "got my Branch link to share: " + url);
+                    final Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                    sharingIntent.setType("text/plain");
+                    if(url!=null) {
+                        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, url);
+                        startActivity(Intent.createChooser(sharingIntent, "Share"));
+                    }
+                }
+            }
+        });
+//        urlString = branchUniversalObject.getShortUrl(EventDetailActivity.this, linkProperties);
+//        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, urlString);
+//        startActivity(Intent.createChooser(sharingIntent, "Share"));
     }
 
     private final TextWatcher mTextEditorWatcher = new TextWatcher() {
@@ -288,6 +383,58 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     public void onStop() {
         super.onStop();
         unregisterReceiver(ReceivefromService);
+        unregisterFirebase();
+    }
+
+    private void registerFirbase() {
+        setupEventListener();
+        if(controlManager!=null) {
+            if(controlManager.getUserData()!=null) {
+                this.user = controlManager.getUserData();
+            }
+        }
+        if(user!=null && user.getClanId()!=null) {
+            if(currEvent!=null && currEvent.getEventId()!=null && currEvent.getClanId()!=null) {
+                refFirebase = new Firebase(Util.getFirebaseUrl(currEvent.getClanId(), currEvent.getEventId(), Constants.EVENT_CHANNEL));
+                if (listener != null) {
+                    refFirebase.addValueEventListener(listener);
+                }
+            }
+        }
+    }
+
+    private void setupEventListener() {
+        listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if(currEvent!=null && currEvent.getEventId()!=null) {
+                    String id = currEvent.getEventId();
+                    RequestParams param = new RequestParams();
+                    param.add("id", id);
+                    controlManager.postEventById(EventDetailActivity.this, param);
+                }
+//                if(snapshot.exists()) {
+//                            if(currEvent!=null && currEvent.getEventId()!=null) {
+//                                String id = currEvent.getEventId();
+//                                RequestParams param = new RequestParams();
+//                                param.add("id", id);
+//                                controlManager.postEventById(EventDetailActivity.this, param);
+//                            }
+//                } else {
+//                    launchListActivityAndFinish();
+//                }
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        };
+    }
+
+    private void unregisterFirebase() {
+        if(listener!=null) {
+            refFirebase.removeEventListener(listener);
+        }
     }
 
     private BroadcastReceiver ReceivefromService = new BroadcastReceiver() {
@@ -386,7 +533,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private void setPlayerNames() {
         String allNames = "";
         String allNamesRem = "";
-        int reqPlayer = currEvent.getActivityData().getMaxPlayer() - currEvent.getPlayerData().size();
+        reqPlayer = currEvent.getActivityData().getMaxPlayer() - currEvent.getPlayerData().size();
 
         allNames = currEvent.getCreatorData().getPsnId();
         if (!currEvent.getEventStatus().equalsIgnoreCase("full")) {
@@ -400,7 +547,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     @Override
     public void update(Observable observable, Object data) {
             hideProgress();
-            if (observable instanceof EventRelationshipHandlerNetwork) {
+            if (observable instanceof EventRelationshipHandlerNetwork || observable instanceof EventByIdNetwork) {
                 this.currEvent = (EventData) data;
                 if (currEvent != null) {
                     if ((currEvent.getPlayerData() != null) && (currEvent.getPlayerData().size()>0)) {
@@ -412,7 +559,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                         setPlayerNames();
                         setBottomButtonSelection();
                     } else {
-                        finish();
+                        launchListActivityAndFinish();
                     }
                 }
             } else if (observable instanceof EventSendMessageNetwork) {
@@ -457,6 +604,18 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 //        errLayout.setVisibility(View.VISIBLE);
 //        errText.setText(err);
         setErrText(err);
+    }
+
+    public String getGroupName() {
+        if(user!=null && user.getClanId()!=null) {
+            if(controlManager!=null) {
+                GroupData grp = controlManager.getGroupObj(user.getClanId());
+                if(grp!=null && grp.getGroupName()!=null) {
+                    return grp.getGroupName();
+                }
+            }
+        }
+        return null;
     }
 
     private class CurrentEventsViewAdapter extends RecyclerView.Adapter<CurrentEventsViewAdapter.CurrentEventsViewHolder> {
@@ -504,7 +663,8 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             if(playerLocal!=null) {
                 if (position >= playerLocal.size() && getMaxPlayer() > playerLocal.size() ) {
                     holder.playerName.setText("searching...");
-                    //holder.playerProfile.setBackground(getResources().getDrawable(R.drawable.img_profile_blank));
+                    holder.message.setVisibility(View.GONE);
+                    holder.playerProfile.setImageResource(R.drawable.img_profile_blank);
                 } else {
                     if (playerLocal.get(position) != null) {
                         if (playerLocal.get(position).getPlayerId() != null) {
@@ -512,7 +672,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                         }
                         if (playerLocal.get(position).getPlayerImageUrl() != null) {
                             Util.picassoLoadIcon(EventDetailActivity.this, holder.playerProfile, playerLocal.get(position).getPlayerImageUrl(),
-                                    R.dimen.eventdetail_player_profile_hgt, R.dimen.eventdetail_player_profile_width, R.drawable.avatar36);
+                                    R.dimen.eventdetail_player_profile_hgt, R.dimen.eventdetail_player_profile_width, R.drawable.img_profile_blank);
                         }
                         if (playerLocal.get(position).getPsnId() != null) {
                             holder.playerName.setText(playerLocal.get(position).getPsnId());
@@ -551,6 +711,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                                 }
                             }
                         });
+                        holder.playerProfile.invalidate();
                     }
                 }
             }
@@ -622,13 +783,21 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 //        }
     }
 
+    private void launchListActivityAndFinish() {
+        Intent i=new Intent (this, ListActivityFragment.class);
+        i.putExtra("userdata", user);
+        startActivity(i);
+        currEvent = null;
+        finish();
+    }
+
     @Override
     public void onBackPressed() {
         if(sendmsg_bckgrnd.getVisibility()==View.VISIBLE){
             sendmsg_bckgrnd.setVisibility(View.GONE);
             hideKeyboard();
         } else {
-            super.onBackPressed();
+            launchListActivityAndFinish();
         }
     }
 }

@@ -336,16 +336,30 @@
                 <!--android:onClick="updateProfileAvatar"-->
                 <!--android:src="@drawable/img_i_c_o_n_r_a_i_d" />-->
 
-            <co.crossroadsapp.destiny.utils.CircularImageView
+            <RelativeLayout
                 android:layout_width="96dp"
                 android:layout_height="96dp"
-                android:id="@+id/profile_avatar"
-                android:src="@drawable/profile_image"
-                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:id="@+id/user_profile_layout"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="81dp"
-                app:borderColor="#37646d"
-                app:border="true"/>
+                android:layout_centerHorizontal="true">
+                <co.crossroadsapp.destiny.utils.CircularImageView
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:id="@+id/profile_avatar"
+                    android:src="@drawable/profile_image"
+                    app:borderColor="#37646d"
+                    app:border="true"/>
+                <ProgressBar
+                    android:id="@+id/loadingImg"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:indeterminateDrawable="@drawable/progress"
+                    android:visibility="gone"/>
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/profile_name"
@@ -353,7 +367,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
-                android:layout_below="@+id/profile_avatar"
+                android:layout_below="@+id/user_profile_layout"
                 android:layout_gravity="bottom"
                 android:gravity="center_horizontal"/>
         </RelativeLayout>
@@ -642,6 +656,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp"
                 android:layout_marginBottom="50dp">
             </android.support.v7.widget.RecyclerView>
 
@@ -660,17 +676,6 @@
                 android:id="@+id/empty_group_layout"
                 android:layout_alignParentBottom="true"
                 android:visibility="gone">
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/empty_grp_card"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="7dp"
-                    android:layout_marginRight="7dp"
-                    android:layout_marginBottom="50dp">
-
-                </FrameLayout>
 
                 <TextView
                     android:layout_width="match_parent"

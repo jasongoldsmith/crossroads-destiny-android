@@ -51,6 +51,7 @@ import co.crossroadsapp.destiny.data.EventList;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.network.EventListNetwork;
 import co.crossroadsapp.destiny.network.EventRelationshipHandlerNetwork;
+import co.crossroadsapp.destiny.network.HelmetUpdateNetwork;
 import co.crossroadsapp.destiny.network.LogoutNetwork;
 import co.crossroadsapp.destiny.network.ResendBungieVerification;
 import co.crossroadsapp.destiny.utils.CircularImageView;
@@ -135,23 +136,27 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         mManager = ControlManager.getmInstance();
         mManager.setCurrentActivity(this);
 
-        Bundle b = getIntent().getExtras();
+        Bundle b=null;
+        if(getIntent()!=null && getIntent().getExtras()!=null) {
+            b = getIntent().getExtras();
+        }
         //user = b.getParcelable("userdata");
         if(mManager.getUserData()!=null) {
             user = mManager.getUserData();
-        } else {
+        } else if(b!=null){
             user = b.getParcelable("userdata");
         }
 
-        if(b.containsKey("eventIntent")){
-            Intent localPushEventObj = (Intent)b.get("eventIntent");
-            if(localPushEventObj.hasExtra("message")) {
-                String payload = localPushEventObj.getStringExtra("message");
-                createPushEventObj(payload);
-            }
-            //Util.clearNotification(localPushEventObj.getExtras());
-            this.getIntent().removeExtra("eventIntent");
-        }
+        //checkEventIntent();
+//        if(b.containsKey("eventIntent")){
+//            Intent localPushEventObj = (Intent)b.get("eventIntent");
+//            if(localPushEventObj.hasExtra("message")) {
+//                String payload = localPushEventObj.getStringExtra("message");
+//                createPushEventObj(payload);
+//            }
+//            //Util.clearNotification(localPushEventObj.getExtras());
+//            this.getIntent().removeExtra("eventIntent");
+//        }
 
         mManager.postGetActivityList(this);
 
@@ -188,10 +193,18 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
         appIcon = (ImageView) findViewById(R.id.badge_icon);
 
-        if (user.getImageUrl()!=null) {
-            Util.picassoLoadIcon(this, userProfile, user.getImageUrl(), R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.avatar);
-            Util.picassoLoadIcon(this, userProfileDrawer, user.getImageUrl(), R.dimen.player_profile_drawer_hgt, R.dimen.player_profile_drawer_width, R.drawable.avatar);
+        if (user!=null) {
+            updateUserProfileImage(user.getImageUrl());
         }
+
+        //hemlet update
+        userProfileDrawer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                findViewById(R.id.loadingImg).setVisibility(View.VISIBLE);
+                mManager.postHelmet(ListActivityFragment.this);
+            }
+        });
 
         if (user.getUser()!=null){
             userNameDrawer.setText(user.getUser());
@@ -431,6 +444,37 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
     }
 
+    private void checkIfExternalDeepLinkPresent() {
+        if(mManager!=null) {
+            if(mManager.getDeepLinkEvent()!=null) {
+                RequestParams param = new RequestParams();
+                param.add("id", mManager.getDeepLinkEvent());
+                mManager.postEventById(ListActivityFragment.this, param);
+                mManager.setDeepLinkEvent(null);
+            }
+        }
+    }
+
+    private void updateUserProfileImage(String url) {
+        if((url!=null) || (!url.equalsIgnoreCase("null"))) {
+            Util.picassoLoadIcon(this, userProfile, url, R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.avatar);
+            Util.picassoLoadIcon(this, userProfileDrawer, url, R.dimen.player_profile_drawer_hgt, R.dimen.player_profile_drawer_width, R.drawable.avatar);
+            user.setImageUrl(url);
+        }
+    }
+
+    private void checkEventIntent() {
+        if(pushEventObject==null) {
+            if (this.getIntent().hasExtra("eventIntent")) {
+                Intent cIntent = (Intent) this.getIntent().getExtras().get("eventIntent");
+                String contentIntent = cIntent.getExtras().get("message").toString();
+                createPushEventObj(contentIntent);
+                //remove intent
+                this.getIntent().removeExtra("eventIntent");
+            }
+        }
+    }
+
     private void showLogoutDialog() {
         // alert dailogue
         new AlertDialog.Builder(ListActivityFragment.this)
@@ -481,6 +525,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                     checkClanSet();
                 }
                 unregisterUserFirebase();
+                checkIfExternalDeepLinkPresent();
             }
         }
     }
@@ -522,8 +567,13 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
     private void registerFirbase() {
         setupEventListener();
+        if(mManager!=null) {
+            if(mManager.getUserData()!=null) {
+                this.user = mManager.getUserData();
+            }
+        }
         if(user!=null && user.getClanId()!=null) {
-            refFirebase = new Firebase(Util.getFirebaseUrl(this.user.getClanId(), Constants.EVENT_CHANNEL));
+            refFirebase = new Firebase(Util.getFirebaseUrl(this.user.getClanId(), null, Constants.EVENT_CHANNEL));
             if (listener != null) {
                 refFirebase.addValueEventListener(listener);
             }
@@ -533,14 +583,13 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     private void unregisterFirebase() {
         if(listener!=null) {
             refFirebase.removeEventListener(listener);
-            refFirebase.removeValue();
         }
     }
 
     private void registerUserFirebase() {
         if(user.getUserId()!=null) {
             setupUserListener();
-            refUFirebase = new Firebase(Util.getFirebaseUrl(this.user.getUserId(), Constants.USER_CHANNEL));
+            refUFirebase = new Firebase(Util.getFirebaseUrl(this.user.getUserId(), null, Constants.USER_CHANNEL));
             if (userListener != null) {
                 refUFirebase.addValueEventListener(userListener);
             }
@@ -551,7 +600,6 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
         if(userListener!=null) {
             if(refUFirebase!=null) {
                 refUFirebase.removeEventListener(userListener);
-                refUFirebase.removeValue();
             }
         }
     }
@@ -603,13 +651,6 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        if(pushEventObject==null) {
-            if (this.getIntent().hasExtra("eventIntent")) {
-                Intent cIntent = (Intent) this.getIntent().getExtras().get("eventIntent");
-                String contentIntent = cIntent.getExtras().get("message").toString();
-                createPushEventObj(contentIntent);
-            }
-        }
     }
 
     public void showProgress() {
@@ -650,21 +691,27 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     }
 
     private void launchPushEventDetail() {
-        if(pushEventObject!=null) {
-            if (pushEventObject.getActivityData() != null) {
-                if (pushEventObject.getActivityData().getActivitySubtype() != null) {
+        startEventDetail(pushEventObject);
+    }
+
+    private void startEventDetail(EventData eData) {
+        if (eData!=null) {
+            if (eData.getActivityData() != null) {
+                if (eData.getActivityData().getActivitySubtype() != null) {
                     CurrentEventDataHolder ins = CurrentEventDataHolder.getInstance();
-                    ins.setData(pushEventObject);
+                    ins.setData(eData);
                     //launch eventdetailactivity
                     //start new activity for event
                     Intent regIntent = new Intent(this,
                             EventDetailActivity.class);
                     regIntent.putExtra("userdata", user);
                     startActivity(regIntent);
+                    finish();
                 }
             }
         }
     }
+
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setTRansparentStatusBar() {
@@ -709,6 +756,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
     public void showError(String err) {
         hideProgress();
+        findViewById(R.id.loadingImg).setVisibility(View.GONE);
         closeProfileDrawer(Gravity.RIGHT);
         closeProfileDrawer(Gravity.LEFT);
 
@@ -738,7 +786,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             mManager.getEventList(this);
         }
 
-        //registerFirbase
+        registerFirbase();
         if (user!=null && user.getPsnVerify()!=null) {
             if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
                 //register user listener
@@ -758,14 +806,26 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     @Override
     public void onStart() {
         super.onStart();
+        //registerReceiver(ReceivefromDeeplink, new IntentFilter("deeplink_flag"));
         registerReceiver(ReceivefromService, new IntentFilter("subtype_flag"));
     }
+
+    private BroadcastReceiver ReceivefromDeeplink = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String eId = intent.getStringExtra("eventId");
+            RequestParams param = new RequestParams();
+            param.add("id", eId);
+            mManager.postEventById(ListActivityFragment.this, param);
+        }
+    };
 
     @Override
     public void onStop() {
         super.onStop();
         unregisterFirebase();
         //unregisterUserFirebase();
+        //unregisterReceiver(ReceivefromDeeplink);
         unregisterReceiver(ReceivefromService);
     }
 
@@ -888,7 +948,6 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     public void update(Observable observable, Object data) {
             if (observable instanceof EventListNetwork) {
                 if (data != null) {
-
                     eList = (EventList) data;
                     if (eData != null) {
                         eData.clear();
@@ -896,6 +955,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                     eData = eList.getEventList();
                     createUpcomingCurrentList(eData);
                     //Checking if current launch happened due to push notification click
+                    checkEventIntent();
                     if (pushEventObject != null) {
                         launchPushEventDetail();
                         pushEventObject = null;
@@ -928,6 +988,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             } else if(observable instanceof GroupListNetwork) {
                 if (data != null) {
                     if (data instanceof UserData) {
+                        registerFirbase();
                         mManager.getEventList(this);
                         hideProgress();
                         closeProfileDrawer(Gravity.RIGHT);
@@ -950,16 +1011,26 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                         Toast.LENGTH_LONG).show();
             } else if(observable instanceof EventByIdNetwork) {
                 if(data!=null) {
-                    pushEventObject = new EventData();
-                    pushEventObject = (EventData) data;
-                    launchPushEventDetail();
-                    pushEventObject = null;
+                    if(pushEventObject!=null) {
+                        pushEventObject = new EventData();
+                        pushEventObject = (EventData) data;
+                        startEventDetail(pushEventObject);
+                        pushEventObject = null;
+                    } else {
+                        startEventDetail((EventData) data);
+                    }
                 }
             } else if(observable instanceof LogoutNetwork) {
                 Intent regIntent = new Intent(getApplicationContext(),
                         MainActivity.class);
                 startActivity(regIntent);
                 finish();
+            } else if(observable instanceof HelmetUpdateNetwork) {
+                findViewById(R.id.loadingImg).setVisibility(View.GONE);
+                if(data!=null) {
+                    updateUserProfileImage(data.toString());
+                    mManager.getEventList(this);
+                }
             }
     }
 

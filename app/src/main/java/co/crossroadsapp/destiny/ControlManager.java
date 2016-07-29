@@ -24,6 +24,7 @@ import co.crossroadsapp.destiny.network.EventSendMessageNetwork;
 import co.crossroadsapp.destiny.network.ForgotPasswordNetwork;
 import co.crossroadsapp.destiny.network.GetVersion;
 import co.crossroadsapp.destiny.network.GroupListNetwork;
+import co.crossroadsapp.destiny.network.HelmetUpdateNetwork;
 import co.crossroadsapp.destiny.network.LogoutNetwork;
 import co.crossroadsapp.destiny.network.ReportCrashNetwork;
 import co.crossroadsapp.destiny.network.ResendBungieVerification;
@@ -80,6 +81,8 @@ public class ControlManager implements Observer{
     private GroupListNetwork groupListNtwrk;
     private VerifyConsoleIDNetwork verifyConsoleNetwork;
     private EventByIdNetwork eventById;
+    private HelmetUpdateNetwork helmetUpdateNetwork;
+    private String deepLinkEvent;
 
     public ControlManager() {
     }
@@ -363,10 +366,24 @@ public class ControlManager implements Observer{
         }
     }
 
-    public void postEventById(ListActivityFragment listActivityFragment, RequestParams param) {
+    public void postHelmet(ListActivityFragment act) {
+        try {
+            helmetUpdateNetwork = new HelmetUpdateNetwork(act);
+            helmetUpdateNetwork.addObserver(act);
+            helmetUpdateNetwork.getHelmet();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void postEventById(Activity listActivityFragment, RequestParams param) {
         try {
             eventById = new EventByIdNetwork(listActivityFragment);
-            eventById.addObserver(listActivityFragment);
+            if(listActivityFragment instanceof ListActivityFragment) {
+                eventById.addObserver((ListActivityFragment)listActivityFragment);
+            } else if(listActivityFragment instanceof EventDetailActivity) {
+                eventById.addObserver((EventDetailActivity)listActivityFragment);
+            }
             eventById.getEventById(param);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -426,29 +443,34 @@ public class ControlManager implements Observer{
     public Intent decideToOpenActivity(Intent contentIntent) {
 
         Intent regIntent;
+        regIntent = new Intent(mCurrentAct.getApplicationContext(),
+                ListActivityFragment.class);
         if (contentIntent != null ) {
-            regIntent = new Intent(mCurrentAct.getApplicationContext(),
-                    ListActivityFragment.class);
             regIntent.putExtra("eventIntent", contentIntent);
-        } else {
-            if(user.getPsnVerify()!=null && user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
-                if(user.getClanId()!=null && user.getClanId().equalsIgnoreCase(Constants.CLAN_NOT_SET)) {
-                    regIntent = new Intent(mCurrentAct.getApplicationContext(),
-                            ListActivityFragment.class);
-                } else {
-                    if(this.eData!=null && (!this.eData.isEmpty())) {
-                        regIntent = new Intent(mCurrentAct.getApplicationContext(),
-                                ListActivityFragment.class);
-                    } else {
-                        regIntent = new Intent(mCurrentAct.getApplicationContext(),
-                                CreateNewEvent.class);
-                    }
-                }
-            } else {
-                regIntent = new Intent(mCurrentAct.getApplicationContext(),
-                        CreateNewEvent.class);
-            }
         }
+//        if (contentIntent != null ) {
+//            regIntent = new Intent(mCurrentAct.getApplicationContext(),
+//                    ListActivityFragment.class);
+//            regIntent.putExtra("eventIntent", contentIntent);
+//        } else {
+//            if(user.getPsnVerify()!=null && user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+//                if(user.getClanId()!=null && user.getClanId().equalsIgnoreCase(Constants.CLAN_NOT_SET)) {
+//                    regIntent = new Intent(mCurrentAct.getApplicationContext(),
+//                            ListActivityFragment.class);
+//                } else {
+//                    if(this.eData!=null && (!this.eData.isEmpty())) {
+//                        regIntent = new Intent(mCurrentAct.getApplicationContext(),
+//                                ListActivityFragment.class);
+//                    } else {
+//                        regIntent = new Intent(mCurrentAct.getApplicationContext(),
+//                                CreateNewEvent.class);
+//                    }
+//                }
+//            } else {
+//                regIntent = new Intent(mCurrentAct.getApplicationContext(),
+//                        CreateNewEvent.class);
+//            }
+//        }
         return regIntent;
     }
 
@@ -561,7 +583,6 @@ public class ControlManager implements Observer{
                 }
             }
         }
-
         return null;
     }
 
@@ -623,5 +644,13 @@ public class ControlManager implements Observer{
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setDeepLinkEvent(String deepLinkEvent) {
+        this.deepLinkEvent = deepLinkEvent;
+    }
+
+    public String getDeepLinkEvent() {
+        return deepLinkEvent;
     }
 }
