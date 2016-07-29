@@ -1,5 +1,6 @@
 package co.crossroadsapp.destiny.data;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,6 +20,19 @@ public class ActivityData {
     private String activityIconUrl;
     private int activityLevel;
     private boolean activityFeature;
+    private AdCardData adCardData;
+
+    public ActivityData () {
+        adCardData = new AdCardData();
+    }
+
+    public void setAdCardData(AdCardData ad) {
+        adCardData = ad;
+    }
+
+    public AdCardData getAdCardData() {
+        return adCardData;
+    }
 
     public void setId(String aId) {
         id = aId;
@@ -130,6 +144,13 @@ public class ActivityData {
             }
             if (!actData.isNull("isFeatured")) {
                 setActivityFeature(actData.getBoolean("isFeatured"));
+            }
+
+            if (actData.has("adCard")) {
+                JSONObject jsonobject = actData.getJSONObject("actData");
+                AdCardData adcard = new AdCardData();
+                adcard.toJson(jsonobject);
+                setAdCardData(adcard);
             }
 
         } catch (JSONException e) {
