@@ -8,7 +8,6 @@
     android:layout_marginRight="10dp"
     android:id="@+id/base_test_card"
     card_view:cardBackgroundColor="@color/app_theme_color"
-    card_view:cardCornerRadius="6dp"
     card_view:cardElevation="0dp">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,8 +20,9 @@
             android:layout_height="30dp"
             android:id="@+id/noti_icon"
             android:src="@drawable/icon_alert"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,12 +43,12 @@
             android:layout_below="@+id/noti_toptext"
             android:layout_toRightOf="@+id/noti_icon"
             android:text="missing event type"
-            android:layout_marginRight="5dp"
             android:fontFamily="sans-serif"
             android:textColor="@color/trimbe_white"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="2dp"
-            android:paddingBottom="5dp"
+            android:paddingBottom="10dp"
+            android:paddingRight="15dp"
             android:textSize="12sp"/>
         <TextView
             android:layout_width="match_parent"
@@ -61,9 +61,9 @@
             android:layout_marginLeft="15dp"
             android:maxLines = "5"
             android:scrollbars = "vertical"
-            android:layout_marginRight="5dp"
+            android:paddingRight="15dp"
             android:layout_marginTop="47dp"
-            android:paddingBottom="5dp"
+            android:paddingBottom="10dp"
             android:textSize="12sp"/>
     </RelativeLayout>
 </android.support.v7.widget.CardView>
