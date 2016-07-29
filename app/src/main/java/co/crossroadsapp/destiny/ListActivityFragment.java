@@ -444,6 +444,17 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
     }
 
+    private void checkIfExternalDeepLinkPresent() {
+        if(mManager!=null) {
+            if(mManager.getDeepLinkEvent()!=null) {
+                RequestParams param = new RequestParams();
+                param.add("id", mManager.getDeepLinkEvent());
+                mManager.postEventById(ListActivityFragment.this, param);
+                mManager.setDeepLinkEvent(null);
+            }
+        }
+    }
+
     private void updateUserProfileImage(String url) {
         if((url!=null) || (!url.equalsIgnoreCase("null"))) {
             Util.picassoLoadIcon(this, userProfile, url, R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.avatar);
@@ -514,6 +525,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                     checkClanSet();
                 }
                 unregisterUserFirebase();
+                checkIfExternalDeepLinkPresent();
             }
         }
     }
@@ -679,11 +691,15 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     }
 
     private void launchPushEventDetail() {
-        if(pushEventObject!=null) {
-            if (pushEventObject.getActivityData() != null) {
-                if (pushEventObject.getActivityData().getActivitySubtype() != null) {
+        startEventDetail(pushEventObject);
+    }
+
+    private void startEventDetail(EventData eData) {
+        if (eData!=null) {
+            if (eData.getActivityData() != null) {
+                if (eData.getActivityData().getActivitySubtype() != null) {
                     CurrentEventDataHolder ins = CurrentEventDataHolder.getInstance();
-                    ins.setData(pushEventObject);
+                    ins.setData(eData);
                     //launch eventdetailactivity
                     //start new activity for event
                     Intent regIntent = new Intent(this,
@@ -695,6 +711,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
             }
         }
     }
+
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setTRansparentStatusBar() {
@@ -789,14 +806,26 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     @Override
     public void onStart() {
         super.onStart();
+        //registerReceiver(ReceivefromDeeplink, new IntentFilter("deeplink_flag"));
         registerReceiver(ReceivefromService, new IntentFilter("subtype_flag"));
     }
+
+    private BroadcastReceiver ReceivefromDeeplink = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String eId = intent.getStringExtra("eventId");
+            RequestParams param = new RequestParams();
+            param.add("id", eId);
+            mManager.postEventById(ListActivityFragment.this, param);
+        }
+    };
 
     @Override
     public void onStop() {
         super.onStop();
         unregisterFirebase();
         //unregisterUserFirebase();
+        //unregisterReceiver(ReceivefromDeeplink);
         unregisterReceiver(ReceivefromService);
     }
 
@@ -982,10 +1011,14 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                         Toast.LENGTH_LONG).show();
             } else if(observable instanceof EventByIdNetwork) {
                 if(data!=null) {
-                    pushEventObject = new EventData();
-                    pushEventObject = (EventData) data;
-                    launchPushEventDetail();
-                    pushEventObject = null;
+                    if(pushEventObject!=null) {
+                        pushEventObject = new EventData();
+                        pushEventObject = (EventData) data;
+                        startEventDetail(pushEventObject);
+                        pushEventObject = null;
+                    } else {
+                        startEventDetail((EventData) data);
+                    }
                 }
             } else if(observable instanceof LogoutNetwork) {
                 Intent regIntent = new Intent(getApplicationContext(),

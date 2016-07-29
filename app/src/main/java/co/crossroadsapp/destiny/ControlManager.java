@@ -82,6 +82,7 @@ public class ControlManager implements Observer{
     private VerifyConsoleIDNetwork verifyConsoleNetwork;
     private EventByIdNetwork eventById;
     private HelmetUpdateNetwork helmetUpdateNetwork;
+    private String deepLinkEvent;
 
     public ControlManager() {
     }
@@ -442,29 +443,34 @@ public class ControlManager implements Observer{
     public Intent decideToOpenActivity(Intent contentIntent) {
 
         Intent regIntent;
+        regIntent = new Intent(mCurrentAct.getApplicationContext(),
+                ListActivityFragment.class);
         if (contentIntent != null ) {
-            regIntent = new Intent(mCurrentAct.getApplicationContext(),
-                    ListActivityFragment.class);
             regIntent.putExtra("eventIntent", contentIntent);
-        } else {
-            if(user.getPsnVerify()!=null && user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
-                if(user.getClanId()!=null && user.getClanId().equalsIgnoreCase(Constants.CLAN_NOT_SET)) {
-                    regIntent = new Intent(mCurrentAct.getApplicationContext(),
-                            ListActivityFragment.class);
-                } else {
-                    if(this.eData!=null && (!this.eData.isEmpty())) {
-                        regIntent = new Intent(mCurrentAct.getApplicationContext(),
-                                ListActivityFragment.class);
-                    } else {
-                        regIntent = new Intent(mCurrentAct.getApplicationContext(),
-                                CreateNewEvent.class);
-                    }
-                }
-            } else {
-                regIntent = new Intent(mCurrentAct.getApplicationContext(),
-                        CreateNewEvent.class);
-            }
         }
+//        if (contentIntent != null ) {
+//            regIntent = new Intent(mCurrentAct.getApplicationContext(),
+//                    ListActivityFragment.class);
+//            regIntent.putExtra("eventIntent", contentIntent);
+//        } else {
+//            if(user.getPsnVerify()!=null && user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+//                if(user.getClanId()!=null && user.getClanId().equalsIgnoreCase(Constants.CLAN_NOT_SET)) {
+//                    regIntent = new Intent(mCurrentAct.getApplicationContext(),
+//                            ListActivityFragment.class);
+//                } else {
+//                    if(this.eData!=null && (!this.eData.isEmpty())) {
+//                        regIntent = new Intent(mCurrentAct.getApplicationContext(),
+//                                ListActivityFragment.class);
+//                    } else {
+//                        regIntent = new Intent(mCurrentAct.getApplicationContext(),
+//                                CreateNewEvent.class);
+//                    }
+//                }
+//            } else {
+//                regIntent = new Intent(mCurrentAct.getApplicationContext(),
+//                        CreateNewEvent.class);
+//            }
+//        }
         return regIntent;
     }
 
@@ -638,5 +644,13 @@ public class ControlManager implements Observer{
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setDeepLinkEvent(String deepLinkEvent) {
+        this.deepLinkEvent = deepLinkEvent;
+    }
+
+    public String getDeepLinkEvent() {
+        return deepLinkEvent;
     }
 }

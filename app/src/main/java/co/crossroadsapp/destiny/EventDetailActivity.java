@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import co.crossroadsapp.destiny.data.CurrentEventDataHolder;
 import co.crossroadsapp.destiny.data.EventData;
+import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.PlayerData;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
@@ -96,6 +97,8 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private ValueEventListener listener;
     private Firebase refFirebase;
     private ImageView share;
+
+    private int reqPlayer;
     private BranchUniversalObject branchUniversalObject;
 //    private TextView errText;
 //    private ImageView close_err;
@@ -132,16 +135,6 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         inst = CurrentEventDataHolder.getInstance();
         currEvent = inst.getData();
         //joinBtnActive = inst.getJoinVisible();
-
-        // Create a BranchUniversal object for the content referred on this activity instance
-        branchUniversalObject = new BranchUniversalObject()
-                .setCanonicalIdentifier("item/12345")
-                .setCanonicalUrl("https://branch.io/deepviews")
-                .setTitle(currEvent.getActivityData().getActivityType())
-                .setContentDescription(currEvent.getActivityData().getActivitySubtype())
-                .setContentImageUrl(currEvent.getActivityData().getActivityIconUrl())
-                //.setContentExpiration(new Date(1476566432000L)) // set contents expiration time if applicable
-                .addContentMetadata("eventId", currEvent.getEventId());
 
         eventProfileImg = (ImageView) findViewById(R.id.event_detail_icon);
         eventName = (TextView) findViewById(R.id.activity_name_detail);
@@ -239,16 +232,28 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             }
         });
 
+        String upcomingDate=null;
+
         if (currEvent.getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING)) {
-            String date  = Util.convertUTCtoReadable(currEvent.getLaunchDate());
-            if (date!=null){
-                eventDetailDate.setText(date);
+            upcomingDate  = Util.convertUTCtoReadable(currEvent.getLaunchDate());
+            if (upcomingDate!=null){
+                eventDetailDate.setText(upcomingDate);
             }
         } else {
             eventDetailDate.setText("");
         }
 
         setPlayerNames();
+
+        // Create a BranchUniversal object for the content referred on this activity instance
+        branchUniversalObject = new BranchUniversalObject()
+                .setCanonicalIdentifier("item/12345")
+                .setCanonicalUrl("https://branch.io/deepviews")
+                .setTitle("Join My Fireteam")
+                .setContentDescription(getDeeplinkContent(upcomingDate))
+                .setContentImageUrl(Constants.DEEP_LINK_IMAGE)
+                //.setContentExpiration(new Date(1476566432000L)) // set contents expiration time if applicable
+                .addContentMetadata("eventId", currEvent.getEventId());
 
         userIsPlayer = checkUserIsPlayer();
 
@@ -289,6 +294,28 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
     }
 
+    private String getDeeplinkContent(String upcomingDate) {
+        String description=null;
+        String grpName=getGroupName();//= "<console>: I need <#> more for <activity> in the <group> group on Crossroads";
+        if(user!=null && user.getConsoleType()!=null) {
+            if(currEvent.getActivityData()!=null && currEvent.getActivityData().getActivitySubtype()!=null) {
+                if(grpName!=null) {
+                    if (reqPlayer > 0) {
+                        String desc = user.getConsoleType() + ": I need " + reqPlayer + " more for " + currEvent.getActivityData().getActivitySubtype();
+                        if (upcomingDate != null) {
+                            description = desc + " on " + upcomingDate + " in the " + grpName + " group on Crossroads";
+                        } else {
+                            description = desc + " in the " + grpName + " group on Crossroads";
+                        }
+                        return description;
+                    }
+                }
+            }
+        }
+
+        return "";
+    }
+
     private void shareIt() {
 //        //deeplink creation
 //        BranchUniversalObject branchUniversalObject = new BranchUniversalObject()
@@ -310,8 +337,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 //                .addContentMetadata("property1", "blue")
 //                .addContentMetadata("property2", "red");
 
-        LinkProperties linkProperties = new LinkProperties()
-                .setDuration(100);
+        LinkProperties linkProperties = new LinkProperties();
 
 //        String urlString = null;
         branchUniversalObject.generateShortUrl(this, linkProperties, new Branch.BranchLinkCreateListener() {
@@ -380,16 +406,22 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         listener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                if(snapshot.exists()) {
-                            if(currEvent!=null && currEvent.getEventId()!=null) {
-                                String id = currEvent.getEventId();
-                                RequestParams param = new RequestParams();
-                                param.add("id", id);
-                                controlManager.postEventById(EventDetailActivity.this, param);
-                            }
-                } else {
-                    launchListActivityAndFinish();
+                if(currEvent!=null && currEvent.getEventId()!=null) {
+                    String id = currEvent.getEventId();
+                    RequestParams param = new RequestParams();
+                    param.add("id", id);
+                    controlManager.postEventById(EventDetailActivity.this, param);
                 }
+//                if(snapshot.exists()) {
+//                            if(currEvent!=null && currEvent.getEventId()!=null) {
+//                                String id = currEvent.getEventId();
+//                                RequestParams param = new RequestParams();
+//                                param.add("id", id);
+//                                controlManager.postEventById(EventDetailActivity.this, param);
+//                            }
+//                } else {
+//                    launchListActivityAndFinish();
+//                }
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
@@ -500,7 +532,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private void setPlayerNames() {
         String allNames = "";
         String allNamesRem = "";
-        int reqPlayer = currEvent.getActivityData().getMaxPlayer() - currEvent.getPlayerData().size();
+        reqPlayer = currEvent.getActivityData().getMaxPlayer() - currEvent.getPlayerData().size();
 
         allNames = currEvent.getCreatorData().getPsnId();
         if (!currEvent.getEventStatus().equalsIgnoreCase("full")) {
@@ -571,6 +603,18 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 //        errLayout.setVisibility(View.VISIBLE);
 //        errText.setText(err);
         setErrText(err);
+    }
+
+    public String getGroupName() {
+        if(user!=null && user.getClanId()!=null) {
+            if(controlManager!=null) {
+                GroupData grp = controlManager.getGroupObj(user.getClanId());
+                if(grp!=null && grp.getGroupName()!=null) {
+                    return grp.getGroupName();
+                }
+            }
+        }
+        return null;
     }
 
     private class CurrentEventsViewAdapter extends RecyclerView.Adapter<CurrentEventsViewAdapter.CurrentEventsViewHolder> {

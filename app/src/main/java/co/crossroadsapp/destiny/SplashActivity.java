@@ -124,24 +124,30 @@ public class SplashActivity extends BaseActivity{
     public void onStart() {
         super.onStart();
 
-        Branch branch = Branch.getInstance(getApplicationContext());
-        branch.initSession(new Branch.BranchUniversalReferralInitListener(){
+        Branch.getInstance(getApplicationContext()).initSession(new Branch.BranchUniversalReferralInitListener(){
             @Override
             public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError error) {
                 if (error == null) {
                     // params are the deep linked params associated with the link that the user clicked before showing up
-                    TravellerLog.i("BranchConfigTest", "deep link data: " + branchUniversalObject.toString());
-//                    mHandler.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            Intent homeIntent = new Intent(getApplicationContext(),
-//                                    MainActivity.class);
-//                            startActivity(homeIntent);
-//                            overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-//                            finish();
-//                        }
-//
-//                    }, SPLASH_DELAY);
+                    //TravellerLog.i("BranchConfigTest", "deep link data: " + branchUniversalObject.toString());
+                    if(branchUniversalObject!=null) {
+                        TravellerLog.i("BranchConfigTest", "deep link data: " + branchUniversalObject.toString());
+                        String d = branchUniversalObject.getMetadata().get("+clicked_branch_link");
+                        System.out.println("Hardik click boolean " + d);
+                        if (branchUniversalObject.getMetadata().get("+clicked_branch_link").equalsIgnoreCase("true")) {
+                            if (branchUniversalObject.getMetadata().containsKey("eventId")) {
+                                String eId = branchUniversalObject.getMetadata().get("eventId");
+                                if (eId != null) {
+                                    if (cManager != null) {
+                                        cManager.setDeepLinkEvent(eId);
+                                    }
+//                            Intent in = new Intent("deeplink_flag");
+//                            in.putExtra("eventId", eId);
+//                            sendBroadcast(in);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }, this.getIntent().getData(), this);
