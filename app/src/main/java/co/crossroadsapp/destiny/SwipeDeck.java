@@ -7,6 +7,7 @@ import android.database.DataSetObserver;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,7 @@ public class SwipeDeck extends FrameLayout {
                 0, 0);
         try {
             // TODO: 7/26/16 HS
-            NUMBER_OF_CARDS = 1;//a.getInt(R.styleable.SwipeDeck_max_visible, 3);
+            NUMBER_OF_CARDS = 2;//a.getInt(R.styleable.SwipeDeck_max_visible, 3);
             ROTATION_DEGREES = a.getFloat(R.styleable.SwipeDeck_rotation_degrees, 15f);
             CARD_SPACING = a.getDimension(R.styleable.SwipeDeck_card_spacing, 15f);
             RENDER_ABOVE = a.getBoolean(R.styleable.SwipeDeck_render_above, true);
@@ -215,6 +216,9 @@ public class SwipeDeck extends FrameLayout {
         super.removeView(view);
     }
 
+    private static final int UNBOUNDED = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+
+
     private void addNextCard() {
         if (nextAdapterCard < mAdapter.getCount()) {
 
@@ -223,6 +227,12 @@ public class SwipeDeck extends FrameLayout {
             // ... don't remove and add to this instance: don't call removeView & addView in sequence.
             View newBottomChild = mAdapter.getView(currentTop, null/*lastRemovedView*/, this);
 
+            View topChild = mAdapter.getView(mAdapter.getCount()-1, null, this);
+            //int height = topChild.getHeight();
+
+            topChild.measure(UNBOUNDED, UNBOUNDED);
+            int height = topChild.getMeasuredHeight();
+
             if (hardwareAccelerationEnabled) {
                 //set backed by an off-screen buffer
                 newBottomChild.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -230,7 +240,7 @@ public class SwipeDeck extends FrameLayout {
 
             //set the initial Y value so card appears from under the deck
             //newBottomChild.setY(paddingTop);
-            addAndMeasureChild(newBottomChild);
+            addAndMeasureChild(newBottomChild, topChild, height);
             nextAdapterCard++;
             if(currentTop>0) {
                 currentTop--;
@@ -258,10 +268,12 @@ public class SwipeDeck extends FrameLayout {
      *
      * @param child The view to add
      */
-    private void addAndMeasureChild(View child) {
+    private void addAndMeasureChild(View child, View topChild, int height) {
         ViewGroup.LayoutParams params = child.getLayoutParams();
-        if (params == null) {
+        if (params == null && child == topChild) {
             params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        } else {
+            params = new LayoutParams(LayoutParams.WRAP_CONTENT, height);
         }
 
         //ensure new card is under the deck at the beginning

@@ -13,7 +13,7 @@
             android:paddingTop="3dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingBottom="2dp"
+            android:paddingBottom="5dp"
             swipedeck:card_spacing="6dp"
             swipedeck:max_visible="2"
             swipedeck:render_above="true"
