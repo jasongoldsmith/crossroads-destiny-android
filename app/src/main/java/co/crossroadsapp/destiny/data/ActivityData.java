@@ -147,7 +147,7 @@ public class ActivityData {
             }
 
             if (actData.has("adCard")) {
-                JSONObject jsonobject = actData.getJSONObject("actData");
+                JSONObject jsonobject = actData.optJSONObject("adCard");
                 AdCardData adcard = new AdCardData();
                 adcard.toJson(jsonobject);
                 setAdCardData(adcard);

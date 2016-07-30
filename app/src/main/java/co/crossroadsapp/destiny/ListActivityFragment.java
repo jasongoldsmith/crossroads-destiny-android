@@ -11,6 +11,8 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 
+import co.crossroadsapp.destiny.data.ActivityData;
+import co.crossroadsapp.destiny.data.ActivityList;
 import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
 import co.crossroadsapp.destiny.network.GroupListNetwork;
@@ -124,6 +126,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     private TextView privacy;
     private TextView license;
     private TextView sendMsgAgain;
+    private ArrayList<ActivityData> adActivityData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -948,11 +951,17 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     public void update(Observable observable, Object data) {
             if (observable instanceof EventListNetwork) {
                 if (data != null) {
-                    eList = (EventList) data;
-                    if (eData != null) {
-                        eData.clear();
+                    if(data instanceof EventListNetwork) {
+                        EventList eList = ((EventListNetwork) data).getEventList();
+                        eData = eList.getEventList();
+                        ActivityList adList = ((EventListNetwork) data).getActList();
+                        adActivityData = adList.getActivityList();
                     }
-                    eData = eList.getEventList();
+//                    eList = (EventList) data;
+//                    if (eData != null) {
+//                        eData.clear();
+//                    }
+//                    eData = eList.getEventList();
                     createUpcomingCurrentList(eData);
                     //Checking if current launch happened due to push notification click
                     checkEventIntent();

@@ -83,6 +83,7 @@ public class ControlManager implements Observer{
     private EventByIdNetwork eventById;
     private HelmetUpdateNetwork helmetUpdateNetwork;
     private String deepLinkEvent;
+    private ArrayList<ActivityData> adActivityData;
 
     public ControlManager() {
     }
@@ -112,6 +113,13 @@ public class ControlManager implements Observer{
     public ArrayList<EventData> getEventListCurrent() {
         if (eData!= null && !eData.isEmpty()) {
             return eData;
+        }
+        return null;
+    }
+
+    public ArrayList<ActivityData> getAdsActivityList() {
+        if (adActivityData!= null && !adActivityData.isEmpty()) {
+            return adActivityData;
         }
         return null;
     }
@@ -489,8 +497,15 @@ public class ControlManager implements Observer{
 
         if (observable instanceof EventListNetwork) {
             eData = new ArrayList<EventData>();
-            EventList eList = (EventList) data;
-            eData = eList.getEventList();
+            if (data instanceof EventListNetwork) {
+                EventList eList = ((EventListNetwork) data).getEventList();
+                eData = eList.getEventList();
+                ActivityList adList = ((EventListNetwork) data).getActList();
+                adActivityData = adList.getActivityList();
+            }else {
+                EventList eList = (EventList) data;
+                eData = eList.getEventList();
+            }
         } else if (observable instanceof LogoutNetwork){
             //mCurrentAct.finish();
         } else if (observable instanceof EventRelationshipHandlerNetwork) {
