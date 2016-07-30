@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.CurrentEventDataHolder;
 import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.UserData;
@@ -36,16 +37,23 @@ public class BlankFragment extends Fragment {
     private ArrayList<EventData> fragmentupcomingEventList;
     MyAdapter adapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ArrayList<ActivityData> currentAdList;
 
     public BlankFragment() {
     }
 
     @SuppressLint("ValidFragment")
-    public BlankFragment(ListActivityFragment act, ArrayList<EventData> eData) {
+    public BlankFragment(ListActivityFragment act, ArrayList<EventData> eData, ArrayList<ActivityData> adData) {
         // Required empty public constructor
         mContext = act;
         currentEventList = new ArrayList<EventData>();
+        currentAdList = new ArrayList<ActivityData>();
         currentEventList = eData;
+        if(adData!=null) {
+            currentAdList = adData;
+        } else {
+            adData.clear();
+        }
     }
 
     @Override
@@ -98,16 +106,22 @@ public class BlankFragment extends Fragment {
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         private ArrayList<EventData> elistLocal;
+        private ArrayList<ActivityData> adList;
 
         public MyAdapter(ArrayList<EventData> currentEventList) {
             elistLocal = new ArrayList<EventData>();
+            adList = new ArrayList<ActivityData>();
             if(currentEventList!=null) {
                 elistLocal = currentEventList;
             }
+            if(currentAdList!=null) {
+                adList = currentAdList;
+            }
         }
 
-        protected void addItem(ArrayList<EventData> a) {
+        protected void addItem(ArrayList<EventData> a, ArrayList<ActivityData> ad) {
             this.elistLocal.addAll(a);
+            this.adList.addAll(ad);
         }
 
         // Provide a reference to the views for each data item
@@ -149,6 +163,13 @@ public class BlankFragment extends Fragment {
                 eventDate = (TextView) v.findViewById(R.id.event_time);
                 checkpointText = (TextView) v.findViewById(R.id.checkoint_text);
             }
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            // Just as an example, return 0 or 2 depending on position
+            // Note that unlike in ListView adapters, types don't have to be contiguous
+            return position % 2 * 2;
         }
 
         // Create new views (invoked by the layout manager)
@@ -420,8 +441,8 @@ public class BlankFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            if(elistLocal!=null) {
-                return this.elistLocal.size();
+            if(elistLocal!=null && adList!=null) {
+                return this.elistLocal.size()+this.adList.size();
             }
             return 0;
         }
@@ -439,11 +460,17 @@ public class BlankFragment extends Fragment {
         return false;
     }
 
-    public void updateCurrListAdapter(ArrayList<EventData> eData){
+    public void updateCurrListAdapter(ArrayList<EventData> eData, ArrayList<ActivityData> adActivityData){
         currentEventList = eData;
+        if (adActivityData!=null) {
+            currentAdList = adActivityData;
+        } else {
+            currentEventList.clear();
+        }
         if (adapter!=null){
             adapter.elistLocal.clear();
-            adapter.addItem(eData);
+            adapter.adList.clear();
+            adapter.addItem(currentEventList, currentAdList);
             adapter.notifyDataSetChanged();
         }
     }

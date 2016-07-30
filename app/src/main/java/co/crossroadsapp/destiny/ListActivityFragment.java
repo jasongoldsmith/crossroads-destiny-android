@@ -215,6 +215,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
         fragmentCurrentEventList = new ArrayList<EventData>();
         fragmentupcomingEventList = new ArrayList<EventData>();
+        adActivityData = new ArrayList<ActivityData>();
 
         drawerLayout = (DrawerLayout) findViewById(R.id.out);
 
@@ -893,9 +894,9 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
             switch (position) {
                 case 0:
-                    return new BlankFragment(ListActivityFragment.this, fragmentCurrentEventList);
+                    return new BlankFragment(ListActivityFragment.this, fragmentCurrentEventList, adActivityData);
                 case 1:
-                    return new BlankFragment(ListActivityFragment.this, fragmentupcomingEventList);
+                    return new BlankFragment(ListActivityFragment.this, fragmentupcomingEventList, null);
             }
 
             return null;
@@ -928,12 +929,12 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     private void updateCurrentFrag() {
         Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 0);
         if(page!=null) {
-            ((BlankFragment) page).updateCurrListAdapter(fragmentCurrentEventList);
+            ((BlankFragment) page).updateCurrListAdapter(fragmentCurrentEventList, adActivityData);
         }
 
         page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 1);
         if(page!=null){
-            ((BlankFragment)page).updateCurrListAdapter(fragmentupcomingEventList);
+            ((BlankFragment)page).updateCurrListAdapter(fragmentupcomingEventList, null);
         }
 
         //
@@ -953,6 +954,10 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                 if (data != null) {
                     if(data instanceof EventListNetwork) {
                         EventList eList = ((EventListNetwork) data).getEventList();
+                        if (eData != null && adActivityData!=null) {
+                            eData.clear();
+                            adActivityData.clear();
+                        }
                         eData = eList.getEventList();
                         ActivityList adList = ((EventListNetwork) data).getActList();
                         adActivityData = adList.getActivityList();
