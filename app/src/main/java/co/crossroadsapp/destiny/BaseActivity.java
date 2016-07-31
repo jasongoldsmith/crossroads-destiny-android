@@ -137,25 +137,28 @@ public class BaseActivity extends FragmentActivity {
                     });
                     TextView notiEventText = (TextView) v.findViewById(R.id.noti_text);
                     TextView notiTopText = (TextView) v.findViewById(R.id.noti_toptext);
-                    TextView notiMessage = (TextView) v.findViewById(R.id.noti_subtext);
+                    //TextView notiMessage = (TextView) v.findViewById(R.id.noti_subtext);
                     if(name!=null) {
                         notiEventText.setText(data.get(position).geteName());
                     }
                     if (typeM) {
                         notiTopText.setText("FIRETEAM MESSAGE");
-                        notiMessage.setVisibility(View.VISIBLE);
-                        if(msg!=null) {
-                            notiMessage.setText(data.get(position).getMessage());
-                        }
+//                        notiMessage.setVisibility(View.VISIBLE);
+//                        if(msg!=null) {
+//                            notiMessage.setText(data.get(position).getMessage());
+//                        }
                     } else {
-                        if(msg!=null) {
-                            notiEventText.setText(data.get(position).getMessage());
-                        }
+//                        if(msg!=null) {
+//                            notiEventText.setText(data.get(position).getMessage());
+//                        }
                         if (name!=null) {
                             notiTopText.setText(name.toUpperCase());
                         }
-                        notiMessage.setVisibility(View.GONE);
+//                        notiMessage.setVisibility(View.GONE);
                         //mManager.getEventList(ListActivityFragment.this);
+                    }
+                    if(msg!=null) {
+                        notiEventText.setText(data.get(position).getMessage());
                     }
                 }
             }
