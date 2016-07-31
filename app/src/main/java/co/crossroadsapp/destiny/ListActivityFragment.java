@@ -952,16 +952,16 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     public void update(Observable observable, Object data) {
             if (observable instanceof EventListNetwork) {
                 if (data != null) {
-                    if(data instanceof EventListNetwork) {
-                        EventList eList = ((EventListNetwork) data).getEventList();
-                        if (eData != null && adActivityData!=null) {
-                            eData.clear();
-                            adActivityData.clear();
-                        }
-                        eData = eList.getEventList();
-                        ActivityList adList = ((EventListNetwork) data).getActList();
-                        adActivityData = adList.getActivityList();
-                    }
+ //                   if(data instanceof EventListNetwork) {
+ //                       EventList eList = ((EventListNetwork) data).getEventList();
+                    eData = new ArrayList<EventData>();
+
+                    adActivityData = new ArrayList<ActivityData>();
+
+                        eData = mManager.getEventListCurrent();
+ //                       ActivityList adList = ((EventListNetwork) data).getActList();
+                        adActivityData = mManager.getAdsActivityList();
+ //                   }
 //                    eList = (EventList) data;
 //                    if (eData != null) {
 //                        eData.clear();

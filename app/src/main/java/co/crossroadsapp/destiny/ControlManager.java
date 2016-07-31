@@ -117,6 +117,20 @@ public class ControlManager implements Observer{
         return null;
     }
 
+    public void setEventList(EventList el) {
+        if(eData==null) {
+            eData = new ArrayList<EventData>();
+        }
+        eData = el.getEventList();
+    }
+
+    public void setadList(ActivityList al) {
+        if(adActivityData==null) {
+            adActivityData = new ArrayList<ActivityData>();
+        }
+        adActivityData = al.getActivityList();
+    }
+
     public ArrayList<ActivityData> getAdsActivityList() {
         if (adActivityData!= null && !adActivityData.isEmpty()) {
             return adActivityData;
@@ -128,7 +142,7 @@ public class ControlManager implements Observer{
         try {
             eventListNtwrk = new EventListNetwork(activity);
             eventListNtwrk.addObserver(activity);
-            eventListNtwrk.addObserver(this);
+            //eventListNtwrk.addObserver(this);
             eventListNtwrk.getEvents();
             //todo commenting out get android version for google release
             getAndroidVersion(activity);
@@ -601,7 +615,7 @@ public class ControlManager implements Observer{
         return null;
     }
 
-    public void postCreateEvent(String activityId, String creator_id, int minP, int maxP, String dateTime, CreateNewEvent activity) {
+    public void postCreateEvent(String activityId, String creator_id, int minP, int maxP, String dateTime, Context activity) {
         ArrayList<String> players = new ArrayList<String>();
         players.add(creator_id);
 
@@ -616,7 +630,11 @@ public class ControlManager implements Observer{
         try {
             eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(activity);
             eventRelationshipNtwrk.addObserver(this);
-            eventRelationshipNtwrk.addObserver(activity);
+            if(activity instanceof CreateNewEvent) {
+                eventRelationshipNtwrk.addObserver((CreateNewEvent)activity);
+            } else if(activity instanceof ListActivityFragment) {
+                eventRelationshipNtwrk.addObserver((ListActivityFragment)activity);
+            }
             eventRelationshipNtwrk.postCreateEvent(rp);
         } catch (JSONException e) {
             e.printStackTrace();

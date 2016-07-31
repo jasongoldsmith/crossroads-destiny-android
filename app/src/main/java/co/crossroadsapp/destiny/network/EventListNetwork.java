@@ -112,6 +112,9 @@ public class EventListNetwork extends Observable{
             }
         }
 
+        mManager.setEventList(eventList);
+        mManager.setadList(actList);
+
         setChanged();
         notifyObservers(this);
 

@@ -191,6 +191,7 @@ public class UserData implements Parcelable {
         this.psnVerify = in.readString();
         this.consoleType = in.readString();
         this.membershipId = in.readString();
+        this.authenticationId = in.readInt();
     }
 
     @Override
@@ -209,5 +210,6 @@ public class UserData implements Parcelable {
         dest.writeString(this.psnVerify);
         dest.writeString(this.consoleType);
         dest.writeString(this.membershipId);
+        dest.writeInt(this.authenticationId);
     }
 }

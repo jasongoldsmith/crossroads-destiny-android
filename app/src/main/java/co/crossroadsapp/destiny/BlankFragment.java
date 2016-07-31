@@ -52,7 +52,7 @@ public class BlankFragment extends Fragment {
         if(adData!=null) {
             currentAdList = adData;
         } else {
-            adData.clear();
+            //adData.clear();
         }
     }
 
@@ -82,7 +82,7 @@ public class BlankFragment extends Fragment {
         RecyclerView rv = (RecyclerView) rootView.findViewById(R.id.event_view);
         rv.setHasFixedSize(true);
 
-        adapter = new MyAdapter(currentEventList);
+        adapter = new MyAdapter(currentEventList, currentAdList);
         rv.setAdapter(adapter);
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
@@ -108,13 +108,13 @@ public class BlankFragment extends Fragment {
         private ArrayList<EventData> elistLocal;
         private ArrayList<ActivityData> adList;
 
-        public MyAdapter(ArrayList<EventData> currentEventList) {
+        public MyAdapter(ArrayList<EventData> currentEventList, ArrayList<ActivityData> currentAdList) {
             elistLocal = new ArrayList<EventData>();
             adList = new ArrayList<ActivityData>();
             if(currentEventList!=null) {
                 elistLocal = currentEventList;
             }
-            if(currentAdList!=null) {
+            if(BlankFragment.this.currentAdList !=null) {
                 adList = currentAdList;
             }
         }
@@ -192,7 +192,9 @@ public class BlankFragment extends Fragment {
         public int getItemViewType(int position) {
             // Just as an example, return 0 or 2 depending on position
             // Note that unlike in ListView adapters, types don't have to be contiguous
-            if(position<elistLocal.size()) {
+            if(position==0 && elistLocal.size()==0) {
+                return 2;
+            }else if(position<elistLocal.size()) {
                 return 0;
             } else {
                 return 2;
@@ -212,7 +214,7 @@ public class BlankFragment extends Fragment {
                     return new MyViewHolder(view);
                 case 2:
                     view = LayoutInflater.from(parent.getContext())
-                            .inflate(R.layout.fragment_event, null);
+                            .inflate(R.layout.fragment_adevent, null);
                     return new MyViewHolder2(view);
             }
             //return new MyViewHolder(view);
@@ -220,7 +222,7 @@ public class BlankFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
             switch (viewHolder.getItemViewType()) {
 
                 case 0:
@@ -397,7 +399,14 @@ public class BlankFragment extends Fragment {
                     String cardBackgroundImageUrl = adList.get(position-elistLocal.size()).getAdCardData().getAdCardBaseUrl() + adList.get(position-elistLocal.size()).getAdCardData().getAdCardImagePath();
                     String iconImageUrl = adList.get(position-elistLocal.size()).getActivityIconUrl();
                     Util.picassoLoadIcon(mContext, adHolder.eventAdIcon, iconImageUrl, R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.icon_ghost_default);
-                    Util.picassoLoadIcon(mContext, adHolder.adCardImg, cardBackgroundImageUrl, adHolder.adCardImg.getWidth(), adHolder.adCardImg.getHeight(), R.drawable.icon_ghost_default);
+                    Util.picassoLoadIcon(mContext, adHolder.adCardImg, cardBackgroundImageUrl, R.dimen.ad_hgt, R.dimen.ad_width, R.drawable.img_adcard_raid_golgoroth);
+
+                    adHolder.addBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mManager.postCreateEvent(adList.get(position-elistLocal.size()).getId(), user.getUserId(), adList.get(position-elistLocal.size()).getMinPlayer(), adList.get(position-elistLocal.size()).getMaxPlayer(), null, mContext);
+                        }
+                    });
                     break;
             }
         }
@@ -517,7 +526,7 @@ public class BlankFragment extends Fragment {
         if (adActivityData!=null) {
             currentAdList = adActivityData;
         } else {
-            currentEventList.clear();
+            currentAdList.clear();
         }
         if (adapter!=null){
             adapter.elistLocal.clear();
