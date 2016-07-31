@@ -189,17 +189,42 @@ public class BaseActivity extends FragmentActivity {
                 notiList = new ArrayList<PushNotification>();
             }
             notiList.add(noti);
-            if(context instanceof ListActivityFragment) {
-                showNotifications(context);
-            } else if(context instanceof EventDetailActivity) {
-                if(eventNotiList==null){
-                    eventNotiList = new ArrayList<PushNotification>();
-                }
-                if(noti.getTypeMessage()) {
-                    eventNotiList.add(noti);
-                    showNotifications(context);
-                }
+            //
+            Context act = mManager.getCurrentActivity();
+            if(act instanceof EventDetailActivity || act instanceof ListActivityFragment) {
+                showNotifications(act);
+//                if (eventNotiList == null) {
+//                    eventNotiList = new ArrayList<PushNotification>();
+//                }
+//                if (noti.getTypeMessage()) {
+//                    if () {
+//                        eventNotiList.add(noti);
+//                    }
+//                    notiList.add(noti);
+//                    showNotifications(act);
+//                }
             }
+//            } else if (act instanceof ListActivityFragment){
+//                notiList.add(noti);
+//                showNotifications(act);
+//            } else {
+//                notiList.add(noti);
+//            }
+
+
+            //
+//            notiList.add(noti);
+//            if(context instanceof ListActivityFragment) {
+//                showNotifications(context);
+//            } else if(context instanceof EventDetailActivity) {
+//                if(eventNotiList==null){
+//                    eventNotiList = new ArrayList<PushNotification>();
+//                }
+//                if(noti.getTypeMessage()) {
+//                    eventNotiList.add(noti);
+//                    showNotifications(context);
+//                }
+//            }
                 //put timer to make the notification message gone after 5 seconds
 //                notiBar.postDelayed(new Runnable() {
 //                    public void run() {
@@ -221,9 +246,10 @@ public class BaseActivity extends FragmentActivity {
             view = ((ListActivityFragment)c).getWindow().getDecorView().findViewById(android.R.id.content).getRootView();
         } else if (c instanceof EventDetailActivity) {
             view = ((EventDetailActivity)c).getWindow().getDecorView().findViewById(android.R.id.content).getRootView();
-            if(eventNotiList==null) {
+            //if(eventNotiList==null) {
                 eventNotiList = new ArrayList<PushNotification>();
-            }
+            //}
+            // filter event related message notification
             if(((EventDetailActivity)c).currEvent!=null) {
                 getEventNotification(((EventDetailActivity)c).currEvent);
             }
@@ -237,6 +263,8 @@ public class BaseActivity extends FragmentActivity {
             if (notiList==null) {
                 notiList = new ArrayList<PushNotification>();
             }
+            System.out.println("Hardik notilist is " + notiList.size());
+            System.out.println("Hardik elist is " + eventNotiList.size());
             adapter = new SwipeStackAdapter(c instanceof ListActivityFragment?notiList:eventNotiList, c);
             cardStack.setAdapter(adapter);
             adapter.notifyDataSetChanged();

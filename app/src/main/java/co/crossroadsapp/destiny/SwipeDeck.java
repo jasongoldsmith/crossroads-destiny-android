@@ -196,6 +196,7 @@ public class SwipeDeck extends FrameLayout {
             NUMBER_OF_CARDS = 2;
         }
         int childOffset = getChildCount() - NUMBER_OF_CARDS + 1;
+        NUMBER_OF_CARDS=2; // reset number of cards
         View child = getChildAt(getChildCount() - childOffset);
         if (child != null) {
             child.setOnTouchListener(null);
