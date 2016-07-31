@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="154dp"
             android:id="@+id/fragment_adevent_mainlayout"
-            android:background="@drawable/imgAdCardRaidGolgoroth">
+            android:background="@drawable/img_adcard_raid_golgoroth">
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,7 +53,15 @@
                     android:layout_toRightOf="@+id/adevent_icon"
                     android:layout_below="@+id/header_text"
                     android:layout_marginLeft="9dp"
+                    android:textColor="@color/activity_light_color"
                     />
+                
+                <android.support.v7.widget.CardView
+                    android:layout_width="64dp"
+                    android:layout_height="36dp"
+                    conversation:cardElevation="0dp">
+
+                </android.support.v7.widget.CardView>
 
             </RelativeLayout>
 
