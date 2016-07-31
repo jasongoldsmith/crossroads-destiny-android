@@ -28,7 +28,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/library_1_14_5.xml" afterPath="$PROJECT_DIR$/.idea/libraries/library_1_14_5.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/ListActivityFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/ListActivityFragment.java" />
     </list>
     <ignored path="traveler-android.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -59,62 +58,25 @@
       <file leaf-file-name="ListActivityFragment.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/ListActivityFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.4814814">
+            <state vertical-scroll-proportion="0.0">
               <caret line="898" column="103" selection-start-line="898" selection-start-column="103" selection-end-line="898" selection-end-column="103" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#6319#6378#0" expanded="true" />
-                <element signature="e#7033#7288#0" expanded="true" />
-                <element signature="e#7287#7288#0" expanded="true" />
-                <element signature="e#7731#7883#0" expanded="true" />
-                <element signature="e#7882#7883#0" expanded="true" />
-                <element signature="e#9321#9486#0" expanded="true" />
-                <element signature="e#9485#9486#0" expanded="true" />
-                <element signature="e#9525#9691#0" expanded="true" />
-                <element signature="e#9690#9691#0" expanded="true" />
-                <element signature="e#10138#10304#0" expanded="true" />
-                <element signature="e#10303#10304#0" expanded="true" />
-                <element signature="e#10537#10705#0" expanded="true" />
-                <element signature="e#10704#10705#0" expanded="true" />
-                <element signature="e#10820#10972#0" expanded="true" />
-                <element signature="e#10971#10972#0" expanded="true" />
-                <element signature="e#11016#11265#0" expanded="true" />
-                <element signature="e#11264#11265#0" expanded="true" />
-                <element signature="e#11391#11794#0" expanded="true" />
-                <element signature="e#11793#11794#0" expanded="true" />
-                <element signature="e#11903#12226#0" expanded="true" />
-                <element signature="e#12225#12226#0" expanded="true" />
-                <element signature="e#13452#13630#0" expanded="true" />
-                <element signature="e#13629#13630#0" expanded="true" />
-                <element signature="e#13669#13845#0" expanded="true" />
-                <element signature="e#13844#13845#0" expanded="true" />
-                <element signature="e#13884#14053#0" expanded="true" />
-                <element signature="e#14052#14053#0" expanded="true" />
-                <element signature="e#14498#14746#0" expanded="true" />
-                <element signature="e#14745#14746#0" expanded="true" />
-                <element signature="e#15479#15806#0" expanded="true" />
-                <element signature="e#15805#15806#0" expanded="true" />
-                <element signature="e#16500#16526#0" expanded="true" />
-                <element signature="e#16528#16556#0" expanded="true" />
-                <element signature="e#16641#16674#0" expanded="true" />
-                <element signature="e#16676#16711#0" expanded="true" />
-                <element signature="e#17422#17473#0" expanded="true" />
-                <element signature="e#17510#17551#0" expanded="true" />
-                <element signature="e#17553#18139#0" expanded="true" />
-                <element signature="e#18138#18139#0" expanded="true" />
-                <element signature="e#18176#18221#0" expanded="true" />
-                <element signature="e#18223#18417#0" expanded="true" />
-                <element signature="e#18416#18417#0" expanded="true" />
-                <element signature="e#19280#19323#0" expanded="true" />
-                <element signature="e#29446#29787#0" expanded="true" />
-                <element signature="e#29786#29787#0" expanded="true" />
-                <element signature="e#30078#31461#0" expanded="true" />
-                <element signature="e#31460#31461#0" expanded="true" />
-                <element signature="e#31648#31675#0" expanded="true" />
-                <element signature="e#31677#31706#0" expanded="true" />
-                <element signature="e#32027#32037#0" expanded="true" />
               </folding>
             </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="fragment_event.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_event.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="33.018867">
+              <caret line="36" column="12" selection-start-line="36" selection-start-column="12" selection-end-line="41" selection-end-column="55" />
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="android-designer">
+            <state />
           </provider>
         </entry>
       </file>
@@ -128,23 +90,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BlankFragment.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BlankFragment.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.573055">
-              <caret line="305" column="49" selection-start-line="305" selection-start-column="49" selection-end-line="305" selection-end-column="49" />
-              <folding />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="126" column="62" selection-start-line="126" selection-start-column="62" selection-end-line="126" selection-end-column="62" />
+              <folding>
+                <element signature="e#2610#2803#0" expanded="true" />
+                <element signature="e#2802#2803#0" expanded="true" />
+                <element signature="e#14414#15592#0" expanded="true" />
+                <element signature="e#15591#15592#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GroupData.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/data/GroupData.java">
+      <file leaf-file-name="fragment_adevent.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_adevent.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.95862067">
+              <caret line="54" column="51" selection-start-line="54" selection-start-column="51" selection-end-line="54" selection-end-column="51" />
               <folding />
             </state>
+          </provider>
+          <provider editor-type-id="android-designer">
+            <state />
           </provider>
         </entry>
       </file>
@@ -153,7 +123,9 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -163,7 +135,10 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="20" column="32" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
-              <folding />
+              <folding>
+                <element signature="e#204#205#0" expanded="false" />
+                <element signature="e#258#259#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -173,34 +148,16 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="112" column="39" selection-start-line="112" selection-start-column="39" selection-end-line="112" selection-end-column="39" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AdCardData.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/data/AdCardData.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="57" column="0" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="false" />
-                <element signature="e#406#407#0" expanded="false" />
-                <element signature="e#437#438#0" expanded="false" />
-                <element signature="e#473#474#0" expanded="false" />
-                <element signature="e#504#505#0" expanded="false" />
-                <element signature="e#562#563#0" expanded="false" />
-                <element signature="e#612#613#0" expanded="false" />
-                <element signature="e#652#653#0" expanded="false" />
-                <element signature="e#688#689#0" expanded="false" />
-                <element signature="e#744#745#0" expanded="false" />
-                <element signature="e#792#793#0" expanded="false" />
-                <element signature="e#831#832#0" expanded="false" />
-                <element signature="e#866#867#0" expanded="false" />
-                <element signature="e#908#909#0" expanded="false" />
-                <element signature="e#946#947#0" expanded="false" />
-                <element signature="e#1220#1221#0" expanded="false" />
-                <element signature="e#1258#1259#0" expanded="false" />
+                <element signature="e#3909#3910#0" expanded="false" />
+                <element signature="e#3936#3937#0" expanded="false" />
+                <element signature="e#18308#18309#0" expanded="false" />
+                <element signature="e#18346#18347#0" expanded="false" />
+                <element signature="e#25184#25185#0" expanded="false" />
+                <element signature="e#25234#25235#0" expanded="false" />
+                <element signature="e#25274#25275#0" expanded="false" />
+                <element signature="e#25310#25311#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -223,6 +180,7 @@
       <list>
         <option value="resourceFile" />
         <option value="Class" />
+        <option value="layoutResourceFile" />
       </list>
     </option>
   </component>
@@ -2735,7 +2693,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="4409390306000" />
+        <entry key="$PROJECT_DIR$" value="4409401154000" />
         <entry key="$USER_HOME$/dlib-android-app" value="5823370836000" />
       </map>
     </option>
@@ -3039,7 +2997,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/ForgotLoginActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/crash_report_activity.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_change_password.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_eventdetail_playercard.xml" />
@@ -3090,6 +3047,7 @@
         <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/ControlManager.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/ListActivityFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_adevent.xml" />
       </list>
     </option>
   </component>
@@ -3129,6 +3087,133 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="traveler-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="traveler-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="traveler-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="traveler-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="traveler-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="traveler-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="traveler-android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+      <pane id="AndroidView">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="traveler-android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Gradle Scripts" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidBuildScriptsGroupNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="traveler-android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="traveler-android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="layout" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="traveler-android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="drawable" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="traveler-android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="PackagesPane">
         <subPane>
           <PATH>
@@ -3197,138 +3282,7 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="traveler-android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="traveler-android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="traveler-android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="traveler-android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="traveler-android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="traveler-android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="traveler-android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="AndroidView">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="traveler-android" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Gradle Scripts" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidBuildScriptsGroupNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="traveler-android" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="traveler-android" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="traveler-android" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="destiny" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="traveler-android" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="destiny" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="network" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -3341,7 +3295,7 @@
     <property name="DEBUGGABLE_PROCESS" value="dev.crossroadsapp.destiny" />
     <property name="SHOW_ALL_PROCESSES" value="false" />
     <property name="device.picker.selection" value="06157df64ab85032" />
-    <property name="last_directory_selection" value="$PROJECT_DIR$/app/src/main/res" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/app/src/main/res/drawable" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/app" />
     <property name="ExportApk.ApkPath" value="$PROJECT_DIR$/app" />
     <property name="ExportApk.Flavors" value="dev" />
@@ -3353,11 +3307,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
       <recent name="$PROJECT_DIR$/app/src/main/res" />
       <recent name="$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi" />
       <recent name="$PROJECT_DIR$/app/src/main/res/drawable-xxxhdpi" />
       <recent name="$PROJECT_DIR$/app/src/main/res/drawable-xhdpi" />
-      <recent name="$PROJECT_DIR$/app/src/main/res/drawable-mdpi" />
     </key>
     <key name="android.template.packageName">
       <recent name="co.crossroadsapp.destiny" />
@@ -3695,10 +3649,10 @@
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.41191068" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3114144" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39702234" sideWeight="0.49713877" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3995037" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -3707,19 +3661,19 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42514125" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2725322" sideWeight="0.44504505" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2725322" sideWeight="0.45037222" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4032258" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24421053" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.4845996" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2725322" sideWeight="0.55495495" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2725322" sideWeight="0.5496278" order="1" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23728813" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3114144" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25477707" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -3832,7 +3786,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java</url>
-          <line>306</line>
+          <line>320</line>
           <properties />
           <option name="timeStamp" value="99" />
         </line-breakpoint>
@@ -4048,7 +4002,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java</url>
-          <line>219</line>
+          <line>233</line>
           <properties />
           <option name="timeStamp" value="236" />
         </line-breakpoint>
@@ -4322,27 +4276,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.901961">
-          <caret line="54" column="49" selection-start-line="54" selection-start-column="49" selection-end-line="54" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_group.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-12.735849">
-          <caret line="45" column="49" selection-start-line="45" selection-start-column="49" selection-end-line="45" selection-end-column="49" />
-          <folding>
-            <element signature="e#1953#1977#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-23/android/widget/TextView.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -4526,17 +4459,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_event.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.3584905">
-          <caret line="47" column="58" selection-start-line="47" selection-start-column="58" selection-end-line="47" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/profile_image.png">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -4617,7 +4539,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="137" column="89" selection-start-line="137" selection-start-column="89" selection-end-line="137" selection-end-column="89" />
           <folding>
-            <element signature="e#7512#7513#0" expanded="true" />
+            <element signature="e#7512#7513#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -4721,7 +4643,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -4729,7 +4653,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="20" column="32" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
-          <folding />
+          <folding>
+            <element signature="e#204#205#0" expanded="false" />
+            <element signature="e#258#259#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -4737,7 +4664,17 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="112" column="39" selection-start-line="112" selection-start-column="39" selection-end-line="112" selection-end-column="39" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#3909#3910#0" expanded="false" />
+            <element signature="e#3936#3937#0" expanded="false" />
+            <element signature="e#18308#18309#0" expanded="false" />
+            <element signature="e#18346#18347#0" expanded="false" />
+            <element signature="e#25184#25185#0" expanded="false" />
+            <element signature="e#25234#25235#0" expanded="false" />
+            <element signature="e#25274#25275#0" expanded="false" />
+            <element signature="e#25310#25311#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -4759,70 +4696,52 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/ListActivityFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.4814814">
+        <state vertical-scroll-proportion="0.0">
           <caret line="898" column="103" selection-start-line="898" selection-start-column="103" selection-end-line="898" selection-end-column="103" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#6319#6378#0" expanded="true" />
-            <element signature="e#7033#7288#0" expanded="true" />
-            <element signature="e#7287#7288#0" expanded="true" />
-            <element signature="e#7731#7883#0" expanded="true" />
-            <element signature="e#7882#7883#0" expanded="true" />
-            <element signature="e#9321#9486#0" expanded="true" />
-            <element signature="e#9485#9486#0" expanded="true" />
-            <element signature="e#9525#9691#0" expanded="true" />
-            <element signature="e#9690#9691#0" expanded="true" />
-            <element signature="e#10138#10304#0" expanded="true" />
-            <element signature="e#10303#10304#0" expanded="true" />
-            <element signature="e#10537#10705#0" expanded="true" />
-            <element signature="e#10704#10705#0" expanded="true" />
-            <element signature="e#10820#10972#0" expanded="true" />
-            <element signature="e#10971#10972#0" expanded="true" />
-            <element signature="e#11016#11265#0" expanded="true" />
-            <element signature="e#11264#11265#0" expanded="true" />
-            <element signature="e#11391#11794#0" expanded="true" />
-            <element signature="e#11793#11794#0" expanded="true" />
-            <element signature="e#11903#12226#0" expanded="true" />
-            <element signature="e#12225#12226#0" expanded="true" />
-            <element signature="e#13452#13630#0" expanded="true" />
-            <element signature="e#13629#13630#0" expanded="true" />
-            <element signature="e#13669#13845#0" expanded="true" />
-            <element signature="e#13844#13845#0" expanded="true" />
-            <element signature="e#13884#14053#0" expanded="true" />
-            <element signature="e#14052#14053#0" expanded="true" />
-            <element signature="e#14498#14746#0" expanded="true" />
-            <element signature="e#14745#14746#0" expanded="true" />
-            <element signature="e#15479#15806#0" expanded="true" />
-            <element signature="e#15805#15806#0" expanded="true" />
-            <element signature="e#16500#16526#0" expanded="true" />
-            <element signature="e#16528#16556#0" expanded="true" />
-            <element signature="e#16641#16674#0" expanded="true" />
-            <element signature="e#16676#16711#0" expanded="true" />
-            <element signature="e#17422#17473#0" expanded="true" />
-            <element signature="e#17510#17551#0" expanded="true" />
-            <element signature="e#17553#18139#0" expanded="true" />
-            <element signature="e#18138#18139#0" expanded="true" />
-            <element signature="e#18176#18221#0" expanded="true" />
-            <element signature="e#18223#18417#0" expanded="true" />
-            <element signature="e#18416#18417#0" expanded="true" />
-            <element signature="e#19280#19323#0" expanded="true" />
-            <element signature="e#29446#29787#0" expanded="true" />
-            <element signature="e#29786#29787#0" expanded="true" />
-            <element signature="e#30078#31461#0" expanded="true" />
-            <element signature="e#31460#31461#0" expanded="true" />
-            <element signature="e#31648#31675#0" expanded="true" />
-            <element signature="e#31677#31706#0" expanded="true" />
-            <element signature="e#32027#32037#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/img_card_bg_new.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_event.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.573055">
-          <caret line="305" column="49" selection-start-line="305" selection-start-column="49" selection-end-line="305" selection-end-column="49" />
+        <state vertical-scroll-proportion="33.018867">
+          <caret line="36" column="12" selection-start-line="36" selection-start-column="12" selection-end-line="41" selection-end-column="55" />
           <folding />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="126" column="62" selection-start-line="126" selection-start-column="62" selection-end-line="126" selection-end-column="62" />
+          <folding>
+            <element signature="e#2610#2803#0" expanded="true" />
+            <element signature="e#2802#2803#0" expanded="true" />
+            <element signature="e#14414#15592#0" expanded="true" />
+            <element signature="e#15591#15592#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_adevent.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.95862067">
+          <caret line="54" column="51" selection-start-line="54" selection-start-column="51" selection-end-line="54" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
   </component>

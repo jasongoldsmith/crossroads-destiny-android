@@ -169,7 +169,11 @@ public class BlankFragment extends Fragment {
         public int getItemViewType(int position) {
             // Just as an example, return 0 or 2 depending on position
             // Note that unlike in ListView adapters, types don't have to be contiguous
-            return position % 2 * 2;
+            if(position<elistLocal.size()) {
+                return 0;
+            } else {
+                return 2;
+            }
         }
 
         // Create new views (invoked by the layout manager)
@@ -177,9 +181,19 @@ public class BlankFragment extends Fragment {
         public MyAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
                                                          int viewType) {
             RecyclerView.ViewHolder vh = null;
-            view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.fragment_event, null);
-            return new MyViewHolder(view);
+
+            switch (viewType) {
+                case 0:
+                    view = LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.fragment_event, null);
+                    return new MyViewHolder(view);
+                case 2:
+                    view = LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.fragment_event, null);
+                    return new MyViewHolder2(view);
+            }
+            //return new MyViewHolder(view);
+            return null;
         }
 
         @Override
