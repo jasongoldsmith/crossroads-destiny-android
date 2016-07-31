@@ -104,7 +104,7 @@ public class BlankFragment extends Fragment {
 //        onItemsLoadComplete();
     }
 
-    public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+    public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private ArrayList<EventData> elistLocal;
         private ArrayList<ActivityData> adList;
 
@@ -165,6 +165,29 @@ public class BlankFragment extends Fragment {
             }
         }
 
+        //Viewholder for ad cards
+        public class MyViewHolder2 extends RecyclerView.ViewHolder {
+            private RelativeLayout event_adcard_mainLayout;
+            private ImageView adCardImg;
+            private CardView event_adcard;
+            private CardView addBtn;
+            protected TextView eventadHeader;
+            protected TextView eventAdSubheader;
+            protected ImageView eventAdIcon;
+
+            public MyViewHolder2(View v) {
+                super(v);
+                view = v;
+                adCardImg = (ImageView) v.findViewById(R.id.adcard_img);
+                event_adcard_mainLayout = (RelativeLayout) v.findViewById(R.id.fragment_adevent_mainlayout);
+                event_adcard = (CardView) v.findViewById(R.id.ad_event);
+                eventadHeader = (TextView) v.findViewById(R.id.ad_header);
+                eventAdSubheader = (TextView) v.findViewById(R.id.ad_subheader);
+                eventAdIcon = (ImageView) v.findViewById(R.id.adevent_icon);
+                addBtn = (CardView) v.findViewById(R.id.adcard_addbtn);
+            }
+        }
+
         @Override
         public int getItemViewType(int position) {
             // Just as an example, return 0 or 2 depending on position
@@ -178,7 +201,7 @@ public class BlankFragment extends Fragment {
 
         // Create new views (invoked by the layout manager)
         @Override
-        public MyAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                          int viewType) {
             RecyclerView.ViewHolder vh = null;
 
@@ -197,68 +220,72 @@ public class BlankFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final MyViewHolder holder, int position) {
-            if (this.elistLocal.size() > 0) {
-                boolean CreatorIn = false;
-                boolean CreatorIsPlayer = false;
-                String allNames = "";
-                String allNamesRem = "";
-                final EventData currEvent = elistLocal.get(position);
-                final String eId = this.elistLocal.get(position).getEventId();
-                String s = this.elistLocal.get(position).getActivityData().getActivitySubtype();
-                int l = this.elistLocal.get(position).getActivityData().getActivityLight();
-                String url = this.elistLocal.get(position).getActivityData().getActivityIconUrl();
-                int reqPlayer = this.elistLocal.get(position).getActivityData().getMaxPlayer() - this.elistLocal.get(position).getPlayerData().size();
-                // get players
-                int i = this.elistLocal.get(position).getPlayerData().size();
-                int level = this.elistLocal.get(position).getActivityData().getActivityLevel();
-                String checkpoint = this.elistLocal.get(position).getActivityData().getActivityCheckpoint();
-                String creatorId = this.elistLocal.get(position).getCreatorData().getPlayerId();
-                final String status = this.elistLocal.get(position).getEventStatus();
+        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+            switch (viewHolder.getItemViewType()) {
 
-                holder.checkpointText.setVisibility(View.GONE);
-                holder.eventDate.setVisibility(View.GONE);
-                setCardViewLayoutParams(holder.event_card_mainLayout, 137);
+                case 0:
+                    final MyViewHolder holder = (MyViewHolder) viewHolder;
+                    if (this.elistLocal.size() > 0) {
+                        boolean CreatorIn = false;
+                        boolean CreatorIsPlayer = false;
+                        String allNames = "";
+                        String allNamesRem = "";
+                        final EventData currEvent = elistLocal.get(position);
+                        final String eId = this.elistLocal.get(position).getEventId();
+                        String s = this.elistLocal.get(position).getActivityData().getActivitySubtype();
+                        int l = this.elistLocal.get(position).getActivityData().getActivityLight();
+                        String url = this.elistLocal.get(position).getActivityData().getActivityIconUrl();
+                        int reqPlayer = this.elistLocal.get(position).getActivityData().getMaxPlayer() - this.elistLocal.get(position).getPlayerData().size();
+                        // get players
+                        int i = this.elistLocal.get(position).getPlayerData().size();
+                        int level = this.elistLocal.get(position).getActivityData().getActivityLevel();
+                        String checkpoint = this.elistLocal.get(position).getActivityData().getActivityCheckpoint();
+                        String creatorId = this.elistLocal.get(position).getCreatorData().getPlayerId();
+                        final String status = this.elistLocal.get(position).getEventStatus();
 
-                if(creatorId!=null){
-                    if (user!=null && user.getUserId()!=null){
-                        if (creatorId.equalsIgnoreCase(user.getUserId())) {
-                            CreatorIn = true;
-                            CreatorIsPlayer = true;
-                        }
-                    }
-                }
-                if(elistLocal.get(position).getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING) || (checkpoint!=null)) {
-                    if(elistLocal.get(position).getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING)) {
-                        String date = Util.convertUTCtoReadable(elistLocal.get(position).getLaunchDate());
-                        if (date != null) {
-                            holder.eventDate.setVisibility(View.VISIBLE);
-                            holder.eventDate.setText(date);
-                        }
-                        if (checkpoint != null && checkpoint.length() > 0 && (!checkpoint.equalsIgnoreCase("null"))) {
-                            holder.checkpointText.setVisibility(View.VISIBLE);
-                            holder.checkpointText.setText(checkpoint);
-                            setCardViewLayoutParams(holder.event_card_mainLayout, 177);
-                        } else {
-                            holder.checkpointText.setVisibility(View.GONE);
-                            setCardViewLayoutParams(holder.event_card_mainLayout, 155);
-                        }
-                    } else if (checkpoint != null && checkpoint.length() > 0 && (!checkpoint.equalsIgnoreCase("null"))) {
-                        holder.checkpointText.setVisibility(View.VISIBLE);
-                        holder.checkpointText.setText(checkpoint);
-                        setCardViewLayoutParams(holder.event_card_mainLayout, 155);
-                    }
-                }
+                        holder.checkpointText.setVisibility(View.GONE);
+                        holder.eventDate.setVisibility(View.GONE);
+                        setCardViewLayoutParams(holder.event_card_mainLayout, 137);
 
-                for (int y = 0; y < i; y++) {
-                    String n = this.elistLocal.get(position).getPlayerData().get(y).getPsnId();
-                    String profileUrl = this.elistLocal.get(position).getPlayerData().get(y).getPlayerImageUrl();
-                    String pId = this.elistLocal.get(position).getPlayerData().get(y).getPlayerId();
-                    if(user!=null && user.getUserId()!=null) {
-                        if (user.getUserId().equalsIgnoreCase(pId)) {
-                            CreatorIn = true;
+                        if (creatorId != null) {
+                            if (user != null && user.getUserId() != null) {
+                                if (creatorId.equalsIgnoreCase(user.getUserId())) {
+                                    CreatorIn = true;
+                                    CreatorIsPlayer = true;
+                                }
+                            }
                         }
-                    }
+                        if (elistLocal.get(position).getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING) || (checkpoint != null)) {
+                            if (elistLocal.get(position).getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING)) {
+                                String date = Util.convertUTCtoReadable(elistLocal.get(position).getLaunchDate());
+                                if (date != null) {
+                                    holder.eventDate.setVisibility(View.VISIBLE);
+                                    holder.eventDate.setText(date);
+                                }
+                                if (checkpoint != null && checkpoint.length() > 0 && (!checkpoint.equalsIgnoreCase("null"))) {
+                                    holder.checkpointText.setVisibility(View.VISIBLE);
+                                    holder.checkpointText.setText(checkpoint);
+                                    setCardViewLayoutParams(holder.event_card_mainLayout, 177);
+                                } else {
+                                    holder.checkpointText.setVisibility(View.GONE);
+                                    setCardViewLayoutParams(holder.event_card_mainLayout, 155);
+                                }
+                            } else if (checkpoint != null && checkpoint.length() > 0 && (!checkpoint.equalsIgnoreCase("null"))) {
+                                holder.checkpointText.setVisibility(View.VISIBLE);
+                                holder.checkpointText.setText(checkpoint);
+                                setCardViewLayoutParams(holder.event_card_mainLayout, 155);
+                            }
+                        }
+
+                        for (int y = 0; y < i; y++) {
+                            String n = this.elistLocal.get(position).getPlayerData().get(y).getPsnId();
+                            String profileUrl = this.elistLocal.get(position).getPlayerData().get(y).getPlayerImageUrl();
+                            String pId = this.elistLocal.get(position).getPlayerData().get(y).getPlayerId();
+                            if (user != null && user.getUserId() != null) {
+                                if (user.getUserId().equalsIgnoreCase(pId)) {
+                                    CreatorIn = true;
+                                }
+                            }
 
 //                    if (i>1 && y<i-1) {
 //                        allNames = allNames + n + ", ";
@@ -266,101 +293,112 @@ public class BlankFragment extends Fragment {
 //                        allNames = allNames + n;
 //                   }
 
-                    if (y < 4)
-                        uploadPlayerImg(holder, profileUrl, y, i);
-                }
-
-                allNames = this.elistLocal.get(position).getCreatorData().getPsnId();
-                if (!status.equalsIgnoreCase("full")) {
-                    allNamesRem = " " + "LF" + reqPlayer + "M";
-                }
-
-                if (status != null && !status.equalsIgnoreCase("")) {
-                    if (!status.equalsIgnoreCase(Constants.STATUS_FULL) && !CreatorIn) {
-                        holder.joinBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                RequestParams rp = new RequestParams();
-                                rp.put("eId", eId);
-                                rp.put("player", user.getUserId());
-                                mContext.hideProgress();
-                                mContext.showProgress();
-                                mManager.postJoinEvent(mContext, rp);
-                                holder.joinBtn.setClickable(false);
-                            }
-                        });
-                    } else if (CreatorIn) {
-                        holder.unjoinBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                RequestParams rp = new RequestParams();
-                                rp.put("eId", eId);
-                                rp.put("player", user.getUserId());
-                                mContext.hideProgress();
-                                mContext.showProgress();
-                                mManager.postUnJoinEvent(mContext, rp);
-                                holder.unjoinBtn.setClickable(false);
-                            }
-                        });
-                    }
-                }
-                final boolean showJoin;
-                if (!status.equalsIgnoreCase(Constants.STATUS_FULL) && !CreatorIn) {
-                    showJoin = true;
-                } else {
-                    showJoin = false;
-                }
-
-                if (s != "" || s != null) {
-                    holder.eventSubType.setText(s);
-                }
-
-                holder.event_card.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (currEvent != null) {
-                            CurrentEventDataHolder ins = CurrentEventDataHolder.getInstance();
-                            ins.setData(currEvent);
-                            if (showJoin) {
-                                ins.setJoinVisible(true);
-                            } else {
-                                ins.setJoinVisible(false);
-                            }
-                            //setCurrEventData(currEvent);
+                            if (y < 4)
+                                uploadPlayerImg(holder, profileUrl, y, i);
                         }
-                        if(mContext!=null) {
-                            //start new activity for event
-                            Intent regIntent = new Intent(mContext,
-                                    EventDetailActivity.class);
-                            if(regIntent!=null) {
-                                regIntent.putExtra("userdata", user);
-                                startActivity(regIntent);
-                                mContext.finish();
+
+                        allNames = this.elistLocal.get(position).getCreatorData().getPsnId();
+                        if (!status.equalsIgnoreCase("full")) {
+                            allNamesRem = " " + "LF" + reqPlayer + "M";
+                        }
+
+                        if (status != null && !status.equalsIgnoreCase("")) {
+                            if (!status.equalsIgnoreCase(Constants.STATUS_FULL) && !CreatorIn) {
+                                holder.joinBtn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        RequestParams rp = new RequestParams();
+                                        rp.put("eId", eId);
+                                        rp.put("player", user.getUserId());
+                                        mContext.hideProgress();
+                                        mContext.showProgress();
+                                        mManager.postJoinEvent(mContext, rp);
+                                        holder.joinBtn.setClickable(false);
+                                    }
+                                });
+                            } else if (CreatorIn) {
+                                holder.unjoinBtn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        RequestParams rp = new RequestParams();
+                                        rp.put("eId", eId);
+                                        rp.put("player", user.getUserId());
+                                        mContext.hideProgress();
+                                        mContext.showProgress();
+                                        mManager.postUnJoinEvent(mContext, rp);
+                                        holder.unjoinBtn.setClickable(false);
+                                    }
+                                });
                             }
                         }
+                        final boolean showJoin;
+                        if (!status.equalsIgnoreCase(Constants.STATUS_FULL) && !CreatorIn) {
+                            showJoin = true;
+                        } else {
+                            showJoin = false;
+                        }
+
+                        if (s != "" || s != null) {
+                            holder.eventSubType.setText(s);
+                        }
+
+                        holder.event_card.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (currEvent != null) {
+                                    CurrentEventDataHolder ins = CurrentEventDataHolder.getInstance();
+                                    ins.setData(currEvent);
+                                    if (showJoin) {
+                                        ins.setJoinVisible(true);
+                                    } else {
+                                        ins.setJoinVisible(false);
+                                    }
+                                    //setCurrEventData(currEvent);
+                                }
+                                if (mContext != null) {
+                                    //start new activity for event
+                                    Intent regIntent = new Intent(mContext,
+                                            EventDetailActivity.class);
+                                    if (regIntent != null) {
+                                        regIntent.putExtra("userdata", user);
+                                        startActivity(regIntent);
+                                        mContext.finish();
+                                    }
+                                }
+                            }
+                        });
+
+                        holder.eventaLight.setText("");
+                        if (l > 0) {
+                            // unicode to show star
+                            String st = "\u2726";
+                            holder.eventaLight.setText(st + String.valueOf(l));
+                        } else if (level > 0) {
+                            holder.eventaLight.setText("lvl " + String.valueOf(level));
+                        }
+
+                        updateJoinButton(holder, status, CreatorIn, CreatorIsPlayer);
+
+                        holder.eventPlayerNames.setText(allNames);
+                        holder.eventPlayerNameCnt.setText(allNamesRem);
+
+                        holder.eventaLight.invalidate();
+                        holder.event_card_mainLayout.invalidate();
+                        holder.checkpointText.invalidate();
+                        holder.eventDate.invalidate();
+
+                        Util.picassoLoadIcon(mContext, holder.eventIcon, url, R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.icon_ghost_default);
                     }
-                });
-
-                holder.eventaLight.setText("");
-                if (l > 0) {
-                    // unicode to show star
-                    String st = "\u2726";
-                    holder.eventaLight.setText(st + String.valueOf(l));
-                } else if(level>0) {
-                    holder.eventaLight.setText("lvl " + String.valueOf(level));
-                }
-
-                updateJoinButton(holder, status, CreatorIn, CreatorIsPlayer);
-
-                holder.eventPlayerNames.setText(allNames);
-                holder.eventPlayerNameCnt.setText(allNamesRem);
-
-                holder.eventaLight.invalidate();
-                holder.event_card_mainLayout.invalidate();
-                holder.checkpointText.invalidate();
-                holder.eventDate.invalidate();
-
-                Util.picassoLoadIcon(mContext, holder.eventIcon, url, R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.icon_ghost_default);
+                    break;
+                case 2:
+                    MyViewHolder2 adHolder = (MyViewHolder2) viewHolder;
+                    adHolder.eventadHeader.setText(adList.get(position-elistLocal.size()).getAdCardData().getAdCardHeader());
+                    adHolder.eventAdSubheader.setText(adList.get(position-elistLocal.size()).getAdCardData().getAdCardSubHeader());
+                    String cardBackgroundImageUrl = adList.get(position-elistLocal.size()).getAdCardData().getAdCardBaseUrl() + adList.get(position-elistLocal.size()).getAdCardData().getAdCardImagePath();
+                    String iconImageUrl = adList.get(position-elistLocal.size()).getActivityIconUrl();
+                    Util.picassoLoadIcon(mContext, adHolder.eventAdIcon, iconImageUrl, R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.icon_ghost_default);
+                    Util.picassoLoadIcon(mContext, adHolder.adCardImg, cardBackgroundImageUrl, adHolder.adCardImg.getWidth(), adHolder.adCardImg.getHeight(), R.drawable.icon_ghost_default);
+                    break;
             }
         }
 
