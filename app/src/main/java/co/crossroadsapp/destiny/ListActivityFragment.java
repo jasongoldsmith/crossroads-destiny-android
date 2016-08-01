@@ -1049,9 +1049,9 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     }
 
     private void createUpcomingCurrentList(ArrayList<EventData> currentEventList) {
+        fragmentCurrentEventList = new ArrayList<EventData>();
+        fragmentupcomingEventList = new ArrayList<EventData>();
         if (currentEventList!=null){
-            fragmentCurrentEventList = new ArrayList<EventData>();
-            fragmentupcomingEventList = new ArrayList<EventData>();
             if (currentEventList.size()>0) {
                 for (int i = 0; i < currentEventList.size(); i++) {
                     if (currentEventList.get(i).getLaunchEventStatus() != null) {
