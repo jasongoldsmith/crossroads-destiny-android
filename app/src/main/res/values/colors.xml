@@ -49,6 +49,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="consoleAddColor">#003847</color>
+
     <color name="logout_btn_background">#131f23</color>
 
     <color name="createnewevent_topbar">#19282c</color>

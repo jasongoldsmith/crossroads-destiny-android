@@ -42,8 +42,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,7 +78,7 @@ import java.util.Observer;
 /**
  * Created by sharmha on 4/8/16.
  */
-public class ListActivityFragment extends AppCompatActivity implements Observer {
+public class ListActivityFragment extends AppCompatActivity implements Observer, AdapterView.OnItemSelectedListener {
 
     UserData user;
     ControlManager mManager;
@@ -127,6 +130,7 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
     private TextView license;
     private TextView sendMsgAgain;
     private ArrayList<ActivityData> adActivityData;
+    private ArrayAdapter<String> adapterConsole;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -334,6 +338,41 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
         changePassword = (TextView) findViewById(R.id.reset);
 
+        Spinner dropdown = (Spinner) findViewById(R.id.console_spinner);
+
+        dropdown.setOnItemSelectedListener(this);
+        // Set adapter for console selector
+        final ArrayList<String> consoleItems = new ArrayList<String>();
+        consoleItems.add(user.getConsoleType());
+        consoleItems.add("Add Console");
+        adapterConsole = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, consoleItems) {
+
+            int FONT_STYLE = Typeface.BOLD;
+
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                ((TextView) v).setTypeface(Typeface.SANS_SERIF, FONT_STYLE);
+                ((TextView) v).setTextColor(
+                        getResources().getColorStateList(R.color.trimbe_white)
+                );
+                ((TextView) v).setGravity(Gravity.LEFT);
+
+                ((TextView) v).setPadding(Util.dpToPx(55, ListActivityFragment.this), 0, 0, 0);
+                ((TextView) v).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                ((TextView) v).setText("Checkpoint - " + ((TextView) v).getText());
+
+                return v;
+            }
+
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                return getCustomView(position, convertView, parent, consoleItems);
+            }
+        };
+        adapterConsole.setDropDownViewResource(R.layout.empty_layout);
+        dropdown.setAdapter(adapterConsole);
+        adapterConsole.notifyDataSetChanged();
+
         changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -446,6 +485,17 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
         //setGroupImageUrl();
 
+    }
+
+    private View getCustomView(int position, View convertView, ViewGroup parent, ArrayList<String> consoleItems) {
+
+        LayoutInflater inflater=getLayoutInflater();
+        View row=inflater.inflate(R.layout.console_selction_view, parent, false);
+        TextView label=(TextView)row.findViewById(R.id.add_console_text);
+        if (consoleItems!=null) {
+            label.setText(consoleItems.get(position));
+        }
+        return row;
     }
 
     private void checkIfExternalDeepLinkPresent() {
@@ -871,6 +921,16 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
                 appIcon.invalidate();
             }
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     class PagerAdapter extends FragmentPagerAdapter {
