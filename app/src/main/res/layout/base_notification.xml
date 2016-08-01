@@ -14,7 +14,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="6dp"
-            swipedeck:card_spacing="6dp"
+            swipedeck:card_spacing="16dp"
             swipedeck:render_above="true"
             swipedeck:rotation_degrees="0"
             />

@@ -98,13 +98,37 @@
             android:textSize="14sp"
             android:text="ACTIVITY DETAILS"/>
     </RelativeLayout>
-    <include
-        layout="@layout/base_notification"
-        android:layout_height="wrap_content"
+
+    <co.crossroadsapp.destiny.SwipeFrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:swipedeck="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/notification_bar_layout"
         android:layout_below="@+id/eventdetail_top_layout"
-        />
+        android:orientation="vertical">
+
+        <co.crossroadsapp.destiny.SwipeDeck
+            android:id="@+id/swipe_deck"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="6dp"
+            swipedeck:card_spacing="16dp"
+            swipedeck:render_above="true"
+            swipedeck:rotation_degrees="0"
+            />
+    </co.crossroadsapp.destiny.SwipeFrameLayout>
+
+    <!--<include-->
+        <!--layout="@layout/base_notification"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:id="@+id/notification_bar_layout"-->
+        <!--android:layout_below="@+id/eventdetail_top_layout"-->
+        <!--/>-->
 
     <!--<RelativeLayout-->
         <!--android:layout_width="match_parent"-->

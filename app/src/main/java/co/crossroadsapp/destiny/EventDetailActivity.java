@@ -25,6 +25,7 @@ import android.widget.Toast;
 import co.crossroadsapp.destiny.data.CurrentEventDataHolder;
 import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.PlayerData;
+import co.crossroadsapp.destiny.data.PushNotification;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.network.EventRelationshipHandlerNetwork;
 import co.crossroadsapp.destiny.network.EventSendMessageNetwork;
@@ -263,7 +264,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             }
         });
 
-        showNotifications(this);
+        showNotifications();
 
     }
 
@@ -641,5 +642,57 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         } else {
             launchListActivityAndFinish();
         }
+    }
+
+    SwipeStackAdapter adapter;
+    //View view;
+    SwipeDeck cardStack;
+
+    public void showNotifications() {
+
+            eventNotiList = new ArrayList<PushNotification>();
+            // filter event related message notification
+            getEventNotification(currEvent);
+
+
+        cardStack = null;
+        cardStack = (SwipeDeck) findViewById(R.id.swipe_deck);
+        if(adapter != null) {
+            adapter = null;
+        }
+
+        adapter = new SwipeStackAdapter(eventNotiList, this);
+        cardStack.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+        cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
+            @Override
+            public void cardSwipedLeft(int position) {
+                checkAndRemoveNoti(EventDetailActivity.this, position, adapter);
+                //notiList.remove(position);
+
+            }
+
+            @Override
+            public void cardSwipedRight(int position) {
+                checkAndRemoveNoti(EventDetailActivity.this, position, adapter);
+            }
+
+            @Override
+            public void cardsDepleted() {
+                //removeNotifyLayout();
+            }
+
+            @Override
+            public void cardActionDown() {
+
+            }
+
+            @Override
+            public void cardActionUp() {
+
+            }
+        });
+
     }
 }

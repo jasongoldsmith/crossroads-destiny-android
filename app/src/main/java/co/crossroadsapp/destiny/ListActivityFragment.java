@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import co.crossroadsapp.destiny.data.GroupData;
+import co.crossroadsapp.destiny.data.PushNotification;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
 import co.crossroadsapp.destiny.network.GroupListNetwork;
 import com.firebase.client.DataSnapshot;
@@ -186,6 +187,8 @@ public class ListActivityFragment extends BaseActivity implements Observer {
         userProfileDrawer = (CircularImageView) findViewById(R.id.profile_avatar);
         userNameDrawer = (TextView) findViewById(R.id.profile_name);
 
+        cardStack = (SwipeDeck) findViewById(R.id.swipe_deck);
+
         legalView = (WebView) findViewById(R.id.legal_web);
 
         appIcon = (ImageView) findViewById(R.id.badge_icon);
@@ -314,7 +317,7 @@ public class ListActivityFragment extends BaseActivity implements Observer {
                         CreateNewEvent.class);
                 regIntent.putExtra("userdata", user);
                 startActivity(regIntent);
-                finish();
+                //finish();
             }
         });
 
@@ -432,7 +435,7 @@ public class ListActivityFragment extends BaseActivity implements Observer {
 
         //setGroupImageUrl();
 
-        showNotifications(this);
+        showNotifications();
 
     }
 
@@ -690,7 +693,7 @@ public class ListActivityFragment extends BaseActivity implements Observer {
                             EventDetailActivity.class);
                     regIntent.putExtra("userdata", user);
                     startActivity(regIntent);
-                    finish();
+                    //finish();
                 }
             }
         }
@@ -1037,5 +1040,73 @@ public class ListActivityFragment extends BaseActivity implements Observer {
 //            this.startService(in);
             finish();
         }
+    }
+
+    SwipeStackAdapter adapter;
+    //View view;
+    SwipeDeck cardStack;
+
+    public void showNotifications() {
+//        if(c instanceof ListActivityFragment) {
+//            view = ((ListActivityFragment)c).getWindow().getDecorView().findViewById(android.R.id.content).getRootView();
+//        } else if (c instanceof EventDetailActivity) {
+//            view = ((EventDetailActivity)c).getWindow().getDecorView().findViewById(android.R.id.content).getRootView();
+//            //if(eventNotiList==null) {
+//            eventNotiList = new ArrayList<PushNotification>();
+//            //}
+//            // filter event related message notification
+//            if(((EventDetailActivity)c).currEvent!=null) {
+//                getEventNotification(((EventDetailActivity)c).currEvent);
+//            }
+//        }
+            //cardStack = null;
+            //cardStack = (SwipeDeck) findViewById(R.id.swipe_deck);
+//        ArrayList<PushNotification> localNoti = new ArrayList<PushNotification>;
+//        if(notiList.size()>1) {
+//            for
+//            localNoti.add(notiList.get())
+//        }
+
+            if(adapter != null) {
+                adapter = null;
+            }
+            if (notiList==null) {
+                notiList = new ArrayList<PushNotification>();
+            }
+            System.out.println("Hardik notilist is " + notiList.size());
+            //System.out.println("Hardik elist is " + eventNotiList.size());
+            adapter = new SwipeStackAdapter(notiList, this);
+            cardStack.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+
+            cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
+                @Override
+                public void cardSwipedLeft(int position) {
+                    checkAndRemoveNoti(ListActivityFragment.this, position, adapter);
+                    //notiList.remove(position);
+
+                }
+
+                @Override
+                public void cardSwipedRight(int position) {
+                    checkAndRemoveNoti(ListActivityFragment.this, position, adapter);
+                }
+
+                @Override
+                public void cardsDepleted() {
+                    //removeNotifyLayout();
+                }
+
+                @Override
+                public void cardActionDown() {
+
+                }
+
+                @Override
+                public void cardActionUp() {
+
+                }
+            });
+
     }
 }

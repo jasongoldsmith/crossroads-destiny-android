@@ -297,7 +297,7 @@ public class BlankFragment extends Fragment {
                                     EventDetailActivity.class);
                             regIntent.putExtra("userdata", user);
                             startActivity(regIntent);
-                            mContext.finish();
+                            //mContext.finish();
                         }
                     }
                 });

@@ -151,7 +151,7 @@
         android:id="@+id/viewFlipper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/notification_bar"
+        android:layout_below="@+id/create_new_event_top_layout"
         android:layout_above="@+id/create_new_event_activity_layout">
 
         <RelativeLayout

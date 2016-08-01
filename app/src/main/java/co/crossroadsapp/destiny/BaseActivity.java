@@ -32,8 +32,8 @@ public class BaseActivity extends FragmentActivity {
     protected TextView errText;
     private RelativeLayout progress;
     private ControlManager mManager = ControlManager.getmInstance();
-    private static ArrayList<PushNotification> notiList;
-    private ArrayList<PushNotification> eventNotiList=new ArrayList<PushNotification>();
+    protected static ArrayList<PushNotification> notiList;
+    protected ArrayList<PushNotification> eventNotiList=new ArrayList<PushNotification>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,14 +120,15 @@ public class BaseActivity extends FragmentActivity {
                 LayoutInflater inflater = getLayoutInflater();
                 // normally use a viewholder
                 v = inflater.inflate(R.layout.base_notification_card, null);
+            }
                 if(data!=null && data.get(position)!=null) {
                     final String id = data.get(position).geteId();
                     String name = data.get(position).geteName();
                     String msg = data.get(position).getMessage();
                     boolean typeM = data.get(position).getTypeMessage();
 
-                    CardView card = (CardView) v.findViewById(R.id.base_test_card);
-                    card.setOnClickListener(new View.OnClickListener() {
+                    //CardView card = (CardView) v.findViewById(R.id.base_test_card);
+                    v.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             if (id != null) {
@@ -161,7 +162,7 @@ public class BaseActivity extends FragmentActivity {
                         notiEventText.setText(data.get(position).getMessage());
                     }
                 }
-            }
+            //}
             return v;
         }
     }
@@ -173,26 +174,32 @@ public class BaseActivity extends FragmentActivity {
     private BroadcastReceiver ReceivefromService = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-  //          if (mManager.getCurrentActivity() == ListActivityFragment) {
+            //          if (mManager.getCurrentActivity() == ListActivityFragment) {
             PushNotification noti = new PushNotification();
-                String subtype = intent.getStringExtra("subtype");
-                boolean playerMsg = intent.getBooleanExtra("playerMessage", false);
+            String subtype = intent.getStringExtra("subtype");
+            boolean playerMsg = intent.getBooleanExtra("playerMessage", false);
             String eventId = intent.getStringExtra("eventId");
             String eventUpdated = intent.getStringExtra("eventUpdated");
-                String msg = intent.getStringExtra("message");
+            String msg = intent.getStringExtra("message");
             noti.seteId(eventId);
             noti.seteName(subtype);
             noti.seteUpdated(eventUpdated);
             noti.setTypeMessage(playerMsg);
             noti.setMessage(msg);
-            if(notiList==null) {
+            if (notiList == null) {
                 notiList = new ArrayList<PushNotification>();
             }
             notiList.add(noti);
             //
             Context act = mManager.getCurrentActivity();
-            if(act instanceof EventDetailActivity || act instanceof ListActivityFragment) {
-                showNotifications(act);
+            if (act instanceof EventDetailActivity) {
+                if(noti.getTypeMessage()) {
+                    ((EventDetailActivity) act).showNotifications();
+                }
+            } else if (act instanceof ListActivityFragment) {
+                ((ListActivityFragment) act).showNotifications();
+            }
+
 //                if (eventNotiList == null) {
 //                    eventNotiList = new ArrayList<PushNotification>();
 //                }
@@ -203,7 +210,7 @@ public class BaseActivity extends FragmentActivity {
 //                    notiList.add(noti);
 //                    showNotifications(act);
 //                }
-            }
+        }
 //            } else if (act instanceof ListActivityFragment){
 //                notiList.add(noti);
 //                showNotifications(act);
@@ -212,7 +219,7 @@ public class BaseActivity extends FragmentActivity {
 //            }
 
 
-            //
+        //
 //            notiList.add(noti);
 //            if(context instanceof ListActivityFragment) {
 //                showNotifications(context);
@@ -225,7 +232,7 @@ public class BaseActivity extends FragmentActivity {
 //                    showNotifications(context);
 //                }
 //            }
-                //put timer to make the notification message gone after 5 seconds
+        //put timer to make the notification message gone after 5 seconds
 //                notiBar.postDelayed(new Runnable() {
 //                    public void run() {
 //                        if(notiBar!=null) {
@@ -233,74 +240,77 @@ public class BaseActivity extends FragmentActivity {
 //                        }
 //                    }
 //                }, 7000);
-  //          }
-        }
+        //          }
+
     };
 
-    SwipeStackAdapter adapter;
-    View view;
+//    SwipeStackAdapter adapter;
+//    View view;
+//    SwipeDeck cardStack;
 
-    protected void showNotifications(final Context c) {
-//        LayoutInflater inflater = getLayoutInflater();
-        if(c instanceof ListActivityFragment) {
-            view = ((ListActivityFragment)c).getWindow().getDecorView().findViewById(android.R.id.content).getRootView();
-        } else if (c instanceof EventDetailActivity) {
-            view = ((EventDetailActivity)c).getWindow().getDecorView().findViewById(android.R.id.content).getRootView();
-            //if(eventNotiList==null) {
-                eventNotiList = new ArrayList<PushNotification>();
-            //}
-            // filter event related message notification
-            if(((EventDetailActivity)c).currEvent!=null) {
-                getEventNotification(((EventDetailActivity)c).currEvent);
-            }
-        }
-        if(view!=null) {
-            //final View v = inflater.inflate(R.layout.base_notification, (ViewGroup) view);
-            SwipeDeck cardStack = (SwipeDeck) view.findViewById(R.id.swipe_deck);
-            if(adapter != null) {
-                adapter = null;
-            }
-            if (notiList==null) {
-                notiList = new ArrayList<PushNotification>();
-            }
-            System.out.println("Hardik notilist is " + notiList.size());
-            System.out.println("Hardik elist is " + eventNotiList.size());
-            adapter = new SwipeStackAdapter(c instanceof ListActivityFragment?notiList:eventNotiList, c);
-            cardStack.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
+//    protected void showNotifications(final Context c) {
+////        LayoutInflater inflater = getLayoutInflater();
+//        view = null;
+//        if(c instanceof ListActivityFragment) {
+//            view = ((ListActivityFragment)c).getWindow().getDecorView().findViewById(android.R.id.content).getRootView();
+//        } else if (c instanceof EventDetailActivity) {
+//            view = ((EventDetailActivity)c).getWindow().getDecorView().findViewById(android.R.id.content).getRootView();
+//            //if(eventNotiList==null) {
+//                eventNotiList = new ArrayList<PushNotification>();
+//            //}
+//            // filter event related message notification
+//            if(((EventDetailActivity)c).currEvent!=null) {
+//                getEventNotification(((EventDetailActivity)c).currEvent);
+//            }
+//        }
+//        if(view!=null) {
+//            //final View v = inflater.inflate(R.layout.base_notification, (ViewGroup) view);
+//            cardStack = null;
+//            cardStack = (SwipeDeck) view.findViewById(R.id.swipe_deck);
+//            if(adapter != null) {
+//                adapter = null;
+//            }
+//            if (notiList==null) {
+//                notiList = new ArrayList<PushNotification>();
+//            }
+//            System.out.println("Hardik notilist is " + notiList.size());
+//            System.out.println("Hardik elist is " + eventNotiList.size());
+//            adapter = new SwipeStackAdapter(c instanceof ListActivityFragment?notiList:eventNotiList, c);
+//            cardStack.setAdapter(adapter);
+//            adapter.notifyDataSetChanged();
+//
+//            cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
+//                @Override
+//                public void cardSwipedLeft(int position) {
+//                    checkAndRemoveNoti(c, position);
+//                    //notiList.remove(position);
+//
+//                }
+//
+//                @Override
+//                public void cardSwipedRight(int position) {
+//                    checkAndRemoveNoti(c, position);
+//                }
+//
+//                @Override
+//                public void cardsDepleted() {
+//                    //removeNotifyLayout();
+//                }
+//
+//                @Override
+//                public void cardActionDown() {
+//
+//                }
+//
+//                @Override
+//                public void cardActionUp() {
+//
+//                }
+//            });
+//        }
+//    }
 
-            cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
-                @Override
-                public void cardSwipedLeft(int position) {
-                    checkAndRemoveNoti(c, position);
-                    //notiList.remove(position);
-
-                }
-
-                @Override
-                public void cardSwipedRight(int position) {
-                    checkAndRemoveNoti(c, position);
-                }
-
-                @Override
-                public void cardsDepleted() {
-                    //removeNotifyLayout();
-                }
-
-                @Override
-                public void cardActionDown() {
-
-                }
-
-                @Override
-                public void cardActionUp() {
-
-                }
-            });
-        }
-    }
-
-    private void checkAndRemoveNoti(Context c, int position) {
+    protected void checkAndRemoveNoti(Context c, int position, SwipeStackAdapter adapter) {
         if(c!=null) {
             if (c instanceof ListActivityFragment) {
                 notiList.remove(position);
@@ -331,7 +341,7 @@ public class BaseActivity extends FragmentActivity {
         }
     }
 
-    private void getEventNotification(EventData currEvent) {
+    protected void getEventNotification(EventData currEvent) {
         if(currEvent.getEventId()!=null) {
             String id = currEvent.getEventId();
             if (notiList!=null){
