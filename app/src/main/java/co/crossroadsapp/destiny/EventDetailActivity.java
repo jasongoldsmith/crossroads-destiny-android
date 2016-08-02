@@ -647,12 +647,24 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     SwipeStackAdapter adapter;
     //View view;
     SwipeDeck cardStack;
+    int n=0;
 
     public void showNotifications() {
 
-            eventNotiList = new ArrayList<PushNotification>();
-            // filter event related message notification
-            getEventNotification(currEvent);
+        ArrayList<PushNotification> localNoti = new ArrayList<PushNotification>();
+        eventNotiList = new ArrayList<PushNotification>();
+        // filter event related message notification
+        getEventNotification(currEvent);
+
+        if(n==0) {
+            if(eventNotiList!=null && (!eventNotiList.isEmpty())){
+                localNoti.add(eventNotiList.get(0));
+                n++;}
+        }else {
+            if(eventNotiList!=null && (!eventNotiList.isEmpty())) {
+                localNoti = eventNotiList;
+            }
+        }
 
 
         cardStack = null;

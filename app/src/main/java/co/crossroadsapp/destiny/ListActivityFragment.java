@@ -1045,6 +1045,7 @@ public class ListActivityFragment extends BaseActivity implements Observer {
     SwipeStackAdapter adapter;
     //View view;
     SwipeDeck cardStack;
+    int n=0;
 
     public void showNotifications() {
 //        if(c instanceof ListActivityFragment) {
@@ -1061,12 +1062,16 @@ public class ListActivityFragment extends BaseActivity implements Observer {
 //        }
             //cardStack = null;
             //cardStack = (SwipeDeck) findViewById(R.id.swipe_deck);
-//        ArrayList<PushNotification> localNoti = new ArrayList<PushNotification>;
-//        if(notiList.size()>1) {
-//            for
-//            localNoti.add(notiList.get())
-//        }
-
+        ArrayList<PushNotification> localNoti = new ArrayList<PushNotification>();
+        if(n==0) {
+            if(notiList!=null && (!notiList.isEmpty())){
+            localNoti.add(notiList.get(0));
+            n++;}
+        }else {
+            if(notiList!=null && (!notiList.isEmpty())) {
+                localNoti = notiList;
+            }
+        }
             if(adapter != null) {
                 adapter = null;
             }
@@ -1074,8 +1079,8 @@ public class ListActivityFragment extends BaseActivity implements Observer {
                 notiList = new ArrayList<PushNotification>();
             }
             System.out.println("Hardik notilist is " + notiList.size());
-            //System.out.println("Hardik elist is " + eventNotiList.size());
-            adapter = new SwipeStackAdapter(notiList, this);
+            System.out.println("Hardik elist is " + localNoti.size());
+            adapter = new SwipeStackAdapter(localNoti, this);
             cardStack.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
@@ -1094,6 +1099,9 @@ public class ListActivityFragment extends BaseActivity implements Observer {
 
                 @Override
                 public void cardsDepleted() {
+                    if (notiList.size()>0) {
+                        showNotifications();
+                    }
                     //removeNotifyLayout();
                 }
 
