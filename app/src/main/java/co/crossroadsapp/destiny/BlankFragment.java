@@ -523,10 +523,9 @@ public class BlankFragment extends Fragment {
 
     public void updateCurrListAdapter(ArrayList<EventData> eData, ArrayList<ActivityData> adActivityData){
         currentEventList = eData;
+        currentAdList = new ArrayList<ActivityData>();
         if (adActivityData!=null) {
             currentAdList = adActivityData;
-        } else {
-            currentAdList.clear();
         }
         if (adapter!=null){
             adapter.elistLocal.clear();

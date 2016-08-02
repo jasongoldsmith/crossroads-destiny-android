@@ -109,65 +109,96 @@
             android:text="ACTIVITY DETAILS"/>
     </RelativeLayout>
 
-    <RelativeLayout
+    <co.crossroadsapp.destiny.SwipeFrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:swipedeck="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:id="@+id/notification_bar"
-        android:background="@color/app_theme_color"
+        android:layout_height="wrap_content"
+        android:id="@+id/notification_bar_layout"
         android:layout_below="@+id/eventdetail_top_layout"
-        android:visibility="gone">
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:id="@+id/noti_icon"
-            android:src="@drawable/icon_alert"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="15dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/noti_toptext"
-            android:layout_toRightOf="@+id/noti_icon"
-            android:fontFamily="sans-serif"
-            android:textStyle="bold"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="12dp"
-            android:text="YOUR FIRETEAM IS READY"
-            android:textColor="#ffc600"
-            android:textSize="12sp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/noti_text"
-            android:layout_toRightOf="@+id/noti_icon"
-            android:text="missing event type"
-            android:fontFamily="sans-serif"
-            android:textColor="@color/trimbe_white"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="30dp"
-            android:textSize="12sp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/noti_subtext"
-            android:layout_toRightOf="@+id/noti_icon"
-            android:fontFamily="sans-serif"
-            android:textColor="@color/trimbe_white"
-            android:layout_marginLeft="15dp"
-            android:maxLines = "10"
-            android:scrollbars = "vertical"
-            android:layout_marginTop="47dp"
-            android:textSize="12sp"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/noti_close"
-            android:src="@drawable/icon_close_sm"
-            android:layout_alignParentRight="true"
-            android:paddingRight="17dp"
-            android:paddingTop="9dp"/>
+        android:orientation="vertical">
 
-    </RelativeLayout>
+        <co.crossroadsapp.destiny.SwipeDeck
+            android:id="@+id/swipe_deck"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="6dp"
+            swipedeck:card_spacing="16dp"
+            swipedeck:render_above="true"
+            swipedeck:rotation_degrees="0"
+            />
+    </co.crossroadsapp.destiny.SwipeFrameLayout>
+
+    <!--<include-->
+        <!--layout="@layout/base_notification"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:id="@+id/notification_bar_layout"-->
+        <!--android:layout_below="@+id/eventdetail_top_layout"-->
+        <!--/>-->
+
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:id="@+id/notification_bar"-->
+        <!--android:background="@color/app_theme_color"-->
+        <!--android:layout_below="@+id/eventdetail_top_layout"-->
+        <!--android:visibility="gone">-->
+        <!--<ImageView-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:id="@+id/noti_icon"-->
+            <!--android:src="@drawable/icon_alert"-->
+            <!--android:layout_marginLeft="25dp"-->
+            <!--android:layout_marginTop="15dp"/>-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/noti_toptext"-->
+            <!--android:layout_toRightOf="@+id/noti_icon"-->
+            <!--android:fontFamily="sans-serif"-->
+            <!--android:textStyle="bold"-->
+            <!--android:layout_marginLeft="15dp"-->
+            <!--android:layout_marginTop="12dp"-->
+            <!--android:text="YOUR FIRETEAM IS READY"-->
+            <!--android:textColor="#ffc600"-->
+            <!--android:textSize="12sp"/>-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/noti_text"-->
+            <!--android:layout_toRightOf="@+id/noti_icon"-->
+            <!--android:text="missing event type"-->
+            <!--android:fontFamily="sans-serif"-->
+            <!--android:textColor="@color/trimbe_white"-->
+            <!--android:layout_marginLeft="15dp"-->
+            <!--android:layout_marginTop="30dp"-->
+            <!--android:textSize="12sp"/>-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/noti_subtext"-->
+            <!--android:layout_toRightOf="@+id/noti_icon"-->
+            <!--android:fontFamily="sans-serif"-->
+            <!--android:textColor="@color/trimbe_white"-->
+            <!--android:layout_marginLeft="15dp"-->
+            <!--android:maxLines = "10"-->
+            <!--android:scrollbars = "vertical"-->
+            <!--android:layout_marginTop="47dp"-->
+            <!--android:textSize="12sp"/>-->
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/noti_close"-->
+            <!--android:src="@drawable/icon_close_sm"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:paddingRight="17dp"-->
+            <!--android:paddingTop="9dp"/>-->
+
+    <!--</RelativeLayout>-->
 
 
     <RelativeLayout
@@ -175,7 +206,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/event_detail_top_frag"
         android:orientation="horizontal"
-        android:layout_below="@+id/notification_bar"
+        android:layout_below="@+id/notification_bar_layout"
         android:layout_marginTop="22dp">
 
         <co.crossroadsapp.destiny.utils.CircularImageView

@@ -72,6 +72,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-gcm:9.2.0'
     compile 'com.android.support:support-v13:21.0.3'
     compile 'com.parse.bolts:bolts-android:1+'
+    compile 'fr.avianey.com.viewpagerindicator:library:2.4.1@aar'
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.android.support:design:23.1.0'
     compile 'com.prolificinteractive:material-calendarview:1.2.0'

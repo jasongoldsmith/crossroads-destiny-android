@@ -26,6 +26,7 @@ import co.crossroadsapp.destiny.data.CurrentEventDataHolder;
 import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.PlayerData;
+import co.crossroadsapp.destiny.data.PushNotification;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
 import co.crossroadsapp.destiny.network.EventRelationshipHandlerNetwork;
@@ -169,19 +170,19 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         sendBtn = (ImageView) findViewById(R.id.send_btn);
 
-        notiBar = (RelativeLayout) findViewById(R.id.notification_bar);
-        notiEventText = (TextView) findViewById(R.id.noti_text);
-
-        notiTopText = (TextView) findViewById(R.id.noti_toptext);
-        notiMessage = (TextView) findViewById(R.id.noti_subtext);
-        notiMessage.setMovementMethod(new ScrollingMovementMethod());
-        notif_close = (ImageView) findViewById(R.id.noti_close);
-        notif_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                notiBar.setVisibility(View.GONE);
-            }
-        });
+//        notiBar = (RelativeLayout) findViewById(R.id.notification_bar);
+//        notiEventText = (TextView) findViewById(R.id.noti_text);
+//
+//        notiTopText = (TextView) findViewById(R.id.noti_toptext);
+//        notiMessage = (TextView) findViewById(R.id.noti_subtext);
+//        notiMessage.setMovementMethod(new ScrollingMovementMethod());
+//        notif_close = (ImageView) findViewById(R.id.noti_close);
+//        notif_close.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                notiBar.setVisibility(View.GONE);
+//            }
+//        });
 
         if (currEvent.getActivityData().getActivityIconUrl() != null) {
             Util.picassoLoadIcon(EventDetailActivity.this, eventProfileImg, currEvent.getActivityData().getActivityIconUrl(), R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.icon_ghost_default);
@@ -290,8 +291,9 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                 sendMsgToAll();
             }
         });
-
         registerFirbase();
+
+        showNotifications();
 
     }
 
@@ -319,28 +321,9 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
     private void shareIt() {
 //        //deeplink creation
-//        BranchUniversalObject branchUniversalObject = new BranchUniversalObject()
-//
-//                // The identifier is what Branch will use to de-dupe the content across many different Universal Objects
-//                .setCanonicalIdentifier("item/12345")
-//
-//                // The canonical URL for SEO purposes (optional)
-//                .setCanonicalUrl("https://branch.io/deepviews")
-//
-//                // This is where you define the open graph structure and how the object will appear on Facebook or in a deepview
-//                .setTitle("My Content Title")
-//                .setContentDescription("My Content Description")
-//
-//                // You use this to specify whether this content can be discovered publicly - default is public
-//                .setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC)
-//
-//                // Here is where you can add custom keys/values to the deep link data
-//                .addContentMetadata("property1", "blue")
-//                .addContentMetadata("property2", "red");
 
         LinkProperties linkProperties = new LinkProperties();
 
-//        String urlString = null;
         branchUniversalObject.generateShortUrl(this, linkProperties, new Branch.BranchLinkCreateListener() {
             @Override
             public void onLinkCreate(String url, BranchError error) {
@@ -355,9 +338,6 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                 }
             }
         });
-//        urlString = branchUniversalObject.getShortUrl(EventDetailActivity.this, linkProperties);
-//        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, urlString);
-//        startActivity(Intent.createChooser(sharingIntent, "Share"));
     }
 
     private final TextWatcher mTextEditorWatcher = new TextWatcher() {
@@ -440,21 +420,21 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private BroadcastReceiver ReceivefromService = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String subtype = intent.getStringExtra("subtype");
-            boolean playerMsg = intent.getBooleanExtra("playerMessage", false);
-            String msg = intent.getStringExtra("message");
-            notiEventText.setText(subtype);
-            if(playerMsg){
-                notiTopText.setText("FIRETEAM MESSAGE");
-                notiMessage.setVisibility(View.VISIBLE);
-                notiMessage.setText(msg);
-            }else {
-                notiEventText.setText("Your Fireteam is ready!");
-                notiTopText.setText(subtype);
-                notiMessage.setVisibility(View.GONE);
-                //mManager.getEventList(ListActivityFragment.this);
-            }
-            notiBar.setVisibility(View.VISIBLE);
+//            String subtype = intent.getStringExtra("subtype");
+//            boolean playerMsg = intent.getBooleanExtra("playerMessage", false);
+//            String msg = intent.getStringExtra("message");
+//            notiEventText.setText(subtype);
+//            if(playerMsg){
+//                notiTopText.setText("FIRETEAM MESSAGE");
+//                notiMessage.setVisibility(View.VISIBLE);
+//                notiMessage.setText(msg);
+//            }else {
+//                notiEventText.setText("Your Fireteam is ready!");
+//                notiTopText.setText(subtype);
+//                notiMessage.setVisibility(View.GONE);
+//                //mManager.getEventList(ListActivityFragment.this);
+//            }
+//            notiBar.setVisibility(View.VISIBLE);
         }
     };
 
@@ -799,5 +779,69 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         } else {
             launchListActivityAndFinish();
         }
+    }
+
+    SwipeStackAdapter adapter;
+    //View view;
+    SwipeDeck cardStack;
+    int n=0;
+
+    public void showNotifications() {
+
+        ArrayList<PushNotification> localNoti = new ArrayList<PushNotification>();
+        eventNotiList = new ArrayList<PushNotification>();
+        // filter event related message notification
+        getEventNotification(currEvent);
+
+        if(n==0) {
+            if(eventNotiList!=null && (!eventNotiList.isEmpty())){
+                localNoti.add(eventNotiList.get(0));
+                n++;}
+        }else {
+            if(eventNotiList!=null && (!eventNotiList.isEmpty())) {
+                localNoti = eventNotiList;
+            }
+        }
+
+
+        cardStack = null;
+        cardStack = (SwipeDeck) findViewById(R.id.swipe_deck);
+        if(adapter != null) {
+            adapter = null;
+        }
+
+        adapter = new SwipeStackAdapter(eventNotiList, this);
+        cardStack.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+        cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
+            @Override
+            public void cardSwipedLeft(int position) {
+                checkAndRemoveNoti(EventDetailActivity.this, position, adapter);
+                //notiList.remove(position);
+
+            }
+
+            @Override
+            public void cardSwipedRight(int position) {
+                checkAndRemoveNoti(EventDetailActivity.this, position, adapter);
+            }
+
+            @Override
+            public void cardsDepleted() {
+                //removeNotifyLayout();
+            }
+
+            @Override
+            public void cardActionDown() {
+
+            }
+
+            @Override
+            public void cardActionUp() {
+
+            }
+        });
+
     }
 }
