@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -24,9 +25,10 @@ public class UserData implements Parcelable {
     private String membershipId=null;
     private String consoleType=null;
     private int authenticationId;
+    private ArrayList<ConsoleData> consoles;
 
     public UserData() {
-
+        consoles = new ArrayList<ConsoleData>();
     }
 
     public void setUser(String name) {
@@ -113,6 +115,10 @@ public class UserData implements Parcelable {
         return this.authenticationId;
     }
 
+    public ArrayList<ConsoleData> getConsoles() {
+        return this.consoles;
+    }
+
     public void toJson(JSONObject json) {
         try {
             if (json.has("value")) {
@@ -142,22 +148,43 @@ public class UserData implements Parcelable {
                 if (jsonData.has("consoles")) {
                     JSONArray conArray = jsonData.optJSONArray("consoles");
                     if (conArray != null) {
-                        JSONObject conData = (JSONObject) conArray.get(0);
+                        for (int i=0; i<conArray.length();i++) {
+                        JSONObject conData = (JSONObject) conArray.get(i);
                         if (conData != null) {
+                            ConsoleData cData = new ConsoleData();
+                            if(conData.has("isPrimary")) {
+                                cData.setPrimary(conData.getBoolean("isPrimary"));
+                            }
                             if (conData.has("consoleType")) {
                                 String cType = conData.getString("consoleType");
-                                setConsoleType(cType);
+                                if(cData.getPrimary()) {
+                                    setConsoleType(cType);
+                                }
+                                cData.setcType(cType);
                             }
-
                             if (conData.has("consoleId")) {
                                 String id = conData.getString("consoleId");
-                                setPsnId(id);
+                                if(cData.getPrimary()) {
+                                    setPsnId(id);
+                                }
+                                cData.setcId(id);
                             }
-
                             if (conData.has("verifyStatus")) {
                                 String verifyS = conData.getString("verifyStatus");
-                                setPsnVerify(verifyS);
+                                if(cData.getPrimary()) {
+                                    setPsnVerify(verifyS);
+                                }
+                                cData.setVerifyStatus(verifyS);
                             }
+                            if (conData.has("clanTag")) {
+                                String tag = conData.getString("clanTag");
+                                if(cData.getPrimary()) {
+                                    setPsnVerify(tag);
+                                }
+                                cData.setClanTag(tag);
+                            }
+                            consoles.add(cData);
+                        }
                         }
                     }
                 }

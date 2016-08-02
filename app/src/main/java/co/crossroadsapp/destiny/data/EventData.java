@@ -21,6 +21,7 @@ public class EventData {
     private String launchDate=null;
     private String launchStatus=null;
     private String clanId=null;
+    private String consoleType=null;
     //private PlayerData playerData;
 
     public EventData () {
@@ -35,6 +36,14 @@ public class EventData {
 
     public String getEventId() {
         return this.eventId;
+    }
+
+    public void setConsoleType(String console) {
+        consoleType = console;
+    }
+
+    public String getConsoleType() {
+        return this.consoleType;
     }
 
     public void setLaunchDate(String date){
@@ -123,6 +132,10 @@ public class EventData {
                 if (json.has("status")) {
                     String status = json.getString("status");
                     setEventStatus(status);
+                }
+                if(json.has("consoleType")) {
+                    String con = json.getString("consoleType");
+                    setConsoleType(con);
                 }
                 if(json.has("clanId")) {
                     String clId = json.getString("clanId");

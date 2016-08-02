@@ -93,4 +93,6 @@
         <item>XBOX360</item>
     </string-array>
 
+    <string name="deeplink_full_err">The maximum amount of players has been reached for this activity. Would you like to add one of your own?</string>
+
 </resources>

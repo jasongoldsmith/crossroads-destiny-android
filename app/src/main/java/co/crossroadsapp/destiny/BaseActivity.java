@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.CardView;
@@ -24,6 +25,7 @@ import java.util.List;
 
 import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.PushNotification;
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 
 public class BaseActivity extends FragmentActivity {
@@ -87,9 +89,59 @@ public class BaseActivity extends FragmentActivity {
         }
     }
 
-    public void showDeeplinkError() {
+    public void showDeeplinkError(int eventFull, String deepLinkEvent) {
         deeplinkError = (RelativeLayout) findViewById(R.id.deeplink_error);
+        TextView errMsg = (TextView) findViewById(R.id.msg);
+        TextView btnText = (TextView) findViewById(R.id.btn_text);
+        CardView btn = (CardView) findViewById(R.id.add_btn);
         deeplinkError.setVisibility(View.VISIBLE);
+        TextView noBtn = 
+        switch(eventFull) {
+            case 1:
+                errMsg.setText("Sorry, that " +deepLinkEvent+ " is no longer available. Would you like to add one of your own?");
+                btnText.setText("ADD THIS ACTIVITY");
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // go to create new event page
+                        Intent regIntent = new Intent(getApplicationContext(),
+                                CreateNewEvent.class);
+                        regIntent.putExtra("userdata", mManager.getUserData());
+                        startActivity(regIntent);
+                    }
+                });
+                break;
+            case 2:
+                errMsg.setText("You’ll need to be in the " +deepLinkEvent + " group to join. Request to join?");
+                btnText.setText("VIEW GROUP ON BUNGIE.NET");
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.bungie.net"));
+                        getApplicationContext().startActivity(browserIntent);
+                    }
+                });
+                break;
+            case 3:
+                errMsg.setText(getResources().getString(R.string.deeplink_full_err));
+                btnText.setText("YES");
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // go to create new event page
+                        Intent regIntent = new Intent(getApplicationContext(),
+                                CreateNewEvent.class);
+                        regIntent.putExtra("userdata", mManager.getUserData());
+                        startActivity(regIntent);
+                    }
+                });
+                break;
+            case 4:
+                errMsg.setText("You’ll need to be on "+ deepLinkEvent +" to join that activity. Add another console to your account?");
+                btnText.setText("ADD MY "+deepLinkEvent);
+                //todo add update console UI
+                break;
+        }
     }
 
     public void hideDeeplinkError() {

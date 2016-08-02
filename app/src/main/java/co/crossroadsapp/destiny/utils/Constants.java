@@ -67,6 +67,12 @@ public class Constants {
     public static int USER_CHANNEL = 2;
     public static int EVENT_CHANNEL = 1;
 
+    //deeplink error types
+    public static int EVENT_GRP_MISSING = 1;
+    public static int EVENT_MISSING = 2;
+    public static int EVENT_FULL= 3;
+    public static int EVENT_CONSOLE_MISSING= 4;
+
     //urls
     public static String DEEP_LINK_IMAGE = "http://w3.crossroadsapp.co/bungie/share/branch/v1/";
 }

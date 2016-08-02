@@ -12,7 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import co.crossroadsapp.destiny.data.ActivityData;
-import co.crossroadsapp.destiny.data.ActivityList;
+import co.crossroadsapp.destiny.data.ConsoleData;
 import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.PushNotification;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
@@ -29,11 +29,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -43,7 +40,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -60,12 +56,10 @@ import co.crossroadsapp.destiny.network.LogoutNetwork;
 import co.crossroadsapp.destiny.network.ResendBungieVerification;
 import co.crossroadsapp.destiny.utils.CircularImageView;
 import co.crossroadsapp.destiny.utils.Constants;
-import co.crossroadsapp.destiny.utils.SendBackpressBroadcast;
 import co.crossroadsapp.destiny.utils.Util;
-import co.crossroadsapp.destiny.R;
+
 import com.loopj.android.http.RequestParams;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -458,9 +452,39 @@ public class ListActivityFragment extends BaseActivity implements Observer {
                 RequestParams param = new RequestParams();
                 param.add("id", mManager.getDeepLinkEvent());
                 mManager.postEventById(ListActivityFragment.this, param);
-                mManager.setDeepLinkEvent(null);
             }
         }
+    }
+
+    private void updateExternalDeepLink(EventData data) {
+        if(mManager!=null) {
+            if(checkIfConsolePresent(data.getConsoleType())) {
+                if(data.getClanId().equalsIgnoreCase(user.getClanId())) {
+                    if(data.getPlayerData().size()==data.getMaxPlayer()) {
+                        showDeeplinkError(Constants.EVENT_FULL, null);
+                    }else {
+                        startEventDetail(data);
+                    }
+                } else {
+                    showDeeplinkError(Constants.EVENT_GRP_MISSING, data.getClanId());
+                }
+            } else {
+                showDeeplinkError(Constants.EVENT_CONSOLE_MISSING, data.getConsoleType());
+            }
+        }
+        mManager.setDeepLinkEvent(null);
+    }
+
+    private boolean checkIfConsolePresent(String consoleType) {
+        if(mManager.getUserData()!=null && mManager.getUserData().getConsoles()!=null) {
+            ArrayList<ConsoleData> localCon = mManager.getUserData().getConsoles();
+            for (int i = 0; i < localCon.size(); i++) {
+                if(consoleType.equalsIgnoreCase(localCon.get(i).getcType())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void updateUserProfileImage(String url) {
@@ -780,9 +804,13 @@ public class ListActivityFragment extends BaseActivity implements Observer {
         findViewById(R.id.loadingImg).setVisibility(View.GONE);
         closeProfileDrawer(Gravity.RIGHT);
         closeProfileDrawer(Gravity.LEFT);
-
-        //show timed error message
-        Util.showErrorMsg(errLayout, errText, err);
+        if(mManager!=null && mManager.getDeepLinkEvent()!=null) {
+            showDeeplinkError(Constants.EVENT_MISSING, mManager.getDeepLinkEvent());
+            mManager.setDeepLinkEvent(null);
+        } else {
+            //show timed error message
+            Util.showErrorMsg(errLayout, errText, err);
+        }
 
 //        errLayout.setVisibility(View.GONE);
 //        errLayout.setVisibility(View.VISIBLE);
@@ -820,6 +848,10 @@ public class ListActivityFragment extends BaseActivity implements Observer {
     public void onPause() {
         super.onPause();
 
+        //remove deeplink reference
+        if(mManager!=null) {
+            mManager.setDeepLinkEvent(null);
+        }
         //unregisterFirebase();
         unregisterUserFirebase();
     }
@@ -1047,6 +1079,8 @@ public class ListActivityFragment extends BaseActivity implements Observer {
                         pushEventObject = (EventData) data;
                         startEventDetail(pushEventObject);
                         pushEventObject = null;
+                    } else if(mManager.getDeepLinkEvent()!=null && (!mManager.getDeepLinkEvent().isEmpty())){
+                        updateExternalDeepLink((EventData) data);
                     } else {
                         startEventDetail((EventData) data);
                     }
