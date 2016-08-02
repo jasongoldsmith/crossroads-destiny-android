@@ -446,6 +446,8 @@ public class ListActivityFragment extends AppCompatActivity implements Observer 
 
         //setGroupImageUrl();
 
+
+
     }
 
     private void checkIfExternalDeepLinkPresent() {

@@ -14,6 +14,7 @@ public class BaseActivity extends Activity {
     protected RelativeLayout errLayout;
     protected TextView errText;
     private RelativeLayout progress;
+    private RelativeLayout deeplinkError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,17 @@ public class BaseActivity extends Activity {
     public void closeView(View view) {
         if(errLayout!=null) {
             errLayout.setVisibility(View.GONE);
+        }
+    }
+
+    public void showDeeplinkError() {
+        deeplinkError = (RelativeLayout) findViewById(R.id.deeplink_error);
+        deeplinkError.setVisibility(View.VISIBLE);
+    }
+
+    public void hideDeeplinkError() {
+        if(deeplinkError!=null) {
+            deeplinkError.setVisibility(View.GONE);
         }
     }
 
