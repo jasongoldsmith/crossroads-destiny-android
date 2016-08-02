@@ -57,9 +57,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/trimbe_black"
-        android:id="@+id/deeplink_error"
-        android:alpha="52">
+        android:id="@+id/deeplink_error">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#cc000000"/>
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -72,7 +74,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/globe"
             android:src="@drawable/img_globe_icon"
-            android:layout_marginTop="134dp"
+            android:layout_marginTop="174dp"
             android:layout_alignTop="@+id/imageView"
             android:layout_centerHorizontal="true" />
         <TextView
@@ -86,8 +88,8 @@
             android:layout_marginTop="15dp"
             android:layout_centerHorizontal="true"/>
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="wrap_content"
+            android:layout_width="55dp"
+            android:layout_height="1dp"
             android:layout_marginTop="15dp"
             android:layout_centerHorizontal="true"
             android:src="@drawable/img_break_line"
@@ -97,6 +99,7 @@
             android:layout_height="wrap_content"
             android:text="Sorry, that activity is no longer available. Would you like to add one of your own?"
             android:layout_below="@+id/eyesup_text"
+            android:textColor="@color/trimbe_white"
             android:id="@+id/msg"
             android:layout_marginTop="40dp"
             android:layout_marginLeft="40dp"
@@ -136,8 +139,9 @@
             android:layout_height="40dp"
             android:src="@drawable/icon_close_x"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="25dp"
-            android:layout_alignTop="@+id/globe" />
+            android:layout_marginTop="160dp"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentEnd="true"/>
 
     </RelativeLayout>
 
