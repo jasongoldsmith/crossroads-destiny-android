@@ -25,7 +25,6 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/img_adcard_raid_golgoroth"
                 android:id="@+id/adcard_img"/>
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -68,7 +67,7 @@
                     android:layout_height="36dp"
                     android:id="@+id/adcard_addbtn"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="13dp"
+                    android:layout_marginRight="0dp"
                     conversation:cardBackgroundColor="@color/app_theme_color"
                     conversation:cardElevation="0dp"
                     conversation:cardCornerRadius="2dp">

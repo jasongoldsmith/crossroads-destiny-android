@@ -25,6 +25,23 @@
             <!--android:id="@+id/activity_icon"-->
             <!--android:layout_alignParentLeft="true"-->
             <!--android:layout_centerVertical="true"/>-->
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:id="@+id/console_img"
+                android:src="@drawable/icon_psn_console"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="14dp"
+                android:layout_centerVertical="true"/>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:id="@+id/drop_arrow"
+                android:visibility="gone"
+                android:src="@drawable/icon_arrow_right"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:padding="8dp"/>
 
             <TextView
                 android:layout_width="wrap_content"

@@ -59,6 +59,11 @@ public class Constants {
     public static String CONSOLEPS4 = "PS4";
     public static String CONSOLEPS3 = "PS3";
 
+    public static String CONSOLEXBOXONESTRG = "Xbox One";
+    public static String CONSOLEXBOX360STRG = "Xbox 360";
+    public static String CONSOLEPS4STRG = "PlayStation 4";
+    public static String CONSOLEPS3STRG = "PlayStation 3";
+
 
     //clan id keys
     public static String CLAN_NOT_SET = "clan_id_not";

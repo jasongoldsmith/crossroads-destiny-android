@@ -31,6 +31,7 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -435,5 +436,35 @@ public class Util {
                 }
             }, 5000);
         }
+    }
+
+    public static String getCorrectConsoleName(String consoleType) {
+        String console;
+        switch (consoleType) {
+            case "PS4":
+                console = "PlayStation 4";
+                break;
+            case "PS3":
+                console = "PlayStation 3";
+                break;
+            case "XBOXONE":
+                console = "Xbox One";
+                break;
+            case "XBOX360":
+                console = "Xbox 360";
+                break;
+            default:
+                console = "Console Missing";
+        }
+        return console;
+    }
+
+    public static ArrayList<String> getRemConsoleName(String consoleType) {
+        ArrayList<String> list = new ArrayList<String>();
+        if (consoleType.equalsIgnoreCase("PS4")) {
+            list.add("Xbox One");
+            list.add("Xbox 360");
+        }
+        return list;
     }
 }

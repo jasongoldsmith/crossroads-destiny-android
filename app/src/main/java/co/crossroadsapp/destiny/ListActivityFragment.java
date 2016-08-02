@@ -29,6 +29,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
@@ -343,7 +344,8 @@ public class ListActivityFragment extends AppCompatActivity implements Observer,
         dropdown.setOnItemSelectedListener(this);
         // Set adapter for console selector
         final ArrayList<String> consoleItems = new ArrayList<String>();
-        consoleItems.add(user.getConsoleType());
+        String n = Util.getCorrectConsoleName(user.getConsoleType());
+        consoleItems.add(n);
         consoleItems.add("Add Console");
         adapterConsole = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, consoleItems) {
 
@@ -358,9 +360,9 @@ public class ListActivityFragment extends AppCompatActivity implements Observer,
                 );
                 ((TextView) v).setGravity(Gravity.LEFT);
 
-                ((TextView) v).setPadding(Util.dpToPx(55, ListActivityFragment.this), 0, 0, 0);
+                ((TextView) v).setPadding(Util.dpToPx(82, ListActivityFragment.this), 0, 0, 0);
                 ((TextView) v).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                ((TextView) v).setText("Checkpoint - " + ((TextView) v).getText());
+                ((TextView) v).setText(((TextView) v).getText());
 
                 return v;
             }
@@ -487,10 +489,36 @@ public class ListActivityFragment extends AppCompatActivity implements Observer,
 
     }
 
+    //console selector spinner
     private View getCustomView(int position, View convertView, ViewGroup parent, ArrayList<String> consoleItems) {
-
         LayoutInflater inflater=getLayoutInflater();
         View row=inflater.inflate(R.layout.console_selction_view, parent, false);
+        ImageView addSymbol = (ImageView)row.findViewById(R.id.console_img);
+        CardView card = (CardView)row.findViewById(R.id.console_card);
+        if(position==0) {
+            card.setBackgroundColor(getResources().getColor(R.color.freelancer_background));
+            ImageView dropArw = (ImageView)row.findViewById(R.id.drop_arrow);
+            dropArw.setVisibility(View.VISIBLE);
+        }
+        if (position==consoleItems.size()-1) {
+            addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_add_console));
+            card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //start new activity for event
+                    Intent regIntent = new Intent(ListActivityFragment.this,
+                            UpdateConsoleActivity.class);
+                    regIntent.putExtra("userdata", user);
+                    startActivity(regIntent);
+                }
+            });
+        }
+        if(consoleItems.get(position).equalsIgnoreCase("PlayStation 4") || consoleItems.get(position).equalsIgnoreCase("PlayStation 3")){
+            addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_psn_console));
+        } else if(consoleItems.get(position).equalsIgnoreCase("Xbox One") || consoleItems.get(position).equalsIgnoreCase("Xbox 360")){
+            addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_xboxone_console));
+        }
+
         TextView label=(TextView)row.findViewById(R.id.add_console_text);
         if (consoleItems!=null) {
             label.setText(consoleItems.get(position));
