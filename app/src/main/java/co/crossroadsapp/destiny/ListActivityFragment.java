@@ -15,6 +15,7 @@ import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.ConsoleData;
 import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.PushNotification;
+import co.crossroadsapp.destiny.network.ChangeCurrentConsoleNetwork;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
 import co.crossroadsapp.destiny.network.GroupListNetwork;
 import com.firebase.client.DataSnapshot;
@@ -29,6 +30,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.SparseArray;
@@ -40,8 +43,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,7 +77,7 @@ import java.util.Observer;
 /**
  * Created by sharmha on 4/8/16.
  */
-public class ListActivityFragment extends BaseActivity implements Observer {
+public class ListActivityFragment extends BaseActivity implements Observer, AdapterView.OnItemSelectedListener {
 
     UserData user;
     ControlManager mManager;
@@ -123,6 +129,10 @@ public class ListActivityFragment extends BaseActivity implements Observer {
     private TextView license;
     private TextView sendMsgAgain;
     private ArrayList<ActivityData> adActivityData;
+    private ArrayAdapter<String> adapterConsole;
+    private ArrayList<String> consoleItems;
+    private ImageView imgConsole;
+    private Spinner dropdown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -327,11 +337,51 @@ public class ListActivityFragment extends BaseActivity implements Observer {
                         CreateNewEvent.class);
                 regIntent.putExtra("userdata", user);
                 startActivity(regIntent);
-                //finish();
+                finish();
             }
         });
 
         changePassword = (TextView) findViewById(R.id.reset);
+        imgConsole = (ImageView) findViewById(R.id.console_icon);
+
+        dropdown = (Spinner) findViewById(R.id.console_spinner);
+
+        dropdown.setOnItemSelectedListener(this);
+        // Set adapter for console selector
+        updateConsoleListUserDrawer();
+//        adapterConsole = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, consoleItems) {
+//
+//            int FONT_STYLE = Typeface.BOLD;
+//
+//            public View getView(int position, View convertView, ViewGroup parent) {
+//                View v = super.getView(position, convertView, parent);
+//
+//                ((TextView) v).setTypeface(Typeface.SANS_SERIF, FONT_STYLE);
+//                ((TextView) v).setTextColor(
+//                        getResources().getColorStateList(R.color.trimbe_white)
+//                );
+//                ((TextView) v).setGravity(Gravity.LEFT);
+//
+//                ((TextView) v).setPadding(Util.dpToPx(82, ListActivityFragment.this), 0, 0, 0);
+//                ((TextView) v).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+//                ((TextView) v).setText(((TextView) v).getText());
+//
+//                if(((TextView) v).getText().toString().equalsIgnoreCase(Constants.CONSOLEXBOXONESTRG) || ((TextView) v).getText().toString().equalsIgnoreCase(Constants.CONSOLEXBOX360STRG)) {
+//                    imgConsole.setImageResource(R.drawable.icon_xboxone_console);
+//                } else {
+//                    imgConsole.setImageResource(R.drawable.icon_psn_console);
+//                }
+//
+//                return v;
+//            }
+//
+//            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+//                return getCustomView(position, convertView, parent, consoleItems);
+//            }
+//        };
+//        adapterConsole.setDropDownViewResource(R.layout.empty_layout);
+//        dropdown.setAdapter(adapterConsole);
+//        adapterConsole.notifyDataSetChanged();
 
         changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -444,6 +494,104 @@ public class ListActivityFragment extends BaseActivity implements Observer {
         checkClanSet();
 
         showNotifications();
+    }
+
+    private void updateConsoleListUserDrawer() {
+        //final ArrayList<String> consoleItems = new ArrayList<String>();
+        consoleItems = Util.getCorrectConsoleName(mManager.getConsoleList());
+        //final ArrayList<String> consoleItems = mManager.getConsoleList();
+        if(needToAdd(consoleItems)) {
+            consoleItems.add("Add Console");
+        }
+
+        adapterConsole = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, consoleItems) {
+
+            int FONT_STYLE = Typeface.BOLD;
+
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                ((TextView) v).setTypeface(Typeface.SANS_SERIF, FONT_STYLE);
+                ((TextView) v).setTextColor(
+                        getResources().getColorStateList(R.color.trimbe_white)
+                );
+                ((TextView) v).setGravity(Gravity.LEFT);
+
+                ((TextView) v).setPadding(Util.dpToPx(82, ListActivityFragment.this), 0, 0, 0);
+                ((TextView) v).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                ((TextView) v).setText(((TextView) v).getText());
+
+                if(((TextView) v).getText().toString().equalsIgnoreCase(Constants.CONSOLEXBOXONESTRG) || ((TextView) v).getText().toString().equalsIgnoreCase(Constants.CONSOLEXBOX360STRG)) {
+                    imgConsole.setImageResource(R.drawable.icon_xboxone_console);
+                } else {
+                    imgConsole.setImageResource(R.drawable.icon_psn_console);
+                }
+
+                return v;
+            }
+
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                return getCustomView(position, convertView, parent, consoleItems);
+            }
+        };
+        adapterConsole.setDropDownViewResource(R.layout.empty_layout);
+        dropdown.setAdapter(adapterConsole);
+        adapterConsole.notifyDataSetChanged();
+    }
+
+    private boolean needToAdd(ArrayList<String> consoleItems) {
+        if(consoleItems.size()==1){
+            return true;
+        } else {
+            int x=0;
+            for (int i=0; i<consoleItems.size(); i++) {
+                if(consoleItems.get(i).equalsIgnoreCase(Constants.CONSOLEPS4STRG) || consoleItems.get(i).equalsIgnoreCase(Constants.CONSOLEXBOXONESTRG)) {
+                    x++;
+                }
+            }
+            if (x<2) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //console selector spinner
+    private View getCustomView(int position, View convertView, ViewGroup parent, ArrayList<String> consoleItems) {
+        LayoutInflater inflater=getLayoutInflater();
+        View row=inflater.inflate(R.layout.console_selction_view, parent, false);
+        ImageView addSymbol = (ImageView)row.findViewById(R.id.console_img);
+        CardView card = (CardView)row.findViewById(R.id.console_card);
+        if(position==0) {
+            card.setBackgroundColor(getResources().getColor(R.color.freelancer_background));
+            ImageView dropArw = (ImageView)row.findViewById(R.id.drop_arrow);
+            dropArw.setVisibility(View.VISIBLE);
+        }
+        if (position==consoleItems.size()-1) {
+            addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_add_console));
+            card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    //start new activity for event
+                    Intent regIntent = new Intent(ListActivityFragment.this,
+                            UpdateConsoleActivity.class);
+                    regIntent.putExtra("userdata", user);
+                    startActivity(regIntent);
+                }
+            });
+        }
+        if(consoleItems.get(position).equalsIgnoreCase("PlayStation 4") || consoleItems.get(position).equalsIgnoreCase("PlayStation 3")){
+            addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_psn_console));
+        } else if(consoleItems.get(position).equalsIgnoreCase("Xbox One") || consoleItems.get(position).equalsIgnoreCase("Xbox 360")){
+            addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_xboxone_console));
+        }
+
+        TextView label=(TextView)row.findViewById(R.id.add_console_text);
+        if (consoleItems!=null) {
+            label.setText(consoleItems.get(position));
+        }
+        return row;
     }
 
     private void checkIfExternalDeepLinkPresent() {
@@ -773,6 +921,8 @@ public class ListActivityFragment extends BaseActivity implements Observer {
             if (gravity == Gravity.RIGHT && gpAct != null) {
                 gpAct.setSelectedGroup();
                 mManager.getGroupList(this);
+            } else if(gravity == Gravity.LEFT && gpAct != null) {
+                updateConsoleListUserDrawer();
             }
             this.drawerLayout.openDrawer(gravity);
         }
@@ -920,6 +1070,45 @@ public class ListActivityFragment extends BaseActivity implements Observer {
                 appIcon.invalidate();
             }
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(position>0) {
+            String console = parent.getItemAtPosition(position).toString();
+            if (console != null) {
+                switch (console) {
+                    case "PlayStation 3":
+                        console = "PS3";
+                        break;
+                    case "PlayStation 4":
+                        console = "PS4";
+                        break;
+                    case "Xbox One":
+                        console = "XBOXONE";
+                        break;
+                    case "Xbox 360":
+                        console = "XBOX360";
+                        break;
+
+                }
+            }
+            if (console!=null) {
+                changeToOtherConsole(console);
+            }
+        }
+    }
+
+    private void changeToOtherConsole(String console) {
+        showProgressBar();
+        RequestParams rp_console = new RequestParams();
+        rp_console.add("consoleType", console);
+        mManager.changeToOtherConsole(ListActivityFragment.this, rp_console);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     class PagerAdapter extends FragmentPagerAdapter {
@@ -1096,6 +1285,13 @@ public class ListActivityFragment extends BaseActivity implements Observer {
                     updateUserProfileImage(data.toString());
                     mManager.getEventList(this);
                 }
+            } else if( observable instanceof ChangeCurrentConsoleNetwork) {
+                hideProgressBar();
+                if(data!=null) {
+                    user = mManager.getUserData();
+                }
+                mManager.getEventList(this);
+                mManager.getGroupList(this);
             }
     }
 

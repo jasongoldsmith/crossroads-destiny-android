@@ -75,8 +75,8 @@
     <string name="animation_speed">400</string>
 
     <!--<plurals name="grp_member">-->
-        <!--<item quantity="one"> &#160;Member</item>-->
-        <!--<item quantity="other"> &#160;Members</item>-->
+    <!--<item quantity="one"> &#160;Member</item>-->
+    <!--<item quantity="other"> &#160;Members</item>-->
     <!--</plurals>-->
 
     <string name="grp_member"> &#160;in Orbit</string>
@@ -92,6 +92,7 @@
         <item>XBOXONE</item>
         <item>XBOX360</item>
     </string-array>
+    <string name="title_activity_update_console">UpdateConsoleActivity</string>
 
     <string name="deeplink_full_err">The maximum amount of players has been reached for this activity. Would you like to add one of your own?</string>
 

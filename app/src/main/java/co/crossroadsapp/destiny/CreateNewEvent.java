@@ -147,6 +147,8 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
     private RelativeLayout checkpointLayout;
     Intent localPushEventObj;
     private DatePickerDialog mDatePickerDai;
+    private String adcardEventId;
+    private ActivityData adAct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +169,10 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
 
         Bundle b = getIntent().getExtras();
         user = b.getParcelable("userdata");
+
+        if(b.containsKey("adsCardId")) {
+            adcardEventId = b.getString("adsCardId");
+        }
 
         checkIfPSNVerified();
 
@@ -471,6 +477,84 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                 showDialog(TIME_DIALOG_ID);
             }
         });
+
+        adCardFlow();
+    }
+
+    private void adCardFlow() {
+        if(adcardEventId!=null && (!adcardEventId.isEmpty())) {
+            adAct = mCntrlMngr.getAdsActivity(adcardEventId);
+            if(adAct!=null) {
+                final_act_text_view.setText(adAct.getActivityType());
+                if (adAct.getActivityType()!=null) {
+                    switch(adAct.getActivityType()) {
+                        case (Constants.ACTIVITY_ARENA):
+                            final_act_icon_view.setImageResource(R.drawable.img_arena_icon);
+                            break;
+                        case (Constants.ACTIVITY_CRUCIBLE):
+                            final_act_icon_view.setImageResource(R.drawable.img_crucible_icon);
+                            break;
+                        case (Constants.ACTIVITY_FEATURED):
+                            final_act_icon_view.setImageResource(R.drawable.img_featured_icon);
+                            break;
+                        case (Constants.ACTIVITY_PATROL):
+                            final_act_icon_view.setImageResource(R.drawable.img_patrol_icon);
+                            break;
+                        case (Constants.ACTIVITY_STRIKES):
+                            final_act_icon_view.setImageResource(R.drawable.img_strikes_icon);
+                            break;
+                    }
+                }
+                Util.picassoLoadIcon(CreateNewEvent.this, createActivityIconview, adAct.getActivityIconUrl(), R.dimen.activity_icon_hgt_createevent, R.dimen.activity_icon_width_createevent, R.drawable.icon_ghost_default);
+                createAvtivityNameText.setText(adAct.getActivitySubtype() + " - " + adAct.getActivityDifficulty()!=null?adAct.getActivityDifficulty():"" );
+                TextView adCheckpoint = (TextView) findViewById(R.id.ad_checkpoint_text);
+                if(adAct.getActivityCheckpoint()!=null) {
+                    adCheckpoint.setText("Checkpoint - " + adAct.getActivityCheckpoint());
+                }
+                final_create_event_firstcard.setClickable(false);
+                checkpointLayout.setClickable(false);
+                if(createNewEventLayout!=null) {
+                    createNewEventLayout.setVisibility(View.VISIBLE);
+                }
+
+                createNewEventBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        if (vf.getDisplayedChild() == 2) {
+//                            if (mAdapter != null && mAdapter.aList != null) {
+//                                if (checkpointActList != null && currentCheckpointActivityPosition >= 0) {
+//                                    if (checkpointActList.get(currentCheckpointActivityPosition).getId() != null && !checkpointActList.get(currentCheckpointActivityPosition).getId().isEmpty()) {
+//                                        String activityId = checkpointActList.get(currentCheckpointActivityPosition).getId();
+//                                        String creator_id = user.getUserId();
+//                                        int maxP = checkpointActList.get(currentCheckpointActivityPosition).getMaxPlayer();
+//                                        int minP = checkpointActList.get(currentCheckpointActivityPosition).getMinPlayer();
+//                                        ArrayList<String> players = new ArrayList<String>();
+//                                        players.add(creator_id);
+//                                        if (activityId != null && creator_id != null) {
+//                                            hideProgressBar();
+//                                            showProgressBar();
+//                                            //linlaHeaderProgress.setVisibility(View.VISIBLE);
+//                                            String dateTime = getCreateEventDateTime();
+//                                            mCntrlMngr.postCreateEvent(activityId, creator_id, minP, maxP, dateTime, CreateNewEvent.this);
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
+                        hideProgressBar();
+                        showProgressBar();
+                        String dateTime = getCreateEventDateTime();
+                        if (adAct.getId() != null && user.getUserId() != null){
+                            mCntrlMngr.postCreateEvent(adAct.getId(), user.getUserId(), adAct.getMinPlayer(), adAct.getMaxPlayer(), dateTime, CreateNewEvent.this);
+                    }
+                    }
+                });
+                vfShowNext();
+                vfShowNext();
+            }else {
+                launchListActivityAndFinish();
+            }
+        }
     }
 
     @Override
@@ -885,7 +969,9 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
     @Override
     public void onBackPressed() {
         if (vf!=null) {
-            if(vf.getDisplayedChild()>0){
+            if(adcardEventId!=null && (!adcardEventId.isEmpty())) {
+                launchListActivityAndFinish();
+            }else if(vf.getDisplayedChild()>0){
                 setVfPrevAnimation();
                 //todo fix the hack to reset date, time and checkpoint
                 setCalendarCheckpointToDefault();

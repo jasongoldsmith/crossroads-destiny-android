@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -89,13 +90,28 @@ public class BaseActivity extends FragmentActivity {
         }
     }
 
-    public void showDeeplinkError(int eventFull, String deepLinkEvent) {
+    public void showDeeplinkError(int eventFull, final String deepLinkEvent) {
         deeplinkError = (RelativeLayout) findViewById(R.id.deeplink_error);
         TextView errMsg = (TextView) findViewById(R.id.msg);
         TextView btnText = (TextView) findViewById(R.id.btn_text);
         CardView btn = (CardView) findViewById(R.id.add_btn);
         deeplinkError.setVisibility(View.VISIBLE);
-        TextView noBtn = 
+        TextView noBtn = (TextView) findViewById(R.id.no_thanks);
+        ImageView close= (ImageView) findViewById(R.id.close);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deeplinkError.setVisibility(View.GONE);
+            }
+        });
+
+        noBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deeplinkError.setVisibility(View.GONE);
+            }
+        });
         switch(eventFull) {
             case 1:
                 errMsg.setText("Sorry, that " +deepLinkEvent+ " is no longer available. Would you like to add one of your own?");

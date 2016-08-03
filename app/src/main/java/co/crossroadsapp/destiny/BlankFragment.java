@@ -404,7 +404,13 @@ public class BlankFragment extends Fragment {
                     adHolder.addBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mManager.postCreateEvent(adList.get(position-elistLocal.size()).getId(), user.getUserId(), adList.get(position-elistLocal.size()).getMinPlayer(), adList.get(position-elistLocal.size()).getMaxPlayer(), null, mContext);
+                            //goto create new event
+                            Intent regIntent = new Intent(mContext,
+                                    CreateNewEvent.class);
+                            regIntent.putExtra("userdata", user);
+                            regIntent.putExtra("adsCardId", adList.get(position-elistLocal.size()).getId());
+                            startActivity(regIntent);
+                            //mManager.postCreateEvent(adList.get(position-elistLocal.size()).getId(), user.getUserId(), adList.get(position-elistLocal.size()).getMinPlayer(), adList.get(position-elistLocal.size()).getMaxPlayer(), null, mContext);
                         }
                     });
                     break;

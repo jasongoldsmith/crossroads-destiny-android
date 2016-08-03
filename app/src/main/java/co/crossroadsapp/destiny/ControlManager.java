@@ -11,12 +11,15 @@ import android.os.Bundle;
 import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.ActivityList;
 import co.crossroadsapp.destiny.data.AppVersion;
+import co.crossroadsapp.destiny.data.ConsoleData;
 import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.EventList;
 import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.GroupList;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.network.ActivityListNetwork;
+import co.crossroadsapp.destiny.network.AddNewConsoleNetwork;
+import co.crossroadsapp.destiny.network.ChangeCurrentConsoleNetwork;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
 import co.crossroadsapp.destiny.network.EventListNetwork;
 import co.crossroadsapp.destiny.network.EventRelationshipHandlerNetwork;
@@ -84,6 +87,9 @@ public class ControlManager implements Observer{
     private HelmetUpdateNetwork helmetUpdateNetwork;
     private String deepLinkEvent;
     private ArrayList<ActivityData> adActivityData;
+    private ArrayList<String> consoleList;
+    private AddNewConsoleNetwork addConsoleNetwork;
+    private ChangeCurrentConsoleNetwork changeCurrentConsoleNetwork;
 
     public ControlManager() {
     }
@@ -685,5 +691,45 @@ public class ControlManager implements Observer{
 
     public String getDeepLinkEvent() {
         return deepLinkEvent;
+    }
+
+    public ArrayList<String> getConsoleList() {
+        consoleList = new ArrayList<>();
+        consoleList.add(user.getConsoleType());
+        for (int n=0; n<user.getConsoles().size();n++) {
+            if(!user.getConsoles().get(n).getcType().equalsIgnoreCase(user.getConsoleType())) {
+                consoleList.add(user.getConsoles().get(n).getcType());
+            }
+        }
+        return consoleList;
+    }
+
+    public void addOtherConsole(UpdateConsoleActivity activity, RequestParams rp_console) {
+        try {
+            addConsoleNetwork = new AddNewConsoleNetwork(activity);
+            addConsoleNetwork.addObserver(activity);
+            addConsoleNetwork.doAddConsole(rp_console);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void changeToOtherConsole(ListActivityFragment activity, RequestParams rp_console) {
+        try {
+            changeCurrentConsoleNetwork = new ChangeCurrentConsoleNetwork(activity);
+            changeCurrentConsoleNetwork.addObserver(activity);
+            changeCurrentConsoleNetwork.doChangeConsole(rp_console);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ActivityData getAdsActivity(String adcardEventId) {
+        for (int n=0;n<adActivityData.size();n++) {
+            if (adActivityData.get(n).getId().equalsIgnoreCase(adcardEventId)) {
+                return adActivityData.get(n);
+            }
+        }
+        return null;
     }
 }

@@ -539,11 +539,26 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/checkmark"
                     android:src="@drawable/icon_checkmark"
                     android:layout_alignParentLeft="true"
                     android:layout_marginLeft="14dp"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ad_checkpoint_text"
+                    android:textColor="@color/trimbe_white"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="bold"
+                    android:textSize="12dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/checkmark"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center" />
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -31,6 +31,7 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -435,5 +436,78 @@ public class Util {
                 }
             }, 5000);
         }
+    }
+
+    public static ArrayList<String> getCorrectConsoleName(ArrayList<String> consoleType) {
+        ArrayList<String> console = new ArrayList<>();
+        for (String temp : consoleType) {
+            switch (temp) {
+                case "PS4":
+                    console.add("PlayStation 4");
+                    break;
+                case "PS3":
+                    console.add("PlayStation 3");
+                    break;
+                case "XBOXONE":
+                    console.add("Xbox One");
+                    break;
+                case "XBOX360":
+                    console.add("Xbox 360");
+                    break;
+                default:
+                    console.add("Console Missing");
+            }
+        }
+        return console;
+    }
+
+    public static ArrayList<String> getRemConsoleName(ArrayList<String> consoleType) {
+        ArrayList<String> list = new ArrayList<String>();
+        if(consoleType.size()==1) {
+            for (String temp : consoleType) {
+                switch (temp){
+                    case "PS4":
+                        if (consoleType.size()==1) {
+                            list.add(Constants.CONSOLEXBOXONESTRG);
+                            list.add(Constants.CONSOLEXBOX360STRG);
+                        }
+                        break;
+                    case "PS3":
+                        if (consoleType.size()==1) {
+                            list.add(Constants.CONSOLEPS4STRG);
+                            list.add(Constants.CONSOLEXBOXONESTRG);
+                            list.add(Constants.CONSOLEXBOX360STRG);
+                        }
+                        break;
+                    case "XBOXONE":
+                        if (consoleType.size()==1) {
+                            list.add(Constants.CONSOLEPS4STRG);
+                            list.add(Constants.CONSOLEPS3STRG);
+                        }
+                        break;
+                    case "XBOX360":
+                        if (consoleType.size()==1) {
+                            list.add(Constants.CONSOLEXBOXONESTRG);
+                            list.add(Constants.CONSOLEPS4STRG);
+                            list.add(Constants.CONSOLEPS3STRG);
+                        }
+                        break;
+                }
+            }
+        } else {
+            if(consoleType.contains(Constants.CONSOLEPS4) && consoleType.contains(Constants.CONSOLEXBOX360)) {
+                list.add(Constants.CONSOLEXBOXONESTRG);
+            } else if(consoleType.contains(Constants.CONSOLEPS3) && consoleType.contains(Constants.CONSOLEXBOX360)) {
+                list.add(Constants.CONSOLEXBOXONESTRG);
+                list.add(Constants.CONSOLEPS4STRG);
+            } else if(consoleType.contains(Constants.CONSOLEPS3) && consoleType.contains(Constants.CONSOLEXBOXONE)){
+                list.add(Constants.CONSOLEPS4STRG);
+            }
+        }
+//        if (consoleType.equalsIgnoreCase("PS4")) {
+//            list.add("Xbox One");
+//            list.add("Xbox 360");
+//        }
+        return list;
     }
 }
