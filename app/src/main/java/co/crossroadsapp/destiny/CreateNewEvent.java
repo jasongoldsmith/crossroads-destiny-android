@@ -487,7 +487,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
             if(adAct!=null) {
                 final_act_text_view.setText(adAct.getActivityType());
                 if (adAct.getActivityType()!=null) {
-                    switch(adAct.getActivityType()) {
+                    switch(adAct.getActivityType().toUpperCase()) {
                         case (Constants.ACTIVITY_ARENA):
                             final_act_icon_view.setImageResource(R.drawable.img_arena_icon);
                             break;
@@ -506,7 +506,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                     }
                 }
                 Util.picassoLoadIcon(CreateNewEvent.this, createActivityIconview, adAct.getActivityIconUrl(), R.dimen.activity_icon_hgt_createevent, R.dimen.activity_icon_width_createevent, R.drawable.icon_ghost_default);
-                createAvtivityNameText.setText(adAct.getActivitySubtype() + " - " + adAct.getActivityDifficulty()!=null?adAct.getActivityDifficulty():"" );
+                createAvtivityNameText.setText(adAct.getActivitySubtype()!=null?adAct.getActivitySubtype():"" + " - " + adAct.getActivityDifficulty()!=null?adAct.getActivityDifficulty():"" );
                 TextView adCheckpoint = (TextView) findViewById(R.id.ad_checkpoint_text);
                 if(adAct.getActivityCheckpoint()!=null) {
                     adCheckpoint.setText("Checkpoint - " + adAct.getActivityCheckpoint());
@@ -520,27 +520,6 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                 createNewEventBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        if (vf.getDisplayedChild() == 2) {
-//                            if (mAdapter != null && mAdapter.aList != null) {
-//                                if (checkpointActList != null && currentCheckpointActivityPosition >= 0) {
-//                                    if (checkpointActList.get(currentCheckpointActivityPosition).getId() != null && !checkpointActList.get(currentCheckpointActivityPosition).getId().isEmpty()) {
-//                                        String activityId = checkpointActList.get(currentCheckpointActivityPosition).getId();
-//                                        String creator_id = user.getUserId();
-//                                        int maxP = checkpointActList.get(currentCheckpointActivityPosition).getMaxPlayer();
-//                                        int minP = checkpointActList.get(currentCheckpointActivityPosition).getMinPlayer();
-//                                        ArrayList<String> players = new ArrayList<String>();
-//                                        players.add(creator_id);
-//                                        if (activityId != null && creator_id != null) {
-//                                            hideProgressBar();
-//                                            showProgressBar();
-//                                            //linlaHeaderProgress.setVisibility(View.VISIBLE);
-//                                            String dateTime = getCreateEventDateTime();
-//                                            mCntrlMngr.postCreateEvent(activityId, creator_id, minP, maxP, dateTime, CreateNewEvent.this);
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
                         hideProgressBar();
                         showProgressBar();
                         String dateTime = getCreateEventDateTime();
@@ -926,7 +905,9 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
 
     private void vfShowNext() {
         if (vf!=null) {
-            setVfNextAnimation();
+            if(adcardEventId==null) {
+                setVfNextAnimation();
+            }
             vf.showNext();
         }
     }

@@ -99,23 +99,17 @@ public class LoginActivity extends BaseActivity implements Observer {
                 username = name_login.getText().toString();
                 password = pswd_login.getText().toString();
                 if (username!=null && password!=null) {
-                    if (username.length()>4 && password.length()>4) {
+                    if(username.length()==0){
+                        showError(getResources().getString(R.string.username_missing));
+                    } else if(password.length()==0) {
+                        showError(getResources().getString(R.string.password_missing));
+                    } else {
                         RequestParams params = new RequestParams();
                         params.put("userName", username);
                         params.put("passWord", password);
                         dialog.show();
                         dialog.setCancelable(false);
                         mManager.postLogin(LoginActivity.this, params, Constants.LOGIN);
-                    } else {
-                        if(username.length()==0){
-                            showError(getResources().getString(R.string.username_missing));
-                        } else if(username.length() < 5) {
-                            showError(getResources().getString(R.string.username_short));
-                        } else if(password.length()==0) {
-                            showError(getResources().getString(R.string.password_missing));
-                        } else {
-                            showError(getResources().getString(R.string.password_short));
-                        }
                     }
                 }
             }

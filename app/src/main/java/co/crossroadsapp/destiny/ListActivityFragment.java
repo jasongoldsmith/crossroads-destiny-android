@@ -1,6 +1,7 @@
 package co.crossroadsapp.destiny;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,8 +30,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -59,6 +58,7 @@ import co.crossroadsapp.destiny.network.EventListNetwork;
 import co.crossroadsapp.destiny.network.EventRelationshipHandlerNetwork;
 import co.crossroadsapp.destiny.network.HelmetUpdateNetwork;
 import co.crossroadsapp.destiny.network.LogoutNetwork;
+import co.crossroadsapp.destiny.network.PrivacyLegalUpdateNetwork;
 import co.crossroadsapp.destiny.network.ResendBungieVerification;
 import co.crossroadsapp.destiny.utils.CircularImageView;
 import co.crossroadsapp.destiny.utils.Constants;
@@ -133,6 +133,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     private ArrayList<String> consoleItems;
     private ImageView imgConsole;
     private Spinner dropdown;
+    private AlertDialog dialogPrivacy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -337,7 +338,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                         CreateNewEvent.class);
                 regIntent.putExtra("userdata", user);
                 startActivity(regIntent);
-                finish();
+                //finish();
             }
         });
 
@@ -349,6 +350,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         dropdown.setOnItemSelectedListener(this);
         // Set adapter for console selector
         updateConsoleListUserDrawer();
+
+        checkPrivacyDialoge();
 //        adapterConsole = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, consoleItems) {
 //
 //            int FONT_STYLE = Typeface.BOLD;
@@ -496,6 +499,30 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         showNotifications();
     }
 
+    private void checkPrivacyDialoge() {
+        if(user!=null) {
+            if(user.getLegal()!=null) {
+                if( user.getLegal().getPrivacyNeedsUpdate()) {
+                    //alert pop-up dailogue
+                    final TextView message = new TextView(this);
+                    message.setText(Html.fromHtml((getString(R.string.dialog_message))));
+                    message.setMovementMethod(LinkMovementMethod.getInstance());
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this)
+                            .setTitle(R.string.dialog_title)
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.ok_btn, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mManager.legalPrivacyDone(ListActivityFragment.this);
+                                }
+                            })
+                            .setView(message);
+                    dialogPrivacy = builder.create();
+                    dialogPrivacy.show();
+                }
+            }
+        }
+    }
+
     private void updateConsoleListUserDrawer() {
         //final ArrayList<String> consoleItems = new ArrayList<String>();
         consoleItems = Util.getCorrectConsoleName(mManager.getConsoleList());
@@ -607,20 +634,21 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     private void updateExternalDeepLink(EventData data) {
         if(mManager!=null) {
             if(checkIfConsolePresent(data.getConsoleType())) {
-                if(data.getClanId().equalsIgnoreCase(user.getClanId())) {
+                GroupData gp = mManager.getGroupObj(data.getClanId());
+                if(gp!=null) {
                     if(data.getPlayerData().size()==data.getMaxPlayer()) {
-                        showDeeplinkError(Constants.EVENT_FULL, null);
+                        showDeeplinkError(Constants.EVENT_FULL, null, null);
                     }else {
                         startEventDetail(data);
                     }
                 } else {
-                    showDeeplinkError(Constants.EVENT_GRP_MISSING, data.getClanId());
+                    showDeeplinkError(Constants.EVENT_GRP_MISSING, data.getClanName()!=null?data.getClanName():"", mManager.getDeepLinkActivityName()!=null?mManager.getDeepLinkActivityName():"");
                 }
             } else {
-                showDeeplinkError(Constants.EVENT_CONSOLE_MISSING, data.getConsoleType());
+                showDeeplinkError(Constants.EVENT_CONSOLE_MISSING, data.getClanName()!=null?data.getClanName():"", data.getConsoleType()!=null?data.getConsoleType():"");
             }
         }
-        mManager.setDeepLinkEvent(null);
+        mManager.setDeepLinkEvent(null, null);
     }
 
     private boolean checkIfConsolePresent(String consoleType) {
@@ -955,8 +983,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         closeProfileDrawer(Gravity.RIGHT);
         closeProfileDrawer(Gravity.LEFT);
         if(mManager!=null && mManager.getDeepLinkEvent()!=null) {
-            showDeeplinkError(Constants.EVENT_MISSING, mManager.getDeepLinkEvent());
-            mManager.setDeepLinkEvent(null);
+            showDeeplinkError(Constants.EVENT_MISSING, mManager.getDeepLinkActivityName(), null);
+            mManager.setDeepLinkEvent(null, null);
         } else {
             //show timed error message
             Util.showErrorMsg(errLayout, errText, err);
@@ -981,6 +1009,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         //get latest event list
         if (mManager!= null) {
             mManager.setCurrentActivity(this);
+            updateConsoleListUserDrawer();
             getExistingList();
             mManager.getEventList(this);
         }
@@ -1000,7 +1029,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
         //remove deeplink reference
         if(mManager!=null) {
-            mManager.setDeepLinkEvent(null);
+            mManager.setDeepLinkEvent(null, null);
         }
         //unregisterFirebase();
         unregisterUserFirebase();
@@ -1292,6 +1321,10 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 }
                 mManager.getEventList(this);
                 mManager.getGroupList(this);
+            } else if(observable instanceof PrivacyLegalUpdateNetwork) {
+                if(dialogPrivacy!=null) {
+                    dialogPrivacy.dismiss();
+                }
             }
     }
 
@@ -1360,7 +1393,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         ArrayList<PushNotification> localNoti = new ArrayList<PushNotification>();
         if(n==0) {
             if(notiList!=null && (!notiList.isEmpty())){
-            localNoti.add(notiList.get(0));
+            localNoti.add(notiList.get(notiList.size()-1));
             n++;}
         }else {
             if(notiList!=null && (!notiList.isEmpty())) {

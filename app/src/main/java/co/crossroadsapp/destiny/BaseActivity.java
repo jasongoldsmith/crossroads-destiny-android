@@ -90,7 +90,7 @@ public class BaseActivity extends FragmentActivity {
         }
     }
 
-    public void showDeeplinkError(int eventFull, final String deepLinkEvent) {
+    public void showDeeplinkError(int eventFull, final String deepLinkEvent, String deepLinkName) {
         deeplinkError = (RelativeLayout) findViewById(R.id.deeplink_error);
         TextView errMsg = (TextView) findViewById(R.id.msg);
         TextView btnText = (TextView) findViewById(R.id.btn_text);
@@ -128,7 +128,7 @@ public class BaseActivity extends FragmentActivity {
                 });
                 break;
             case 2:
-                errMsg.setText("You’ll need to be in the " +deepLinkEvent + " group to join. Request to join?");
+                errMsg.setText("You’ll need to be in the " +deepLinkEvent+ " group to join " + deepLinkName+ ". Request to join?");
                 btnText.setText("VIEW GROUP ON BUNGIE.NET");
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -153,8 +153,8 @@ public class BaseActivity extends FragmentActivity {
                 });
                 break;
             case 4:
-                errMsg.setText("You’ll need to be on "+ deepLinkEvent +" to join that activity. Add another console to your account?");
-                btnText.setText("ADD MY "+deepLinkEvent);
+                errMsg.setText("You’ll need to be on "+deepLinkName+" to join that activity from "+deepLinkEvent+ ". Add another console to your account?");
+                btnText.setText("ADD MY "+deepLinkName);
                 //todo add update console UI
                 break;
         }

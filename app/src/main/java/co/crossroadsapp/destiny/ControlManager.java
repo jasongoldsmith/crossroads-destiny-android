@@ -29,6 +29,7 @@ import co.crossroadsapp.destiny.network.GetVersion;
 import co.crossroadsapp.destiny.network.GroupListNetwork;
 import co.crossroadsapp.destiny.network.HelmetUpdateNetwork;
 import co.crossroadsapp.destiny.network.LogoutNetwork;
+import co.crossroadsapp.destiny.network.PrivacyLegalUpdateNetwork;
 import co.crossroadsapp.destiny.network.ReportCrashNetwork;
 import co.crossroadsapp.destiny.network.ResendBungieVerification;
 import co.crossroadsapp.destiny.network.VerifyConsoleIDNetwork;
@@ -90,6 +91,8 @@ public class ControlManager implements Observer{
     private ArrayList<String> consoleList;
     private AddNewConsoleNetwork addConsoleNetwork;
     private ChangeCurrentConsoleNetwork changeCurrentConsoleNetwork;
+    private String deepLinkActivityName;
+    private PrivacyLegalUpdateNetwork legalPrivacyNetwork;
 
     public ControlManager() {
     }
@@ -685,12 +688,17 @@ public class ControlManager implements Observer{
         }
     }
 
-    public void setDeepLinkEvent(String deepLinkEvent) {
+    public void setDeepLinkEvent(String deepLinkEvent, String actName) {
         this.deepLinkEvent = deepLinkEvent;
+        this.deepLinkActivityName = actName;
     }
 
     public String getDeepLinkEvent() {
         return deepLinkEvent;
+    }
+
+    public String getDeepLinkActivityName() {
+        return deepLinkActivityName;
     }
 
     public ArrayList<String> getConsoleList() {
@@ -731,5 +739,15 @@ public class ControlManager implements Observer{
             }
         }
         return null;
+    }
+
+    public void legalPrivacyDone(ListActivityFragment act) {
+        try {
+            legalPrivacyNetwork = new PrivacyLegalUpdateNetwork(act);
+            legalPrivacyNetwork.addObserver(act);
+            legalPrivacyNetwork.postTermsPrivacyDone();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

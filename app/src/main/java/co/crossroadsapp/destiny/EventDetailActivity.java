@@ -255,6 +255,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                 .setContentDescription(getDeeplinkContent(upcomingDate))
                 .setContentImageUrl(Constants.DEEP_LINK_IMAGE + currEvent.getEventId()+".png")
                 //.setContentExpiration(new Date(1476566432000L)) // set contents expiration time if applicable
+                .addContentMetadata("activityName", currEvent.getActivityData().getActivitySubtype())
                 .addContentMetadata("eventId", currEvent.getEventId());
 
         userIsPlayer = checkUserIsPlayer();
@@ -795,7 +796,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         if(n==0) {
             if(eventNotiList!=null && (!eventNotiList.isEmpty())){
-                localNoti.add(eventNotiList.get(0));
+                localNoti.add(eventNotiList.get(eventNotiList.size()-1));
                 n++;}
         }else {
             if(eventNotiList!=null && (!eventNotiList.isEmpty())) {

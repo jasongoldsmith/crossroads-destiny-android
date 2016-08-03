@@ -225,7 +225,7 @@ public class RegisterActivity extends BaseActivity implements Observer {
                 } else {
                     if(username.length()==0){
                         showError(getResources().getString(R.string.username_missing));
-                    } else if(username.length() < 5) {
+                    } else if(username.length() < 3) {
                         showError(getResources().getString(R.string.username_short));
                     } else if(password.length()==0) {
                         showError(getResources().getString(R.string.password_missing));

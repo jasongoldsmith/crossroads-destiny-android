@@ -28,7 +28,9 @@ public class NetworkEngine {
         client = new AsyncHttpClient();
         myCookieStore = new PersistentCookieStore(c);
         //myCookieStore.clear();
-        client.setCookieStore(myCookieStore);
+        if(myCookieStore!=null) {
+            client.setCookieStore(myCookieStore);
+        }
     }
 
     public static NetworkEngine getmInstance(Context context) {

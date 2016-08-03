@@ -139,9 +139,10 @@ public class SplashActivity extends BaseActivity{
                             if (branchUniversalObject != null) {
                                 if (branchUniversalObject.getMetadata().containsKey("eventId")) {
                                     String eId = branchUniversalObject.getMetadata().get("eventId");
+                                    String aName = branchUniversalObject.getMetadata().get("activityName");
                                     if (eId != null) {
                                         if (cManager != null) {
-                                            cManager.setDeepLinkEvent(eId);
+                                            cManager.setDeepLinkEvent(eId, aName);
                                         }
                                     }
                                 }

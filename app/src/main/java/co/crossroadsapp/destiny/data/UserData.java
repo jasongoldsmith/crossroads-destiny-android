@@ -15,6 +15,7 @@ import java.util.Map;
  */
 public class UserData implements Parcelable {
 
+    private LegalData legal;
     private String user=null;
     private String password=null;
     private String psnId=null;
@@ -29,6 +30,7 @@ public class UserData implements Parcelable {
 
     public UserData() {
         consoles = new ArrayList<ConsoleData>();
+        legal = new LegalData();
     }
 
     public void setUser(String name) {
@@ -41,6 +43,14 @@ public class UserData implements Parcelable {
         if (pswd!=null && !pswd.isEmpty()) {
             this.password = pswd;
         }
+    }
+
+    public void setLegal(LegalData lData) {
+        this.legal = lData;
+    }
+
+    public LegalData getLegal() {
+        return legal;
     }
 
     public void setPsnVerify(String psnVeri) {
@@ -145,7 +155,11 @@ public class UserData implements Parcelable {
                     String uId = jsonData.getString("_id");
                     setUserId(uId);
                 }
-                if (jsonData.has("consoles")) {
+                    if(jsonData.has("legal")) {
+                        JSONObject legalData = jsonData.optJSONObject("legal");
+                        legal.toJson(legalData);
+                    }
+                    if (jsonData.has("consoles")) {
                     JSONArray conArray = jsonData.optJSONArray("consoles");
                     if (conArray != null) {
                         for (int i=0; i<conArray.length();i++) {

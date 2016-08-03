@@ -1,12 +1,18 @@
 package co.crossroadsapp.destiny;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.View;
+import android.widget.TextView;
 
 import co.crossroadsapp.destiny.data.AppVersion;
 import co.crossroadsapp.destiny.network.GetVersion;

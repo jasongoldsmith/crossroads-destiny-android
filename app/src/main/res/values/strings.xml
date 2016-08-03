@@ -31,7 +31,7 @@
     <string name="patrol">Patrol</string>
 
     <!-- error message strings -->
-    <string name="username_short">Your username must have at least 5 characters.</string>
+    <string name="username_short">Your username must have at least 3 characters.</string>
     <string name="username_missing">Please enter a username.</string>
     <string name="password_short">Your password must have at least 5 characters.</string>
     <string name="password_missing">Please enter a password.</string>
@@ -95,5 +95,7 @@
     <string name="title_activity_update_console">UpdateConsoleActivity</string>
 
     <string name="deeplink_full_err">The maximum amount of players has been reached for this activity. Would you like to add one of your own?</string>
+    <string name="dialog_message">Our Terms of Service and Privacy Policy have changed.\n  By tapping the “OK” button, you agree to the updated <![CDATA[<a href="https://www.crossroadsapp.co/terms">Terms of Service</a>]]> and <![CDATA[<a href="https://www.crossroadsapp.co/privacy">Privacy Policy</a>]]>.</string>
+    <string name="dialog_title">"                     Update"</string>
 
 </resources>

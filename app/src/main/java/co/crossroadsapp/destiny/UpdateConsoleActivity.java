@@ -104,21 +104,7 @@ public class UpdateConsoleActivity extends BaseActivity implements AdapterView.O
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressBar();
-                if(console!=null) {
-                    if (idLayout.getVisibility() == View.VISIBLE) {
-                        conId = consoleEditHint.getText().toString();
-                    } else {
-                        conId = getConsoleId(console);
-                    }
-                    if (conId != null) {
-                        showProgressBar();
-                        RequestParams rp_console = new RequestParams();
-                        rp_console.add("consoleId", conId);
-                        rp_console.add("consoleType", console);
-                        mManager.addOtherConsole(UpdateConsoleActivity.this, rp_console);
-                    }
-                }
+                showUpgradeDialog();
             }
         });
 
@@ -160,6 +146,23 @@ public class UpdateConsoleActivity extends BaseActivity implements AdapterView.O
         adapterConsole.setDropDownViewResource(R.layout.empty_layout);
         dropdown.setAdapter(adapterConsole);
         adapterConsole.notifyDataSetChanged();
+    }
+
+    private void addConsoleNetworkCall() {
+        if(console!=null) {
+            if (idLayout.getVisibility() == View.VISIBLE) {
+                conId = consoleEditHint.getText().toString();
+            } else {
+                conId = getConsoleId(console);
+            }
+            if (conId != null) {
+                showProgressBar();
+                RequestParams rp_console = new RequestParams();
+                rp_console.add("consoleId", conId);
+                rp_console.add("consoleType", console);
+                mManager.addOtherConsole(UpdateConsoleActivity.this, rp_console);
+            }
+        }
     }
 
     private String getConsoleId(String console) {
@@ -273,6 +276,47 @@ public class UpdateConsoleActivity extends BaseActivity implements AdapterView.O
         return row;
     }
 
+    private void showUpgradeDialog() {
+        if (selectedConsole != null) {
+            String s=null;
+            if (!existingConsoles.contains(selectedConsole)) {
+                if (selectedConsole.equalsIgnoreCase(Constants.CONSOLEXBOXONESTRG) && existingConsoles.contains(Constants.CONSOLEXBOX360STRG)) {
+                    s = "Are you sure you want to upgrade to Xbox One? This change will be permanent and you will no longer be able to view activities on Xbox 360.";
+                } else if (selectedConsole.equalsIgnoreCase(Constants.CONSOLEPS4STRG) && existingConsoles.contains(Constants.CONSOLEPS3STRG)) {
+                    s = "Are you sure you want to upgrade to PlayStation 4? This change will be permanent and you will no longer be able to view activities on PlayStation 3.";
+                } else {
+                    addConsoleNetworkCall();
+                }
+                if (s!=null) {
+                    createAlert("UPGRADE", s, null, null);
+                }
+            }
+        }
+    }
+
+    private void createAlert(String title, String msg, String ok, String cancel) {
+        if(title!=null && msg!=null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(UpdateConsoleActivity.this)
+                    .setTitle(title)
+                    .setMessage(msg)
+                    .setNegativeButton("UPGRADE", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // continue with finish activity
+                            dialog.dismiss();
+                            addConsoleNetworkCall();
+                        }
+                    })
+                    .setPositiveButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // continue with finish activity
+                            dialog.dismiss();
+                        }
+                    });
+            dialog = builder.create();
+            dialog.show();
+        }
+    }
+
     @Override
     public void update(Observable observable, Object data) {
         hideProgressBar();
@@ -294,13 +338,7 @@ public class UpdateConsoleActivity extends BaseActivity implements AdapterView.O
 
     @Override
     public void onBackPressed() {
-        if(dialog!=null) {
-            dialog.dismiss();
-        }else {
             super.onBackPressed();
-//            Intent in = new Intent(this, SendBackpressBroadcast.class);
-//            this.startService(in);
             finish();
-        }
     }
 }

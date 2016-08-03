@@ -430,8 +430,8 @@ public class GroupDrawerAdapter {
                                             if (user.getUserId() != null) {
                                                 params.add("id", user.getUserId());
                                             }
-
                                             params.add("clanId", glistLocal.get(position).getGroupId());
+                                            params.add("clanName", glistLocal.get(position).getGroupName());
 
                                             ((ListActivityFragment) c).hideProgress();
                                             ((ListActivityFragment) c).showProgress();
