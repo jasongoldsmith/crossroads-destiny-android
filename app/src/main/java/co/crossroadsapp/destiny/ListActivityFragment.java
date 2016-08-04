@@ -87,7 +87,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     private ArrayList<EventData> fragmentupcomingEventList;
     PagerAdapter pagerAdapter;
     ViewPager viewPager;
-    private ImageView userProfile;
+    private CircularImageView userProfile;
     private CircularImageView userProfileDrawer;
     private TextView userNameDrawer;
     private DrawerLayout drawerLayout;
@@ -195,7 +195,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         checkUserPSNVerification();
 
         progress = (RelativeLayout) findViewById(R.id.progress_bar_layout);
-        userProfile = (ImageView) findViewById(R.id.userProfile);
+        userProfile = (CircularImageView) findViewById(R.id.userProfile);
         userProfileDrawer = (CircularImageView) findViewById(R.id.profile_avatar);
         userNameDrawer = (TextView) findViewById(R.id.profile_name);
 
@@ -411,6 +411,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             TabLayout.Tab tab = tabLayout.getTabAt(i);
             tab.setCustomView(pagerAdapter.getTabView(i));
         }
+
+        changeUserProfileBorderColor();
 
         showVersion = (TextView) findViewById(R.id.build_version);
         if(Util.getApplicationVersionCode(ListActivityFragment.this)!=null){
@@ -1319,6 +1321,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 if(data!=null) {
                     user = mManager.getUserData();
                 }
+                changeUserProfileBorderColor();
                 mManager.getEventList(this);
                 mManager.getGroupList(this);
             } else if(observable instanceof PrivacyLegalUpdateNetwork) {
@@ -1326,6 +1329,33 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                     dialogPrivacy.dismiss();
                 }
             }
+    }
+
+    private void changeUserProfileBorderColor() {
+        if(user!=null) {
+            if(user.getConsoleType()!=null) {
+                switch (user.getConsoleType()) {
+                    case "PS3":
+                        userProfileDrawer.setBorderColor(getResources().getColor(R.color.user_profile_border_playstation));
+                        userProfile.setBorderColor(getResources().getColor(R.color.user_profile_border_playstation));
+                        break;
+                    case "PS4":
+                        userProfileDrawer.setBorderColor(getResources().getColor(R.color.user_profile_border_playstation));
+                        userProfile.setBorderColor(getResources().getColor(R.color.user_profile_border_playstation));
+                        break;
+                    case "XBOX360":
+                        userProfileDrawer.setBorderColor(getResources().getColor(R.color.user_profile_border_xbox));
+                        userProfile.setBorderColor(getResources().getColor(R.color.user_profile_border_xbox));
+                        break;
+                    case "XBOXONE":
+                        userProfileDrawer.setBorderColor(getResources().getColor(R.color.user_profile_border_xbox));
+                        userProfile.setBorderColor(getResources().getColor(R.color.user_profile_border_xbox));
+                        break;
+
+                }
+
+            }
+        }
     }
 
     private void createUpcomingCurrentList(ArrayList<EventData> currentEventList) {

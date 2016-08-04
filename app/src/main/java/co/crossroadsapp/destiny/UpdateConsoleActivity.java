@@ -194,17 +194,29 @@ public class UpdateConsoleActivity extends BaseActivity implements AdapterView.O
                     idLayout.setVisibility(View.GONE);
                     consoleRelatedText.setVisibility(View.VISIBLE);
                     consoleRelatedText.setText("NOTE: Once you upgrade to Xbox One, you will no longer be able to view activities from Xbox 360.");
+                    if(addBtnText!=null) {
+                        addBtnText.setText("UPGRADE");
+                    }
                 } else if (selectedConsole.equalsIgnoreCase(Constants.CONSOLEPS4STRG) && existingConsoles.contains(Constants.CONSOLEPS3STRG)) {
                     idLayout.setVisibility(View.GONE);
                     consoleRelatedText.setVisibility(View.VISIBLE);
                     consoleRelatedText.setText("NOTE: Once you upgrade to PlayStation 4, you will no longer be able to view activities from PlayStation 3.");
+                    if(addBtnText!=null) {
+                        addBtnText.setText("UPGRADE");
+                    }
                 } else {
                     idLayout.setVisibility(View.VISIBLE);
                     consoleRelatedText.setVisibility(View.GONE);
+                    if(addBtnText!=null) {
+                        addBtnText.setText("ADD");
+                    }
                 }
             } else {
                 idLayout.setVisibility(View.VISIBLE);
                 consoleRelatedText.setVisibility(View.GONE);
+                if(addBtnText!=null) {
+                    addBtnText.setText("ADD");
+                }
             }
         }
     }
