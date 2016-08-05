@@ -102,6 +102,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private int reqPlayer;
     private BranchUniversalObject branchUniversalObject;
     private String eventId;
+    private SwipeFrameLayout cardStackLayout;
 //    private TextView errText;
 //    private ImageView close_err;
 
@@ -169,6 +170,8 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         mCharacter = (TextView) findViewById(R.id.character_count);
 
         sendBtn = (ImageView) findViewById(R.id.send_btn);
+
+        cardStackLayout = (SwipeFrameLayout) findViewById(R.id.notification_bar_layout);
 
 //        notiBar = (RelativeLayout) findViewById(R.id.notification_bar);
 //        notiEventText = (TextView) findViewById(R.id.noti_text);
@@ -247,17 +250,6 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         setPlayerNames();
 
-        // Create a BranchUniversal object for the content referred on this activity instance
-        branchUniversalObject = new BranchUniversalObject()
-                .setCanonicalIdentifier("item/12345")
-                .setCanonicalUrl("https://branch.io/deepviews")
-                .setTitle("Join My Fireteam")
-                .setContentDescription(getDeeplinkContent(upcomingDate))
-                .setContentImageUrl(Constants.DEEP_LINK_IMAGE + currEvent.getEventId()+".png")
-                //.setContentExpiration(new Date(1476566432000L)) // set contents expiration time if applicable
-                .addContentMetadata("activityName", currEvent.getActivityData().getActivitySubtype())
-                .addContentMetadata("eventId", currEvent.getEventId());
-
         userIsPlayer = checkUserIsPlayer();
 
         setBottomButtonSelection();
@@ -284,14 +276,54 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         mRecyclerView.setAdapter(mAdapter);
 
-        //setSendMsgToAllVisibility();
-
         msgallBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendMsgToAll();
             }
         });
+
+        String actName = currEvent.getActivityData().getActivitySubtype();
+        String grpName = controlManager.getGroupObj(currEvent.getClanId()).getGroupName();
+        String deepLinkTitle=" ";
+        String deepLinkMsg=" ";
+        if(userIsPlayer){
+            deepLinkTitle = "Join My Fireteam";
+            if(reqPlayer==0) {
+                deepLinkTitle = currEvent.getActivityData().getActivitySubtype();
+            }
+            deepLinkMsg = getDeepLinkConsoleType()+": I need "+reqPlayer+ " more for "+ actName + " in the " +grpName+ " group";
+        }else {
+            deepLinkTitle = "Searching for Guardians";
+            if(reqPlayer==0) {
+                deepLinkTitle = currEvent.getActivityData().getActivitySubtype();
+            }
+            deepLinkMsg = getDeepLinkConsoleType() +": This fireteam needs " + reqPlayer + " more for " + actName+" in the " + grpName + " group";
+
+            if(currEvent.getEventStatus().equalsIgnoreCase("Upcoming")) {
+                deepLinkMsg = getDeeplinkContent(upcomingDate);
+            }
+        }
+
+        if(reqPlayer==0){
+            if(currEvent.getEventStatus().equalsIgnoreCase("Upcoming")) {
+                deepLinkMsg = getDeepLinkConsoleType() +": Check out this " + actName + " on " + upcomingDate + " in the " + grpName + " group";
+            }else {
+                deepLinkMsg = getDeepLinkConsoleType() +": Check out this " + actName + " in the " + grpName + " group";
+            }
+        }
+
+        // Create a BranchUniversal object for the content referred on this activity instance
+        branchUniversalObject = new BranchUniversalObject()
+                .setCanonicalIdentifier("item/12345")
+                .setCanonicalUrl("https://branch.io/deepviews")
+                .setTitle(deepLinkTitle)
+                .setContentDescription(deepLinkMsg)
+                .setContentImageUrl(Constants.DEEP_LINK_IMAGE + currEvent.getEventId()+".png")
+                //.setContentExpiration(new Date(1476566432000L)) // set contents expiration time if applicable
+                .addContentMetadata("activityName", currEvent.getActivityData().getActivitySubtype())
+                .addContentMetadata("eventId", currEvent.getEventId());
+
         registerFirbase();
 
         showNotifications();
@@ -305,11 +337,12 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             if(currEvent.getActivityData()!=null && currEvent.getActivityData().getActivitySubtype()!=null) {
                 if(grpName!=null) {
                     if (reqPlayer > 0) {
-                        String desc = user.getConsoleType() + ": I need " + reqPlayer + " more for " + currEvent.getActivityData().getActivitySubtype();
+                        String s = getDeepLinkConsoleType();
+                        String desc = s + ": I need " + reqPlayer + " more for " + currEvent.getActivityData().getActivitySubtype();
                         if (upcomingDate != null) {
-                            description = desc + " on " + upcomingDate + " in the " + grpName + " group on Crossroads";
+                            description = desc + " on " + upcomingDate + " in the " + grpName + " group";
                         } else {
-                            description = desc + " in the " + grpName + " group on Crossroads";
+                            description = desc + " in the " + grpName + " group";
                         }
                         return description;
                     }
@@ -318,6 +351,22 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         }
 
         return "";
+    }
+
+    private String getDeepLinkConsoleType() {
+        String s;
+        switch (user.getConsoleType()) {
+            case "XBOX360":
+                s = "360";
+                break;
+            case "XBOXONE":
+                s = "XB1";
+                break;
+            default:
+                s = user.getConsoleType();
+                break;
+        }
+        return s;
     }
 
     private void shareIt() {
@@ -793,7 +842,9 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         eventNotiList = new ArrayList<PushNotification>();
         // filter event related message notification
         getEventNotification(currEvent);
-
+        if(eventNotiList!=null && (!eventNotiList.isEmpty())) {
+            cardStackLayout.setVisibility(View.VISIBLE);
+        }
         if(n==0) {
             if(eventNotiList!=null && (!eventNotiList.isEmpty())){
                 localNoti.add(eventNotiList.get(eventNotiList.size()-1));
@@ -830,7 +881,9 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
             @Override
             public void cardsDepleted() {
-                //removeNotifyLayout();
+                if(eventNotiList.isEmpty()) {
+                    cardStackLayout.setVisibility(View.GONE);
+                }
             }
 
             @Override

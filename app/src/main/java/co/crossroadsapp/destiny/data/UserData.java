@@ -190,13 +190,6 @@ public class UserData implements Parcelable {
                                 }
                                 cData.setVerifyStatus(verifyS);
                             }
-                            if (conData.has("clanTag")) {
-                                String tag = conData.getString("clanTag");
-                                if(cData.getPrimary()) {
-                                    setPsnVerify(tag);
-                                }
-                                cData.setClanTag(tag);
-                            }
                             consoles.add(cData);
                         }
                         }

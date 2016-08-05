@@ -151,8 +151,8 @@ public class EventData {
                     setClanId(clId);
                 }
                 if(json.has("clanName")) {
-                    String clId = json.getString("clanName");
-                    setClanId(clId);
+                    String clName = json.getString("clanName");
+                    setClanName(clName);
                 }
                     if (json.has("minPlayers")) {
                         int minPlayers = json.getInt("minPlayers");

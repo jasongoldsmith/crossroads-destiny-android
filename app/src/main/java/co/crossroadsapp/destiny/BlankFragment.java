@@ -23,6 +23,7 @@ import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import co.crossroadsapp.destiny.R;
 import com.loopj.android.http.RequestParams;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -399,7 +400,13 @@ public class BlankFragment extends Fragment {
                     String cardBackgroundImageUrl = adList.get(position-elistLocal.size()).getAdCardData().getAdCardBaseUrl() + adList.get(position-elistLocal.size()).getAdCardData().getAdCardImagePath();
                     String iconImageUrl = adList.get(position-elistLocal.size()).getActivityIconUrl();
                     Util.picassoLoadIcon(mContext, adHolder.eventAdIcon, iconImageUrl, R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.icon_ghost_default);
-                    Util.picassoLoadIcon(mContext, adHolder.adCardImg, cardBackgroundImageUrl, R.dimen.ad_hgt, R.dimen.ad_width, R.drawable.img_adcard_raid_golgoroth);
+                    //Util.picassoLoadIcon(mContext, adHolder.adCardImg, cardBackgroundImageUrl, R.dimen.ad_hgt, R.dimen.ad_width, R.drawable.img_adcard_raid_golgoroth);
+
+                    Picasso.with(mContext)
+                            .load(cardBackgroundImageUrl)
+                            .placeholder(R.drawable.img_adcard_raid_golgoroth)
+                            .fit().centerCrop()
+                            .into(adHolder.adCardImg);
 
                     adHolder.addBtn.setOnClickListener(new View.OnClickListener() {
                         @Override

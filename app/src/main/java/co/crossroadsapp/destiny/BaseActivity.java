@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -21,11 +22,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.PushNotification;
+import co.crossroadsapp.destiny.utils.CircularImageView;
 import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 
@@ -90,7 +94,7 @@ public class BaseActivity extends FragmentActivity {
         }
     }
 
-    public void showDeeplinkError(int eventFull, final String deepLinkEvent, String deepLinkName) {
+    public void showDeeplinkError(int eventFull, final String deepLinkEvent, String deepLinkName, final String clanId) {
         deeplinkError = (RelativeLayout) findViewById(R.id.deeplink_error);
         TextView errMsg = (TextView) findViewById(R.id.msg);
         TextView btnText = (TextView) findViewById(R.id.btn_text);
@@ -113,7 +117,7 @@ public class BaseActivity extends FragmentActivity {
             }
         });
         switch(eventFull) {
-            case 1:
+            case 2:
                 errMsg.setText("Sorry, that " +deepLinkEvent+ " is no longer available. Would you like to add one of your own?");
                 btnText.setText("ADD THIS ACTIVITY");
                 btn.setOnClickListener(new View.OnClickListener() {
@@ -127,14 +131,18 @@ public class BaseActivity extends FragmentActivity {
                     }
                 });
                 break;
-            case 2:
+            case 1:
                 errMsg.setText("You’ll need to be in the " +deepLinkEvent+ " group to join " + deepLinkName+ ". Request to join?");
                 btnText.setText("VIEW GROUP ON BUNGIE.NET");
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.bungie.net"));
-                        getApplicationContext().startActivity(browserIntent);
+                        String uri = "http://www.bungie.net";
+                        if(clanId!=null && !clanId.isEmpty()) {
+                            uri = "http://www.bungie.net/en/clan/"+clanId;
+                        }
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                        mManager.getCurrentActivity().startActivity(browserIntent);
                     }
                 });
                 break;
@@ -155,7 +163,16 @@ public class BaseActivity extends FragmentActivity {
             case 4:
                 errMsg.setText("You’ll need to be on "+deepLinkName+" to join that activity from "+deepLinkEvent+ ". Add another console to your account?");
                 btnText.setText("ADD MY "+deepLinkName);
-                //todo add update console UI
+                btnText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // go to create new event page
+                    Intent regIntent = new Intent(getApplicationContext(),
+                            UpdateConsoleActivity.class);
+                    regIntent.putExtra("userdata", mManager.getUserData());
+                    startActivity(regIntent);
+                }
+                });
                 break;
         }
     }
@@ -207,6 +224,12 @@ public class BaseActivity extends FragmentActivity {
                     String msg = data.get(position).getMessage();
                     boolean typeM = data.get(position).getTypeMessage();
 
+                    String console = data.get(position).getEventConsole();
+                    String grpName = data.get(position).getEventClanName();
+                    String grpImage = data.get(position).getEventClanImageUrl();
+                    String msngrConsoleId = data.get(position).getMessengerConsoleId();
+                    String msngrImage = data.get(position).getMessengerImageUrl();
+
                     //CardView card = (CardView) v.findViewById(R.id.base_test_card);
                     v.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -218,25 +241,45 @@ public class BaseActivity extends FragmentActivity {
                     });
                     TextView notiEventText = (TextView) v.findViewById(R.id.noti_text);
                     TextView notiTopText = (TextView) v.findViewById(R.id.noti_toptext);
-                    //TextView notiMessage = (TextView) v.findViewById(R.id.noti_subtext);
-                    if(name!=null) {
-                        notiEventText.setText(data.get(position).geteName());
-                    }
+                    TextView notiTopSubText = (TextView) v.findViewById(R.id.noti_topsubtext);
+                    ImageView grpImageView = (ImageView) v.findViewById(R.id.noti_icon);
+                    CircularImageView msngrImageView = (CircularImageView) v.findViewById(R.id.player_msg_pic);
+
                     if (typeM) {
-                        notiTopText.setText("FIRETEAM MESSAGE");
-//                        notiMessage.setVisibility(View.VISIBLE);
-//                        if(msg!=null) {
-//                            notiMessage.setText(data.get(position).getMessage());
-//                        }
-                    } else {
-//                        if(msg!=null) {
-//                            notiEventText.setText(data.get(position).getMessage());
-//                        }
-                        if (name!=null) {
-                            notiTopText.setText(name.toUpperCase());
+                        if(msngrConsoleId!=null) {
+                            notiTopText.setText(msngrConsoleId);
                         }
-//                        notiMessage.setVisibility(View.GONE);
-                        //mManager.getEventList(ListActivityFragment.this);
+                        if(msngrImage!=null) {
+                            Picasso.with(getApplicationContext())
+                                    .load(msngrImage)
+                                    .placeholder(R.drawable.icon_alert)
+                                    .fit().centerCrop()
+                                    .into(msngrImageView);
+                        }
+                        grpImageView.setVisibility(View.GONE);
+                        msngrImageView.setVisibility(View.VISIBLE);
+                        notiTopSubText.setVisibility(View.GONE);
+                        if(msg!=null) {
+                            notiEventText.setText(data.get(position).getMessage());
+                        }
+                    } else {
+                        grpImageView.setVisibility(View.VISIBLE);
+                        msngrImageView.setVisibility(View.GONE);
+                        notiTopSubText.setVisibility(View.VISIBLE);
+                        if (name!=null) {
+                            notiTopSubText.setText(name.toUpperCase());
+                        }
+                        if (console!=null && grpName!=null) {
+                            String first = console +": "+ grpName;
+                            notiTopText.setText(first);
+                        }
+                        if(grpImage!=null && (!grpImage.isEmpty())) {
+                            Picasso.with(getApplicationContext())
+                                    .load(grpImage)
+                                    .placeholder(R.drawable.icon_alert)
+                                    .fit().centerCrop()
+                                    .into(grpImageView);
+                        }
                     }
                     if(msg!=null) {
                         notiEventText.setText(data.get(position).getMessage());
@@ -256,16 +299,51 @@ public class BaseActivity extends FragmentActivity {
         public void onReceive(Context context, Intent intent) {
             //          if (mManager.getCurrentActivity() == ListActivityFragment) {
             PushNotification noti = new PushNotification();
-            String subtype = intent.getStringExtra("subtype");
-            boolean playerMsg = intent.getBooleanExtra("playerMessage", false);
-            String eventId = intent.getStringExtra("eventId");
-            String eventUpdated = intent.getStringExtra("eventUpdated");
-            String msg = intent.getStringExtra("message");
-            noti.seteId(eventId);
-            noti.seteName(subtype);
-            noti.seteUpdated(eventUpdated);
-            noti.setTypeMessage(playerMsg);
-            noti.setMessage(msg);
+            if(intent.hasExtra("subtype")) {
+                String subtype = intent.getStringExtra("subtype");
+                noti.seteName(subtype);
+            }
+            if(intent.hasExtra("playerMessage")) {
+                boolean playerMsg = intent.getBooleanExtra("playerMessage", false);
+                noti.setTypeMessage(playerMsg);
+            }
+            if(intent.hasExtra("eventId")) {
+                String eventId = intent.getStringExtra("eventId");
+                noti.seteId(eventId);
+            }
+            if(intent.hasExtra("eventUpdated")) {
+                String eventUpdated = intent.getStringExtra("eventUpdated");
+                noti.seteUpdated(eventUpdated);
+            }
+            if(intent.hasExtra("message")) {
+                String msg = intent.getStringExtra("message");
+                noti.setMessage(msg);
+            }
+            if(intent.hasExtra("eventClanId")) {
+                String eventClanId = intent.getStringExtra("eventClanId");
+                noti.setEventClanId(eventClanId);
+            }
+            if(intent.hasExtra("eventClanName")) {
+                String eventClanName = intent.getStringExtra("eventClanName");
+                noti.setEventClanName(eventClanName);
+            }
+            if(intent.hasExtra("eventClanImageUrl")) {
+                String eventClanImageUrl = intent.getStringExtra("eventClanImageUrl");
+                noti.setEventClanImageUrl(eventClanImageUrl);
+            }
+            if(intent.hasExtra("eventConsole")) {
+                String eventConsole = intent.getStringExtra("eventConsole");
+                noti.setEventConsole(eventConsole);
+            }
+            if(intent.hasExtra("messengerConsoleId")) {
+                String messengerConsoleId = intent.getStringExtra("messengerConsoleId");
+                noti.setMessengerConsoleId(messengerConsoleId);
+            }
+            if(intent.hasExtra("messengerImageUrl")) {
+                String messengerImageUrl = intent.getStringExtra("messengerImageUrl");
+                noti.setMessengerImageUrl(messengerImageUrl);
+            }
+
             if (notiList == null) {
                 notiList = new ArrayList<PushNotification>();
             }

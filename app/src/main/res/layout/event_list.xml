@@ -147,17 +147,18 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/notification_bar_layout"
                 android:layout_below="@+id/tab_layout"
+                android:visibility="gone"
                 android:orientation="vertical">
 
                 <co.crossroadsapp.destiny.SwipeDeck
                     android:id="@+id/swipe_deck"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
+                    android:paddingTop="6dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:paddingBottom="6dp"
-                    swipedeck:card_spacing="16dp"
+                    android:paddingBottom="10dp"
+                    swipedeck:card_spacing="6dp"
                     swipedeck:render_above="true"
                     swipedeck:rotation_degrees="0"
                     />
@@ -237,12 +238,12 @@
                     <!--android:paddingTop="9dp"/>-->
 
             <!--</RelativeLayout>-->
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="6dp"
-                android:background="@android:color/transparent"
-                android:layout_below="@+id/notification_bar_layout"
-                android:id="@+id/empty_img"/>
+            <!--<ImageView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="6dp"-->
+                <!--android:background="@android:color/transparent"-->
+                <!--android:layout_below="@+id/notification_bar_layout"-->
+                <!--android:id="@+id/empty_img"/>-->
 
             <!--<android.support.v4.widget.SwipeRefreshLayout-->
                 <!--android:id="@+id/swipeRefreshLayout"-->
@@ -253,7 +254,7 @@
                     android:id="@+id/viewpager"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/empty_img"
+                    android:layout_below="@+id/notification_bar_layout"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"
                     android:background="@android:color/transparent"/>
             <!--</android.support.v4.widget.SwipeRefreshLayout>-->
@@ -455,13 +456,12 @@
                 android:id="@+id/console_icon"
                 android:src="@drawable/icon_psn_console"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="14dp"
-                android:layout_centerVertical="true"
-                android:scaleType="fitXY"/>
+                android:layout_marginLeft="16dp"
+                android:layout_centerVertical="true"/>
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/icon_arrow_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_arrow_dwn"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:padding="8dp"/>
@@ -946,5 +946,4 @@
     </WebView>
 
     <include layout="@layout/activity_base" />
-
 </android.support.v4.widget.DrawerLayout>

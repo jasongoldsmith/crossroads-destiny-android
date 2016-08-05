@@ -132,12 +132,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/privacy_terms"
-        android:layout_marginBottom="5dp"
-        android:textColor="@color/copyright_text"
+        android:layout_below="@+id/gamertag_layout"
+        android:layout_marginTop="12dp"
+        android:textColor="@color/trimbe_white"
         android:textSize="12sp"
         android:layout_centerHorizontal="true"
-        android:text="@string/copyright_string"
+        android:text="@string/console_selection_text"
         android:id="@+id/textView" />
 
     <TextView

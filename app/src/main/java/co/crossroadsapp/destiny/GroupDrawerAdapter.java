@@ -432,7 +432,7 @@ public class GroupDrawerAdapter {
                                             }
                                             params.add("clanId", glistLocal.get(position).getGroupId());
                                             params.add("clanName", glistLocal.get(position).getGroupName());
-
+                                            params.add("clanImage", glistLocal.get(position).getGroupImageUrl());
                                             ((ListActivityFragment) c).hideProgress();
                                             ((ListActivityFragment) c).showProgress();
                                             mCntrlMngr.postSetGroup((ListActivityFragment) c, params);

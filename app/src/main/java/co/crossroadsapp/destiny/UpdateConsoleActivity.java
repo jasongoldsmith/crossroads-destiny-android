@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
 import android.os.Parcelable;
+import android.support.v7.internal.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -50,6 +52,7 @@ public class UpdateConsoleActivity extends BaseActivity implements AdapterView.O
     TextView addBtnText;
 
     AlertDialog dialog;
+    private AlertDialog.Builder builder;
 
 
     @Override
@@ -90,8 +93,9 @@ public class UpdateConsoleActivity extends BaseActivity implements AdapterView.O
         ArrayList<String> userConsoleList = mManager.getConsoleList();
         existingConsoles = Util.getCorrectConsoleName(userConsoleList);
         consoleItems = Util.getRemConsoleName(userConsoleList);
-
-        selectedConsole = consoleItems.get(0);
+        if(!consoleItems.isEmpty()) {
+            selectedConsole = consoleItems.get(0);
+        }
 
         ImageView back = (ImageView) findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -129,11 +133,11 @@ public class UpdateConsoleActivity extends BaseActivity implements AdapterView.O
                 if(((TextView) v).getText().toString().equalsIgnoreCase(Constants.CONSOLEXBOXONESTRG) || ((TextView) v).getText().toString().equalsIgnoreCase(Constants.CONSOLEXBOX360STRG)) {
                     imgConsole.setImageResource(R.drawable.icon_xboxone_console);
                     consoleName.setText("XBOX GAMERTAG");
-                    consoleEditHint.setHint("ENTER XBOX GAMERTAG");
+                    consoleEditHint.setHint("Enter Xbox Gamertag");
                 } else {
                     imgConsole.setImageResource(R.drawable.icon_psn_console);
                     consoleName.setText("PLAYSTATION ID");
-                    consoleEditHint.setHint("ENTER PLAYSTATION ID");
+                    consoleEditHint.setHint("Enter PlayStation ID");
                 }
                 selectedConsole = ((TextView) v).getText().toString();
                 return v;
@@ -308,8 +312,13 @@ public class UpdateConsoleActivity extends BaseActivity implements AdapterView.O
 
     private void createAlert(String title, String msg, String ok, String cancel) {
         if(title!=null && msg!=null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(UpdateConsoleActivity.this)
-                    .setTitle(title)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(UpdateConsoleActivity.this, android.R.style.Theme_Material_Light_Dialog_Alert);
+            } else {
+                builder = new AlertDialog.Builder(UpdateConsoleActivity.this);
+            }
+
+            builder.setTitle(title)
                     .setMessage(msg)
                     .setNegativeButton("UPGRADE", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
@@ -335,7 +344,7 @@ public class UpdateConsoleActivity extends BaseActivity implements AdapterView.O
         if(data!=null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(UpdateConsoleActivity.this)
                     .setTitle("Success!")
-                    .setMessage("Your " +console + " " + conId + " has been added to your account")
+                    .setMessage("Your " +console + " " + conId + " account has been linked to Crossroads.")
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // continue with finish activity

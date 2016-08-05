@@ -58,32 +58,48 @@ public class NotificationService extends Service {
                     in.putExtra("eventId", eId);
                 }
             }
-
             if(jsonObj.has("eventUpdated")) {
                 String eUpdated = (String) jsonObj.get("eventUpdated");
                 if (!eUpdated.equalsIgnoreCase(null)) {
                     in.putExtra("eventUpdated", eUpdated);
                 }
             }
-
-//            if(jsonObj.has("event")) {
-//                ed.toJson((JSONObject) jsonObj.get("event"));
-//            } else {
-//                ed.toJson(jsonObj);
-//            }
-//            if(ed.getActivityData()!=null){
-//                if(ed.getActivityData().getActivitySubtype()!=null){
-//                    ActivityData ad = ed.getActivityData();
-//                    String st = ad.getActivitySubtype();
-//                    if (!st.equalsIgnoreCase(null)) {
-//                        in.putExtra("subtype", st);
-//                    }
-//                }
-//            }
-//
-//            if(jsonObj.has("playerMessage") || payload == null){
-//                in.putExtra("playerMessage", true);
-//            }
+            if(jsonObj.has("eventClanName")) {
+                String eClanName = (String) jsonObj.get("eventClanName");
+                if (!eClanName.equalsIgnoreCase(null)) {
+                    in.putExtra("eventClanName", eClanName);
+                }
+            }
+            if(jsonObj.has("eventClanImageUrl")) {
+                String eClanImage = (String) jsonObj.get("eventClanImageUrl");
+                if (!eClanImage.equalsIgnoreCase(null)) {
+                    in.putExtra("eventClanImageUrl", eClanImage);
+                }
+            }
+            if(jsonObj.has("eventConsole")) {
+                String eConsole = (String) jsonObj.get("eventConsole");
+                if (!eConsole.equalsIgnoreCase(null)) {
+                    in.putExtra("eventConsole", eConsole);
+                }
+            }
+            if(jsonObj.has("eventClanId")) {
+                String eClanId = (String) jsonObj.get("eventClanId");
+                if (!eClanId.equalsIgnoreCase(null)) {
+                    in.putExtra("eventClanId", eClanId);
+                }
+            }
+            if(jsonObj.has("messengerConsoleId") && !jsonObj.isNull("messengerConsoleId")) {
+                    String mClanId = (String) (jsonObj.get("messengerConsoleId"));
+                    if (!mClanId.equalsIgnoreCase(null)) {
+                        in.putExtra("messengerConsoleId", mClanId);
+                    }
+            }
+            if(jsonObj.has("messengerImageUrl") && !jsonObj.isNull("messengerImageUrl")) {
+                    String mImageUrl = (String) (jsonObj.get("messengerImageUrl"));
+                    if (!mImageUrl.equalsIgnoreCase(null)) {
+                        in.putExtra("messengerImageUrl", mImageUrl);
+                    }
+            }
             if(alert!=null && alert.length()>0){
                 in.putExtra("message", alert);
             }

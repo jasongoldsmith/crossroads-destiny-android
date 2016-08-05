@@ -62,10 +62,12 @@ public class SplashActivity extends BaseActivity{
 //        });
         mHandler = new Handler();
         mLayout = (RelativeLayout) findViewById(R.id.splash_layout);
-        mLayout.setVisibility(View.VISIBLE);
-        Animation anim = AnimationUtils.loadAnimation(this,
-                R.anim.fadein_splash);
-        mLayout.startAnimation(anim);
+        if(mLayout!=null) {
+            mLayout.setVisibility(View.VISIBLE);
+            Animation anim = AnimationUtils.loadAnimation(this,
+                    R.anim.fadein_splash);
+            mLayout.startAnimation(anim);
+        }
 
         //deeplink handling
         // Build GoogleApiClient with AppInvite API for receiving deep links
@@ -137,7 +139,7 @@ public class SplashActivity extends BaseActivity{
                         if (error == null) {
                             // params are the deep linked params associated with the link that the user clicked before showing up
                             if (branchUniversalObject != null) {
-                                if (branchUniversalObject.getMetadata().containsKey("eventId")) {
+                                if (branchUniversalObject.getMetadata().containsKey("eventId") && branchUniversalObject.getMetadata().containsKey("activityName")) {
                                     String eId = branchUniversalObject.getMetadata().get("eventId");
                                     String aName = branchUniversalObject.getMetadata().get("activityName");
                                     if (eId != null) {

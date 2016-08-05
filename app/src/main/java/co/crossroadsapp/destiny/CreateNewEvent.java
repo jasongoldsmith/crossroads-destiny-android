@@ -510,7 +510,10 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                 TextView adCheckpoint = (TextView) findViewById(R.id.ad_checkpoint_text);
                 if(adAct.getActivityCheckpoint()!=null) {
                     adCheckpoint.setText("Checkpoint - " + adAct.getActivityCheckpoint());
+                }else {
+                    checkpointLayout.setVisibility(View.GONE);
                 }
+
                 final_create_event_firstcard.setClickable(false);
                 checkpointLayout.setClickable(false);
                 if(createNewEventLayout!=null) {

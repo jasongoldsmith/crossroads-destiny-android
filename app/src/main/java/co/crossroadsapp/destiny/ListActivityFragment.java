@@ -32,7 +32,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.CardView;
 import android.text.Html;
+import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.URLSpan;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -134,6 +137,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     private ImageView imgConsole;
     private Spinner dropdown;
     private AlertDialog dialogPrivacy;
+    private SwipeFrameLayout cardStackLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,6 +204,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         userNameDrawer = (TextView) findViewById(R.id.profile_name);
 
         cardStack = (SwipeDeck) findViewById(R.id.swipe_deck);
+
+        cardStackLayout = (SwipeFrameLayout) findViewById(R.id.notification_bar_layout);
 
         legalView = (WebView) findViewById(R.id.legal_web);
 
@@ -351,7 +357,6 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         // Set adapter for console selector
         updateConsoleListUserDrawer();
 
-        checkPrivacyDialoge();
 //        adapterConsole = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, consoleItems) {
 //
 //            int FONT_STYLE = Typeface.BOLD;
@@ -508,7 +513,12 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                     //alert pop-up dailogue
                     final TextView message = new TextView(this);
                     message.setText(Html.fromHtml((getString(R.string.dialog_message))));
-                    message.setMovementMethod(LinkMovementMethod.getInstance());
+
+                    //
+                    setTextViewHTML(message, (getString(R.string.dialog_message)));
+
+                    message.setPadding(95,80,95,80);
+                    //message.setMovementMethod(LinkMovementMethod.getInstance());
                     android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this)
                             .setTitle(R.string.dialog_title)
                             .setCancelable(false)
@@ -523,6 +533,36 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 }
             }
         }
+    }
+
+    protected void setTextViewHTML(TextView text, String html)
+    {
+        CharSequence sequence = Html.fromHtml(html);
+        SpannableStringBuilder strBuilder = new SpannableStringBuilder(sequence);
+        URLSpan[] urls = strBuilder.getSpans(0, sequence.length(), URLSpan.class);
+        for(URLSpan span : urls) {
+            makeLinkClickable(strBuilder, span);
+        }
+        text.setText(strBuilder);
+        text.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    protected void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span)
+    {
+        int start = strBuilder.getSpanStart(span);
+        int end = strBuilder.getSpanEnd(span);
+        int flags = strBuilder.getSpanFlags(span);
+        ClickableSpan clickable = new ClickableSpan() {
+            public void onClick(View view) {
+                dialogPrivacy.dismiss();
+                // Do something with span.getURL() to handle the link click...
+                legalView.setVisibility(View.VISIBLE);
+                legalView.setWebViewClient(new WebViewClient());
+                legalView.loadUrl(span.getURL());
+            }
+        };
+        strBuilder.setSpan(clickable, start, end, flags);
+        strBuilder.removeSpan(span);
     }
 
     private void updateConsoleListUserDrawer() {
@@ -544,9 +584,9 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 ((TextView) v).setTextColor(
                         getResources().getColorStateList(R.color.trimbe_white)
                 );
-                ((TextView) v).setGravity(Gravity.LEFT);
+                ((TextView) v).setGravity(Gravity.CENTER);
 
-                ((TextView) v).setPadding(Util.dpToPx(82, ListActivityFragment.this), 0, 0, 0);
+                ((TextView) v).setPadding(Util.dpToPx(0, ListActivityFragment.this), 0, 0, 0);
                 ((TextView) v).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
                 ((TextView) v).setText(((TextView) v).getText());
 
@@ -587,16 +627,17 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
     //console selector spinner
     private View getCustomView(int position, View convertView, ViewGroup parent, ArrayList<String> consoleItems) {
-        LayoutInflater inflater=getLayoutInflater();
-        View row=inflater.inflate(R.layout.console_selction_view, parent, false);
-        ImageView addSymbol = (ImageView)row.findViewById(R.id.console_img);
-        CardView card = (CardView)row.findViewById(R.id.console_card);
-        if(position==0) {
+        LayoutInflater inflater = getLayoutInflater();
+        View row = inflater.inflate(R.layout.console_selction_view, parent, false);
+        ImageView addSymbol = (ImageView) row.findViewById(R.id.console_img);
+        CardView card = (CardView) row.findViewById(R.id.console_card);
+        if (position == 0) {
             card.setBackgroundColor(getResources().getColor(R.color.freelancer_background));
-            ImageView dropArw = (ImageView)row.findViewById(R.id.drop_arrow);
+            ImageView dropArw = (ImageView) row.findViewById(R.id.drop_arrow);
             dropArw.setVisibility(View.VISIBLE);
         }
-        if (position==consoleItems.size()-1) {
+        if(consoleItems.contains("Add Console")) {
+        if (position == consoleItems.size() - 1) {
             addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_add_console));
             card.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -609,6 +650,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                     startActivity(regIntent);
                 }
             });
+        }
         }
         if(consoleItems.get(position).equalsIgnoreCase("PlayStation 4") || consoleItems.get(position).equalsIgnoreCase("PlayStation 3")){
             addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_psn_console));
@@ -639,15 +681,15 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 GroupData gp = mManager.getGroupObj(data.getClanId());
                 if(gp!=null) {
                     if(data.getPlayerData().size()==data.getMaxPlayer()) {
-                        showDeeplinkError(Constants.EVENT_FULL, null, null);
+                        showDeeplinkError(Constants.EVENT_FULL, null, null, null);
                     }else {
                         startEventDetail(data);
                     }
                 } else {
-                    showDeeplinkError(Constants.EVENT_GRP_MISSING, data.getClanName()!=null?data.getClanName():"", mManager.getDeepLinkActivityName()!=null?mManager.getDeepLinkActivityName():"");
+                    showDeeplinkError(Constants.EVENT_GRP_MISSING, data.getClanName()!=null?data.getClanName():"", mManager.getDeepLinkActivityName()!=null?mManager.getDeepLinkActivityName():"", data.getClanId());
                 }
             } else {
-                showDeeplinkError(Constants.EVENT_CONSOLE_MISSING, data.getClanName()!=null?data.getClanName():"", data.getConsoleType()!=null?data.getConsoleType():"");
+                showDeeplinkError(Constants.EVENT_CONSOLE_MISSING, data.getClanName()!=null?data.getClanName():"", data.getConsoleType()!=null?data.getConsoleType():"", null);
             }
         }
         mManager.setDeepLinkEvent(null, null);
@@ -727,7 +769,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 verify_user_bottom_text = (TextView) findViewById(R.id.verify_bottom_text);
                 verify_user_bottom_text.setText(Html.fromHtml((getString(R.string.verify_accnt_bottomtext))));
                 verify_user_bottom_text.setMovementMethod(LinkMovementMethod.getInstance());
-                verify_username.setText("Welcome " + user.getUser() + "!");
+                verify_username.setText("Hi " + user.getUser() + "!");
                 unverifiedUserScreen.setVisibility(View.VISIBLE);
             } else {
                 if (unverifiedUserScreen!=null) {
@@ -783,6 +825,9 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     private void getExistingList() {
         if (mManager!=null) {
             if (mManager.getEventListCurrent()!=null && (!mManager.getEventListCurrent().isEmpty())) {
+                if((mManager.getAdsActivityList()!=null) &&(!mManager.getAdsActivityList().isEmpty())) {
+                    adActivityData=mManager.getAdsActivityList();
+                }
                 createUpcomingCurrentList(mManager.getEventListCurrent());
             }
         }
@@ -985,7 +1030,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         closeProfileDrawer(Gravity.RIGHT);
         closeProfileDrawer(Gravity.LEFT);
         if(mManager!=null && mManager.getDeepLinkEvent()!=null) {
-            showDeeplinkError(Constants.EVENT_MISSING, mManager.getDeepLinkActivityName(), null);
+            showDeeplinkError(Constants.EVENT_MISSING, mManager.getDeepLinkActivityName(), null, null);
             mManager.setDeepLinkEvent(null, null);
         } else {
             //show timed error message
@@ -1007,6 +1052,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
     @Override
     public void onResume() {
+        checkPrivacyDialoge();
         super.onResume();
         //get latest event list
         if (mManager!= null) {
@@ -1015,7 +1061,6 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             getExistingList();
             mManager.getEventList(this);
         }
-
         registerFirbase();
         if (user!=null && user.getPsnVerify()!=null) {
             if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
@@ -1333,7 +1378,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
     private void changeUserProfileBorderColor() {
         if(user!=null) {
-            if(user.getConsoleType()!=null) {
+            if(user.getConsoles().size()>1) {
+            if (user.getConsoleType() != null) {
                 switch (user.getConsoleType()) {
                     case "PS3":
                         userProfileDrawer.setBorderColor(getResources().getColor(R.color.user_profile_border_playstation));
@@ -1351,9 +1397,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                         userProfileDrawer.setBorderColor(getResources().getColor(R.color.user_profile_border_xbox));
                         userProfile.setBorderColor(getResources().getColor(R.color.user_profile_border_xbox));
                         break;
-
                 }
-
+            }
             }
         }
     }
@@ -1388,14 +1433,17 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     @Override
     public void onBackPressed() {
         if(legalView.getVisibility()==View.VISIBLE) {
-            legalView.setVisibility(View.GONE);
-            openProfileDrawer(Gravity.LEFT);
+            if(user.getLegal().getPrivacyNeedsUpdate()) {
+                legalView.setVisibility(View.GONE);
+                checkPrivacyDialoge();
+            }else {
+                legalView.setVisibility(View.GONE);
+                openProfileDrawer(Gravity.LEFT);
+            }
         } else if(checkDrawerOpen()){
             closeAllDrawers();
         }else {
             super.onBackPressed();
-//            Intent in = new Intent(this, SendBackpressBroadcast.class);
-//            this.startService(in);
             finish();
         }
     }
@@ -1420,6 +1468,12 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 //        }
             //cardStack = null;
             //cardStack = (SwipeDeck) findViewById(R.id.swipe_deck);
+        if(notiList!=null && (!notiList.isEmpty())) {
+            if(cardStackLayout!=null) {
+                cardStackLayout.setVisibility(View.VISIBLE);
+            }
+        }
+
         ArrayList<PushNotification> localNoti = new ArrayList<PushNotification>();
         if(n==0) {
             if(notiList!=null && (!notiList.isEmpty())){
@@ -1459,6 +1513,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 public void cardsDepleted() {
                     if (notiList.size()>0) {
                         showNotifications();
+                    } else {
+                        cardStackLayout.setVisibility(View.GONE);
                     }
                     //removeNotifyLayout();
                 }
