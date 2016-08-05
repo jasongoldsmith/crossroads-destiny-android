@@ -783,13 +783,35 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     }
 
     @Override
-    protected void goToDetail(String id) {
+    protected void goToDetail(String id, String console, String clanId) {
         if (id!=null) {
             if(mManager!=null) {
+                //check and change if current active console is different
+                if(console!=null) {
+                    if(!console.equalsIgnoreCase(user.getConsoleType()) && checkIfConsolePresent(console)){
+                        changeToOtherConsole(console);
+                    }
+                }
+                //check and change if current active group is different
+                if(clanId!=null) {
+                    if(mManager.getGroupObj(clanId)!=null) {
+                        if (!clanId.equalsIgnoreCase(user.getClanId())) {
+                            GroupData grp = mManager.getGroupObj(clanId);
+                            RequestParams params = new RequestParams();
+                            if (user.getUserId() != null) {
+                                params.add("id", user.getUserId());
+                            }
+                            params.add("clanId", grp.getGroupId());
+                            params.add("clanName", grp.getGroupName());
+                            params.add("clanImage", grp.getGroupImageUrl());
+                            mManager.postSetGroup(ListActivityFragment.this, params);
+                        }
+                    }
+                }
                 if((id!=null) && (!id.equalsIgnoreCase("null"))) {
-                        RequestParams param = new RequestParams();
-                        param.add("id", id);
-                        mManager.postEventById(this, param);
+                    RequestParams param = new RequestParams();
+                    param.add("id", id);
+                    mManager.postEventById(this, param);
                 }
             }
         }

@@ -224,7 +224,8 @@ public class BaseActivity extends FragmentActivity {
                     String msg = data.get(position).getMessage();
                     boolean typeM = data.get(position).getTypeMessage();
 
-                    String console = data.get(position).getEventConsole();
+                    final String console = data.get(position).getEventConsole();
+                    final String grpId = data.get(position).getEventClanId();
                     String grpName = data.get(position).getEventClanName();
                     String grpImage = data.get(position).getEventClanImageUrl();
                     String msngrConsoleId = data.get(position).getMessengerConsoleId();
@@ -235,7 +236,7 @@ public class BaseActivity extends FragmentActivity {
                         @Override
                         public void onClick(View v) {
                             if (id != null) {
-                                goToDetail(id);
+                                goToDetail(id, console, grpId);
                             }
                         }
                     });
@@ -290,7 +291,7 @@ public class BaseActivity extends FragmentActivity {
         }
     }
 
-    protected void goToDetail(String s) {
+    protected void goToDetail(String s, String console, String clanId) {
 
     }
 

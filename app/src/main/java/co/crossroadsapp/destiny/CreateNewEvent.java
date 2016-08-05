@@ -147,6 +147,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
     private RelativeLayout checkpointLayout;
     Intent localPushEventObj;
     private DatePickerDialog mDatePickerDai;
+    private TimePickerDialog tpd;
     private String adcardEventId;
     private ActivityData adAct;
 
@@ -544,8 +545,9 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
         // TODO Auto-generated method stub
         switch (id) {
             case TIME_DIALOG_ID:
+                Calendar c = Calendar.getInstance();
                 // set time picker as current time
-                TimePickerDialog tpd = new TimePickerDialog(this, timePickerListener, hour, minute,false);
+                tpd = new TimePickerDialog(this, timePickerListener, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE),false);
 
                 tpd.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
@@ -979,6 +981,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
 
                 if(time_display!=null) {
                     time_display.setText(getResources().getString(R.string.time_default));
+                    updateTimePicker();
                 }
                 //todo hack to fix for bug showing checkpoint for wrong event
                 if(checkpointLayout!=null) {
@@ -998,6 +1001,13 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                 Date d = Util.getCurrentCalendar();
                 mDatePickerDai.getDatePicker().updateDate(d.getYear(), d.getMonth(), d.getDate());
             }
+        }
+    }
+
+    private void updateTimePicker() {
+        if(tpd!=null) {
+            Calendar c = Calendar.getInstance();
+            tpd.updateTime(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE));
         }
     }
 
