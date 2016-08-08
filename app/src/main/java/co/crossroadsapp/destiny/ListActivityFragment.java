@@ -691,8 +691,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             } else {
                 showDeeplinkError(Constants.EVENT_CONSOLE_MISSING, data.getClanName()!=null?data.getClanName():"", data.getConsoleType()!=null?data.getConsoleType():"", null);
             }
+            mManager.setDeepLinkEvent(null, null);
         }
-        mManager.setDeepLinkEvent(null, null);
     }
 
     private boolean checkIfConsolePresent(String consoleType) {
@@ -1193,6 +1193,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             }
             if (console!=null) {
                 changeToOtherConsole(console);
+                closeProfileDrawer(Gravity.LEFT);
             }
         }
     }
@@ -1348,6 +1349,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                         if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
                             gpAct.updateGrpData(data);
                         }
+                        setGroupImageUrl();
                     } else {
                         //setGroupImageUrl();
                         if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {

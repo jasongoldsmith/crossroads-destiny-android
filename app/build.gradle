@@ -13,8 +13,8 @@ android {
         applicationId  = theApplicationId
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 47
-        versionName "1.0.5(8)"
+        versionCode 5
+        versionName "1.0.5"
     }
 //    buildTypes {
 //        release {

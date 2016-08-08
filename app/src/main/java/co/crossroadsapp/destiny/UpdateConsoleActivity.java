@@ -320,14 +320,14 @@ public class UpdateConsoleActivity extends BaseActivity implements AdapterView.O
 
             builder.setTitle(title)
                     .setMessage(msg)
-                    .setNegativeButton("UPGRADE", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("UPGRADE", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // continue with finish activity
                             dialog.dismiss();
                             addConsoleNetworkCall();
                         }
                     })
-                    .setPositiveButton("CANCEL", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // continue with finish activity
                             dialog.dismiss();
@@ -342,8 +342,13 @@ public class UpdateConsoleActivity extends BaseActivity implements AdapterView.O
     public void update(Observable observable, Object data) {
         hideProgressBar();
         if(data!=null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(UpdateConsoleActivity.this)
-                    .setTitle("Success!")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(UpdateConsoleActivity.this, android.R.style.Theme_Material_Light_Dialog_Alert);
+            } else {
+                builder = new AlertDialog.Builder(UpdateConsoleActivity.this);
+            }
+
+            builder.setTitle("Success!")
                     .setMessage("Your " +console + " " + conId + " account has been linked to Crossroads.")
                     .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {

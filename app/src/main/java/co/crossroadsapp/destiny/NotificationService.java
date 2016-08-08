@@ -38,51 +38,51 @@ public class NotificationService extends Service {
             EventData ed = new EventData();
             Intent in = new Intent("subtype_flag");
 
-            if(jsonObj.has("notificationName")) {
+            if(jsonObj.has("notificationName") && !jsonObj.isNull("notificationName")) {
                 String notiName = (String) jsonObj.get("notificationName");
                 if (notiName.equalsIgnoreCase("messageFromPlayer")) {
                     in.putExtra("playerMessage", true);
                 }
             }
 
-            if(jsonObj.has("eventName")) {
+            if(jsonObj.has("eventName") && !jsonObj.isNull("eventName")) {
                 String eName = (String) jsonObj.get("eventName");
                 if (!eName.equalsIgnoreCase(null)) {
                         in.putExtra("subtype", eName);
                     }
             }
 
-            if(jsonObj.has("eventId")) {
+            if(jsonObj.has("eventId") && !jsonObj.isNull("eventId")) {
                 String eId = (String) jsonObj.get("eventId");
                 if (!eId.equalsIgnoreCase(null)) {
                     in.putExtra("eventId", eId);
                 }
             }
-            if(jsonObj.has("eventUpdated")) {
+            if(jsonObj.has("eventUpdated") && !jsonObj.isNull("eventUpdated")) {
                 String eUpdated = (String) jsonObj.get("eventUpdated");
                 if (!eUpdated.equalsIgnoreCase(null)) {
                     in.putExtra("eventUpdated", eUpdated);
                 }
             }
-            if(jsonObj.has("eventClanName")) {
+            if(jsonObj.has("eventClanName") && !jsonObj.isNull("eventClanName")) {
                 String eClanName = (String) jsonObj.get("eventClanName");
                 if (!eClanName.equalsIgnoreCase(null)) {
                     in.putExtra("eventClanName", eClanName);
                 }
             }
-            if(jsonObj.has("eventClanImageUrl")) {
+            if(jsonObj.has("eventClanImageUrl") && !jsonObj.isNull("eventClanImageUrl")) {
                 String eClanImage = (String) jsonObj.get("eventClanImageUrl");
                 if (!eClanImage.equalsIgnoreCase(null)) {
                     in.putExtra("eventClanImageUrl", eClanImage);
                 }
             }
-            if(jsonObj.has("eventConsole")) {
+            if(jsonObj.has("eventConsole") && !jsonObj.isNull("eventConsole")) {
                 String eConsole = (String) jsonObj.get("eventConsole");
                 if (!eConsole.equalsIgnoreCase(null)) {
                     in.putExtra("eventConsole", eConsole);
                 }
             }
-            if(jsonObj.has("eventClanId")) {
+            if(jsonObj.has("eventClanId") && !jsonObj.isNull("eventClanId")) {
                 String eClanId = (String) jsonObj.get("eventClanId");
                 if (!eClanId.equalsIgnoreCase(null)) {
                     in.putExtra("eventClanId", eClanId);

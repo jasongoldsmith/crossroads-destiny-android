@@ -103,6 +103,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private BranchUniversalObject branchUniversalObject;
     private String eventId;
     private SwipeFrameLayout cardStackLayout;
+    private String upcomingDate;
 //    private TextView errText;
 //    private ImageView close_err;
 
@@ -233,11 +234,13 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                 rp.put("player", user.getUserId());
                 hideProgress();
                 showProgress();
+                //todo fix when fire base rules are in
+                if(currEvent.getPlayerData().size()==1){
+                    unregisterFirebase();
+                }
                 controlManager.postUnJoinEvent(EventDetailActivity.this, rp);
             }
         });
-
-        String upcomingDate = null;
 
         if (currEvent.getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING)) {
             upcomingDate = Util.convertUTCtoReadable(currEvent.getLaunchDate());
@@ -283,51 +286,98 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             }
         });
 
-        String actName = currEvent.getActivityData().getActivitySubtype();
-        String grpName = controlManager.getGroupObj(currEvent.getClanId()).getGroupName();
-        String deepLinkTitle=" ";
-        String deepLinkMsg=" ";
-        if(userIsPlayer){
-            deepLinkTitle = "Join My Fireteam";
-            if(reqPlayer==0) {
-                deepLinkTitle = currEvent.getActivityData().getActivitySubtype();
-            }
-            deepLinkMsg = getDeepLinkConsoleType()+": I need "+reqPlayer+ " more for "+ actName + " in the " +grpName+ " group";
-        }else {
-            deepLinkTitle = "Searching for Guardians";
-            if(reqPlayer==0) {
-                deepLinkTitle = currEvent.getActivityData().getActivitySubtype();
-            }
-            deepLinkMsg = getDeepLinkConsoleType() +": This fireteam needs " + reqPlayer + " more for " + actName+" in the " + grpName + " group";
+        generateBranchObject();
 
-            if(currEvent.getEventStatus().equalsIgnoreCase("Upcoming")) {
-                deepLinkMsg = getDeeplinkContent(upcomingDate);
-            }
-        }
-
-        if(reqPlayer==0){
-            if(currEvent.getEventStatus().equalsIgnoreCase("Upcoming")) {
-                deepLinkMsg = getDeepLinkConsoleType() +": Check out this " + actName + " on " + upcomingDate + " in the " + grpName + " group";
-            }else {
-                deepLinkMsg = getDeepLinkConsoleType() +": Check out this " + actName + " in the " + grpName + " group";
-            }
-        }
-
-        // Create a BranchUniversal object for the content referred on this activity instance
-        branchUniversalObject = new BranchUniversalObject()
-                .setCanonicalIdentifier("item/12345")
-                .setCanonicalUrl("https://branch.io/deepviews")
-                .setTitle(deepLinkTitle)
-                .setContentDescription(deepLinkMsg)
-                .setContentImageUrl(Constants.DEEP_LINK_IMAGE + currEvent.getEventId()+".png")
-                //.setContentExpiration(new Date(1476566432000L)) // set contents expiration time if applicable
-                .addContentMetadata("activityName", currEvent.getActivityData().getActivitySubtype())
-                .addContentMetadata("eventId", currEvent.getEventId());
+//        String actName = currEvent.getActivityData().getActivitySubtype();
+//        String grpName = controlManager.getGroupObj(currEvent.getClanId()).getGroupName();
+//        String deepLinkTitle=" ";
+//        String deepLinkMsg=" ";
+//        if(userIsPlayer){
+//            deepLinkTitle = "Join My Fireteam";
+//            if(reqPlayer==0) {
+//                deepLinkTitle = currEvent.getActivityData().getActivitySubtype();
+//            }
+//            deepLinkMsg = getDeepLinkConsoleType()+": I need "+reqPlayer+ " more for "+ actName + " in the " +grpName+ " group";
+//        }else {
+//            deepLinkTitle = "Searching for Guardians";
+//            if(reqPlayer==0) {
+//                deepLinkTitle = currEvent.getActivityData().getActivitySubtype();
+//            }
+//            deepLinkMsg = getDeepLinkConsoleType() +": This fireteam needs " + reqPlayer + " more for " + actName+" in the " + grpName + " group";
+//
+//            if(currEvent.getEventStatus().equalsIgnoreCase("Upcoming")) {
+//                deepLinkMsg = getDeeplinkContent(upcomingDate);
+//            }
+//        }
+//
+//        if(reqPlayer==0){
+//            if(currEvent.getEventStatus().equalsIgnoreCase("Upcoming")) {
+//                deepLinkMsg = getDeepLinkConsoleType() +": Check out this " + actName + " on " + upcomingDate + " in the " + grpName + " group";
+//            }else {
+//                deepLinkMsg = getDeepLinkConsoleType() +": Check out this " + actName + " in the " + grpName + " group";
+//            }
+//        }
+//
+//        // Create a BranchUniversal object for the content referred on this activity instance
+//        branchUniversalObject = new BranchUniversalObject()
+//                .setCanonicalIdentifier("item/12345")
+//                .setCanonicalUrl("https://branch.io/deepviews")
+//                .setTitle(deepLinkTitle)
+//                .setContentDescription(deepLinkMsg)
+//                .setContentImageUrl(Constants.DEEP_LINK_IMAGE + currEvent.getEventId()+".png")
+//                //.setContentExpiration(new Date(1476566432000L)) // set contents expiration time if applicable
+//                .addContentMetadata("activityName", currEvent.getActivityData().getActivitySubtype())
+//                .addContentMetadata("eventId", currEvent.getEventId());
 
         registerFirbase();
 
         showNotifications();
 
+    }
+
+    private void generateBranchObject() {
+        if (currEvent != null) {
+            String actName = currEvent.getActivityData().getActivitySubtype();
+            String grpName = controlManager.getGroupObj(currEvent.getClanId()).getGroupName();
+            String deepLinkTitle = " ";
+            String deepLinkMsg = " ";
+            if (checkUserIsPlayer()) {
+                deepLinkTitle = "Join My Fireteam";
+                if (reqPlayer == 0) {
+                    deepLinkTitle = currEvent.getActivityData().getActivitySubtype();
+                }
+                deepLinkMsg = getDeepLinkConsoleType() + ": I need " + reqPlayer + " more for " + actName + " in the " + grpName + " group";
+            } else {
+                deepLinkTitle = "Searching for Guardians";
+                if (reqPlayer == 0) {
+                    deepLinkTitle = currEvent.getActivityData().getActivitySubtype();
+                }
+                deepLinkMsg = getDeepLinkConsoleType() + ": This fireteam needs " + reqPlayer + " more for " + actName + " in the " + grpName + " group";
+
+                if (currEvent.getEventStatus().equalsIgnoreCase("Upcoming")) {
+                    deepLinkMsg = getDeeplinkContent(upcomingDate);
+                }
+            }
+
+            if (reqPlayer == 0) {
+                if (currEvent.getEventStatus().equalsIgnoreCase("Upcoming")) {
+                    deepLinkMsg = getDeepLinkConsoleType() + ": Check out this " + actName + " on " + upcomingDate + " in the " + grpName + " group";
+                } else {
+                    deepLinkMsg = getDeepLinkConsoleType() + ": Check out this " + actName + " in the " + grpName + " group";
+                }
+            }
+
+            // Create a BranchUniversal object for the content referred on this activity instance
+            branchUniversalObject = new BranchUniversalObject()
+                    .setCanonicalIdentifier("item/12345")
+                    .setCanonicalUrl("https://branch.io/deepviews")
+                    .setTitle(deepLinkTitle)
+                    .setContentDescription(deepLinkMsg)
+                    .setContentImageUrl(Constants.DEEP_LINK_IMAGE + currEvent.getEventId() + ".png")
+                    //.setContentExpiration(new Date(1476566432000L)) // set contents expiration time if applicable
+                    .addContentMetadata("activityName", currEvent.getActivityData().getActivitySubtype())
+                    .addContentMetadata("eventId", currEvent.getEventId());
+        }
     }
 
     private String getDeeplinkContent(String upcomingDate) {
@@ -374,11 +424,12 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         LinkProperties linkProperties = new LinkProperties();
 
+        generateBranchObject();
+
         branchUniversalObject.generateShortUrl(this, linkProperties, new Branch.BranchLinkCreateListener() {
             @Override
             public void onLinkCreate(String url, BranchError error) {
                 if (error == null) {
-                    TravellerLog.i("MyApp", "got my Branch link to share: " + url);
                     final Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                     sharingIntent.setType("text/plain");
                     if(url!=null) {
@@ -588,6 +639,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                         }
                         setPlayerNames();
                         setBottomButtonSelection();
+                        generateBranchObject();
                     } else {
                         launchListActivityAndFinish();
                     }
