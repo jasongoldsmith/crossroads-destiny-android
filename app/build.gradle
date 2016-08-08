@@ -13,7 +13,7 @@ android {
         applicationId  = theApplicationId
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 5
+        versionCode 55
         versionName "1.0.5"
     }
 //    buildTypes {

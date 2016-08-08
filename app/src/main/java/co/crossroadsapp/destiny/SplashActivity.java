@@ -137,6 +137,8 @@ public class SplashActivity extends BaseActivity{
                     @Override
                     public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError error) {
                         if (error == null) {
+                            //todo need to reset user session as it's not getting automatically updated and looks like a bug with branch
+                            Branch.getInstance().resetUserSession();
                             // params are the deep linked params associated with the link that the user clicked before showing up
                             if (branchUniversalObject != null) {
                                 if (branchUniversalObject.getMetadata().containsKey("eventId") && branchUniversalObject.getMetadata().containsKey("activityName")) {
