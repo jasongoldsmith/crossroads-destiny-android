@@ -341,7 +341,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             public void onClick(View v) {
                 // go to create new event page
                 Intent regIntent = new Intent(getApplicationContext(),
-                        CreateNewEvent.class);
+                        AddNewActivity.class);
                 regIntent.putExtra("userdata", user);
                 startActivity(regIntent);
                 //finish();

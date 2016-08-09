@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="co.crossroadsapp.destiny.AddNewActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/img_background_map"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/img_b_g_choose_activity"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/back_btn"
+        android:src="@drawable/icon_back_arrow"
+        android:layout_marginTop="22dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/top_text"
+        android:text="CHOOSE AN ACTIVITY"
+        android:textSize="20dp"
+        android:fontFamily="sans-serif"
+        android:textStyle="bold"
+        android:textColor="@color/trimbe_white"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="169dp"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_text"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="33dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_featured"
+            android:id="@+id/first_act"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/second_act"
+            android:src="@drawable/img_raids"
+            android:layout_toRightOf="@+id/first_act"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/third_act"
+            android:src="@drawable/img_arena"
+            android:layout_toRightOf="@+id/second_act"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_cruicible"
+            android:layout_below="@+id/first_act"
+            android:id="@+id/fourth_act"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fifth_act"
+            android:src="@drawable/img_strikes"
+            android:layout_below="@+id/first_act"
+            android:layout_toRightOf="@+id/fourth_act"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/sixth_act"
+            android:src="@drawable/img_patrol"
+            android:layout_below="@+id/first_act"
+            android:layout_toRightOf="@+id/fifth_act"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_story"
+            android:layout_below="@+id/fourth_act"
+            android:id="@+id/seventh_act" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/eigth_act"
+            android:src="@drawable/img_quest"
+            android:layout_below="@+id/fourth_act"
+            android:layout_toRightOf="@+id/seventh_act"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ninth_act"
+            android:src="@drawable/img_exotic"
+            android:layout_below="@+id/fourth_act"
+            android:layout_toRightOf="@+id/eigth_act"/>
+
+    </RelativeLayout>
+</RelativeLayout>
