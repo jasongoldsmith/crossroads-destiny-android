@@ -67,7 +67,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:id="@+id/select_console_img"
-            android:src="@drawable/icon_psn_console"
+            android:src="@drawable/icon_psn_consolex"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="14dp"
             android:layout_centerVertical="true"

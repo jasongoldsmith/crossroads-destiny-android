@@ -346,7 +346,9 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                 if (reqPlayer == 0) {
                     deepLinkTitle = currEvent.getActivityData().getActivitySubtype();
                 }
-                deepLinkMsg = getDeepLinkConsoleType() + ": I need " + reqPlayer + " more for " + actName + " in the " + grpName + " group";
+                //deepLinkMsg = getDeepLinkConsoleType() + ": I need " + reqPlayer + " more for " + actName + " in the " + grpName + " group";
+
+                deepLinkMsg = getDeeplinkContent(upcomingDate);
             } else {
                 deepLinkTitle = "Searching for Guardians";
                 if (reqPlayer == 0) {

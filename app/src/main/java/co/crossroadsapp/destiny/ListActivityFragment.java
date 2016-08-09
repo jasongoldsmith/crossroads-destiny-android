@@ -591,9 +591,9 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 ((TextView) v).setText(((TextView) v).getText());
 
                 if(((TextView) v).getText().toString().equalsIgnoreCase(Constants.CONSOLEXBOXONESTRG) || ((TextView) v).getText().toString().equalsIgnoreCase(Constants.CONSOLEXBOX360STRG)) {
-                    imgConsole.setImageResource(R.drawable.icon_xboxone_console);
+                    imgConsole.setImageResource(R.drawable.icon_xboxone_consolex);
                 } else {
-                    imgConsole.setImageResource(R.drawable.icon_psn_console);
+                    imgConsole.setImageResource(R.drawable.icon_psn_consolex);
                 }
 
                 return v;
@@ -638,7 +638,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         }
         if(consoleItems.contains("Add Console")) {
         if (position == consoleItems.size() - 1) {
-            addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_add_console));
+            addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_add_consolex));
             card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -653,9 +653,9 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         }
         }
         if(consoleItems.get(position).equalsIgnoreCase("PlayStation 4") || consoleItems.get(position).equalsIgnoreCase("PlayStation 3")){
-            addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_psn_console));
+            addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_psn_consolex));
         } else if(consoleItems.get(position).equalsIgnoreCase("Xbox One") || consoleItems.get(position).equalsIgnoreCase("Xbox 360")){
-            addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_xboxone_console));
+            addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_xboxone_consolex));
         }
 
         TextView label=(TextView)row.findViewById(R.id.add_console_text);
