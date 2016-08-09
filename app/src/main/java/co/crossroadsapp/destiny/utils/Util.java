@@ -263,7 +263,7 @@ public class Util {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        format = new SimpleDateFormat("EEE, MMM dd - hh:mm a");
+        format = new SimpleDateFormat("EEE, MMM d - h:mm a");
         String date = format.format(newDate);
         return date;
     }

@@ -45,6 +45,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -631,10 +632,13 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         View row = inflater.inflate(R.layout.console_selction_view, parent, false);
         ImageView addSymbol = (ImageView) row.findViewById(R.id.console_img);
         CardView card = (CardView) row.findViewById(R.id.console_card);
+
         if (position == 0) {
-            card.setBackgroundColor(getResources().getColor(R.color.freelancer_background));
-            ImageView dropArw = (ImageView) row.findViewById(R.id.drop_arrow);
-            dropArw.setVisibility(View.VISIBLE);
+            card.setCardBackgroundColor(getResources().getColor(R.color.freelancer_background));
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ImageView dropArw = (ImageView) row.findViewById(R.id.drop_arrow);
+                dropArw.setVisibility(View.VISIBLE);
+            }
         }
         if(consoleItems.contains("Add Console")) {
         if (position == consoleItems.size() - 1) {
@@ -662,6 +666,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         if (consoleItems!=null) {
             label.setText(consoleItems.get(position));
         }
+
         return row;
     }
 
@@ -683,6 +688,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                     if(data.getPlayerData().size()==data.getMaxPlayer()) {
                         showDeeplinkError(Constants.EVENT_FULL, null, null, null);
                     }else {
+                        checkToChangeConsoleGrp(data.getConsoleType()!=null?data.getConsoleType():null, data.getClanId()!=null?data.getClanId():null);
                         startEventDetail(data);
                     }
                 } else {
@@ -786,32 +792,40 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     protected void goToDetail(String id, String console, String clanId) {
         if (id!=null) {
             if(mManager!=null) {
-                //check and change if current active console is different
-                if(console!=null) {
-                    if(!console.equalsIgnoreCase(user.getConsoleType()) && checkIfConsolePresent(console)){
-                        changeToOtherConsole(console);
-                    }
-                }
-                //check and change if current active group is different
-                if(clanId!=null) {
-                    if(mManager.getGroupObj(clanId)!=null) {
-                        if (!clanId.equalsIgnoreCase(user.getClanId())) {
-                            GroupData grp = mManager.getGroupObj(clanId);
-                            RequestParams params = new RequestParams();
-                            if (user.getUserId() != null) {
-                                params.add("id", user.getUserId());
-                            }
-                            params.add("clanId", grp.getGroupId());
-                            params.add("clanName", grp.getGroupName());
-                            params.add("clanImage", grp.getGroupImageUrl());
-                            mManager.postSetGroup(ListActivityFragment.this, params);
-                        }
-                    }
-                }
+                //check and change if current active console or grp is different
+                checkToChangeConsoleGrp(console, clanId);
+
                 if((id!=null) && (!id.equalsIgnoreCase("null"))) {
                     RequestParams param = new RequestParams();
                     param.add("id", id);
                     mManager.postEventById(this, param);
+                }
+            }
+        }
+    }
+
+    private void checkToChangeConsoleGrp(String console, String clanId) {
+        if(mManager!=null) {
+            //check and change if current active console is different
+            if (console != null) {
+                if (!console.equalsIgnoreCase(user.getConsoleType()) && checkIfConsolePresent(console)) {
+                    changeToOtherConsole(console);
+                }
+            }
+            //check and change if current active group is different
+            if (clanId != null) {
+                if (mManager.getGroupObj(clanId) != null) {
+                    if (!clanId.equalsIgnoreCase(user.getClanId())) {
+                        GroupData grp = mManager.getGroupObj(clanId);
+                        RequestParams params = new RequestParams();
+                        if (user.getUserId() != null) {
+                            params.add("id", user.getUserId());
+                        }
+                        params.add("clanId", grp.getGroupId());
+                        params.add("clanName", grp.getGroupName());
+                        params.add("clanImage", grp.getGroupImageUrl());
+                        mManager.postSetGroup(ListActivityFragment.this, params);
+                    }
                 }
             }
         }
