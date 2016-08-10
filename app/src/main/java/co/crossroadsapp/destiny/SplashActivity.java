@@ -20,6 +20,7 @@ import com.google.android.gms.appinvite.AppInviteReferral;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import io.fabric.sdk.android.Fabric;
 import org.json.JSONObject;
@@ -49,11 +50,15 @@ public class SplashActivity extends BaseActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //fabric
         Fabric.with(this, new Answers());
         //facebood adk
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);
+        FacebookSdk.sdkInitialize(SplashActivity.this);
+        AppEventsLogger.activateApp(SplashActivity.this);
         setContentView(R.layout.splash_loading);
+        //mixpanel token
+        String projectToken =  getResources().getString(R.string.mix_panel_token);//"23f27698695b0137adfef97f173b9f91";
+        MixpanelAPI mixpanel = MixpanelAPI.getInstance(SplashActivity.this, projectToken);
         // Automatic session tracking
         //Branch.getAutoInstance(this);
         cManager = ControlManager.getmInstance();

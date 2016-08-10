@@ -341,29 +341,29 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             String grpName = controlManager.getGroupObj(currEvent.getClanId()).getGroupName();
             String deepLinkTitle = " ";
             String deepLinkMsg = " ";
+            String console = getDeepLinkConsoleType();
             if (checkUserIsPlayer()) {
                 deepLinkTitle = "Join My Fireteam";
-                if (reqPlayer == 0) {
-                    deepLinkTitle = currEvent.getActivityData().getActivitySubtype();
+                if (currEvent.getLaunchEventStatus().equalsIgnoreCase("upcoming")) {
+                    deepLinkMsg = getDeepLinkConsoleType() + ": I need " + reqPlayer + " more for " + actName + " on " + upcomingDate + " in the " + grpName + " group";
+                }else {
+                    deepLinkMsg = getDeepLinkConsoleType() + ": I need " + reqPlayer + " more for " + actName + " in the " + grpName + " group";
                 }
-                deepLinkMsg = getDeepLinkConsoleType() + ": I need " + reqPlayer + " more for " + actName + " in the " + grpName + " group";
             } else {
                 deepLinkTitle = "Searching for Guardians";
-                if (reqPlayer == 0) {
-                    deepLinkTitle = currEvent.getActivityData().getActivitySubtype();
-                }
-                deepLinkMsg = getDeepLinkConsoleType() + ": This fireteam needs " + reqPlayer + " more for " + actName + " in the " + grpName + " group";
-
-                if (currEvent.getEventStatus().equalsIgnoreCase("Upcoming")) {
-                    deepLinkMsg = getDeeplinkContent(upcomingDate);
+                if (currEvent.getLaunchEventStatus().equalsIgnoreCase("upcoming")) {
+                    deepLinkMsg = console + ": This fireteam needs " + reqPlayer + " more for " + actName + " on " + upcomingDate + " in the " + grpName + " group";
+                }else {
+                    deepLinkMsg = console + ": This fireteam needs " + reqPlayer + " more for " + actName + " in the " + grpName + " group";
                 }
             }
 
             if (reqPlayer == 0) {
-                if (currEvent.getEventStatus().equalsIgnoreCase("Upcoming")) {
-                    deepLinkMsg = getDeepLinkConsoleType() + ": Check out this " + actName + " on " + upcomingDate + " in the " + grpName + " group";
+                deepLinkTitle = currEvent.getActivityData().getActivitySubtype();
+                if (currEvent.getLaunchEventStatus().equalsIgnoreCase("Upcoming")) {
+                    deepLinkMsg = console + ": Check out this " + actName + " on " + upcomingDate + " in the " + grpName + " group";
                 } else {
-                    deepLinkMsg = getDeepLinkConsoleType() + ": Check out this " + actName + " in the " + grpName + " group";
+                    deepLinkMsg = console + ": Check out this " + actName + " in the " + grpName + " group";
                 }
             }
 
@@ -378,29 +378,6 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                     .addContentMetadata("activityName", currEvent.getActivityData().getActivitySubtype())
                     .addContentMetadata("eventId", currEvent.getEventId());
         }
-    }
-
-    private String getDeeplinkContent(String upcomingDate) {
-        String description=null;
-        String grpName=getGroupName();//= "<console>: I need <#> more for <activity> in the <group> group on Crossroads";
-        if(user!=null && user.getConsoleType()!=null) {
-            if(currEvent.getActivityData()!=null && currEvent.getActivityData().getActivitySubtype()!=null) {
-                if(grpName!=null) {
-                    if (reqPlayer > 0) {
-                        String s = getDeepLinkConsoleType();
-                        String desc = s + ": I need " + reqPlayer + " more for " + currEvent.getActivityData().getActivitySubtype();
-                        if (upcomingDate != null) {
-                            description = desc + " on " + upcomingDate + " in the " + grpName + " group";
-                        } else {
-                            description = desc + " in the " + grpName + " group";
-                        }
-                        return description;
-                    }
-                }
-            }
-        }
-
-        return "";
     }
 
     private String getDeepLinkConsoleType() {

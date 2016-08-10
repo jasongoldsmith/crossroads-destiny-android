@@ -131,11 +131,11 @@ public class UpdateConsoleActivity extends BaseActivity implements AdapterView.O
                 ((TextView) v).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
                 ((TextView) v).setText(((TextView) v).getText());
                 if(((TextView) v).getText().toString().equalsIgnoreCase(Constants.CONSOLEXBOXONESTRG) || ((TextView) v).getText().toString().equalsIgnoreCase(Constants.CONSOLEXBOX360STRG)) {
-                    imgConsole.setImageResource(R.drawable.icon_xboxone_console);
+                    imgConsole.setImageResource(R.drawable.icon_xboxone_consolex);
                     consoleName.setText("XBOX GAMERTAG");
                     consoleEditHint.setHint("Enter Xbox Gamertag");
                 } else {
-                    imgConsole.setImageResource(R.drawable.icon_psn_console);
+                    imgConsole.setImageResource(R.drawable.icon_psn_consolex);
                     consoleName.setText("PLAYSTATION ID");
                     consoleEditHint.setHint("Enter PlayStation ID");
                 }
@@ -280,9 +280,9 @@ public class UpdateConsoleActivity extends BaseActivity implements AdapterView.O
 //            });
 //        }
         if(consoleItems.get(position).equalsIgnoreCase("PlayStation 4") || consoleItems.get(position).equalsIgnoreCase("PlayStation 3")){
-            addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_psn_console));
+            addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_psn_consolex));
         } else if(consoleItems.get(position).equalsIgnoreCase("Xbox One") || consoleItems.get(position).equalsIgnoreCase("Xbox 360")){
-            addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_xboxone_console));
+            addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_xboxone_consolex));
         }
 
         TextView label=(TextView)row.findViewById(R.id.add_console_text);

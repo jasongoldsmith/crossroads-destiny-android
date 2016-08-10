@@ -99,6 +99,8 @@
     <string name="dialog_title">Update</string>
     <string name="console_selection_text">More than one console? You can add it later!</string>
 
-    <string name="facebook_app_id">co.crossroadsapp.destiny</string>
+    <string name="facebook_app_id">855221411276321</string>
+
+    <string name="mix_panel_token">23f27698695b0137adfef97f173b9f91</string>
 
 </resources>
