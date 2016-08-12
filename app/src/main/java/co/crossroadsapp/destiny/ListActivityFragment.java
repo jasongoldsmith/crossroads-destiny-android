@@ -172,7 +172,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 //            this.getIntent().removeExtra("eventIntent");
 //        }
 
-        mManager.postGetActivityList(this);
+        //mManager.postGetActivityList(this);
 
         // get existing event list
         getExistingList();

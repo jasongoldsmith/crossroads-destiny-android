@@ -2,6 +2,7 @@ package co.crossroadsapp.destiny.network;
 
 import android.content.Context;
 
+import co.crossroadsapp.destiny.AddFinalActivity;
 import co.crossroadsapp.destiny.ControlManager;
 import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.utils.Util;

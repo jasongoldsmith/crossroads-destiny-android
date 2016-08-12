@@ -356,13 +356,13 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                 }
                 deepLinkMsg = getDeepLinkConsoleType() + ": This fireteam needs " + reqPlayer + " more for " + actName + " in the " + grpName + " group";
 
-                if (currEvent.getEventStatus().equalsIgnoreCase("Upcoming")) {
+                if (currEvent.getLaunchEventStatus().equalsIgnoreCase("Upcoming")) {
                     deepLinkMsg = getDeeplinkContent(upcomingDate);
                 }
             }
 
             if (reqPlayer == 0) {
-                if (currEvent.getEventStatus().equalsIgnoreCase("Upcoming")) {
+                if (currEvent.getLaunchEventStatus().equalsIgnoreCase("Upcoming")) {
                     deepLinkMsg = getDeepLinkConsoleType() + ": Check out this " + actName + " on " + upcomingDate + " in the " + grpName + " group";
                 } else {
                     deepLinkMsg = getDeepLinkConsoleType() + ": Check out this " + actName + " in the " + grpName + " group";

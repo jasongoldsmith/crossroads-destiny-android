@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * Created by sharmha on 2/28/16.
  */
@@ -21,9 +23,16 @@ public class ActivityData {
     private int activityLevel;
     private boolean activityFeature;
     private AdCardData adCardData;
+    private ArrayList<ModifierData> modifierList;
+    private ArrayList<BonusData> bonusList;
+    private String aImageBaseUrl=null;
+    private String aImagePath=null;
+    private String tag;
 
     public ActivityData () {
         adCardData = new AdCardData();
+        modifierList = new ArrayList<ModifierData>();
+        bonusList = new ArrayList<BonusData>();
     }
 
     public void setAdCardData(AdCardData ad) {
@@ -32,6 +41,14 @@ public class ActivityData {
 
     public AdCardData getAdCardData() {
         return adCardData;
+    }
+
+    public void setTag(String t) {
+        tag = t;
+    }
+
+    public String getTag() {
+        return tag;
     }
 
     public void setId(String aId) {
@@ -90,6 +107,10 @@ public class ActivityData {
         return this.activityIconUrl;
     }
 
+    public String getaImagePath() {
+        return aImagePath;
+    }
+
     public void setActivityDifficulty(String aDifficulty) {
         activityDifficulty = aDifficulty;
     }
@@ -122,6 +143,14 @@ public class ActivityData {
         return this.activityLevel;
     }
 
+    public ArrayList<ModifierData> getModifierList() {
+        return modifierList;
+    }
+
+    public ArrayList<BonusData> getBonusList() {
+        return bonusList;
+    }
+
     public void toJson(JSONObject actData) {
         try {
             setId(actData.getString("_id"));
@@ -147,10 +176,44 @@ public class ActivityData {
             }
 
             if (actData.has("adCard")) {
-                JSONObject jsonobject = actData.optJSONObject("adCard");
+                JSONObject jsonobjectAd = actData.optJSONObject("adCard");
                 AdCardData adcard = new AdCardData();
-                adcard.toJson(jsonobject);
+                adcard.toJson(jsonobjectAd);
                 setAdCardData(adcard);
+            }
+
+            if(actData.has("tag") && !actData.isNull("tag")) {
+                setTag(actData.getString("tag"));
+            }
+
+            if(actData.has("aImage") && !actData.isNull("aImage")) {
+                JSONObject jsonobjectIm = actData.optJSONObject("aImage");
+                if(jsonobjectIm.has("aImageBaseUrl") && !jsonobjectIm.isNull("aImageBaseUrl")) {
+                    aImageBaseUrl = jsonobjectIm.getString("aImageBaseUrl");
+                    if(jsonobjectIm.has("aImageImagePath") && !jsonobjectIm.isNull("aImageImagePath")) {
+                        aImagePath = aImageBaseUrl+jsonobjectIm.getString("aImageImagePath");
+                    }
+                }
+            }
+
+            if(actData.has("aModifiers") && !actData.isNull("aModifiers")) {
+                JSONArray jsonArrM = actData.optJSONArray("aModifiers");
+                for (int i = 0; i < jsonArrM.length(); i++) {
+                    JSONObject jsonobjectM = jsonArrM.getJSONObject(i);
+                    ModifierData mData = new ModifierData();
+                    mData.toJson(jsonobjectM);
+                    modifierList.add(mData);
+                }
+            }
+
+            if(actData.has("aBonus") && !actData.isNull("aBonus")) {
+                JSONArray jsonArrB = actData.optJSONArray("aBonus");
+                for (int i = 0; i < jsonArrB.length(); i++) {
+                    JSONObject jsonobjectB = jsonArrB.getJSONObject(i);
+                    BonusData mData = new BonusData();
+                    mData.toJson(jsonobjectB);
+                    bonusList.add(mData);
+                }
             }
 
         } catch (JSONException e) {

@@ -104,4 +104,6 @@
             android:layout_toRightOf="@+id/eigth_act"/>
 
     </RelativeLayout>
+
+    <include layout="@layout/activity_base" />
 </RelativeLayout>
