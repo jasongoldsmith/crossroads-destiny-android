@@ -113,6 +113,21 @@
                 android:layout_alignParentRight="true">
             </TextView>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tag_text"
+                android:background="#203236"
+                android:layout_below="@+id/activity_name_layout"
+                android:textSize="11dp"
+                android:textColor="#9ba8ad"
+                android:layout_toRightOf="@+id/event_icon"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:visibility="gone"
+                android:padding="6dp"/>
+
         </RelativeLayout>
 
         <RelativeLayout

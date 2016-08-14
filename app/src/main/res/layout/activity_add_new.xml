@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/top_text"
-        android:text="CHOOSE AN ACTIVITY"
+        android:text="CHOOSE YOUR ACTIVITY"
         android:textSize="20dp"
         android:fontFamily="sans-serif"
         android:textStyle="bold"

@@ -267,11 +267,17 @@ public class ControlManager implements Observer{
         }
     }
 
-    public void postGetActivityList(AddNewActivity c, RequestParams params) {
+    public void postGetActivityList(Activity c, RequestParams params) {
         try {
-            activityListNetwork = new ActivityListNetwork(c);
-            activityListNetwork.addObserver(this);
-            activityListNetwork.addObserver(c);
+            if(c instanceof AddNewActivity) {
+                activityListNetwork = new ActivityListNetwork((AddNewActivity)c);
+                activityListNetwork.addObserver(this);
+                activityListNetwork.addObserver((AddNewActivity)c);
+            } else if (c instanceof ListActivityFragment) {
+                activityListNetwork = new ActivityListNetwork((ListActivityFragment)c);
+                activityListNetwork.addObserver(this);
+                activityListNetwork.addObserver((ListActivityFragment)c);
+            }
             if(activityList!=null) {
                 activityList.clear();
             }

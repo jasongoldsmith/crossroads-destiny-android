@@ -101,6 +101,9 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         Bundle b = getIntent().getExtras();
         user = b.getParcelable("userdata");
 
+        boolean ads= b.getBoolean("adcard");
+        String adP = b.getString("adCardId");
+
         back = (ImageView) findViewById(R.id.back_btn);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,6 +123,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         actSubtypeDropdownText = (TextView) findViewById(R.id.act_subtype_text);
 
         subtypeLayout = (RelativeLayout) findViewById(R.id.final_create_event_firstcard);
+        detailLayout = (RelativeLayout) findViewById(R.id.event_creation_detail_layout);
 
         activity = mCntrlMngr.getCurrentActivityList();
 
@@ -147,6 +151,23 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         dropdownDetails.setOnItemSelectedListener(AddFinalActivity.this);
 
         refreshActivityUI();
+
+        if(ads) {
+            ActivityData ad= mCntrlMngr.getAdsActivity(adP);
+            if(ad!=null) {
+                String subtypeDiff = ad.getActivitySubtype();
+                if(!ad.getActivityDifficulty().isEmpty()) {
+                    subtypeDiff = subtypeDiff + " - " + ad.getActivityDifficulty();
+                }
+                dropdownSubtype.setSelection(actSubTypeList.indexOf(subtypeDiff));
+                if(!ad.getActivityCheckpoint().isEmpty()) {
+                    dropdownCheckpoint.setSelection(checkpointItems.indexOf(ad.getActivityCheckpoint()));
+                }
+                if(!ad.getTag().isEmpty()) {
+                    dropdownDetails.setSelection(tagList.indexOf(ad.getTag()));
+                }
+            }
+        }
 
         date = (RelativeLayout) findViewById(R.id.date);
         date_display = (TextView) findViewById(R.id.date_text);
@@ -222,6 +243,9 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         String description=null;
         String levelText=null;
         String lightText=null;
+        String subtypeDiff=null;
+        String check=null;
+        String localTag=null;
 
         if(finalAct!=null && !finalAct.getActivitySubtype().isEmpty()) {
             actIconUrl = finalAct.getActivityIconUrl();
@@ -229,6 +253,12 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
             subType = finalAct.getActivitySubtype();
             level = finalAct.getActivityLevel();
             light = finalAct.getActivityLight();
+            subtypeDiff = finalAct.getActivitySubtype();
+            if(!finalAct.getActivityDifficulty().isEmpty()) {
+                subtypeDiff = subtypeDiff + " - " + finalAct.getActivityDifficulty();
+            }
+            check = finalAct.getActivityCheckpoint();
+            localTag= finalAct.getTag();
         }else {
             actIconUrl = activity.get(0).getActivityIconUrl();
             backg = activity.get(0).getaImagePath();
@@ -255,7 +285,6 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         actSubtype.setText(subType);
 
         if(finalAct==null) {
-
             //subtypes and difficulty level
             actSubList = mCntrlMngr.getCustomActivityList(activity.get(0).getActivityType());
             actSubTypeList = new ArrayList<String>();
@@ -279,6 +308,8 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
             //checkpoints
             if (checkpointActList == null) {
                 checkpointActList = new ArrayList<ActivityData>();
+            }else {
+                checkpointActList.clear();
             }
             checkpointActList = mCntrlMngr.getCheckpointActivityList(activity.get(0).getActivitySubtype(), activity.get(0).getActivityDifficulty());
 
@@ -309,6 +340,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
             }
         }
         tagList.clear();
+        tagList.add("None");
         tagActList = new ArrayList<ActivityData>();
         if (checkpointActList != null && !checkpointActList.isEmpty()) {
             for (int i = 0; i < checkpointActList.size(); i++) {
@@ -320,9 +352,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                                 if (checkpointActList.get(i).getActivitySubtype().equalsIgnoreCase(subActType) && checkpointActList.get(i).getActivityDifficulty().equalsIgnoreCase(subtypeDifficulty)) {
                                     if (checkpointActList.get(i).getActivityCheckpoint().equalsIgnoreCase(cp)) {
                                         if (checkpointActList.get(i).getTag() != null) {
-                                            if(checkpointActList.get(i).getTag().isEmpty()) {
-                                                tagList.add("None");
-                                            }else {
+                                            if(!checkpointActList.get(i).getTag().isEmpty()) {
                                                 tagList.add(checkpointActList.get(i).getTag());
                                             }
                                             tagActList.add(checkpointActList.get(i));
@@ -332,9 +362,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                             } else {
                                 if (checkpointActList.get(i).getActivitySubtype().equalsIgnoreCase(subActType)) {
                                     if (checkpointActList.get(i).getTag() != null) {
-                                        if(checkpointActList.get(i).getTag().isEmpty()) {
-                                            tagList.add("None");
-                                        }else {
+                                        if(!checkpointActList.get(i).getTag().isEmpty()) {
                                             tagList.add(checkpointActList.get(i).getTag());
                                         }
                                         tagActList.add(checkpointActList.get(i));
@@ -347,9 +375,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                             if (checkpointActList.get(i).getActivitySubtype().equalsIgnoreCase(subActType)) {
                                 if (checkpointActList.get(i).getActivityCheckpoint().equalsIgnoreCase(cp)) {
                                     if (checkpointActList.get(i).getTag() != null) {
-                                        if(checkpointActList.get(i).getTag().isEmpty()) {
-                                            tagList.add("None");
-                                        }else {
+                                        if(!checkpointActList.get(i).getTag().isEmpty()) {
                                             tagList.add(checkpointActList.get(i).getTag());
                                         }
                                         tagActList.add(checkpointActList.get(i));
@@ -359,9 +385,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                         } else {
                             if (checkpointActList.get(i).getActivitySubtype().equalsIgnoreCase(subActType)) {
                                 if (checkpointActList.get(i).getTag() != null) {
-                                    if(checkpointActList.get(i).getTag().isEmpty()) {
-                                        tagList.add("None");
-                                    }else {
+                                    if(!checkpointActList.get(i).getTag().isEmpty()) {
                                         tagList.add(checkpointActList.get(i).getTag());
                                     }
                                     tagActList.add(checkpointActList.get(i));
@@ -373,17 +397,15 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
             }
         }
         updateDrawer(tagList, detailText, dropdownDetails, null);
-        if (!tagList.isEmpty()){
-            setFinalAct(0);
-        }
     }
 
     private void getCheckpointList() {
         //checkpoints
         if(checkpointActList==null) {
             checkpointActList = new ArrayList<ActivityData>();
+        }else {
+            checkpointActList.clear();
         }
-        checkpointActList.clear();
         checkpointActList = mCntrlMngr.getCheckpointActivityList(subActType, subtypeDifficulty);
 
         checkpointItems.clear();
@@ -687,7 +709,9 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
     }
 
     public void setFinalAct(int position) {
-        this.finalAct = tagActList.get(position);
+        if(!tagActList.isEmpty()) {
+            this.finalAct = tagActList.get(position);
+        }
         refreshActivityUI();
     }
 
@@ -695,5 +719,10 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
     public void update(Observable observable, Object data) {
         hideProgressBar();
         launchListActivityAndFinish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

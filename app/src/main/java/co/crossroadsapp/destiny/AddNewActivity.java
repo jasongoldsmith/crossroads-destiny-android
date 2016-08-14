@@ -38,6 +38,10 @@ public class AddNewActivity extends BaseActivity implements Observer {
 
         Bundle b = getIntent().getExtras();
         user = b.getParcelable("userdata");
+        boolean ads= b.getBoolean("adcard");
+        String adP = b.getString("adCardId");
+
+        checkIfAdFlow(ads, adP);
 
         back = (ImageView) findViewById(R.id.back_btn);
         back.setOnClickListener(new View.OnClickListener() {
@@ -161,6 +165,18 @@ public class AddNewActivity extends BaseActivity implements Observer {
 //        }
     }
 
+    private void checkIfAdFlow(boolean ads, String adP) {
+        if(ads) {
+            //start new activity for add event creation
+            Intent regIntent = new Intent(AddNewActivity.this,
+                    AddFinalActivity.class);
+            regIntent.putExtra("userdata", user);
+            regIntent.putExtra("adcard", ads);
+            regIntent.putExtra("adCardId", adP);
+            startActivity(regIntent);
+        }
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setTRansparentStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -181,5 +197,20 @@ public class AddNewActivity extends BaseActivity implements Observer {
             regIntent.putExtra("userdata", user);
             startActivity(regIntent);
         }
+    }
+
+    private void launchListActivityAndFinish() {
+        Intent i=new Intent (this, ListActivityFragment.class);
+        i.putExtra("userdata", user);
+//        if(localPushEventObj!=null){
+//            i.putExtra("eventIntent", localPushEventObj);
+//        }
+        startActivity(i);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        launchListActivityAndFinish();
     }
 }

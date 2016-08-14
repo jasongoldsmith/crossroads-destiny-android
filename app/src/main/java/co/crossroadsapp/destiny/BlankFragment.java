@@ -411,12 +411,12 @@ public class BlankFragment extends Fragment {
                     adHolder.addBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //goto create new event
-                            Intent regIntent = new Intent(mContext,
-                                    CreateNewEvent.class);
-                            regIntent.putExtra("userdata", user);
-                            regIntent.putExtra("adsCardId", adList.get(position-elistLocal.size()).getId());
-                            startActivity(regIntent);
+                            mContext.showProgressBar();
+                            mContext.setAdCardPosition(adList.get(position-elistLocal.size()).getId());
+                            RequestParams rp = new RequestParams();
+                            rp.add("aType", adList.get(position-elistLocal.size()).getActivityType());
+                            rp.add("includeTags", "true");
+                            mManager.postGetActivityList(mContext, rp);
                             //mManager.postCreateEvent(adList.get(position-elistLocal.size()).getId(), user.getUserId(), adList.get(position-elistLocal.size()).getMinPlayer(), adList.get(position-elistLocal.size()).getMaxPlayer(), null, mContext);
                         }
                     });

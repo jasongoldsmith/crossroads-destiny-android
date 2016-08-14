@@ -16,6 +16,7 @@ import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.ConsoleData;
 import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.PushNotification;
+import co.crossroadsapp.destiny.network.ActivityListNetwork;
 import co.crossroadsapp.destiny.network.ChangeCurrentConsoleNetwork;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
 import co.crossroadsapp.destiny.network.GroupListNetwork;
@@ -138,6 +139,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     private Spinner dropdown;
     private AlertDialog dialogPrivacy;
     private SwipeFrameLayout cardStackLayout;
+    private String adCardPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -606,6 +608,10 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         adapterConsole.setDropDownViewResource(R.layout.empty_layout);
         dropdown.setAdapter(adapterConsole);
         adapterConsole.notifyDataSetChanged();
+    }
+
+    public void setAdCardPosition(String adAct) {
+        adCardPosition = adAct;
     }
 
     private boolean needToAdd(ArrayList<String> consoleItems) {
@@ -1396,6 +1402,18 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             } else if(observable instanceof PrivacyLegalUpdateNetwork) {
                 if(dialogPrivacy!=null) {
                     dialogPrivacy.dismiss();
+                }
+            } else if(observable instanceof ActivityListNetwork) {
+                hideProgressBar();
+                if(mManager.getCurrentActivityList()!=null && !mManager.getCurrentActivityList().isEmpty()) {
+                    //start new activity for add event creation
+                    Intent regIntent = new Intent(ListActivityFragment.this,
+                            AddNewActivity.class);
+                    regIntent.putExtra("userdata", user);
+                    regIntent.putExtra("adcard", true);
+                    regIntent.putExtra("adCardId", adCardPosition);
+                    startActivity(regIntent);
+                    finish();
                 }
             }
     }

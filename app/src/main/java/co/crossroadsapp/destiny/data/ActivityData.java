@@ -153,66 +153,68 @@ public class ActivityData {
 
     public void toJson(JSONObject actData) {
         try {
-            setId(actData.getString("_id"));
-            setActivityType(actData.getString("aType"));
-            setActivitySubtype(actData.getString("aSubType"));
-            setMinPlayer(actData.getInt("minPlayers"));
-            setMaxPlayer(actData.getInt("maxPlayers"));
-            if(!actData.isNull("aCheckpoint")) {
-                setActivityCheckpoint(actData.getString("aCheckpoint"));
-            }
-            setActivityDifficulty(actData.getString("aDifficulty"));
-            if (!actData.isNull("aIconUrl")) {
-                setActivityIconUrl(actData.getString("aIconUrl"));
-            } else {
-                setActivityIconUrl(null);
-            }
-            setActivityLight(actData.getInt("aLight"));
-            if (!actData.isNull("aLevel")) {
-                setActivityLevel(actData.getInt("aLevel"));
-            }
-            if (!actData.isNull("isFeatured")) {
-                setActivityFeature(actData.getBoolean("isFeatured"));
-            }
+            if(actData!=null) {
+                setId(actData.getString("_id"));
+                setActivityType(actData.getString("aType"));
+                setActivitySubtype(actData.getString("aSubType"));
+                setMinPlayer(actData.getInt("minPlayers"));
+                setMaxPlayer(actData.getInt("maxPlayers"));
+                if (!actData.isNull("aCheckpoint")) {
+                    setActivityCheckpoint(actData.getString("aCheckpoint"));
+                }
+                setActivityDifficulty(actData.getString("aDifficulty"));
+                if (!actData.isNull("aIconUrl")) {
+                    setActivityIconUrl(actData.getString("aIconUrl"));
+                } else {
+                    setActivityIconUrl(null);
+                }
+                setActivityLight(actData.getInt("aLight"));
+                if (!actData.isNull("aLevel")) {
+                    setActivityLevel(actData.getInt("aLevel"));
+                }
+                if (!actData.isNull("isFeatured")) {
+                    setActivityFeature(actData.getBoolean("isFeatured"));
+                }
 
-            if (actData.has("adCard")) {
-                JSONObject jsonobjectAd = actData.optJSONObject("adCard");
-                AdCardData adcard = new AdCardData();
-                adcard.toJson(jsonobjectAd);
-                setAdCardData(adcard);
-            }
+                if (actData.has("adCard")) {
+                    JSONObject jsonobjectAd = actData.optJSONObject("adCard");
+                    AdCardData adcard = new AdCardData();
+                    adcard.toJson(jsonobjectAd);
+                    setAdCardData(adcard);
+                }
 
-            if(actData.has("tag") && !actData.isNull("tag")) {
-                setTag(actData.getString("tag"));
-            }
+                if (actData.has("tag") && !actData.isNull("tag")) {
+                    setTag(actData.getString("tag"));
+                }
 
-            if(actData.has("aImage") && !actData.isNull("aImage")) {
-                JSONObject jsonobjectIm = actData.optJSONObject("aImage");
-                if(jsonobjectIm.has("aImageBaseUrl") && !jsonobjectIm.isNull("aImageBaseUrl")) {
-                    aImageBaseUrl = jsonobjectIm.getString("aImageBaseUrl");
-                    if(jsonobjectIm.has("aImageImagePath") && !jsonobjectIm.isNull("aImageImagePath")) {
-                        aImagePath = aImageBaseUrl+jsonobjectIm.getString("aImageImagePath");
+                if (actData.has("aImage") && !actData.isNull("aImage")) {
+                    JSONObject jsonobjectIm = actData.optJSONObject("aImage");
+                    if (jsonobjectIm.has("aImageBaseUrl") && !jsonobjectIm.isNull("aImageBaseUrl")) {
+                        aImageBaseUrl = jsonobjectIm.getString("aImageBaseUrl");
+                        if (jsonobjectIm.has("aImageImagePath") && !jsonobjectIm.isNull("aImageImagePath")) {
+                            aImagePath = aImageBaseUrl + jsonobjectIm.getString("aImageImagePath");
+                        }
                     }
                 }
-            }
 
-            if(actData.has("aModifiers") && !actData.isNull("aModifiers")) {
-                JSONArray jsonArrM = actData.optJSONArray("aModifiers");
-                for (int i = 0; i < jsonArrM.length(); i++) {
-                    JSONObject jsonobjectM = jsonArrM.getJSONObject(i);
-                    ModifierData mData = new ModifierData();
-                    mData.toJson(jsonobjectM);
-                    modifierList.add(mData);
+                if (actData.has("aModifiers") && !actData.isNull("aModifiers")) {
+                    JSONArray jsonArrM = actData.optJSONArray("aModifiers");
+                    for (int i = 0; i < jsonArrM.length(); i++) {
+                        JSONObject jsonobjectM = jsonArrM.getJSONObject(i);
+                        ModifierData mData = new ModifierData();
+                        mData.toJson(jsonobjectM);
+                        modifierList.add(mData);
+                    }
                 }
-            }
 
-            if(actData.has("aBonus") && !actData.isNull("aBonus")) {
-                JSONArray jsonArrB = actData.optJSONArray("aBonus");
-                for (int i = 0; i < jsonArrB.length(); i++) {
-                    JSONObject jsonobjectB = jsonArrB.getJSONObject(i);
-                    BonusData mData = new BonusData();
-                    mData.toJson(jsonobjectB);
-                    bonusList.add(mData);
+                if (actData.has("aBonus") && !actData.isNull("aBonus")) {
+                    JSONArray jsonArrB = actData.optJSONArray("aBonus");
+                    for (int i = 0; i < jsonArrB.length(); i++) {
+                        JSONObject jsonobjectB = jsonArrB.getJSONObject(i);
+                        BonusData mData = new BonusData();
+                        mData.toJson(jsonobjectB);
+                        bonusList.add(mData);
+                    }
                 }
             }
 
