@@ -95,6 +95,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/subtype_downarw"
                     android:src="@drawable/icon_arrow_dwn"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -146,6 +147,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/checkpoint_downarw"
                     android:src="@drawable/icon_arrow_dwn"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -264,6 +266,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/tag_downarw"
                     android:src="@drawable/icon_arrow_dwn"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -298,24 +301,56 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/modifier"
+                android:layout_above="@+id/modifier_layout3"
                 android:id="@+id/level_text"
+                android:layout_marginLeft="53dp"
+                android:gravity="center"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
+                android:paddingTop="5dp"
                 android:textColor="@color/trimbe_white"
                 android:textSize="12sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/modifier"
+                android:id="@+id/light"
+                android:layout_above="@+id/modifier_layout3"
+                android:layout_toRightOf="@+id/level_text"
+                android:textSize="12sp"
+                android:textColor="@color/activity_light_color"/>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/modifier_layout"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"
-                android:text="GOLGOOTH CHALLENGE"
-                android:padding="5dp"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/trimbe_white"
-                android:textSize="10sp"/>
+                android:layout_marginTop="10dp">
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/modifier_layout2"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_above="@+id/modifier_layout"
+                android:layout_marginTop="10dp">
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/modifier_layout3"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_above="@+id/modifier_layout2"
+                android:layout_marginTop="10dp">
+            </RelativeLayout>
+
         </RelativeLayout>
 
     </RelativeLayout>

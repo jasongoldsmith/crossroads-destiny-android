@@ -25,6 +25,8 @@ public class ActivityData {
     private AdCardData adCardData;
     private ArrayList<ModifierData> modifierList;
     private ArrayList<BonusData> bonusList;
+    private String aDescription;
+    private String aLocation;
     private String aImageBaseUrl=null;
     private String aImagePath=null;
     private String tag;
@@ -143,6 +145,22 @@ public class ActivityData {
         return this.activityLevel;
     }
 
+    public void setaDescription(String desc) {
+        aDescription = desc;
+    }
+
+    public String getaDescription() {
+        return aDescription;
+    }
+
+    public void setaLocation(String loc) {
+        aLocation = loc;
+    }
+
+    public String getaLocation() {
+        return aLocation;
+    }
+
     public ArrayList<ModifierData> getModifierList() {
         return modifierList;
     }
@@ -185,6 +203,17 @@ public class ActivityData {
 
                 if (actData.has("tag") && !actData.isNull("tag")) {
                     setTag(actData.getString("tag"));
+                }
+
+                if(actData.has("aDescription") && !actData.isNull("aDescription")) {
+                    setaDescription(actData.getString("aDescription"));
+                }
+
+                if(actData.has("aLocation") && !actData.isNull("aLocation")) {
+                    JSONObject jsonobjectLoc = actData.optJSONObject("aLocation");
+                    if (jsonobjectLoc.has("aSubLocation") && !jsonobjectLoc.isNull("aSubLocation")) {
+                        setaLocation(jsonobjectLoc.getString("aSubLocation"));
+                    }
                 }
 
                 if (actData.has("aImage") && !actData.isNull("aImage")) {

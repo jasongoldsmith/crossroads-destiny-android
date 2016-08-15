@@ -245,6 +245,7 @@ public class BlankFragment extends Fragment {
                         String checkpoint = this.elistLocal.get(position).getActivityData().getActivityCheckpoint();
                         String creatorId = this.elistLocal.get(position).getCreatorData().getPlayerId();
                         final String status = this.elistLocal.get(position).getEventStatus();
+                        String tag = this.elistLocal.get(position).getActivityData().getTag();
 
                         holder.checkpointText.setVisibility(View.GONE);
                         holder.eventDate.setVisibility(View.GONE);
@@ -268,6 +269,7 @@ public class BlankFragment extends Fragment {
                                 if (checkpoint != null && checkpoint.length() > 0 && (!checkpoint.equalsIgnoreCase("null"))) {
                                     holder.checkpointText.setVisibility(View.VISIBLE);
                                     holder.checkpointText.setText(checkpoint);
+
                                     setCardViewLayoutParams(holder.event_card_mainLayout, 177);
                                 } else {
                                     holder.checkpointText.setVisibility(View.GONE);

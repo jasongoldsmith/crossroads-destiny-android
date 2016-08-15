@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v7.widget.CardView;
+import android.text.Html;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Random;
 
 import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.UserData;
@@ -87,6 +89,15 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
     private ArrayList<ActivityData> tagActList;
     private ActivityData finalAct;
     private TextView createNewEventBtn;
+    private ArrayAdapter<String> adapterTags;
+    private ArrayAdapter<String> adapterSubtypes;
+    private ImageView tagDropdownArw;
+    private ImageView checkpointDropdownArw;
+    private ImageView subtypeDropdownArw;
+    private TextView lightTextView;
+    private RelativeLayout modifiersLayout;
+    private RelativeLayout modifiersLayout2;
+    private RelativeLayout modifiersLayout3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +131,8 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
         levelTextView = (TextView) findViewById(R.id.level_text);
 
+        lightTextView = (TextView) findViewById(R.id.light);
+
         actSubtypeDropdownText = (TextView) findViewById(R.id.act_subtype_text);
 
         subtypeLayout = (RelativeLayout) findViewById(R.id.final_create_event_firstcard);
@@ -127,13 +140,20 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
         activity = mCntrlMngr.getCurrentActivityList();
 
-        modifier = (TextView) findViewById(R.id.modifier);
+        //modifier = (TextView) findViewById(R.id.modifier);
 
         checkpointText = (TextView) findViewById(R.id.ad_checkpoint_text);
 
         checkpointLayout = (RelativeLayout) findViewById(R.id.event_creation_checkpoint_layout);
 
+        modifiersLayout = (RelativeLayout) findViewById(R.id.modifier_layout);
+        modifiersLayout2 = (RelativeLayout) findViewById(R.id.modifier_layout2);
+        modifiersLayout3 = (RelativeLayout) findViewById(R.id.modifier_layout3);
+
         detailText = (TextView) findViewById(R.id.ad_detail_text);
+        subtypeDropdownArw = (ImageView) findViewById(R.id.subtype_downarw);
+        checkpointDropdownArw = (ImageView) findViewById(R.id.checkpoint_downarw);
+        tagDropdownArw = (ImageView) findViewById(R.id.tag_downarw);
 
         //checkpoint dropdown
         dropdownCheckpoint = (Spinner)findViewById(R.id.event_creation_checkpoint);
@@ -230,51 +250,134 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
     }
 
     private void refreshActivityUI() {
-        GradientDrawable gd = new GradientDrawable();
-        gd.setCornerRadius(5);
-        gd.setStroke(2, 0xFFFFFFFF);
-        modifier.setBackgroundDrawable(gd);
 
-        String actIconUrl=null;
-        String backg=null;
-        String subType=null;
+        String actIconUrl = null;
+        String backg = null;
+        String subType = null;
         int level;
         int light;
-        String description=null;
-        String levelText=null;
-        String lightText=null;
-        String subtypeDiff=null;
-        String check=null;
-        String localTag=null;
+        String description = null;
+        String levelText = null;
+        String lightText = null;
+        String subtypeDiff = null;
+        String check = null;
+        String localTag = null;
+        String location = null;
+        String next = null;
+        ArrayList<String> modi = new ArrayList<String>();
+        ArrayList<String> bonus = new ArrayList<String>();
 
-        if(finalAct!=null && !finalAct.getActivitySubtype().isEmpty()) {
+        if (finalAct != null && !finalAct.getActivitySubtype().isEmpty()) {
             actIconUrl = finalAct.getActivityIconUrl();
             backg = finalAct.getaImagePath();
             subType = finalAct.getActivitySubtype();
             level = finalAct.getActivityLevel();
             light = finalAct.getActivityLight();
             subtypeDiff = finalAct.getActivitySubtype();
-            if(!finalAct.getActivityDifficulty().isEmpty()) {
+            if (!finalAct.getActivityDifficulty().isEmpty()) {
                 subtypeDiff = subtypeDiff + " - " + finalAct.getActivityDifficulty();
             }
             check = finalAct.getActivityCheckpoint();
-            localTag= finalAct.getTag();
-        }else {
+            localTag = finalAct.getTag();
+            description = finalAct.getaDescription();
+            location = finalAct.getaLocation();
+            if (finalAct.getModifierList() != null && !finalAct.getModifierList().isEmpty()) {
+                for (int y = 0; y < finalAct.getModifierList().size(); y++) {
+                    modi.add(finalAct.getModifierList().get(y).getaModifierName());
+                }
+            }
+            if (finalAct.getBonusList() != null && !finalAct.getBonusList().isEmpty()) {
+                for (int y = 0; y < finalAct.getBonusList().size(); y++) {
+                    bonus.add(finalAct.getBonusList().get(y).getaBonusName());
+                }
+            }
+        } else {
             actIconUrl = activity.get(0).getActivityIconUrl();
             backg = activity.get(0).getaImagePath();
             subType = activity.get(0).getActivitySubtype();
             level = activity.get(0).getActivityLevel();
             light = activity.get(0).getActivityLight();
-        }
-
-        if(level!=0) {
-            levelText = "LEVEL " +level;
-            if(light!=0) {
-                levelText = levelText + " Recommended Light: " + "\u2726" + light;
+            description = activity.get(0).getaDescription();
+            location = activity.get(0).getaLocation();
+            if (activity.get(0).getModifierList() != null && !activity.get(0).getModifierList().isEmpty()) {
+                for (int y = 0; y < activity.get(0).getModifierList().size(); y++) {
+                    modi.add(activity.get(0).getModifierList().get(y).getaModifierName());
+                }
+            }
+            if (activity.get(0).getBonusList() != null && !activity.get(0).getBonusList().isEmpty()) {
+                for (int y = 0; y < activity.get(0).getBonusList().size(); y++) {
+                    bonus.add(activity.get(0).getBonusList().get(y).getaBonusName());
+                }
             }
         }
 
+        lightTextView.setText("");
+
+        if (level != 0) {
+            levelText = "LEVEL " + level;
+            if (light != 0) {
+                //next = "<font color='#ffc600'>\u2726 </font>";
+                levelText = levelText + "  Recommended Light: ";
+                lightTextView.setText("\u2726" + light);
+            } else {
+                levelText = levelText + "  " + location;
+            }
+        } else {
+            levelText = description;
+        }
+
         levelTextView.setText(levelText);
+
+//        modi.add("bbhjbjh");
+//        modi.add("gvbhbhbhb");
+//        modi.add("jnjkbjhhjbg g gg");
+//        modi.add ("bhbc b");
+//        modi.add("njknhj");
+//        bonus.add("strike");
+        //show modifiers and bonuses
+        modifiersLayout.removeAllViews();
+        modifiersLayout2.removeAllViews();
+        modifiersLayout3.removeAllViews();
+        Random rnd = new Random();
+        int prevTextViewId = 0;
+        int pad = Util.dpToPx(5, AddFinalActivity.this);
+        if (!modi.isEmpty() || !bonus.isEmpty()) {
+            if (modi.size() + bonus.size() < 11) {
+                for (int i = 0; i < modi.size() + bonus.size(); i++) {
+                    final TextView textView = new TextView(this);
+                    if (i < modi.size()) {
+                        textView.setText(modi.get(i));
+                    } else {
+                        textView.setText(bonus.get(modi.size() + bonus.size() - i));
+                    }
+                    textView.setTextColor(getResources().getColor(R.color.trimbe_white));
+                    textView.setPadding(pad, pad, pad, pad);
+                    GradientDrawable gd = new GradientDrawable();
+                    gd.setCornerRadius(5);
+                    gd.setStroke(2, 0xFFFFFFFF);
+                    textView.setBackgroundDrawable(gd);
+
+                    int curTextViewId = prevTextViewId + 1;
+                    textView.setId(curTextViewId);
+                    final RelativeLayout.LayoutParams params =
+                            new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+                    params.addRule(RelativeLayout.RIGHT_OF, prevTextViewId);
+                    params.leftMargin = pad;
+                    textView.setLayoutParams(params);
+
+                    prevTextViewId = curTextViewId;
+                    if (i < 2) {
+                        modifiersLayout3.addView(textView, params);
+                    } else if (i < 6) {
+                        modifiersLayout2.addView(textView, params);
+                    } else {
+                        modifiersLayout.addView(textView, params);
+                    }
+                }
+        }
+        }
 
         //load activity icon
         Util.picassoLoadImageWithoutMeasurement(getApplicationContext(), actIcon, actIconUrl, R.drawable.icon_ghost_default);
@@ -326,9 +429,9 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
             getTagList();
 
-            updateDrawer(actSubTypeList, actSubtypeDropdownText, dropdownSubtype, subtypeLayout);
-            updateDrawer(checkpointItems, checkpointText, dropdownCheckpoint, checkpointLayout);
-            updateDrawer(tagList, detailText, dropdownDetails, null);
+            updateDrawerSubtype(actSubTypeList);
+            updateDrawer(checkpointItems);
+            updateDrawerTags(tagList);
         }
     }
 
@@ -340,7 +443,6 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
             }
         }
         tagList.clear();
-        tagList.add("None");
         tagActList = new ArrayList<ActivityData>();
         if (checkpointActList != null && !checkpointActList.isEmpty()) {
             for (int i = 0; i < checkpointActList.size(); i++) {
@@ -354,6 +456,8 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                                         if (checkpointActList.get(i).getTag() != null) {
                                             if(!checkpointActList.get(i).getTag().isEmpty()) {
                                                 tagList.add(checkpointActList.get(i).getTag());
+                                            }else {
+                                                tagList.add("None");
                                             }
                                             tagActList.add(checkpointActList.get(i));
                                         }
@@ -364,6 +468,8 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                                     if (checkpointActList.get(i).getTag() != null) {
                                         if(!checkpointActList.get(i).getTag().isEmpty()) {
                                             tagList.add(checkpointActList.get(i).getTag());
+                                        }else {
+                                            tagList.add("None");
                                         }
                                         tagActList.add(checkpointActList.get(i));
                                     }
@@ -377,6 +483,8 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                                     if (checkpointActList.get(i).getTag() != null) {
                                         if(!checkpointActList.get(i).getTag().isEmpty()) {
                                             tagList.add(checkpointActList.get(i).getTag());
+                                        }else {
+                                            tagList.add("None");
                                         }
                                         tagActList.add(checkpointActList.get(i));
                                     }
@@ -387,6 +495,8 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                                 if (checkpointActList.get(i).getTag() != null) {
                                     if(!checkpointActList.get(i).getTag().isEmpty()) {
                                         tagList.add(checkpointActList.get(i).getTag());
+                                    }else {
+                                        tagList.add("None");
                                     }
                                     tagActList.add(checkpointActList.get(i));
                                 }
@@ -396,7 +506,10 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                 }
             }
         }
-        updateDrawer(tagList, detailText, dropdownDetails, null);
+        if(tagList.isEmpty()) {
+            tagList.add("None");
+        }
+        updateDrawerTags(tagList);
     }
 
     private void getCheckpointList() {
@@ -419,36 +532,106 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         //remove duplicates
         checkpointItems = Util.removeListDuplicates(checkpointItems);
 
-        updateDrawer(checkpointItems, checkpointText, dropdownCheckpoint, checkpointLayout);
+        updateDrawer(checkpointItems);
 
         getTagList();
     }
 
-    private void updateDrawer(final ArrayList<String> dataList, final TextView text, Spinner dropdown, RelativeLayout layout) {
+    private void updateDrawer(final ArrayList<String> dataList) {
         if(dataList !=null && !dataList.isEmpty()) {
-            if (layout!=null) {
-                layout.setVisibility(View.VISIBLE);
+            if (checkpointLayout != null) {
+                checkpointLayout.setVisibility(View.VISIBLE);
             }
-            adapterCheckpoint = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dataList) {
+            if(dataList.size()>1) {
+                checkpointDropdownArw.setVisibility(View.VISIBLE);
+                adapterCheckpoint = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dataList) {
 
-                public View getView(int position, View convertView, ViewGroup parent) {
-                    View v = super.getView(position, convertView, parent);
-                    text.setText(((TextView) v).getText());
-                    ((TextView) v).setVisibility(View.GONE);
-                    return v;
-                }
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        View v = super.getView(position, convertView, parent);
+                        checkpointText.setText(((TextView) v).getText());
+                        ((TextView) v).setVisibility(View.GONE);
+                        return v;
+                    }
 
-                public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                    return getCustomView(position, convertView, parent, dataList);
-                }
-            };
-            adapterCheckpoint.setDropDownViewResource(R.layout.empty_layout);
-            dropdown.setAdapter(adapterCheckpoint);
-            adapterCheckpoint.notifyDataSetChanged();
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        return getCustomView(position, convertView, parent, dataList);
+                    }
+                };
+                adapterCheckpoint.setDropDownViewResource(R.layout.empty_layout);
+                dropdownCheckpoint.setEnabled(true);
+                dropdownCheckpoint.setAdapter(adapterCheckpoint);
+                adapterCheckpoint.notifyDataSetChanged();
+            }else {
+                dropdownCheckpoint.setEnabled(false);
+                checkpointText.setText(dataList.get(0).toString());
+                checkpointDropdownArw.setVisibility(View.GONE);
+            }
         } else {
             //todo checkpoint layout visibility gone
-            if(layout!=null) {
-                layout.setVisibility(View.GONE);
+            if(checkpointLayout!=null) {
+                checkpointLayout.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private void updateDrawerTags(final ArrayList<String> dataList) {
+        if(dataList !=null && !dataList.isEmpty()) {
+            if (dataList.size() > 1) {
+                tagDropdownArw.setVisibility(View.VISIBLE);
+                adapterTags = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dataList) {
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        View v = super.getView(position, convertView, parent);
+                        if (((TextView) v).getText().toString().equalsIgnoreCase("None")) {
+                            detailText.setText("Details (Optional)");
+                        } else {
+                            detailText.setText(((TextView) v).getText());
+                        }
+                        ((TextView) v).setVisibility(View.GONE);
+                        return v;
+                    }
+
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        return getCustomView(position, convertView, parent, dataList);
+                    }
+                };
+                adapterTags.setDropDownViewResource(R.layout.empty_layout);
+                dropdownDetails.setEnabled(true);
+                dropdownDetails.setAdapter(adapterTags);
+                adapterTags.notifyDataSetChanged();
+            } else {
+                if (dataList.get(0).toString().equalsIgnoreCase("None")) {
+                    detailText.setText("Details (Optional)");
+                }
+                dropdownDetails.setEnabled(false);
+                tagDropdownArw.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private void updateDrawerSubtype(final ArrayList<String> dataList) {
+        if(dataList !=null && !dataList.isEmpty()) {
+            if (dataList.size() > 1) {
+                subtypeDropdownArw.setVisibility(View.VISIBLE);
+                adapterSubtypes = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dataList) {
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        View v = super.getView(position, convertView, parent);
+                        actSubtypeDropdownText.setText(((TextView) v).getText());
+                        ((TextView) v).setVisibility(View.GONE);
+                        return v;
+                    }
+
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        return getCustomView(position, convertView, parent, dataList);
+                    }
+                };
+                adapterSubtypes.setDropDownViewResource(R.layout.empty_layout);
+                dropdownSubtype.setEnabled(true);
+                dropdownSubtype.setAdapter(adapterSubtypes);
+                adapterSubtypes.notifyDataSetChanged();
+            } else {
+                actSubtypeDropdownText.setText(dataList.get(0).toString());
+                dropdownSubtype.setEnabled(true);
+                subtypeDropdownArw.setVisibility(View.GONE);
             }
         }
     }
