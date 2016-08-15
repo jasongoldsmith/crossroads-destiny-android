@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
@@ -17,8 +18,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import co.crossroadsapp.destiny.AddFinalActivity;
 import co.crossroadsapp.destiny.ControlManager;
-import co.crossroadsapp.destiny.CreateNewEvent;
+//import co.crossroadsapp.destiny.CreateNewEvent;
+import co.crossroadsapp.destiny.ListActivityFragment;
 import co.crossroadsapp.destiny.R;
 import co.crossroadsapp.destiny.data.UserData;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -34,6 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.TimeZone;
 
 /**
@@ -43,7 +47,7 @@ public class Util {
 
     //To switch between production and development server links
     //where 1 points to development and 2 points to production
-    private static final int network_connection = 2;
+    private static final int network_connection = 1;
 
     private static final String TAG = Util.class.getName();
     public static final String trimbleDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -351,7 +355,7 @@ public class Util {
         return currentDate;
     }
 
-    public static void checkTimePicker(TextView date_display, TextView time_display, CreateNewEvent c) {
+    public static void checkTimePicker(TextView date_display, TextView time_display, AddFinalActivity c) {
         if (date_display!=null && time_display!=null) {
             if (isPresentDay(c, date_display)) {
                 if (!time_display.getText().toString().equalsIgnoreCase(c.getResources().getString(R.string.time_default))) {
@@ -372,13 +376,13 @@ public class Util {
             }
         }
     }
-    public static String getCurrentTime(int h, int m, CreateNewEvent c) {
+    public static String getCurrentTime(int h, int m, AddFinalActivity c) {
         Toast.makeText(c.getApplicationContext(), "Cannot set previous time for today.", Toast.LENGTH_SHORT).show();
         String t =  updateTime(h, m);
         return t;
     }
 
-    public static boolean isPresentDay(CreateNewEvent c, TextView date_display) {
+    public static boolean isPresentDay(AddFinalActivity c, TextView date_display) {
         if (date_display!=null) {
             if (date_display.getText().toString().equalsIgnoreCase(c.getResources().getString(R.string.date_default))) {
                 return true;
@@ -419,6 +423,16 @@ public class Util {
         }
     }
 
+    public static void picassoLoadImageWithoutMeasurement(Context c, ImageView eventIcon, String url, int avatar) {
+        if(url!=null && c!=null && eventIcon!=null) {
+            Picasso.with(c)
+                    .load(url)
+                    .placeholder(avatar)
+                    .fit().centerCrop()
+                    .into(eventIcon);
+        }
+    }
+
     public static void showErrorMsg(final RelativeLayout errLayout, TextView errText, String errorText) {
         if(errLayout!=null) {
             errLayout.setVisibility(View.GONE);
@@ -437,6 +451,16 @@ public class Util {
                 }
             }, 5000);
         }
+    }
+
+    public static ArrayList<String> removeListDuplicates(ArrayList<String> list) {
+       if(list!=null && !list.isEmpty()) {
+           HashSet<String> hashSet = new HashSet<String>();
+           hashSet.addAll(list);
+           list.clear();
+           list.addAll(hashSet);
+       }
+        return list;
     }
 
     public static ArrayList<String> getCorrectConsoleName(ArrayList<String> consoleType) {
@@ -510,5 +534,13 @@ public class Util {
 //            list.add("Xbox 360");
 //        }
         return list;
+    }
+
+    public static void roundCorner(TextView textView, ListActivityFragment mContext) {
+        GradientDrawable gd = new GradientDrawable();
+        gd.setCornerRadius(5);
+        gd.setStroke(2, 0xFF203236);
+        gd.setColor(mContext.getResources().getColor(R.color.tag_background));
+        textView.setBackgroundDrawable(gd);
     }
 }

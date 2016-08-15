@@ -125,7 +125,7 @@ public class BaseActivity extends FragmentActivity {
                     public void onClick(View v) {
                         // go to create new event page
                         Intent regIntent = new Intent(getApplicationContext(),
-                                CreateNewEvent.class);
+                                AddNewActivity.class);
                         regIntent.putExtra("userdata", mManager.getUserData());
                         startActivity(regIntent);
                     }
@@ -154,7 +154,7 @@ public class BaseActivity extends FragmentActivity {
                     public void onClick(View v) {
                         // go to create new event page
                         Intent regIntent = new Intent(getApplicationContext(),
-                                CreateNewEvent.class);
+                                AddNewActivity.class);
                         regIntent.putExtra("userdata", mManager.getUserData());
                         startActivity(regIntent);
                     }

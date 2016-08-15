@@ -190,7 +190,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
 
         aData = new ArrayList<ActivityData>();
 
-        mCntrlMngr.postGetActivityList(this);
+        //mCntrlMngr.postGetActivityList(this);
 
         //createLocalActivityLists();
 
@@ -443,7 +443,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                                     showProgressBar();
                                     //linlaHeaderProgress.setVisibility(View.VISIBLE);
                                     String dateTime = getCreateEventDateTime();
-                                    mCntrlMngr.postCreateEvent(activityId, creator_id, minP, maxP, dateTime, CreateNewEvent.this);
+                                    //mCntrlMngr.postCreateEvent(activityId, creator_id, minP, maxP, dateTime, CreateNewEvent.this);
                                 }
                             }
                         }
@@ -528,7 +528,7 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
                         showProgressBar();
                         String dateTime = getCreateEventDateTime();
                         if (adAct.getId() != null && user.getUserId() != null){
-                            mCntrlMngr.postCreateEvent(adAct.getId(), user.getUserId(), adAct.getMinPlayer(), adAct.getMaxPlayer(), dateTime, CreateNewEvent.this);
+                            //mCntrlMngr.postCreateEvent(adAct.getId(), user.getUserId(), adAct.getMinPlayer(), adAct.getMaxPlayer(), dateTime, CreateNewEvent.this);
                     }
                     }
                 });
@@ -540,81 +540,81 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
         }
     }
 
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        // TODO Auto-generated method stub
-        switch (id) {
-            case TIME_DIALOG_ID:
-                Calendar c = Calendar.getInstance();
-                // set time picker as current time
-                tpd = new TimePickerDialog(this, timePickerListener, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE),false);
+//    @Override
+//    protected Dialog onCreateDialog(int id) {
+//        // TODO Auto-generated method stub
+//        switch (id) {
+//            case TIME_DIALOG_ID:
+//                Calendar c = Calendar.getInstance();
+//                // set time picker as current time
+//                tpd = new TimePickerDialog(this, timePickerListener, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE),false);
+//
+//                tpd.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//                    @Override
+//                    public void onDismiss(DialogInterface dialog) {
+//                    }
+//                });
+//                return tpd;
+//
+//            case DATE_DIALOG_ID:
+//                Date d = Util.getCurrentCalendar();
+//                mDatePickerDai = new DatePickerDialog(this, myDateListener, d.getYear(), d.getMonth(), d.getDate());
+//                //disable previous dates for datepicker
+//                mDatePickerDai.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+//                return mDatePickerDai;
+//                //return new DatePickerDialog(this, myDateListener, d.getYear(), d.getMonth(), d.getDate());
+//
+//            default: return null;
+//        }
+//    }
 
-                tpd.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                    }
-                });
-                return tpd;
-
-            case DATE_DIALOG_ID:
-                Date d = Util.getCurrentCalendar();
-                mDatePickerDai = new DatePickerDialog(this, myDateListener, d.getYear(), d.getMonth(), d.getDate());
-                //disable previous dates for datepicker
-                mDatePickerDai.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
-                return mDatePickerDai;
-                //return new DatePickerDialog(this, myDateListener, d.getYear(), d.getMonth(), d.getDate());
-
-            default: return null;
-        }
-    }
-
-    private DatePickerDialog.OnDateSetListener myDateListener = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3) {
-            // TODO Auto-generated method stub
-//            date_display.setText(arg1 + "-" + arg2+1
-//                    + "-" + arg3);
-            //showDate(arg1, arg2+1, arg3);
-
-            int m = arg2;
-            int d = arg3;
-            int y = arg1;
-
-            //todo will change with new calendar but for now hacking to reset date if user selects previous date
-            String date=null;
-            Date currentDate = Util.getCurrentCalendar();
-
-            Date selectedDate = new Date(y, m, d);
-
-            if(selectedDate.compareTo(currentDate)<0){
-                Toast.makeText(getApplicationContext(), "Cannot set previous date.", Toast.LENGTH_SHORT).show();
-                m =  currentDate.getMonth();
-                d = currentDate.getDate();
-                y = currentDate.getYear();
-
-                //set datepicker view to current date
-                updateDatePickerCalendar();
-            }
-//            else {
-            date = m + "-" + d
-                        + "-" + y;
+//    private DatePickerDialog.OnDateSetListener myDateListener = new DatePickerDialog.OnDateSetListener() {
+//        @Override
+//        public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3) {
+//            // TODO Auto-generated method stub
+////            date_display.setText(arg1 + "-" + arg2+1
+////                    + "-" + arg3);
+//            //showDate(arg1, arg2+1, arg3);
+//
+//            int m = arg2;
+//            int d = arg3;
+//            int y = arg1;
+//
+//            //todo will change with new calendar but for now hacking to reset date if user selects previous date
+//            String date=null;
+//            Date currentDate = Util.getCurrentCalendar();
+//
+//            Date selectedDate = new Date(y, m, d);
+//
+//            if(selectedDate.compareTo(currentDate)<0){
+//                Toast.makeText(getApplicationContext(), "Cannot set previous date.", Toast.LENGTH_SHORT).show();
+//                m =  currentDate.getMonth();
+//                d = currentDate.getDate();
+//                y = currentDate.getYear();
+//
+//                //set datepicker view to current date
+//                updateDatePickerCalendar();
 //            }
-
-            if (m == 1 && d > 29) {
-                m = 3;
-                if (d == 30) {
-                    d = 1;
-                } else {
-                    d = 2;
-                }
-            } else {
-                m = m + 1;
-            }
-            date_display.setText(m + "-" + d
-                    + "-" + y);
-            Util.checkTimePicker(date_display, time_display, CreateNewEvent.this);
-        }
-    };
+////            else {
+//            date = m + "-" + d
+//                        + "-" + y;
+////            }
+//
+//            if (m == 1 && d > 29) {
+//                m = 3;
+//                if (d == 30) {
+//                    d = 1;
+//                } else {
+//                    d = 2;
+//                }
+//            } else {
+//                m = m + 1;
+//            }
+//            date_display.setText(m + "-" + d
+//                    + "-" + y);
+//            Util.checkTimePicker(date_display, time_display, CreateNewEvent.this);
+//        }
+//    };
 
     private void setVfNextAnimation() {
         if(vf!=null) {
@@ -724,36 +724,36 @@ public class CreateNewEvent extends BaseActivity implements Observer, AdapterVie
         }
     };
 
-    protected TimePickerDialog.OnTimeSetListener timePickerListener =  new TimePickerDialog.OnTimeSetListener() {
-        @Override
-        public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
-            Calendar c = Calendar.getInstance();
-            hour = selectedHour;
-            minute = selectedMinute;
-            String aTime=null;
-            int currHour = c.get(Calendar.HOUR_OF_DAY);
-            int currMin = c.get(Calendar.MINUTE);
-
-            if(Util.isPresentDay(CreateNewEvent.this, date_display)) {
-                if (hour >= currHour) {
-                    if (hour == currHour && minute < currMin) {
-                        aTime = Util.getCurrentTime(currHour, currMin, CreateNewEvent.this);
-                    } else {
-                        // set current time into textview
-                        aTime = Util.updateTime(hour, minute);
-                    }
-                }else {
-                    aTime = Util.getCurrentTime(currHour, currMin, CreateNewEvent.this);
-                }
-            }else {
-                // set current time into textview
-                aTime = Util.updateTime(hour, minute);
-            }
-            if (aTime != null) {
-                time_display.setText(aTime);
-            }
-        }
-    };
+//    protected TimePickerDialog.OnTimeSetListener timePickerListener =  new TimePickerDialog.OnTimeSetListener() {
+//        @Override
+//        public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
+//            Calendar c = Calendar.getInstance();
+//            hour = selectedHour;
+//            minute = selectedMinute;
+//            String aTime=null;
+//            int currHour = c.get(Calendar.HOUR_OF_DAY);
+//            int currMin = c.get(Calendar.MINUTE);
+//
+//            if(Util.isPresentDay(CreateNewEvent.this, date_display)) {
+//                if (hour >= currHour) {
+//                    if (hour == currHour && minute < currMin) {
+//                        aTime = Util.getCurrentTime(currHour, currMin, CreateNewEvent.this);
+//                    } else {
+//                        // set current time into textview
+//                        aTime = Util.updateTime(hour, minute);
+//                    }
+//                }else {
+//                    aTime = Util.getCurrentTime(currHour, currMin, CreateNewEvent.this);
+//                }
+//            }else {
+//                // set current time into textview
+//                aTime = Util.updateTime(hour, minute);
+//            }
+//            if (aTime != null) {
+//                time_display.setText(aTime);
+//            }
+//        }
+//    };
 
     public void showError(String err) {
         hideProgressBar();

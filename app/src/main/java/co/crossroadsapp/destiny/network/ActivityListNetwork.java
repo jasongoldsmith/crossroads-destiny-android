@@ -7,6 +7,7 @@ import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.ActivityList;
 import co.crossroadsapp.destiny.utils.Util;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,9 +40,9 @@ public class ActivityListNetwork extends Observable {
         }
     }
 
-    public void postGetActivityList() throws JSONException {
+    public void postGetActivityList(RequestParams rp) throws JSONException {
         if (Util.isNetworkAvailable(mContext)) {
-            ntwrk.get(url, new JsonHttpResponseHandler() {
+            ntwrk.get(url, rp, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     // If the response is JSONObject instead of expected JSONArray

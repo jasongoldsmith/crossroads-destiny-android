@@ -60,4 +60,7 @@
 
     <color name="user_profile_border_playstation">#013b98</color>
     <color name="user_profile_border_xbox">#4dc222</color>
+
+    <color name="tag_text">#9ba8ad</color>
+    <color name="tag_background">#203236</color>
 </resources>

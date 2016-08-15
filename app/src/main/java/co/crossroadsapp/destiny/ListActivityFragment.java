@@ -16,6 +16,7 @@ import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.ConsoleData;
 import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.PushNotification;
+import co.crossroadsapp.destiny.network.ActivityListNetwork;
 import co.crossroadsapp.destiny.network.ChangeCurrentConsoleNetwork;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
 import co.crossroadsapp.destiny.network.GroupListNetwork;
@@ -139,6 +140,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     private Spinner dropdown;
     private AlertDialog dialogPrivacy;
     private SwipeFrameLayout cardStackLayout;
+    private String adCardPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,7 +175,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 //            this.getIntent().removeExtra("eventIntent");
 //        }
 
-        mManager.postGetActivityList(this);
+        //mManager.postGetActivityList(this);
 
         // get existing event list
         getExistingList();
@@ -342,7 +344,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             public void onClick(View v) {
                 // go to create new event page
                 Intent regIntent = new Intent(getApplicationContext(),
-                        CreateNewEvent.class);
+                        AddNewActivity.class);
                 regIntent.putExtra("userdata", user);
                 startActivity(regIntent);
                 //finish();
@@ -607,6 +609,10 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         adapterConsole.setDropDownViewResource(R.layout.empty_layout);
         dropdown.setAdapter(adapterConsole);
         adapterConsole.notifyDataSetChanged();
+    }
+
+    public void setAdCardPosition(String adAct) {
+        adCardPosition = adAct;
     }
 
     private boolean needToAdd(ArrayList<String> consoleItems) {
@@ -1411,13 +1417,25 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 if(dialogPrivacy!=null) {
                     dialogPrivacy.dismiss();
                 }
+            } else if(observable instanceof ActivityListNetwork) {
+                hideProgressBar();
+                if(mManager.getCurrentActivityList()!=null && !mManager.getCurrentActivityList().isEmpty()) {
+                    //start new activity for add event creation
+                    Intent regIntent = new Intent(ListActivityFragment.this,
+                            AddNewActivity.class);
+                    regIntent.putExtra("userdata", user);
+                    regIntent.putExtra("adcard", true);
+                    regIntent.putExtra("adCardId", adCardPosition);
+                    startActivity(regIntent);
+                    finish();
+                }
             }
     }
 
     private void changeUserProfileBorderColor() {
         if(user!=null) {
-            if(user.getConsoles().size()>1) {
             if (user.getConsoleType() != null) {
+            if(user.getConsoles().size()>1) {
                 switch (user.getConsoleType()) {
                     case "PS3":
                         userProfileDrawer.setBorderColor(getResources().getColor(R.color.user_profile_border_playstation));

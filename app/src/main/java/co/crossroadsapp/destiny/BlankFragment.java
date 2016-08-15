@@ -21,7 +21,7 @@ import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
-import co.crossroadsapp.destiny.R;
+
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 
@@ -144,6 +144,7 @@ public class BlankFragment extends Fragment {
             protected ImageView unjoinBtn;
             protected TextView eventDate;
             protected TextView checkpointText;
+            protected TextView tagText;
 
             public MyViewHolder(View v) {
                 super(v);
@@ -163,6 +164,7 @@ public class BlankFragment extends Fragment {
                 eventPlayerNameCnt = (TextView) v.findViewById(R.id.activity_player_name_lf);
                 eventDate = (TextView) v.findViewById(R.id.event_time);
                 checkpointText = (TextView) v.findViewById(R.id.checkoint_text);
+                tagText = (TextView) v.findViewById(R.id.tag_text);
             }
         }
 
@@ -245,10 +247,19 @@ public class BlankFragment extends Fragment {
                         String checkpoint = this.elistLocal.get(position).getActivityData().getActivityCheckpoint();
                         String creatorId = this.elistLocal.get(position).getCreatorData().getPlayerId();
                         final String status = this.elistLocal.get(position).getEventStatus();
+                        String tag = this.elistLocal.get(position).getActivityData().getTag();
 
                         holder.checkpointText.setVisibility(View.GONE);
                         holder.eventDate.setVisibility(View.GONE);
-                        setCardViewLayoutParams(holder.event_card_mainLayout, 137);
+                        holder.tagText.setVisibility(View.GONE);
+                        if(tag!=null && !tag.isEmpty()) {
+                            setCardViewLayoutParams(holder.event_card_mainLayout, 172);
+                            holder.tagText.setVisibility(View.VISIBLE);
+                            holder.tagText.setText(tag);
+                            Util.roundCorner(holder.tagText, mContext);
+                        }else {
+                            setCardViewLayoutParams(holder.event_card_mainLayout, 137);
+                        }
 
                         if (creatorId != null) {
                             if (user != null && user.getUserId() != null) {
@@ -268,15 +279,36 @@ public class BlankFragment extends Fragment {
                                 if (checkpoint != null && checkpoint.length() > 0 && (!checkpoint.equalsIgnoreCase("null"))) {
                                     holder.checkpointText.setVisibility(View.VISIBLE);
                                     holder.checkpointText.setText(checkpoint);
-                                    setCardViewLayoutParams(holder.event_card_mainLayout, 177);
+                                    if(tag!=null && !tag.isEmpty()) {
+                                        setCardViewLayoutParams(holder.event_card_mainLayout, 212);
+                                        holder.tagText.setVisibility(View.VISIBLE);
+                                        holder.tagText.setText(tag);
+                                        Util.roundCorner(holder.tagText, mContext);
+                                    }else {
+                                        setCardViewLayoutParams(holder.event_card_mainLayout, 177);
+                                    }
                                 } else {
                                     holder.checkpointText.setVisibility(View.GONE);
-                                    setCardViewLayoutParams(holder.event_card_mainLayout, 155);
+                                    if(tag!=null && !tag.isEmpty()) {
+                                        setCardViewLayoutParams(holder.event_card_mainLayout, 190);
+                                        holder.tagText.setVisibility(View.VISIBLE);
+                                        holder.tagText.setText(tag);
+                                        Util.roundCorner(holder.tagText, mContext);
+                                    }else {
+                                        setCardViewLayoutParams(holder.event_card_mainLayout, 155);
+                                    }
                                 }
                             } else if (checkpoint != null && checkpoint.length() > 0 && (!checkpoint.equalsIgnoreCase("null"))) {
                                 holder.checkpointText.setVisibility(View.VISIBLE);
                                 holder.checkpointText.setText(checkpoint);
-                                setCardViewLayoutParams(holder.event_card_mainLayout, 155);
+                                if(tag!=null && !tag.isEmpty()) {
+                                    setCardViewLayoutParams(holder.event_card_mainLayout, 190);
+                                    holder.tagText.setVisibility(View.VISIBLE);
+                                    holder.tagText.setText(tag);
+                                    Util.roundCorner(holder.tagText, mContext);
+                                }else {
+                                    setCardViewLayoutParams(holder.event_card_mainLayout, 155);
+                                }
                             }
                         }
 
@@ -411,12 +443,12 @@ public class BlankFragment extends Fragment {
                     adHolder.addBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //goto create new event
-                            Intent regIntent = new Intent(mContext,
-                                    CreateNewEvent.class);
-                            regIntent.putExtra("userdata", user);
-                            regIntent.putExtra("adsCardId", adList.get(position-elistLocal.size()).getId());
-                            startActivity(regIntent);
+                            mContext.showProgressBar();
+                            mContext.setAdCardPosition(adList.get(position-elistLocal.size()).getId());
+                            RequestParams rp = new RequestParams();
+                            rp.add("aType", adList.get(position-elistLocal.size()).getActivityType());
+                            rp.add("includeTags", "true");
+                            mManager.postGetActivityList(mContext, rp);
                             //mManager.postCreateEvent(adList.get(position-elistLocal.size()).getId(), user.getUserId(), adList.get(position-elistLocal.size()).getMinPlayer(), adList.get(position-elistLocal.size()).getMaxPlayer(), null, mContext);
                         }
                     });

@@ -267,26 +267,35 @@ public class ControlManager implements Observer{
         }
     }
 
-    public void postGetActivityList(CreateNewEvent c) {
+    public void postGetActivityList(Activity c, RequestParams params) {
         try {
-                activityListNetwork = new ActivityListNetwork(c);
-                //activityListNetwork.addObserver(c);
+            if(c instanceof AddNewActivity) {
+                activityListNetwork = new ActivityListNetwork((AddNewActivity)c);
                 activityListNetwork.addObserver(this);
-                activityListNetwork.postGetActivityList();
+                activityListNetwork.addObserver((AddNewActivity)c);
+            } else if (c instanceof ListActivityFragment) {
+                activityListNetwork = new ActivityListNetwork((ListActivityFragment)c);
+                activityListNetwork.addObserver(this);
+                activityListNetwork.addObserver((ListActivityFragment)c);
+            }
+            if(activityList!=null) {
+                activityList.clear();
+            }
+            activityListNetwork.postGetActivityList(params);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public void postGetActivityList(ListActivityFragment c) {
-        try {
-            activityListNetwork = new ActivityListNetwork(c);
-            activityListNetwork.addObserver(this);
-            activityListNetwork.postGetActivityList();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+//    public void postGetActivityList(ListActivityFragment c) {
+//        try {
+//            activityListNetwork = new ActivityListNetwork(c);
+//            activityListNetwork.addObserver(this);
+//            activityListNetwork.postGetActivityList();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public void postUnJoinEvent(ListActivityFragment activity, RequestParams params) {
         try {
@@ -336,14 +345,24 @@ public class ControlManager implements Observer{
         if (this.activityList!= null) {
             ArrayList<ActivityData> checkpointActivityList = new ArrayList<ActivityData>();
             for (int i=0; i<activityList.size();i++) {
-                if (activityList.get(i).getActivitySubtype().equalsIgnoreCase(subtype) && activityList.get(i).getActivityDifficulty().equalsIgnoreCase(diff)){
-                    checkpointActivityList.add(activityList.get(i));
+                if(diff!=null) {
+                    if (activityList.get(i).getActivitySubtype().equalsIgnoreCase(subtype) && activityList.get(i).getActivityDifficulty().equalsIgnoreCase(diff)) {
+                        checkpointActivityList.add(activityList.get(i));
+                    }
+                }else {
+                    if (activityList.get(i).getActivitySubtype().equalsIgnoreCase(subtype)) {
+                        checkpointActivityList.add(activityList.get(i));
+                    }
                 }
             }
             return checkpointActivityList;
         }
 
         return null;
+    }
+
+    public ArrayList<ActivityData> getCurrentActivityList() {
+        return activityList;
     }
 
     public void postLogin(Activity activity, RequestParams params, int postId) {
@@ -434,8 +453,8 @@ public class ControlManager implements Observer{
                 ((RegisterActivity) mCurrentAct).showError(err);
             } else if(mCurrentAct instanceof ListActivityFragment) {
                 ((ListActivityFragment) mCurrentAct).showError(err);
-            } else if(mCurrentAct instanceof CreateNewEvent){
-                ((CreateNewEvent) mCurrentAct).showError(err);
+            } else if(mCurrentAct instanceof AddFinalActivity){
+                ((AddFinalActivity) mCurrentAct).showError(err);
             } else if (mCurrentAct instanceof EventDetailActivity){
                 ((EventDetailActivity) mCurrentAct).showError(err);
             } else if (mCurrentAct instanceof ForgotLoginActivity){
@@ -448,6 +467,8 @@ public class ControlManager implements Observer{
                 ((MainActivity) mCurrentAct).showError(err);
             } else if (mCurrentAct instanceof UpdateConsoleActivity) {
                 ((UpdateConsoleActivity)mCurrentAct).showError(err);
+            } else if(mCurrentAct instanceof AddFinalActivity) {
+                ((AddFinalActivity)mCurrentAct).showError(err);
             }
         }
     }
@@ -641,10 +662,8 @@ public class ControlManager implements Observer{
         try {
             eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(activity);
             eventRelationshipNtwrk.addObserver(this);
-            if(activity instanceof CreateNewEvent) {
-                eventRelationshipNtwrk.addObserver((CreateNewEvent)activity);
-            } else if(activity instanceof ListActivityFragment) {
-                eventRelationshipNtwrk.addObserver((ListActivityFragment)activity);
+            if(activity instanceof AddFinalActivity) {
+                eventRelationshipNtwrk.addObserver((AddFinalActivity)activity);
             }
             eventRelationshipNtwrk.postCreateEvent(rp);
         } catch (JSONException e) {
@@ -705,10 +724,12 @@ public class ControlManager implements Observer{
 
     public ArrayList<String> getConsoleList() {
         consoleList = new ArrayList<>();
-        consoleList.add(user.getConsoleType());
-        for (int n=0; n<user.getConsoles().size();n++) {
-            if(!user.getConsoles().get(n).getcType().equalsIgnoreCase(user.getConsoleType())) {
-                consoleList.add(user.getConsoles().get(n).getcType());
+        if(user!=null && user.getConsoleType()!=null) {
+            consoleList.add(user.getConsoleType());
+            for (int n = 0; n < user.getConsoles().size(); n++) {
+                if (!user.getConsoles().get(n).getcType().equalsIgnoreCase(user.getConsoleType())) {
+                    consoleList.add(user.getConsoles().get(n).getcType());
+                }
             }
         }
         return consoleList;

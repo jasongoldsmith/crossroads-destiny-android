@@ -68,6 +68,7 @@
     <string name="username_hint">Enter username</string>
 
     <string name="add_activity">ADD ACTIVITY</string>
+    <string name="add">ADD</string>
     <string name="support_link"> support@crossroadsapp.co</string>
     <string name="contact_us">Contact Us</string>
     <string name="password_hint">Enter password</string>
@@ -98,6 +99,7 @@
     <string name="dialog_message">Our Terms of Service and Privacy Policy have changed.\n  By tapping the “OK” button, you agree to the updated <![CDATA[<a href="https://www.crossroadsapp.co/terms">Terms of Service</a>]]> and <![CDATA[<a href="https://www.crossroadsapp.co/privacy">Privacy Policy</a>]]>.</string>
     <string name="dialog_title">Update</string>
     <string name="console_selection_text">More than one console? You can add it later!</string>
+    <string name="title_activity_add_final">AddFinalActivity</string>
 
     <string name="facebook_app_id">855221411276321</string>
 
