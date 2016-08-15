@@ -144,6 +144,7 @@ public class BlankFragment extends Fragment {
             protected ImageView unjoinBtn;
             protected TextView eventDate;
             protected TextView checkpointText;
+            protected TextView tagText;
 
             public MyViewHolder(View v) {
                 super(v);
@@ -163,6 +164,7 @@ public class BlankFragment extends Fragment {
                 eventPlayerNameCnt = (TextView) v.findViewById(R.id.activity_player_name_lf);
                 eventDate = (TextView) v.findViewById(R.id.event_time);
                 checkpointText = (TextView) v.findViewById(R.id.checkoint_text);
+                tagText = (TextView) v.findViewById(R.id.tag_text);
             }
         }
 
@@ -249,7 +251,14 @@ public class BlankFragment extends Fragment {
 
                         holder.checkpointText.setVisibility(View.GONE);
                         holder.eventDate.setVisibility(View.GONE);
-                        setCardViewLayoutParams(holder.event_card_mainLayout, 137);
+                        holder.tagText.setVisibility(View.GONE);
+                        if(tag!=null && !tag.isEmpty()) {
+                            setCardViewLayoutParams(holder.event_card_mainLayout, 172);
+                            holder.tagText.setVisibility(View.VISIBLE);
+                            holder.tagText.setText(tag);
+                        }else {
+                            setCardViewLayoutParams(holder.event_card_mainLayout, 137);
+                        }
 
                         if (creatorId != null) {
                             if (user != null && user.getUserId() != null) {
@@ -269,16 +278,33 @@ public class BlankFragment extends Fragment {
                                 if (checkpoint != null && checkpoint.length() > 0 && (!checkpoint.equalsIgnoreCase("null"))) {
                                     holder.checkpointText.setVisibility(View.VISIBLE);
                                     holder.checkpointText.setText(checkpoint);
-
-                                    setCardViewLayoutParams(holder.event_card_mainLayout, 177);
+                                    if(tag!=null && !tag.isEmpty()) {
+                                        setCardViewLayoutParams(holder.event_card_mainLayout, 212);
+                                        holder.tagText.setVisibility(View.VISIBLE);
+                                        holder.tagText.setText(tag);
+                                    }else {
+                                        setCardViewLayoutParams(holder.event_card_mainLayout, 177);
+                                    }
                                 } else {
                                     holder.checkpointText.setVisibility(View.GONE);
-                                    setCardViewLayoutParams(holder.event_card_mainLayout, 155);
+                                    if(tag!=null && !tag.isEmpty()) {
+                                        setCardViewLayoutParams(holder.event_card_mainLayout, 190);
+                                        holder.tagText.setVisibility(View.VISIBLE);
+                                        holder.tagText.setText(tag);
+                                    }else {
+                                        setCardViewLayoutParams(holder.event_card_mainLayout, 155);
+                                    }
                                 }
                             } else if (checkpoint != null && checkpoint.length() > 0 && (!checkpoint.equalsIgnoreCase("null"))) {
                                 holder.checkpointText.setVisibility(View.VISIBLE);
                                 holder.checkpointText.setText(checkpoint);
-                                setCardViewLayoutParams(holder.event_card_mainLayout, 155);
+                                if(tag!=null && !tag.isEmpty()) {
+                                    setCardViewLayoutParams(holder.event_card_mainLayout, 190);
+                                    holder.tagText.setVisibility(View.VISIBLE);
+                                    holder.tagText.setText(tag);
+                                }else {
+                                    setCardViewLayoutParams(holder.event_card_mainLayout, 155);
+                                }
                             }
                         }
 

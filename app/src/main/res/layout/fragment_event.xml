@@ -46,7 +46,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/activity_name_layout"
                 android:layout_toRightOf="@+id/event_icon"
-                android:layout_marginLeft="10dp">
+                android:layout_marginLeft="10dp"
+                android:paddingBottom="8dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -123,9 +124,7 @@
                 android:textColor="#9ba8ad"
                 android:layout_toRightOf="@+id/event_icon"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:visibility="gone"
                 android:padding="6dp"/>
 
         </RelativeLayout>
@@ -136,7 +135,7 @@
             android:id="@+id/event_bottom_frag"
             android:layout_below="@+id/event_top_frag"
             android:orientation="horizontal"
-            android:layout_marginTop="18dp">
+            android:layout_marginTop="15dp">
 
             <!--<PlayerProfileImageView-->
                 <!--android:id="@+id/profile_icon"-->
