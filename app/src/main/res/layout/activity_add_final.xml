@@ -49,10 +49,9 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="250dp"
             android:layout_above="@+id/create_new_event_activity_layout"
-            android:id="@+id/dropdown_layout"
-            android:layout_marginBottom="20dp">
+            android:id="@+id/dropdown_layout">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"

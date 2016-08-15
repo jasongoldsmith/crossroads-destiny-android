@@ -455,7 +455,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                                     if (checkpointActList.get(i).getActivityCheckpoint().equalsIgnoreCase(cp)) {
                                         if (checkpointActList.get(i).getTag() != null) {
                                             if(!checkpointActList.get(i).getTag().isEmpty()) {
-                                                tagList.add(checkpointActList.get(i).getTag());
+                                                tagList.add(checkpointActList.get(i).getTag().replace("#",""));
                                             }else {
                                                 tagList.add("None");
                                             }
@@ -467,7 +467,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                                 if (checkpointActList.get(i).getActivitySubtype().equalsIgnoreCase(subActType)) {
                                     if (checkpointActList.get(i).getTag() != null) {
                                         if(!checkpointActList.get(i).getTag().isEmpty()) {
-                                            tagList.add(checkpointActList.get(i).getTag());
+                                            tagList.add(checkpointActList.get(i).getTag().replace("#",""));
                                         }else {
                                             tagList.add("None");
                                         }
@@ -482,7 +482,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                                 if (checkpointActList.get(i).getActivityCheckpoint().equalsIgnoreCase(cp)) {
                                     if (checkpointActList.get(i).getTag() != null) {
                                         if(!checkpointActList.get(i).getTag().isEmpty()) {
-                                            tagList.add(checkpointActList.get(i).getTag());
+                                            tagList.add(checkpointActList.get(i).getTag().replace("#",""));
                                         }else {
                                             tagList.add("None");
                                         }
@@ -494,7 +494,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                             if (checkpointActList.get(i).getActivitySubtype().equalsIgnoreCase(subActType)) {
                                 if (checkpointActList.get(i).getTag() != null) {
                                     if(!checkpointActList.get(i).getTag().isEmpty()) {
-                                        tagList.add(checkpointActList.get(i).getTag());
+                                        tagList.add(checkpointActList.get(i).getTag().replace("#",""));
                                     }else {
                                         tagList.add("None");
                                     }

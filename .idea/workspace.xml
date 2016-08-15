@@ -33,8 +33,8 @@
   <component name="ChangeListManager">
     <list default="true" id="6b810106-f75f-4552-bf8e-e9e0a75095ec" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_event.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_event.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/AddFinalActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/AddFinalActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_add_final.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_add_final.xml" />
     </list>
     <ignored path="traveler-android.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -152,8 +152,8 @@
       <file leaf-file-name="AddFinalActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/AddFinalActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.2222223">
-              <caret line="268" column="0" selection-start-line="268" selection-start-column="0" selection-end-line="268" selection-end-column="0" />
+            <state vertical-scroll-proportion="-6.4074073">
+              <caret line="496" column="101" selection-start-line="496" selection-start-column="101" selection-end-line="496" selection-end-column="101" />
               <folding>
                 <element signature="e#3956#4105#0" expanded="true" />
                 <element signature="e#4104#4105#0" expanded="true" />
@@ -161,18 +161,18 @@
                 <element signature="e#8348#8349#0" expanded="true" />
                 <element signature="e#9980#9988#0" expanded="true" />
                 <element signature="e#10039#10047#0" expanded="true" />
-                <element signature="e#30770#32365#0" expanded="true" />
-                <element signature="e#32364#32365#0" expanded="true" />
-                <element signature="e#32516#32563#0" expanded="true" />
-                <element signature="e#32622#32669#0" expanded="true" />
-                <element signature="e#32771#32818#0" expanded="true" />
-                <element signature="e#32988#33035#0" expanded="true" />
-                <element signature="e#33533#34761#0" expanded="true" />
-                <element signature="e#34760#34761#0" expanded="true" />
-                <element signature="e#36753#36800#0" expanded="true" />
-                <element signature="e#36952#36999#0" expanded="true" />
-                <element signature="e#38755#38756#0" expanded="true" />
-                <element signature="e#38779#38780#0" expanded="true" />
+                <element signature="e#30834#32429#0" expanded="true" />
+                <element signature="e#32428#32429#0" expanded="true" />
+                <element signature="e#32580#32627#0" expanded="true" />
+                <element signature="e#32686#32733#0" expanded="true" />
+                <element signature="e#32835#32882#0" expanded="true" />
+                <element signature="e#33052#33099#0" expanded="true" />
+                <element signature="e#33597#34825#0" expanded="true" />
+                <element signature="e#34824#34825#0" expanded="true" />
+                <element signature="e#36817#36864#0" expanded="true" />
+                <element signature="e#37016#37063#0" expanded="true" />
+                <element signature="e#38819#38820#0" expanded="true" />
+                <element signature="e#38843#38844#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -210,15 +210,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="activity_add_final.xml" pinned="false" current-in-tab="false">
+      <file leaf-file-name="activity_add_final.xml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_add_final.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-37.207546">
-              <caret line="356" column="0" selection-start-line="356" selection-start-column="0" selection-end-line="356" selection-end-column="0" />
+            <state vertical-scroll-proportion="-8.332494">
+              <caret line="53" column="45" selection-start-line="53" selection-start-column="45" selection-end-line="53" selection-end-column="45" />
               <folding>
                 <element signature="e#1609#1622#0" expanded="true" />
-                <element signature="e#7832#7854#0" expanded="true" />
-                <element signature="e#9323#9345#0" expanded="true" />
+                <element signature="e#7778#7800#0" expanded="true" />
+                <element signature="e#9269#9291#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -227,10 +227,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BlankFragment.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BlankFragment.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6099291">
+            <state vertical-scroll-proportion="-9.555555">
               <caret line="290" column="97" selection-start-line="290" selection-start-column="97" selection-end-line="290" selection-end-column="97" />
               <folding />
             </state>
@@ -3129,10 +3129,10 @@
         <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BaseActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/data/ActivityData.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_add_final.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/AddFinalActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_event.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/AddFinalActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_add_final.xml" />
       </list>
     </option>
   </component>
@@ -3481,7 +3481,7 @@
     <property name="DEBUGGABLE_DEVICE" value="samsung-sm_g920v-06157df64ab85032" />
     <property name="DEBUGGABLE_PROCESS" value="co.crossroadsapp.destiny" />
     <property name="SHOW_ALL_PROCESSES" value="false" />
-    <property name="device.picker.selection" value="a26ec19f" />
+    <property name="device.picker.selection" value="06157df64ab85032" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/app/src/main/res" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/app" />
     <property name="ExportApk.ApkPath" value="$PROJECT_DIR$/app" />
@@ -3842,7 +3842,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Fabric" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3101737" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Monitor" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.40694788" sideWeight="0.49713877" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.40694788" sideWeight="0.49713877" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287841" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2028754" sideWeight="0.36777583" order="5" side_tool="true" content_ui="tabs" />
@@ -4999,33 +4999,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/AddFinalActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.2222223">
-          <caret line="268" column="0" selection-start-line="268" selection-start-column="0" selection-end-line="268" selection-end-column="0" />
-          <folding>
-            <element signature="e#3956#4105#0" expanded="true" />
-            <element signature="e#4104#4105#0" expanded="true" />
-            <element signature="e#7781#8349#0" expanded="true" />
-            <element signature="e#8348#8349#0" expanded="true" />
-            <element signature="e#9980#9988#0" expanded="true" />
-            <element signature="e#10039#10047#0" expanded="true" />
-            <element signature="e#30770#32365#0" expanded="true" />
-            <element signature="e#32364#32365#0" expanded="true" />
-            <element signature="e#32516#32563#0" expanded="true" />
-            <element signature="e#32622#32669#0" expanded="true" />
-            <element signature="e#32771#32818#0" expanded="true" />
-            <element signature="e#32988#33035#0" expanded="true" />
-            <element signature="e#33533#34761#0" expanded="true" />
-            <element signature="e#34760#34761#0" expanded="true" />
-            <element signature="e#36753#36800#0" expanded="true" />
-            <element signature="e#36952#36999#0" expanded="true" />
-            <element signature="e#38755#38756#0" expanded="true" />
-            <element signature="e#38779#38780#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BaseActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -5063,21 +5036,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_add_final.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-37.207546">
-          <caret line="356" column="0" selection-start-line="356" selection-start-column="0" selection-end-line="356" selection-end-column="0" />
-          <folding>
-            <element signature="e#1609#1622#0" expanded="true" />
-            <element signature="e#7832#7854#0" expanded="true" />
-            <element signature="e#9323#9345#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_event.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-3.962264">
@@ -5099,10 +5057,52 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6099291">
+        <state vertical-scroll-proportion="-9.555555">
           <caret line="290" column="97" selection-start-line="290" selection-start-column="97" selection-end-line="290" selection-end-column="97" />
           <folding />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/AddFinalActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.4074073">
+          <caret line="496" column="101" selection-start-line="496" selection-start-column="101" selection-end-line="496" selection-end-column="101" />
+          <folding>
+            <element signature="e#3956#4105#0" expanded="true" />
+            <element signature="e#4104#4105#0" expanded="true" />
+            <element signature="e#7781#8349#0" expanded="true" />
+            <element signature="e#8348#8349#0" expanded="true" />
+            <element signature="e#9980#9988#0" expanded="true" />
+            <element signature="e#10039#10047#0" expanded="true" />
+            <element signature="e#30834#32429#0" expanded="true" />
+            <element signature="e#32428#32429#0" expanded="true" />
+            <element signature="e#32580#32627#0" expanded="true" />
+            <element signature="e#32686#32733#0" expanded="true" />
+            <element signature="e#32835#32882#0" expanded="true" />
+            <element signature="e#33052#33099#0" expanded="true" />
+            <element signature="e#33597#34825#0" expanded="true" />
+            <element signature="e#34824#34825#0" expanded="true" />
+            <element signature="e#36817#36864#0" expanded="true" />
+            <element signature="e#37016#37063#0" expanded="true" />
+            <element signature="e#38819#38820#0" expanded="true" />
+            <element signature="e#38843#38844#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_add_final.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.332494">
+          <caret line="53" column="45" selection-start-line="53" selection-start-column="45" selection-end-line="53" selection-end-column="45" />
+          <folding>
+            <element signature="e#1609#1622#0" expanded="true" />
+            <element signature="e#7778#7800#0" expanded="true" />
+            <element signature="e#9269#9291#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
   </component>
