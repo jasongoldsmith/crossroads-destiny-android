@@ -1420,8 +1420,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
     private void changeUserProfileBorderColor() {
         if(user!=null) {
-            if(user.getConsoles().size()>1) {
             if (user.getConsoleType() != null) {
+            if(user.getConsoles().size()>1) {
                 switch (user.getConsoleType()) {
                     case "PS3":
                         userProfileDrawer.setBorderColor(getResources().getColor(R.color.user_profile_border_playstation));

@@ -27,14 +27,14 @@
     </layouts>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="error" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6b810106-f75f-4552-bf8e-e9e0a75095ec" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/AddFinalActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/AddFinalActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_add_final.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_add_final.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/ListActivityFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/ListActivityFragment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/utils/Util.java" afterPath="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/utils/Util.java" />
     </list>
     <ignored path="traveler-android.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -62,44 +62,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="AddNewActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/AddNewActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="191" column="0" selection-start-line="191" selection-start-column="0" selection-end-line="191" selection-end-column="0" />
-              <folding>
-                <element signature="e#1347#1496#0" expanded="true" />
-                <element signature="e#1495#1496#0" expanded="true" />
-                <element signature="e#1628#2000#0" expanded="true" />
-                <element signature="e#1999#2000#0" expanded="true" />
-                <element signature="e#2112#2480#0" expanded="true" />
-                <element signature="e#2479#2480#0" expanded="true" />
-                <element signature="e#2591#2960#0" expanded="true" />
-                <element signature="e#2959#2960#0" expanded="true" />
-                <element signature="e#3078#3450#0" expanded="true" />
-                <element signature="e#3449#3450#0" expanded="true" />
-                <element signature="e#3563#3933#0" expanded="true" />
-                <element signature="e#3932#3933#0" expanded="true" />
-                <element signature="e#4046#4416#0" expanded="true" />
-                <element signature="e#4415#4416#0" expanded="true" />
-                <element signature="e#4529#4898#0" expanded="true" />
-                <element signature="e#4897#4898#0" expanded="true" />
-                <element signature="e#5009#5378#0" expanded="true" />
-                <element signature="e#5377#5378#0" expanded="true" />
-                <element signature="e#5491#5861#0" expanded="true" />
-                <element signature="e#5860#5861#0" expanded="true" />
-                <element signature="e#7718#7719#0" expanded="true" />
-                <element signature="e#7763#7764#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="ListActivityFragment.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/ListActivityFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.0">
-              <caret line="152" column="0" selection-start-line="152" selection-start-column="0" selection-end-line="152" selection-end-column="0" />
+            <state vertical-scroll-proportion="-4.5185184">
+              <caret line="1423" column="45" selection-start-line="1423" selection-start-column="45" selection-end-line="1423" selection-end-column="45" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#6893#6952#0" expanded="true" />
@@ -139,8 +106,8 @@
       <file leaf-file-name="fragment_event.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_event.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.962264">
-              <caret line="137" column="40" selection-start-line="137" selection-start-column="40" selection-end-line="137" selection-end-column="40" />
+            <state vertical-scroll-proportion="-2.981132">
+              <caret line="120" column="37" selection-start-line="120" selection-start-column="37" selection-end-line="120" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -152,8 +119,8 @@
       <file leaf-file-name="AddFinalActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/AddFinalActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.4074073">
-              <caret line="496" column="101" selection-start-line="496" selection-start-column="101" selection-end-line="496" selection-end-column="101" />
+            <state vertical-scroll-proportion="-5.296296">
+              <caret line="352" column="47" selection-start-line="352" selection-start-column="47" selection-end-line="352" selection-end-column="47" />
               <folding>
                 <element signature="e#3956#4105#0" expanded="true" />
                 <element signature="e#4104#4105#0" expanded="true" />
@@ -188,33 +155,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ActivityData.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/data/ActivityData.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="25" column="36" selection-start-line="25" selection-start-column="36" selection-end-line="25" selection-end-column="36" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#3280#3281#0" expanded="true" />
-                <element signature="e#3315#3316#0" expanded="true" />
-                <element signature="e#3354#3355#0" expanded="true" />
-                <element signature="e#3389#3390#0" expanded="true" />
-                <element signature="e#3433#3434#0" expanded="true" />
-                <element signature="e#3464#3465#0" expanded="true" />
-                <element signature="e#3500#3501#0" expanded="true" />
-                <element signature="e#3532#3533#0" expanded="true" />
-                <element signature="e#3588#3589#0" expanded="true" />
-                <element signature="e#3623#3624#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="activity_add_final.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="activity_add_final.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_add_final.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.332494">
-              <caret line="53" column="45" selection-start-line="53" selection-start-column="45" selection-end-line="53" selection-end-column="45" />
+            <state vertical-scroll-proportion="-5.792453">
+              <caret line="294" column="47" selection-start-line="294" selection-start-column="47" selection-end-line="294" selection-end-column="47" />
               <folding>
                 <element signature="e#1609#1622#0" expanded="true" />
                 <element signature="e#7778#7800#0" expanded="true" />
@@ -227,11 +172,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BlankFragment.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="BlankFragment.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.555555">
-              <caret line="290" column="97" selection-start-line="290" selection-start-column="97" selection-end-line="290" selection-end-column="97" />
+            <state vertical-scroll-proportion="0.5404814">
+              <caret line="303" column="65" selection-start-line="303" selection-start-column="65" selection-end-line="303" selection-end-column="65" />
               <folding />
             </state>
           </provider>
@@ -3119,20 +3064,20 @@
         <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/data/ModifierData.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/data/BonusData.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_checkpoint.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/utils/Util.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/CreateNewEvent.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/network/EventRelationshipHandlerNetwork.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/ControlManager.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/AddNewActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/ListActivityFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_add_new.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BaseActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/data/ActivityData.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_event.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/AddFinalActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_add_final.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/ListActivityFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/utils/Util.java" />
       </list>
     </option>
   </component>
@@ -3842,7 +3787,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Fabric" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3101737" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.40694788" sideWeight="0.49713877" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36476427" sideWeight="0.49713877" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287841" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2028754" sideWeight="0.36777583" order="5" side_tool="true" content_ui="tabs" />
@@ -3850,12 +3795,12 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42514125" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2811159" sideWeight="0.27196652" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2811159" sideWeight="0.27148438" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27295285" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24317618" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.4845996" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2811159" sideWeight="0.7280335" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2811159" sideWeight="0.7285156" order="1" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2369727" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
@@ -3920,13 +3865,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/utils/Util.java</url>
-          <line>335</line>
+          <line>337</line>
           <properties />
           <option name="timeStamp" value="67" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/utils/Util.java</url>
-          <line>342</line>
+          <line>344</line>
           <properties />
           <option name="timeStamp" value="68" />
         </line-breakpoint>
@@ -3968,7 +3913,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/utils/Util.java</url>
-          <line>289</line>
+          <line>291</line>
           <properties />
           <option name="timeStamp" value="91" />
         </line-breakpoint>
@@ -4064,7 +4009,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/utils/Util.java</url>
-          <line>60</line>
+          <line>62</line>
           <properties />
           <option name="timeStamp" value="160" />
         </line-breakpoint>
@@ -4214,7 +4159,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/utils/Util.java</url>
-          <line>349</line>
+          <line>351</line>
           <properties />
           <option name="timeStamp" value="258" />
         </line-breakpoint>
@@ -4298,7 +4243,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/utils/Util.java</url>
-          <line>432</line>
+          <line>434</line>
           <properties />
           <option name="timeStamp" value="294" />
         </line-breakpoint>
@@ -4454,7 +4399,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java</url>
-          <line>443</line>
+          <line>447</line>
           <properties />
           <option name="timeStamp" value="367" />
         </line-breakpoint>
@@ -4502,7 +4447,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java</url>
-          <line>388</line>
+          <line>392</line>
           <properties />
           <option name="timeStamp" value="377" />
         </line-breakpoint>
@@ -4548,13 +4493,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/network/HelmetUpdateNetwork.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="47" column="45" selection-start-line="47" selection-start-column="45" selection-end-line="47" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_base.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -4859,18 +4797,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/utils/Util.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-          <folding>
-            <element signature="e#12862#12911#0" expanded="true" />
-            <element signature="e#14041#14090#0" expanded="true" />
-            <element signature="e#16669#16677#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/network/EventRelationshipHandlerNetwork.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -4975,14 +4901,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.882353">
-          <caret line="64" column="40" selection-start-line="64" selection-start-column="40" selection-end-line="64" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-23/android/widget/RelativeLayout.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -5007,10 +4925,33 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/ControlManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="187" column="0" selection-start-line="187" selection-start-column="0" selection-end-line="187" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_add_final.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.792453">
+          <caret line="294" column="47" selection-start-line="294" selection-start-column="47" selection-end-line="294" selection-end-column="47" />
+          <folding>
+            <element signature="e#1609#1622#0" expanded="true" />
+            <element signature="e#7778#7800#0" expanded="true" />
+            <element signature="e#9269#9291#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/ListActivityFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.0">
-          <caret line="152" column="0" selection-start-line="152" selection-start-column="0" selection-end-line="152" selection-end-column="0" />
+        <state vertical-scroll-proportion="-4.5185184">
+          <caret line="1423" column="45" selection-start-line="1423" selection-start-column="45" selection-end-line="1423" selection-end-column="45" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#6893#6952#0" expanded="true" />
@@ -5038,8 +4979,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_event.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.962264">
-          <caret line="137" column="40" selection-start-line="137" selection-start-column="40" selection-end-line="137" selection-end-column="40" />
+        <state vertical-scroll-proportion="-2.981132">
+          <caret line="120" column="37" selection-start-line="120" selection-start-column="37" selection-end-line="120" selection-end-column="43" />
           <folding />
         </state>
       </provider>
@@ -5047,26 +4988,40 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/ControlManager.java">
+    <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-23/android/graphics/drawable/GradientDrawable.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="187" column="0" selection-start-line="187" selection-start-column="0" selection-end-line="187" selection-end-column="0" />
+          <caret line="254" column="16" selection-start-line="254" selection-start-column="16" selection-end-line="254" selection-end-column="16" />
+          <folding>
+            <element signature="e#9383#9384#0" expanded="false" />
+            <element signature="e#9428#9429#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.1372547">
+          <caret line="64" column="31" selection-start-line="64" selection-start-column="17" selection-end-line="64" selection-end-column="31" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/utils/Util.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.555555">
-          <caret line="290" column="97" selection-start-line="290" selection-start-column="97" selection-end-line="290" selection-end-column="97" />
-          <folding />
+        <state vertical-scroll-proportion="0.7210744">
+          <caret line="542" column="75" selection-start-line="542" selection-start-column="75" selection-end-line="542" selection-end-column="75" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#16774#16782#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/AddFinalActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.4074073">
-          <caret line="496" column="101" selection-start-line="496" selection-start-column="101" selection-end-line="496" selection-end-column="101" />
+        <state vertical-scroll-proportion="-5.296296">
+          <caret line="352" column="47" selection-start-line="352" selection-start-column="47" selection-end-line="352" selection-end-column="47" />
           <folding>
             <element signature="e#3956#4105#0" expanded="true" />
             <element signature="e#4104#4105#0" expanded="true" />
@@ -5090,19 +5045,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_add_final.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/co/crossroadsapp/destiny/BlankFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.332494">
-          <caret line="53" column="45" selection-start-line="53" selection-start-column="45" selection-end-line="53" selection-end-column="45" />
-          <folding>
-            <element signature="e#1609#1622#0" expanded="true" />
-            <element signature="e#7778#7800#0" expanded="true" />
-            <element signature="e#9269#9291#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.5404814">
+          <caret line="303" column="65" selection-start-line="303" selection-start-column="65" selection-end-line="303" selection-end-column="65" />
+          <folding />
         </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
   </component>

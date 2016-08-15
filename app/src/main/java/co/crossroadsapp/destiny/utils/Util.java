@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import co.crossroadsapp.destiny.AddFinalActivity;
 import co.crossroadsapp.destiny.ControlManager;
 //import co.crossroadsapp.destiny.CreateNewEvent;
+import co.crossroadsapp.destiny.ListActivityFragment;
 import co.crossroadsapp.destiny.R;
 import co.crossroadsapp.destiny.data.UserData;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -532,5 +534,13 @@ public class Util {
 //            list.add("Xbox 360");
 //        }
         return list;
+    }
+
+    public static void roundCorner(TextView textView, ListActivityFragment mContext) {
+        GradientDrawable gd = new GradientDrawable();
+        gd.setCornerRadius(5);
+        gd.setStroke(2, 0xFF203236);
+        gd.setColor(mContext.getResources().getColor(R.color.tag_background));
+        textView.setBackgroundDrawable(gd);
     }
 }

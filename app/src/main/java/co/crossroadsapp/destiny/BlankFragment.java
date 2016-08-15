@@ -21,7 +21,7 @@ import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
-import co.crossroadsapp.destiny.R;
+
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 
@@ -256,6 +256,7 @@ public class BlankFragment extends Fragment {
                             setCardViewLayoutParams(holder.event_card_mainLayout, 172);
                             holder.tagText.setVisibility(View.VISIBLE);
                             holder.tagText.setText(tag);
+                            Util.roundCorner(holder.tagText, mContext);
                         }else {
                             setCardViewLayoutParams(holder.event_card_mainLayout, 137);
                         }
@@ -282,6 +283,7 @@ public class BlankFragment extends Fragment {
                                         setCardViewLayoutParams(holder.event_card_mainLayout, 212);
                                         holder.tagText.setVisibility(View.VISIBLE);
                                         holder.tagText.setText(tag);
+                                        Util.roundCorner(holder.tagText, mContext);
                                     }else {
                                         setCardViewLayoutParams(holder.event_card_mainLayout, 177);
                                     }
@@ -291,6 +293,7 @@ public class BlankFragment extends Fragment {
                                         setCardViewLayoutParams(holder.event_card_mainLayout, 190);
                                         holder.tagText.setVisibility(View.VISIBLE);
                                         holder.tagText.setText(tag);
+                                        Util.roundCorner(holder.tagText, mContext);
                                     }else {
                                         setCardViewLayoutParams(holder.event_card_mainLayout, 155);
                                     }
@@ -302,6 +305,7 @@ public class BlankFragment extends Fragment {
                                     setCardViewLayoutParams(holder.event_card_mainLayout, 190);
                                     holder.tagText.setVisibility(View.VISIBLE);
                                     holder.tagText.setText(tag);
+                                    Util.roundCorner(holder.tagText, mContext);
                                 }else {
                                     setCardViewLayoutParams(holder.event_card_mainLayout, 155);
                                 }
