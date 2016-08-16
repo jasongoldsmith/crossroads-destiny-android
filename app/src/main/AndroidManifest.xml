@@ -106,11 +106,11 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".CreateNewEvent"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyTheme" />
+        <!--<activity-->
+            <!--android:name=".CreateNewEvent"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:theme="@style/MyTheme" />-->
         <activity
             android:name=".BaseActivity"
             android:label="@string/title_activity_base"

@@ -104,6 +104,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private String eventId;
     private SwipeFrameLayout cardStackLayout;
     private String upcomingDate;
+    private ImageView background;
 //    private TextView errText;
 //    private ImageView close_err;
 
@@ -120,6 +121,8 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         msgallBtn = (TextView) findViewById(R.id.messageall_btn);
         bottomBtnLayout = (RelativeLayout) findViewById(R.id.detail_bottom_btn);
 
+        background = (ImageView) findViewById(R.id.background);
+
         progressBar = (RelativeLayout) findViewById(R.id.progress_bar_eventdetail_layout);
 
         eventCheckpoint = (TextView) findViewById(R.id.eventDetailCheckpoint);
@@ -132,13 +135,16 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         _handler = new Handler();
 
-        userProfile = (CircularImageView) findViewById(R.id.userProfile_event);
+        //userProfile = (CircularImageView) findViewById(R.id.userProfile_event);
 
         currEvent = new EventData();
 
         inst = CurrentEventDataHolder.getInstance();
         currEvent = inst.getData();
         //joinBtnActive = inst.getJoinVisible();
+
+        //load background image
+        Util.picassoLoadImageWithoutMeasurement(getApplicationContext(), background, currEvent.getActivityData().getaImagePath(), R.drawable.img_b_g_d_e_f_a_u_l_t);
 
         eventProfileImg = (ImageView) findViewById(R.id.event_detail_icon);
         eventName = (TextView) findViewById(R.id.activity_name_detail);
@@ -209,9 +215,9 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             eventCheckpoint.setText(currEvent.getActivityData().getActivityCheckpoint());
         }
 
-        if (user.getImageUrl() != null) {
-            Util.picassoLoadIcon(EventDetailActivity.this, userProfile, user.getImageUrl(), R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.img_avatar_you);
-        }
+//        if (user.getImageUrl() != null) {
+//            Util.picassoLoadIcon(EventDetailActivity.this, userProfile, user.getImageUrl(), R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.img_avatar_you);
+//        }
 
         checkUserIsPlayer();
         joinBtn.setOnClickListener(new View.OnClickListener() {

@@ -328,12 +328,6 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
         levelTextView.setText(levelText);
 
-//        modi.add("bbhjbjh");
-//        modi.add("gvbhbhbhb");
-//        modi.add("jnjkbjhhjbg g gg");
-//        modi.add ("bhbc b");
-//        modi.add("njknhj");
-//        bonus.add("strike");
         //show modifiers and bonuses
         modifiersLayout.removeAllViews();
         modifiersLayout2.removeAllViews();
@@ -342,13 +336,14 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         int prevTextViewId = 0;
         int pad = Util.dpToPx(5, AddFinalActivity.this);
         if (!modi.isEmpty() || !bonus.isEmpty()) {
-            if (modi.size() + bonus.size() < 11) {
-                for (int i = 0; i < modi.size() + bonus.size(); i++) {
+            int listSize = modi.size() + bonus.size();
+            if (listSize < 11) {
+                for (int i = 0; i < listSize; i++) {
                     final TextView textView = new TextView(this);
                     if (i < modi.size()) {
                         textView.setText(modi.get(i));
                     } else {
-                        textView.setText(bonus.get(modi.size() + bonus.size() - i));
+                        textView.setText(bonus.get(listSize - i - 1));
                     }
                     textView.setTextColor(getResources().getColor(R.color.trimbe_white));
                     textView.setPadding(pad, pad, pad, pad);
@@ -427,7 +422,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
             //remove duplicates
             checkpointItems = Util.removeListDuplicates(checkpointItems);
 
-            getTagList();
+            getTagList(null);
 
             updateDrawerSubtype(actSubTypeList);
             updateDrawer(checkpointItems);
@@ -435,11 +430,13 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         }
     }
 
-    private void getTagList() {
+    private void getTagList(String checkPoint) {
         String cp = "";
-        if (checkpointLayout.getVisibility() == View.VISIBLE) {
-            if (checkpointText != null && !checkpointText.getText().toString().isEmpty()) {
-                cp = checkpointText.getText().toString();
+        if(checkpointItems!=null && !checkpointItems.isEmpty()) {
+            if(checkPoint!=null) {
+                cp = checkPoint;
+            }else {
+                cp = checkpointItems.get(0);
             }
         }
         tagList.clear();
@@ -534,7 +531,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
         updateDrawer(checkpointItems);
 
-        getTagList();
+        getTagList(null);
     }
 
     private void updateDrawer(final ArrayList<String> dataList) {
@@ -795,8 +792,8 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
     }
 
     private void filterReqTagList(int position) {
-        //String chckpoint = checkpointItems.get(position);
-        getTagList();
+        String chckpoint = checkpointItems.get(position);
+        getTagList(chckpoint);
     }
 
     private void filterReqList(int position) {
@@ -808,7 +805,6 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
             subtypeDifficulty = parts[1];
             subtypeDifficulty = subtypeDifficulty.trim();
         }
-
         getCheckpointList();
     }
 

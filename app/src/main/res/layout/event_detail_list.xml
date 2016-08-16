@@ -54,15 +54,19 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/img_background_map"
-        android:scaleType="fitXY"/>
+        android:background="@drawable/img_background_map"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/background"
+        android:layout_alignParentTop="true"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:layout_alignParentTop="true"
-        android:id="@+id/eventdetail_top_layout"
-        android:background="@drawable/img_header_bg_eventdetail">
+        android:id="@+id/eventdetail_top_layout">
         <!--<ImageView-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="wrap_content"-->
@@ -87,26 +91,6 @@
             android:paddingRight="11dp"
             android:paddingLeft="20dp"
             android:layout_alignParentRight="true"/>
-        <co.crossroadsapp.destiny.utils.CircularImageView
-            android:layout_width="@dimen/player_profile_width"
-            android:layout_height="@dimen/player_profile_hgt"
-            android:visibility="gone"
-            android:id="@+id/userProfile_event"
-            android:src="@drawable/img_avatar_you"
-            android:layout_marginEnd="11dp"
-            android:layout_marginTop="14dp"
-            android:layout_alignParentRight="true" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:fontFamily="sans-serif"
-            android:textStyle="bold"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="11dp"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            android:text="ACTIVITY DETAILS"/>
     </RelativeLayout>
 
     <co.crossroadsapp.destiny.SwipeFrameLayout
@@ -210,20 +194,20 @@
         android:layout_below="@+id/notification_bar_layout"
         android:layout_marginTop="22dp">
 
-        <co.crossroadsapp.destiny.utils.CircularImageView
+        <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/event_detail_icon"
             android:src="@drawable/icon_ghost_default"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="11dp"/>
+            android:layout_marginLeft="15dp"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/activity_name_layout_detail"
             android:layout_toRightOf="@+id/event_detail_icon"
-            android:layout_marginLeft="10dp">
+            android:layout_marginLeft="12dp">
 
             <TextView
                 android:layout_width="wrap_content"
