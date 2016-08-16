@@ -409,24 +409,27 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
             }else {
                 checkpointActList.clear();
             }
-            checkpointActList = mCntrlMngr.getCheckpointActivityList(activity.get(0).getActivitySubtype(), activity.get(0).getActivityDifficulty());
+//            checkpointActList = mCntrlMngr.getCheckpointActivityList(activity.get(0).getActivitySubtype(), activity.get(0).getActivityDifficulty());
 
             tagList = new ArrayList<String>();
 
-            for (int i = 0; i < checkpointActList.size(); i++) {
-                if (checkpointActList.get(i).getActivityCheckpoint() != null && !checkpointActList.get(i).getActivityCheckpoint().equalsIgnoreCase("null") && !checkpointActList.get(i).getActivityCheckpoint().isEmpty()) {
-                    checkpointItems.add(checkpointActList.get(i).getActivityCheckpoint());
-                }
-            }
-
-            //remove duplicates
-            checkpointItems = Util.removeListDuplicates(checkpointItems);
-
-            getTagList(null);
+//            for (int i = 0; i < checkpointActList.size(); i++) {
+//                if (checkpointActList.get(i).getActivityCheckpoint() != null && !checkpointActList.get(i).getActivityCheckpoint().equalsIgnoreCase("null") && !checkpointActList.get(i).getActivityCheckpoint().isEmpty()) {
+//                    checkpointItems.add(checkpointActList.get(i).getActivityCheckpoint());
+//                }
+//            }
+//
+//            //remove duplicates
+//            checkpointItems = Util.removeListDuplicates(checkpointItems);
+//            if(checkpointItems.isEmpty()) {
+//                checkpointActList.clear();
+//            }
+//
+//            getTagList(null);
 
             updateDrawerSubtype(actSubTypeList);
-            updateDrawer(checkpointItems);
-            updateDrawerTags(tagList);
+//            updateDrawer(checkpointItems);
+//            updateDrawerTags(tagList);
         }
     }
 
@@ -801,6 +804,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         String[] parts = sub.split("\\-");
         subActType = parts[0];
         subActType = subActType.trim();
+        subtypeDifficulty = "";
         if(parts.length>1) {
             subtypeDifficulty = parts[1];
             subtypeDifficulty = subtypeDifficulty.trim();
