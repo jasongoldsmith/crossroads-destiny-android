@@ -223,20 +223,6 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                 }
             }
         });
-
-//        GradientDrawable gd = new GradientDrawable();
-//        //gd.setColor(); // Changes this drawbale to use a single color instead of a gradient
-//        gd.setCornerRadius(5);
-//        gd.setStroke(2, 0xFFFFFFFF);
-//        modifier.setBackgroundDrawable(gd);
-//
-//        //load activity icon
-//        Util.picassoLoadImageWithoutMeasurement(getApplicationContext(), actIcon, activity.get(0).getActivityIconUrl(), R.drawable.icon_ghost_default);
-//
-//        //load background image
-//        Util.picassoLoadImageWithoutMeasurement(getApplicationContext(), background, activity.get(0).getaImagePath(), R.drawable.img_b_g_d_e_f_a_u_l_t);
-//
-//        actSubtype.setText(activity.get(0).getActivitySubtype());
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -328,12 +314,6 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
         levelTextView.setText(levelText);
 
-//        modi.add("bbhjbjh");
-//        modi.add("gvbhbhbhb");
-//        modi.add("jnjkbjhhjbg g gg");
-//        modi.add ("bhbc b");
-//        modi.add("njknhj");
-//        bonus.add("strike");
         //show modifiers and bonuses
         modifiersLayout.removeAllViews();
         modifiersLayout2.removeAllViews();
@@ -342,13 +322,14 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         int prevTextViewId = 0;
         int pad = Util.dpToPx(5, AddFinalActivity.this);
         if (!modi.isEmpty() || !bonus.isEmpty()) {
-            if (modi.size() + bonus.size() < 11) {
-                for (int i = 0; i < modi.size() + bonus.size(); i++) {
+            int listSize = modi.size() + bonus.size();
+            if (listSize < 11) {
+                for (int i = 0; i < listSize; i++) {
                     final TextView textView = new TextView(this);
                     if (i < modi.size()) {
                         textView.setText(modi.get(i));
                     } else {
-                        textView.setText(bonus.get(modi.size() + bonus.size() - i));
+                        textView.setText(bonus.get(listSize - i - 1));
                     }
                     textView.setTextColor(getResources().getColor(R.color.trimbe_white));
                     textView.setPadding(pad, pad, pad, pad);
@@ -427,7 +408,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
             //remove duplicates
             checkpointItems = Util.removeListDuplicates(checkpointItems);
 
-            getTagList();
+            getTagList(null);
 
             updateDrawerSubtype(actSubTypeList);
             updateDrawer(checkpointItems);
@@ -435,11 +416,13 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         }
     }
 
-    private void getTagList() {
+    private void getTagList(String checkPoint) {
         String cp = "";
-        if (checkpointLayout.getVisibility() == View.VISIBLE) {
-            if (checkpointText != null && !checkpointText.getText().toString().isEmpty()) {
-                cp = checkpointText.getText().toString();
+        if(checkpointItems!=null && !checkpointItems.isEmpty()) {
+            if(checkPoint!=null) {
+                cp = checkPoint;
+            } else {
+                cp = checkpointItems.get(0);
             }
         }
         tagList.clear();
@@ -534,7 +517,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
         updateDrawer(checkpointItems);
 
-        getTagList();
+        getTagList(null);
     }
 
     private void updateDrawer(final ArrayList<String> dataList) {
@@ -795,8 +778,8 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
     }
 
     private void filterReqTagList(int position) {
-        //String chckpoint = checkpointItems.get(position);
-        getTagList();
+        String chckpoint = checkpointItems.get(position);
+        getTagList(chckpoint);
     }
 
     private void filterReqList(int position) {
