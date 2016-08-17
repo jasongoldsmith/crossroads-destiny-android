@@ -536,7 +536,7 @@ public class Util {
         return list;
     }
 
-    public static void roundCorner(TextView textView, ListActivityFragment mContext) {
+    public static void roundCorner(TextView textView, Context mContext) {
         GradientDrawable gd = new GradientDrawable();
         gd.setCornerRadius(5);
         gd.setStroke(2, 0xFF203236);

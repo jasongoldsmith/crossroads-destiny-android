@@ -724,11 +724,13 @@ public class ControlManager implements Observer{
 
     public ArrayList<String> getConsoleList() {
         consoleList = new ArrayList<>();
-        if(user!=null && user.getConsoleType()!=null) {
-            consoleList.add(user.getConsoleType());
-            for (int n = 0; n < user.getConsoles().size(); n++) {
-                if (!user.getConsoles().get(n).getcType().equalsIgnoreCase(user.getConsoleType())) {
-                    consoleList.add(user.getConsoles().get(n).getcType());
+        if(user!=null) {
+            if(user.getConsoleType()!=null) {
+                consoleList.add(user.getConsoleType());
+                for (int n = 0; n < user.getConsoles().size(); n++) {
+                    if (!user.getConsoles().get(n).getcType().equalsIgnoreCase(user.getConsoleType())) {
+                        consoleList.add(user.getConsoles().get(n).getcType());
+                    }
                 }
             }
         }

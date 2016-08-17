@@ -13,6 +13,7 @@ public class PlayerData {
     private String username;
     private String psnId;
     private String playerImageUrl;
+    private String playerClanTag;
 
     public void setPlayerId(String id) {
         playerId = id;
@@ -46,19 +47,38 @@ public class PlayerData {
         return this.playerImageUrl;
     }
 
+    public void setClanTag(String clanT) {
+        playerClanTag = clanT;
+    }
+
+    public String getClanTag() {
+        return this.playerClanTag;
+    }
+
     public void toJson(JSONObject jsonobject) {
         if (jsonobject!= null) {
             try {
                 JSONArray conArray = jsonobject.optJSONArray("consoles");
-                JSONObject conData = (JSONObject) conArray.get(0);
 //                if(conData.has("consoleType")) {
 //                    String cType = conData.getString("consoleType");
 //                    setConsoleType(cType);
 //                }
-
-                if(conData.has("consoleId")) {
-                    String id = conData.getString("consoleId");
-                    setPsnId(id);
+                if(conArray!=null) {
+                    for (int i=0;i<conArray.length();i++) {
+                        JSONObject conData = (JSONObject) conArray.get(i);
+                        if(conData.has("isPrimary")) {
+                            if(conData.getBoolean("isPrimary")){
+                                if(conData.has("consoleId")) {
+                                    String id = conData.getString("consoleId");
+                                    setPsnId(id);
+                                }
+                                if(conData.has("clanTag")) {
+                                    String clanTag = conData.getString("clanTag");
+                                    setClanTag(clanTag);
+                                }
+                            }
+                        }
+                    }
                 }
 
 //                if(conData.has("verifyStatus")){

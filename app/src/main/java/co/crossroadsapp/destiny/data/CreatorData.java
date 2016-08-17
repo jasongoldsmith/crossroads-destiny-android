@@ -17,15 +17,22 @@ public class CreatorData extends PlayerData {
             setPlayerId(creator.getString("_id"));
             setUsername(creator.getString("userName"));
             JSONArray conArray = creator.optJSONArray("consoles");
-            JSONObject conData = (JSONObject) conArray.get(0);
-//            if(conData.has("consoleType")) {
-//                String cType = conData.getString("consoleType");
-//                setConsoleType(cType);
-//            }
-
-            if(conData.has("consoleId")) {
-                String id = conData.getString("consoleId");
-                setPsnId(id);
+            if(conArray!=null) {
+                for (int i=0;i<conArray.length();i++) {
+                    JSONObject conData = (JSONObject) conArray.get(i);
+                    if(conData.has("isPrimary")) {
+                        if(conData.getBoolean("isPrimary")){
+                            if(conData.has("consoleId")) {
+                                String id = conData.getString("consoleId");
+                                setPsnId(id);
+                            }
+                            if(conData.has("clanTag")) {
+                                String clanTag = conData.getString("clanTag");
+                                setClanTag(clanTag);
+                            }
+                        }
+                    }
+                }
             }
 
 //            if(conData.has("verifyStatus")){

@@ -63,4 +63,6 @@
 
     <color name="tag_text">#9ba8ad</color>
     <color name="tag_background">#203236</color>
+
+    <color name="event_detail_fireteam_cardbackground">#1d3137</color>
 </resources>

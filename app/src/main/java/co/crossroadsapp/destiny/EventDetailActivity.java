@@ -1,18 +1,31 @@
 package co.crossroadsapp.destiny;
 
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
+import android.util.SparseArray;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -105,6 +118,8 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private SwipeFrameLayout cardStackLayout;
     private String upcomingDate;
     private ImageView background;
+    private ViewPager viewPager;
+    private PagerAdapter pagerAdapter;
 //    private TextView errText;
 //    private ImageView close_err;
 
@@ -115,6 +130,8 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         Bundle b = getIntent().getExtras();
         user = b.getParcelable("userdata");
+
+        setTRansparentStatusBar();
 
         joinBtn = (TextView) findViewById(R.id.join_btn);
         leaveBtn = (TextView) findViewById(R.id.leave_btn);
@@ -143,14 +160,21 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         currEvent = inst.getData();
         //joinBtnActive = inst.getJoinVisible();
 
+        TextView tagText = (TextView) findViewById(R.id.event_tag_text);
+
+        if(currEvent!=null && currEvent.getActivityData().getTag()!=null && !currEvent.getActivityData().getTag().isEmpty()) {
+            tagText.setText(currEvent.getActivityData().getTag());
+            Util.roundCorner(tagText, EventDetailActivity.this);
+        }
+
         //load background image
         Util.picassoLoadImageWithoutMeasurement(getApplicationContext(), background, currEvent.getActivityData().getaImagePath(), R.drawable.img_b_g_d_e_f_a_u_l_t);
 
         eventProfileImg = (ImageView) findViewById(R.id.event_detail_icon);
         eventName = (TextView) findViewById(R.id.activity_name_detail);
-        eventSubName = (TextView) findViewById(R.id.activity_player_name_detail);
-        eventSubNameLF = (TextView) findViewById(R.id.activity_player_name_lf_detail);
-        eventLight = (TextView) findViewById(R.id.activity_aLight_detail);
+//        eventSubName = (TextView) findViewById(R.id.activity_player_name_detail);
+//        eventSubNameLF = (TextView) findViewById(R.id.activity_player_name_lf_detail);
+//        eventLight = (TextView) findViewById(R.id.activity_aLight_detail);
         back = (ImageView) findViewById(R.id.eventdetail_backbtn);
         share = (ImageView) findViewById(R.id.eventdetail_sharebtn);
         eventDetailDate = (TextView) findViewById(R.id.eventDetailDate);
@@ -202,13 +226,13 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             eventName.setText(currEvent.getActivityData().getActivitySubtype());
         }
 
-        if (currEvent.getActivityData().getActivityLight() > 0) {
-            // unicode to show star
-            String st = "\u2726";
-            eventLight.setText(st + currEvent.getActivityData().getActivityLight());
-        } else if (currEvent.getActivityData().getActivityLevel() > 0) {
-            eventLight.setText("lvl " + currEvent.getActivityData().getActivityLevel());
-        }
+//        if (currEvent.getActivityData().getActivityLight() > 0) {
+//            // unicode to show star
+//            String st = "\u2726";
+//            eventLight.setText(st + currEvent.getActivityData().getActivityLight());
+//        } else if (currEvent.getActivityData().getActivityLevel() > 0) {
+//            eventLight.setText("lvl " + currEvent.getActivityData().getActivityLevel());
+//        }
 
         if (currEvent.getActivityData().getActivityCheckpoint() != null && (!currEvent.getActivityData().getActivityCheckpoint().equalsIgnoreCase("null"))) {
             eventCheckpoint.setVisibility(View.VISIBLE);
@@ -277,18 +301,41 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         //checkLeaveBtn();
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.event_player);
-
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        mAdapter = new CurrentEventsViewAdapter(currEvent.getPlayerData());
-
-        mRecyclerView.setAdapter(mAdapter);
+//        mRecyclerView = (RecyclerView) findViewById(R.id.event_player);
+//
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//
+//        mAdapter = new CurrentEventsViewAdapter(currEvent.getPlayerData());
+//
+//        mRecyclerView.setAdapter(mAdapter);
 
         msgallBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendMsgToAll();
+            }
+        });
+
+        // Get the ViewPager and set it's PagerAdapter so that it can display items
+        viewPager = (ViewPager) findViewById(R.id.eventdetail_viewpager);
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), EventDetailActivity.this);
+        viewPager.setAdapter(pagerAdapter);
+
+        // Give the TabLayout the ViewPager
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.eventdetail_tab_layout);
+        tabLayout.setupWithViewPager(viewPager);
+
+        // Iterate over all tabs and set the custom view
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            tab.setCustomView(pagerAdapter.getTabView(i));
+        }
+
+        viewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                viewPager.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
             }
         });
 
@@ -339,6 +386,71 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         showNotifications();
 
+    }
+
+    class PagerAdapter extends FragmentPagerAdapter {
+
+        String tabTitles[] = new String[] { "FIRETEAM", "COMMENTS" };
+        Context context;
+        SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
+
+        public PagerAdapter(FragmentManager fm, Context context) {
+            super(fm);
+            this.context = context;
+        }
+
+        @Override
+        public int getCount() {
+            return tabTitles.length;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+
+            switch (position) {
+                case 0:
+                    return EventDetailsFragments.newInstance(0, EventDetailActivity.this, currEvent);
+                case 1:
+                    return EventDetailsFragments.newInstance(1, EventDetailActivity.this, null);
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            // Generate title based on item position
+            return tabTitles[position];
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            Fragment fragment = (Fragment) super.instantiateItem(container, position);
+            //registeredFragments.put(position, fragment);
+            return fragment;
+        }
+
+        public View getTabView(int position) {
+            View tab = LayoutInflater.from(EventDetailActivity.this).inflate(R.layout.custom_tab, null);
+            TextView tv = (TextView) tab.findViewById(R.id.custom_text);
+            tv.setTypeface(Typeface.SANS_SERIF, 1);
+            tv.setPadding(Util.dpToPx(43, EventDetailActivity.this), 25, 0, 0);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            tv.setText(tabTitles[position]);
+            return tab;
+        }
+    }
+
+    private void updateCurrentFrag() {
+        Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 0);
+        if (page != null) {
+            ((EventDetailsFragments) page).updateCurrListAdapter(currEvent);
+        }
+
+        page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 1);
+        if (page != null) {
+            ((EventDetailsFragments) page).updateCurrListAdapter(currEvent);
+        }
     }
 
     private void generateBranchObject() {
@@ -465,6 +577,13 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                 }
             }
         }
+    }
+
+    public EventData getCurrentEventData() {
+        if(currEvent!=null) {
+            return currEvent;
+        }
+        return null;
     }
 
     private void setupEventListener() {
@@ -604,8 +723,8 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             allNamesRem = " " + "LF" +reqPlayer+"M";
         }
 
-        eventSubName.setText(allNames);
-        eventSubNameLF.setText(allNamesRem);
+//        eventSubName.setText(allNames);
+//        eventSubNameLF.setText(allNamesRem);
     }
 
     @Override
@@ -615,6 +734,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                 this.currEvent = (EventData) data;
                 if (currEvent != null) {
                     if ((currEvent.getPlayerData() != null) && (currEvent.getPlayerData().size()>0)) {
+                        updateCurrentFrag();
                         if (mAdapter != null) {
                             mAdapter.playerLocal.clear();
                             mAdapter.addItem(currEvent.getPlayerData());
@@ -653,6 +773,16 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             }
         }
         return false;
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setTRansparentStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
     }
 
     private boolean checkUserIsCreator() {

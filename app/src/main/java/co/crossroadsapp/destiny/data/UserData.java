@@ -27,6 +27,7 @@ public class UserData implements Parcelable {
     private String consoleType=null;
     private int authenticationId;
     private ArrayList<ConsoleData> consoles;
+    private String clanTag=null;
 
     public UserData() {
         consoles = new ArrayList<ConsoleData>();
@@ -117,6 +118,14 @@ public class UserData implements Parcelable {
         return this.imageUrl;
     }
 
+    public void setClanTag(String clanT) {
+        clanTag = clanT;
+    }
+
+    public String getClanTag() {
+        return this.clanTag;
+    }
+
     public void setAuthenticationId(int id) {
         authenticationId = id;
     }
@@ -189,6 +198,13 @@ public class UserData implements Parcelable {
                                     setPsnVerify(verifyS);
                                 }
                                 cData.setVerifyStatus(verifyS);
+                            }
+                            if (conData.has("clanTag")) {
+                                String clanTag = conData.getString("clanTag");
+                                if(cData.getPrimary()) {
+                                    setClanTag(clanTag);
+                                }
+                                cData.setClanTag(clanTag);
                             }
                             consoles.add(cData);
                         }
