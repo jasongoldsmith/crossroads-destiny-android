@@ -207,10 +207,10 @@ public class EventDetailsFragments extends Fragment {
                     holder.message.setVisibility(View.GONE);
 
                     if (checkUserIsCreator() && (!playerLocal.get(position).getPlayerId().equalsIgnoreCase(currentEvent.getCreatorData().getPlayerId()))) {
-                        holder.message.setVisibility(View.VISIBLE);
+                        //holder.message.setVisibility(View.VISIBLE);
                     }
                     if ((checkUserIsPlayer() && !checkUserIsCreator()) && (playerLocal.get(position).getPlayerId().equalsIgnoreCase(currentEvent.getCreatorData().getPlayerId()))) {
-                        holder.message.setVisibility(View.VISIBLE);
+                        //holder.message.setVisibility(View.VISIBLE);
                     }
 
                     final String finalCurrPlayerId = currPlayerId;
