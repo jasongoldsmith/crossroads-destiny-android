@@ -65,4 +65,6 @@
     <color name="tag_background">#203236</color>
 
     <color name="event_detail_fireteam_cardbackground">#1d3137</color>
+    <color name="comment_text_color">#819ea8</color>
+    <color name="comment_typing_text">#353f4e</color>
 </resources>

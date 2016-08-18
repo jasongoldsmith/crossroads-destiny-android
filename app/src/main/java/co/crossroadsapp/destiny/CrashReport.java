@@ -34,7 +34,8 @@ public class CrashReport extends Activity {
         controlManager = ControlManager.getmInstance();
 
         Bundle b = getIntent().getExtras();
-        user = b.getParcelable("userdata");
+        //user = b.getParcelable("userdata");
+        user = controlManager.getUserData();
 
         crash_text = (EditText) findViewById(R.id.crash_edittext);
         send_crash = (CardView) findViewById(R.id.send_crash);

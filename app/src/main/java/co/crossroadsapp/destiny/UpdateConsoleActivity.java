@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.app.Activity;
-import android.os.Parcelable;
-import android.support.v7.internal.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -71,7 +68,7 @@ public class UpdateConsoleActivity extends BaseActivity implements AdapterView.O
         if(mManager.getUserData()!=null) {
             user = mManager.getUserData();
         } else if(b!=null){
-            user = b.getParcelable("userdata");
+            //user = b.getParcelable("userdata");
         }
 
         //spinner customization

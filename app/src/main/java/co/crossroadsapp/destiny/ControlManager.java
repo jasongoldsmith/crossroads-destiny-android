@@ -18,6 +18,7 @@ import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.GroupList;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.network.ActivityListNetwork;
+import co.crossroadsapp.destiny.network.AddCommentNetwork;
 import co.crossroadsapp.destiny.network.AddNewConsoleNetwork;
 import co.crossroadsapp.destiny.network.ChangeCurrentConsoleNetwork;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
@@ -93,6 +94,7 @@ public class ControlManager implements Observer{
     private ChangeCurrentConsoleNetwork changeCurrentConsoleNetwork;
     private String deepLinkActivityName;
     private PrivacyLegalUpdateNetwork legalPrivacyNetwork;
+    private AddCommentNetwork addCommentsNetwork;
 
     public ControlManager() {
     }
@@ -704,6 +706,17 @@ public class ControlManager implements Observer{
             forgotPasswordNetwork = new ForgotPasswordNetwork(activity);
             forgotPasswordNetwork.addObserver(activity);
             forgotPasswordNetwork.doChangePassword(params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void postComments(EventDetailActivity activity, RequestParams params) {
+        try {
+            addCommentsNetwork = new AddCommentNetwork(activity);
+            addCommentsNetwork.addObserver(activity);
+            addCommentsNetwork.postComments(params);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

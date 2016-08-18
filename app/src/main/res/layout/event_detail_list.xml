@@ -365,6 +365,65 @@
             android:layout_alignParentBottom="true"
             android:gravity="center"
             android:visibility="gone"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/send_comment_layout"
+            android:visibility="gone">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/trimbe_white"
+                android:id="@+id/comment_edittext"
+                android:paddingLeft="14dp"
+                android:paddingTop="9dp"
+                android:paddingBottom="12dp"
+                android:textColorHint="@color/comment_text_color"
+                android:textColor="@color/comment_typing_text"
+                android:hint="Write a message"
+                android:textSize="16sp"
+                android:paddingRight="50dp"
+                android:textCursorDrawable="@color/comment_text_color"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLines="4"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/send_msg_btn"
+                android:src="@drawable/icon_s_e_n_d"
+                android:padding="3dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+
+
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:id="@+id/send_comment_layout"-->
+            <!--android:background="@color/trimbe_white"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:visibility="gone">-->
+
+            <!--<EditText-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/comment_edittext"-->
+                <!--android:layout_marginLeft="14dp"-->
+                <!--android:paddingTop="9dp"-->
+                <!--android:hint="Write a message"-->
+                <!--android:textSize="26sp"-->
+                <!--android:inputType="textMultiLine"-->
+                <!--/>-->
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@drawable/img_send_btn"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:padding="3dp"/>-->
+        <!--</RelativeLayout>-->
     </RelativeLayout>
 
     <!--<android.support.v7.widget.RecyclerView-->
@@ -398,13 +457,6 @@
             app:tabPaddingStart="20dp"
             app:tabPaddingEnd="0dp"
             android:minHeight="?attr/actionBarSize" />
-        <!--<com.viewpagerindicator.TitlePageIndicator-->
-            <!--android:id="@+id/eventdetail_tab_layout"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="top"-->
-            <!--android:paddingBottom="4dp"-->
-            <!--android:paddingTop="4dp" />-->
         <android.support.v4.view.ViewPager
             android:id="@+id/eventdetail_viewpager"
             android:layout_width="match_parent"

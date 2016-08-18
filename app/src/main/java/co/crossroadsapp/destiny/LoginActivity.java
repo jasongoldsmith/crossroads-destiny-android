@@ -47,13 +47,15 @@ public class LoginActivity extends BaseActivity implements Observer {
 
         Bundle b = getIntent().getExtras();
         if(b!=null) {
-            if(b.getParcelable("userdata")!=null) {
-                user = b.getParcelable("userdata");
-            }
-        }
 
-        if(b.containsKey("eventIntent")) {
-            localPushEvent = (Intent) b.get("eventIntent");
+//            if(b.getParcelable("userdata")!=null) {
+//                user = b.getParcelable("userdata");
+//            }
+//        }
+
+            if (b.containsKey("eventIntent")) {
+                localPushEvent = (Intent) b.get("eventIntent");
+            }
         }
 
         name_login = (EditText) findViewById(R.id.login_name);
@@ -91,6 +93,8 @@ public class LoginActivity extends BaseActivity implements Observer {
 
         mManager = ControlManager.getmInstance();
         mManager.setCurrentActivity(this);
+
+        user = mManager.getUserData();
 
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,7 +232,7 @@ public class LoginActivity extends BaseActivity implements Observer {
 //                regIntent = new Intent(getApplicationContext(),
 //                        CreateNewEvent.class);
 //            }
-                regIntent.putExtra("userdata", ud);
+                //regIntent.putExtra("userdata", ud);
 
                 startActivity(regIntent);
                 finish();

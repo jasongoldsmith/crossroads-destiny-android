@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Created by sharmha on 2/23/16.
  */
-public class UserData implements Parcelable {
+public class UserData {
 
     private LegalData legal;
     private String user=null;
@@ -219,47 +219,51 @@ public class UserData implements Parcelable {
         }
     }
 
-    public static final Creator<UserData> CREATOR = new Creator<UserData>() {
-        @Override
-        public UserData createFromParcel(Parcel in) {
-            return new UserData(in);
-        }
-
-        @Override
-        public UserData[] newArray(int size) {
-            return new UserData[size];
-        }
-    };
-
-    public UserData(Parcel in){
-        this.user = in.readString();
-        this.password = in.readString();
-        this.psnId = in.readString();
-        this.imageUrl = in.readString();
-        this.userId = in.readString();
-        this.clanId = in.readString();
-        this.psnVerify = in.readString();
-        this.consoleType = in.readString();
-        this.membershipId = in.readString();
-        this.authenticationId = in.readInt();
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.user);
-        dest.writeString(this.password);
-        dest.writeString(this.psnId);
-        dest.writeString(this.imageUrl);
-        dest.writeString(this.userId);
-        dest.writeString(this.clanId);
-        dest.writeString(this.psnVerify);
-        dest.writeString(this.consoleType);
-        dest.writeString(this.membershipId);
-        dest.writeInt(this.authenticationId);
-    }
+//    public static final Creator<UserData> CREATOR = new Creator<UserData>() {
+//        @Override
+//        public UserData createFromParcel(Parcel in) {
+//            return new UserData(in);
+//        }
+//
+//        @Override
+//        public UserData[] newArray(int size) {
+//            return new UserData[size];
+//        }
+//    };
+//
+//    public UserData(Parcel in){
+//        this.user = in.readString();
+//        this.password = in.readString();
+//        this.psnId = in.readString();
+//        this.imageUrl = in.readString();
+//        this.userId = in.readString();
+//        this.clanId = in.readString();
+//        this.psnVerify = in.readString();
+//        this.consoleType = in.readString();
+//        this.membershipId = in.readString();
+//        this.authenticationId = in.readInt();
+//        this.clanTag = in.readString();
+//        this.consoles = in.readArrayList(ConsoleData.class.getClassLoader());
+//    }
+//
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel dest, int flags) {
+//        dest.writeString(this.user);
+//        dest.writeString(this.password);
+//        dest.writeString(this.psnId);
+//        dest.writeString(this.imageUrl);
+//        dest.writeString(this.userId);
+//        dest.writeString(this.clanId);
+//        dest.writeString(this.psnVerify);
+//        dest.writeString(this.consoleType);
+//        dest.writeString(this.membershipId);
+//        dest.writeInt(this.authenticationId);
+//        dest.writeString(this.clanTag);
+//        dest.writeList(this.consoles);
+//    }
 }

@@ -13,6 +13,7 @@
         android:visibility="gone"
         android:textColor="@color/trimbe_white"
         android:textSize="12sp"
+        android:padding="15dp"
         android:id="@+id/clan_tag_text"/>
 
     <android.support.v4.widget.SwipeRefreshLayout

@@ -35,11 +35,21 @@ public class AddNewActivity extends BaseActivity implements Observer {
         mCntrlMngr = ControlManager.getmInstance();
         mCntrlMngr.setCurrentActivity(this);
         //mCntrlMngr.getAllActivities(this);
+        boolean ads= false;
+        String adP=null;
 
         Bundle b = getIntent().getExtras();
-        user = b.getParcelable("userdata");
-        boolean ads= b.getBoolean("adcard");
-        String adP = b.getString("adCardId");
+        //user = b.getParcelable("userdata");
+        if(b!=null) {
+            if (b.containsKey("adcard")) {
+                ads = b.getBoolean("adcard");
+            }
+            if (b.containsKey("adCardId")) {
+                adP = b.getString("adCardId");
+            }
+        }
+
+        user = mCntrlMngr.getUserData();
 
         checkIfAdFlow(ads, adP);
 
@@ -167,13 +177,15 @@ public class AddNewActivity extends BaseActivity implements Observer {
 
     private void checkIfAdFlow(boolean ads, String adP) {
         if(ads) {
-            //start new activity for add event creation
-            Intent regIntent = new Intent(AddNewActivity.this,
-                    AddFinalActivity.class);
-            regIntent.putExtra("userdata", user);
-            regIntent.putExtra("adcard", ads);
-            regIntent.putExtra("adCardId", adP);
-            startActivity(regIntent);
+            if(adP!=null) {
+                //start new activity for add event creation
+                Intent regIntent = new Intent(AddNewActivity.this,
+                        AddFinalActivity.class);
+                //regIntent.putExtra("userdata", user);
+                regIntent.putExtra("adcard", ads);
+                regIntent.putExtra("adCardId", adP);
+                startActivity(regIntent);
+            }
         }
     }
 
@@ -200,14 +212,14 @@ public class AddNewActivity extends BaseActivity implements Observer {
             //start new activity for add event creation
             Intent regIntent = new Intent(AddNewActivity.this,
                     AddFinalActivity.class);
-            regIntent.putExtra("userdata", user);
+            //regIntent.putExtra("userdata", user);
             startActivity(regIntent);
         }
     }
 
     private void launchListActivityAndFinish() {
         Intent i=new Intent (this, ListActivityFragment.class);
-        i.putExtra("userdata", user);
+        //i.putExtra("userdata", user);
 //        if(localPushEventObj!=null){
 //            i.putExtra("eventIntent", localPushEventObj);
 //        }

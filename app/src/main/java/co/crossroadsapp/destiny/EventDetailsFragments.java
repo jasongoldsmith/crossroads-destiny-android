@@ -14,8 +14,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.loopj.android.http.RequestParams;
+
 import java.util.ArrayList;
 
+import co.crossroadsapp.destiny.data.CommentData;
 import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.PlayerData;
 import co.crossroadsapp.destiny.data.UserData;
@@ -35,6 +38,8 @@ public class EventDetailsFragments extends Fragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private EventData currentEvent;
     private CurrentEventsViewAdapter mAdapter;
+    private CurrentEventsCommentsViewAdapter mAdapterComment;
+    private RelativeLayout commentLayout;
 
     // newInstance constructor for creating fragment with arguments
     public static EventDetailsFragments newInstance(int page, EventDetailActivity c, EventData data) {
@@ -81,40 +86,59 @@ public class EventDetailsFragments extends Fragment {
 //        mSwipeRefreshLayout.setLayoutParams(params);
 //        mSwipeRefreshLayout.requestLayout();
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rv.setHasFixedSize(false);
+        rv.setHasFixedSize(true);
 
         if(page==0) {
             // fireteam fragment
             if(currentEvent!=null && currentEvent.getPlayerData()!=null) {
-                if(clanTag!=null) {
                     //// TODO: 8/16/16 check clanTag in activity
-                    if(user!=null && user.getClanTag()!=null) {
+                    if(currentEvent.getClanName()!=null) {
                         clanTag.setVisibility(View.VISIBLE);
-                        clanTag.setText(user.getClanTag());
+                        clanTag.setText(currentEvent.getClanName());
                     }
-                }
                 mAdapter = new CurrentEventsViewAdapter(currentEvent.getPlayerData());
                 rv.setAdapter(mAdapter);
             }
         } else if(page==1) {
-            //comments fragment
-            clanTag.setVisibility(View.GONE);
+            if(currentEvent!=null && currentEvent.getCommentDataList()!=null) {
+                //comments fragment
+                if(clanTag!=null) {
+                    clanTag.setVisibility(View.GONE);
+                }
+                mAdapterComment = new CurrentEventsCommentsViewAdapter(currentEvent.getCommentDataList());
+                rv.setAdapter(mAdapterComment);
+            }
         }
 
         return view;
     }
 
     private void refreshItems() {
-
+        if(currentEvent!=null && currentEvent.getEventId()!=null) {
+            String id = currentEvent.getEventId();
+            RequestParams param = new RequestParams();
+            param.add("id", id);
+            mManager.postEventById(((EventDetailActivity)getActivity()), param);
+        }
     }
 
-    public void updateCurrListAdapter(EventData currEvent) {
+    public void updateCurrListAdapter(EventData currEvent, int page ) {
+        // Stop refresh animation
+        mSwipeRefreshLayout.setRefreshing(false);
         if(currEvent!=null) {
             currentEvent = currEvent;
-            if (mAdapter!=null) {
-                mAdapter.playerLocal.clear();
-                mAdapter.addItem(currentEvent.getPlayerData());
-                mAdapter.notifyDataSetChanged();
+            if(page==0) {
+                if (mAdapter != null) {
+                    mAdapter.playerLocal.clear();
+                    mAdapter.addItem(currentEvent.getPlayerData());
+                    mAdapter.notifyDataSetChanged();
+                }
+            } else if(page==1) {
+                if (mAdapterComment != null) {
+                    mAdapterComment.commentsLocal.clear();
+                    mAdapterComment.commentsLocal = currEvent.getCommentDataList();
+                    mAdapterComment.notifyDataSetChanged();
+                }
             }
         }
     }
@@ -163,6 +187,7 @@ public class EventDetailsFragments extends Fragment {
         if(playerLocal!=null) {
             if (position >= playerLocal.size() && getMaxPlayer() > playerLocal.size() ) {
                 holder.playerName.setText("searching...");
+                holder.playerName.setTextColor(getResources().getColor(R.color.trimbe_white));
                 holder.message.setVisibility(View.GONE);
                 holder.playerProfile.setImageResource(R.drawable.img_profile_blank);
             } else {
@@ -176,6 +201,7 @@ public class EventDetailsFragments extends Fragment {
                     }
                     if (playerLocal.get(position).getPsnId() != null) {
                         holder.playerName.setText(playerLocal.get(position).getPsnId());
+                        holder.playerName.setTextColor(getResources().getColor(R.color.activity_light_color));
                     }
 
                     holder.message.setVisibility(View.GONE);
@@ -257,5 +283,64 @@ public class EventDetailsFragments extends Fragment {
             }
         }
         return false;
+    }
+
+    private class CurrentEventsCommentsViewAdapter extends RecyclerView.Adapter<CurrentEventsCommentsViewAdapter.CurrentEventsCommentsViewHolder>{
+        private ArrayList<CommentData> commentsLocal;
+
+        public CurrentEventsCommentsViewAdapter(ArrayList<CommentData> commentDataList) {
+            commentsLocal = new ArrayList<CommentData>();
+            commentsLocal = commentDataList;
+        }
+
+        @Override
+        public CurrentEventsCommentsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            RecyclerView.ViewHolder vh = null;
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.fragment_eventdetail_commentcard, null);
+            return new CurrentEventsCommentsViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(CurrentEventsCommentsViewHolder holder, int position) {
+            if(commentsLocal!=null && !commentsLocal.isEmpty()) {
+                if(commentsLocal.get(position)!=null) {
+                    if(commentsLocal.get(position).getComment()!=null && !commentsLocal.get(position).getComment().isEmpty()) {
+                        String text = commentsLocal.get(position).getComment();
+                        holder.playerCommentText.setText(text);
+                    }
+                    if(commentsLocal.get(position).getPlayerImageUrl()!=null && !commentsLocal.get(position).getPlayerImageUrl().isEmpty()) {
+                        String playerImg = commentsLocal.get(position).getPlayerImageUrl();
+                        Util.picassoLoadImageWithoutMeasurement(getActivity(), holder.playerProfileComment, playerImg, R.drawable.img_profile_blank);
+                    }
+                    if(commentsLocal.get(position).getUsername()!=null) {
+                        holder.playerNameComment.setText(commentsLocal.get(position).getUsername());
+                    }
+
+                }
+            }
+            holder.playerProfileComment.invalidate();
+        }
+
+        @Override
+        public int getItemCount() {
+            return commentsLocal.size();
+        }
+
+        public class CurrentEventsCommentsViewHolder extends RecyclerView.ViewHolder {
+            private CircularImageView playerProfileComment;
+            private TextView playerNameComment;
+            private TextView playerCommentText;
+            private TextView time;
+            public CurrentEventsCommentsViewHolder(View itemView) {
+                super(itemView);
+                view = itemView;
+
+                playerProfileComment = (CircularImageView) itemView.findViewById(R.id.event_detail_comment_player_profile);
+                playerNameComment = (TextView) itemView.findViewById(R.id.player_name_comment);
+                playerCommentText = (TextView) itemView.findViewById(R.id.comment_text);
+                time = (TextView) itemView.findViewById(R.id.comment_time);
+            }
+        }
     }
 }

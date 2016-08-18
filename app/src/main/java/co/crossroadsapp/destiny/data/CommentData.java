@@ -71,7 +71,7 @@ public class CommentData extends PlayerData {
                     }
                 }
                 if(creator.has("imageUrl")) {
-                    setPlayerImageUrl("imageUrl");
+                    setPlayerImageUrl(creator.getString("imageUrl"));
                 }
             }
             if(data.has("text") && !data.isNull("text")) {

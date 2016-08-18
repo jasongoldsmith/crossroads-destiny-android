@@ -41,6 +41,7 @@ import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.PlayerData;
 import co.crossroadsapp.destiny.data.PushNotification;
 import co.crossroadsapp.destiny.data.UserData;
+import co.crossroadsapp.destiny.network.AddCommentNetwork;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
 import co.crossroadsapp.destiny.network.EventRelationshipHandlerNetwork;
 import co.crossroadsapp.destiny.network.EventSendMessageNetwork;
@@ -120,6 +121,9 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private ImageView background;
     private ViewPager viewPager;
     private PagerAdapter pagerAdapter;
+    private RelativeLayout commentLayout;
+    private EditText sendMsg;
+    private ImageView sendMsgBtn;
 //    private TextView errText;
 //    private ImageView close_err;
 
@@ -129,7 +133,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         setContentView(R.layout.event_detail_list);
 
         Bundle b = getIntent().getExtras();
-        user = b.getParcelable("userdata");
+//        user = b.getParcelable("userdata");
 
         setTRansparentStatusBar();
 
@@ -149,6 +153,8 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         controlManager = ControlManager.getmInstance();
 
         controlManager.setCurrentActivity(EventDetailActivity.this);
+
+        user = controlManager.getUserData();
 
         _handler = new Handler();
 
@@ -178,6 +184,19 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         back = (ImageView) findViewById(R.id.eventdetail_backbtn);
         share = (ImageView) findViewById(R.id.eventdetail_sharebtn);
         eventDetailDate = (TextView) findViewById(R.id.eventDetailDate);
+
+        commentLayout = (RelativeLayout) findViewById(R.id.send_comment_layout);
+
+        sendMsg = (EditText) findViewById(R.id.comment_edittext);
+        sendMsg.addTextChangedListener(mTextEditorWatcher);
+        sendMsgBtn = (ImageView) findViewById(R.id.send_msg_btn);
+
+        sendMsgBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMsgBtnClick();
+            }
+        });
 
         sendmsg_bckgrnd = (RelativeLayout) findViewById(R.id.sendmsg_background);
 
@@ -285,8 +304,6 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         userIsPlayer = checkUserIsPlayer();
 
-        setBottomButtonSelection();
-
         sendMessageLayout = (RelativeLayout) findViewById(R.id.send_message_layout);
 
         sendmsg_bckgrnd.setOnClickListener(new View.OnClickListener() {
@@ -320,6 +337,30 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         viewPager = (ViewPager) findViewById(R.id.eventdetail_viewpager);
         pagerAdapter = new PagerAdapter(getSupportFragmentManager(), EventDetailActivity.this);
         viewPager.setAdapter(pagerAdapter);
+
+        setBottomButtonSelection();
+
+        //viewpager change listener
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if(position==1) {
+                    changeBottomButtomForComments();
+                } else if(position==0) {
+                    setBottomButtonSelection();
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.eventdetail_tab_layout);
@@ -388,6 +429,18 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
     }
 
+    private void changeBottomButtomForComments() {
+        if(userIsPlayer) {
+            bottomBtnLayout.setVisibility(View.VISIBLE);
+            joinBtn.setVisibility(View.GONE);
+            leaveBtn.setVisibility(View.GONE);
+            msgallBtn.setVisibility(View.GONE);
+            commentLayout.setVisibility(View.VISIBLE);
+        } else {
+            setBottomButtonSelection();
+        }
+    }
+
     class PagerAdapter extends FragmentPagerAdapter {
 
         String tabTitles[] = new String[] { "FIRETEAM", "COMMENTS" };
@@ -442,14 +495,14 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     }
 
     private void updateCurrentFrag() {
-        Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 0);
+        Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.eventdetail_viewpager + ":" + 0);
         if (page != null) {
-            ((EventDetailsFragments) page).updateCurrListAdapter(currEvent);
+            ((EventDetailsFragments) page).updateCurrListAdapter(currEvent, 0);
         }
 
-        page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 1);
+        page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.eventdetail_viewpager + ":" + 1);
         if (page != null) {
-            ((EventDetailsFragments) page).updateCurrListAdapter(currEvent);
+            ((EventDetailsFragments) page).updateCurrListAdapter(currEvent, 1);
         }
     }
 
@@ -642,8 +695,29 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     };
 
     private void setBottomButtonSelection() {
-        if(checkUserIsCreator()){
-            if((this.currEvent.getPlayerData()!=null) && this.currEvent.getPlayerData().size()>1) {
+        int p=5;
+        if(viewPager!=null) {
+            p = viewPager.getCurrentItem();
+        }
+        if(p==1) {
+            if(checkUserIsPlayer()) {
+                bottomBtnLayout.setVisibility(View.VISIBLE);
+                joinBtn.setVisibility(View.GONE);
+                leaveBtn.setVisibility(View.GONE);
+                msgallBtn.setVisibility(View.GONE);
+                commentLayout.setVisibility(View.VISIBLE);
+            }else {
+                setBottomBtn();
+            }
+        }else {
+            setBottomBtn();
+        }
+    }
+
+    private void setBottomBtn() {
+        commentLayout.setVisibility(View.GONE);
+        if (checkUserIsCreator()) {
+            if ((this.currEvent.getPlayerData() != null) && this.currEvent.getPlayerData().size() > 1) {
                 bottomBtnLayout.setVisibility(View.VISIBLE);
                 leaveBtn.setVisibility(View.GONE);
                 joinBtn.setVisibility(View.GONE);
@@ -659,7 +733,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             leaveBtn.setVisibility(View.VISIBLE);
             joinBtn.setVisibility(View.GONE);
             msgallBtn.setVisibility(View.GONE);
-        } else if(!currEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)){
+        } else if (!currEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)) {
             bottomBtnLayout.setVisibility(View.VISIBLE);
             leaveBtn.setVisibility(View.GONE);
             joinBtn.setVisibility(View.VISIBLE);
@@ -729,8 +803,9 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
     @Override
     public void update(Observable observable, Object data) {
-            hideProgress();
-            if (observable instanceof EventRelationshipHandlerNetwork || observable instanceof EventByIdNetwork) {
+        hideProgress();
+        hideProgressBar();
+            if (observable instanceof EventRelationshipHandlerNetwork || observable instanceof EventByIdNetwork || observable instanceof AddCommentNetwork) {
                 this.currEvent = (EventData) data;
                 if (currEvent != null) {
                     if ((currEvent.getPlayerData() != null) && (currEvent.getPlayerData().size()>0)) {
@@ -957,6 +1032,37 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         return null;
     }
 
+    private String getSendMsgEditText() {
+        if (sendMsg != null) {
+            if (sendMsg.getText() != null) {
+                if (sendMsg.getText().toString().length() > 0) {
+                    return sendMsg.getText().toString();
+                }
+            }
+        }
+        return null;
+    }
+
+    private void sendMsgBtnClick() {
+        showProgressBar();
+        if (currEvent != null && currEvent.getEventId() != null) {
+            String msg = getSendMsgEditText();
+            sendMsg.setText("");
+            // Check if no view has focus:
+            View view = this.getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+            if(msg!=null) {
+                RequestParams params = new RequestParams();
+                params.put("eId", currEvent.getEventId());
+                params.put("text", msg);
+                controlManager.postComments(EventDetailActivity.this, params);
+            }
+        }
+    }
+
     private void sendMessage(final String currentPlayerId, final String msg) {
         //final String pId = currentPlayerId;
 //        if (editText != null) {
@@ -980,7 +1086,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
     private void launchListActivityAndFinish() {
         Intent i=new Intent (this, ListActivityFragment.class);
-        i.putExtra("userdata", user);
+        //i.putExtra("userdata", user);
         startActivity(i);
         currEvent = null;
         finish();
@@ -1008,7 +1114,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         // filter event related message notification
         getEventNotification(currEvent);
         if(eventNotiList!=null && (!eventNotiList.isEmpty())) {
-            cardStackLayout.setVisibility(View.VISIBLE);
+            //cardStackLayout.setVisibility(View.VISIBLE);
         }
         if(n==0) {
             if(eventNotiList!=null && (!eventNotiList.isEmpty())){
@@ -1021,46 +1127,46 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         }
 
 
-        cardStack = null;
-        cardStack = (SwipeDeck) findViewById(R.id.swipe_deck);
-        if(adapter != null) {
-            adapter = null;
-        }
+//        cardStack = null;
+//        cardStack = (SwipeDeck) findViewById(R.id.swipe_deck);
+//        if(adapter != null) {
+//            adapter = null;
+//        }
+//
+//        adapter = new SwipeStackAdapter(eventNotiList, this);
+//        cardStack.setAdapter(adapter);
+//        adapter.notifyDataSetChanged();
 
-        adapter = new SwipeStackAdapter(eventNotiList, this);
-        cardStack.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-
-        cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
-            @Override
-            public void cardSwipedLeft(int position) {
-                checkAndRemoveNoti(EventDetailActivity.this, position, adapter);
-                //notiList.remove(position);
-
-            }
-
-            @Override
-            public void cardSwipedRight(int position) {
-                checkAndRemoveNoti(EventDetailActivity.this, position, adapter);
-            }
-
-            @Override
-            public void cardsDepleted() {
-                if(eventNotiList.isEmpty()) {
-                    cardStackLayout.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void cardActionDown() {
-
-            }
-
-            @Override
-            public void cardActionUp() {
-
-            }
-        });
+//        cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
+//            @Override
+//            public void cardSwipedLeft(int position) {
+//                checkAndRemoveNoti(EventDetailActivity.this, position, adapter);
+//                //notiList.remove(position);
+//
+//            }
+//
+//            @Override
+//            public void cardSwipedRight(int position) {
+//                checkAndRemoveNoti(EventDetailActivity.this, position, adapter);
+//            }
+//
+//            @Override
+//            public void cardsDepleted() {
+//                if(eventNotiList.isEmpty()) {
+//                    cardStackLayout.setVisibility(View.GONE);
+//                }
+//            }
+//
+//            @Override
+//            public void cardActionDown() {
+//
+//            }
+//
+//            @Override
+//            public void cardActionUp() {
+//
+//            }
+//        });
 
     }
 }

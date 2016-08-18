@@ -17,6 +17,7 @@ public class EventData {
     private int maxPlayer=0;
     private ActivityData activityData;
     private ArrayList<PlayerData> playerDataList;
+    private ArrayList<CommentData> commentDataList;
     private CreatorData creatorData;
     private String launchDate=null;
     private String launchStatus=null;
@@ -29,6 +30,7 @@ public class EventData {
         activityData = new ActivityData();
         playerDataList = new ArrayList<PlayerData>();
         creatorData = new CreatorData();
+        commentDataList = new ArrayList<CommentData>();
     }
 
     public void setEventId(String id) {
@@ -131,6 +133,10 @@ public class EventData {
         return this.playerDataList;
     }
 
+    public ArrayList<CommentData> getCommentDataList() {
+        return commentDataList;
+    }
+
     public void toJson(JSONObject json) {
         try {
             if(json!=null) {
@@ -179,6 +185,15 @@ public class EventData {
                             playerDataList.add(pData);
                         }
                     }
+                if(json.has("comments") && !json.isNull("comments")){
+                    JSONArray commentArr = json.optJSONArray("comments");
+                    for (int n=0; n<commentArr.length(); n++) {
+                        JSONObject jsonObj = commentArr.getJSONObject(n);
+                        CommentData cd = new CommentData();
+                        cd.toJson(jsonObj);
+                        commentDataList.add(cd);
+                    }
+                }
                     if (json.has("launchDate")) {
                         setLaunchDate(json.getString("launchDate"));
                     }

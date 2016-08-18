@@ -11,7 +11,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId  = theApplicationId
+        applicationId = theApplicationId
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 57
@@ -62,28 +62,28 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.loopj.android:android-async-http:1.4.9'
-    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
-    compile 'com.google.code.gson:gson:2.4'
-    compile "com.mixpanel.android:mixpanel-android:4.+"
-    compile 'io.branch.sdk.android:library:1.+'
-    compile 'com.android.support:recyclerview-v7:23.2.1'
-    compile 'com.android.support:design:22.2.0'
-    compile 'com.android.support:design:23.0.1'
-    compile 'com.android.support:cardview-v7:21.+'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.google.android.gms:play-services-gcm:9.2.0'
-    compile 'com.android.support:support-v13:21.0.3'
-    compile 'com.parse.bolts:bolts-android:1+'
-    compile 'fr.avianey.com.viewpagerindicator:library:2.4.1@aar'
-    compile 'com.android.support:appcompat-v7:23.1.0'
-    compile 'com.android.support:design:23.1.0'
-    compile 'com.prolificinteractive:material-calendarview:1.2.0'
-    compile 'com.google.firebase:firebase-database:9.2.0'
-    compile 'com.google.firebase:firebase-invites:9.2.0'
     compile('com.crashlytics.sdk.android:answers:1.3.8@aar') {
         transitive = true;
     }
+    compile 'com.loopj.android:android-async-http:1.4.9'
+    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    compile 'com.google.code.gson:gson:2.4'
+    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.mixpanel.android:mixpanel-android:4.+'
+    compile 'io.branch.sdk.android:library:1.+'
+    compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:cardview-v7:23.4.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.google.android.gms:play-services-gcm:9.2.0'
+    compile 'com.android.support:support-v13:23.4.0'
+    compile 'com.parse.bolts:bolts-android:1.+'
+    compile 'fr.avianey.com.viewpagerindicator:library:2.4.1@aar'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.prolificinteractive:material-calendarview:1.2.0'
+    compile 'com.google.firebase:firebase-database:9.2.0'
+    compile 'com.google.firebase:firebase-invites:9.2.0'
+    compile 'com.android.support:support-v4:23.4.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

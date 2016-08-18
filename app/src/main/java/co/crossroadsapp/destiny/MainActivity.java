@@ -104,7 +104,7 @@ public class MainActivity extends BaseActivity implements Observer {
                     TravellerLog.w(this, "Launch console selection page activity");
                     Intent regIntent = new Intent(getApplicationContext(),
                             ConsoleSelectionActivity.class);
-                    regIntent.putExtra("userdata", userData);
+                    //regIntent.putExtra("userdata", userData);
                     startActivity(regIntent);
                     finish();
                 }
@@ -123,7 +123,7 @@ public class MainActivity extends BaseActivity implements Observer {
     private void launchLogin() {
         Intent signinIntent = new Intent(getApplicationContext(),
                 LoginActivity.class);
-        signinIntent.putExtra("userdata", userData);
+        //signinIntent.putExtra("userdata", userData);
         if(contentIntent!=null) {
             signinIntent.putExtra("eventIntent", contentIntent);
         }
@@ -213,7 +213,7 @@ public class MainActivity extends BaseActivity implements Observer {
 //                    regIntent = new Intent(getApplicationContext(),
 //                            CreateNewEvent.class);
 //                }
-                    regIntent.putExtra("userdata", ud);
+                    //regIntent.putExtra("userdata", ud);
                     startActivity(regIntent);
                     finish();
                 } else {

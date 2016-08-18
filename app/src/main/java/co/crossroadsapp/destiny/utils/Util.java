@@ -537,10 +537,12 @@ public class Util {
     }
 
     public static void roundCorner(TextView textView, Context mContext) {
-        GradientDrawable gd = new GradientDrawable();
-        gd.setCornerRadius(5);
-        gd.setStroke(2, 0xFF203236);
-        gd.setColor(mContext.getResources().getColor(R.color.tag_background));
-        textView.setBackgroundDrawable(gd);
+        if(mContext!=null) {
+            GradientDrawable gd = new GradientDrawable();
+            gd.setCornerRadius(5);
+            gd.setStroke(2, 0xFF203236);
+            gd.setColor(mContext.getResources().getColor(R.color.tag_background));
+            textView.setBackgroundDrawable(gd);
+        }
     }
 }

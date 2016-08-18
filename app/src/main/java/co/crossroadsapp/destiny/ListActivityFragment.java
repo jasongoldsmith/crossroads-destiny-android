@@ -345,7 +345,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 // go to create new event page
                 Intent regIntent = new Intent(getApplicationContext(),
                         AddNewActivity.class);
-                regIntent.putExtra("userdata", user);
+                //regIntent.putExtra("userdata", user);
                 startActivity(regIntent);
                 //finish();
             }
@@ -497,7 +497,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             public void onClick(View v) {
                 Intent regIntent = new Intent(getApplicationContext(),
                         CrashReport.class);
-                regIntent.putExtra("userdata", user);
+                //regIntent.putExtra("userdata", user);
                 startActivity(regIntent);
             }
         });
@@ -656,7 +656,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                     //start new activity for event
                     Intent regIntent = new Intent(ListActivityFragment.this,
                             UpdateConsoleActivity.class);
-                    regIntent.putExtra("userdata", user);
+                    //regIntent.putExtra("userdata", user);
                     startActivity(regIntent);
                 }
             });
@@ -1014,7 +1014,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                     //start new activity for event
                     Intent regIntent = new Intent(this,
                             EventDetailActivity.class);
-                    regIntent.putExtra("userdata", user);
+                    //regIntent.putExtra("userdata", user);
                     startActivity(regIntent);
                     finish();
                 }
@@ -1423,7 +1423,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                     //start new activity for add event creation
                     Intent regIntent = new Intent(ListActivityFragment.this,
                             AddNewActivity.class);
-                    regIntent.putExtra("userdata", user);
+                    //regIntent.putExtra("userdata", user);
                     regIntent.putExtra("adcard", true);
                     regIntent.putExtra("adCardId", adCardPosition);
                     startActivity(regIntent);

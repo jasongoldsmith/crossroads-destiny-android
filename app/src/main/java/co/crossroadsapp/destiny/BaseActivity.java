@@ -46,17 +46,22 @@ public class BaseActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        registerReceiver(ReceivefromService, new IntentFilter("subtype_flag"));
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        registerReceiver(ReceivefromService, new IntentFilter("subtype_flag"));
     }
 
     @Override
     public void onStop() {
         super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         unregisterReceiver(ReceivefromService);
     }
 
@@ -126,7 +131,7 @@ public class BaseActivity extends FragmentActivity {
                         // go to create new event page
                         Intent regIntent = new Intent(getApplicationContext(),
                                 AddNewActivity.class);
-                        regIntent.putExtra("userdata", mManager.getUserData());
+                        //regIntent.putExtra("userdata", mManager.getUserData());
                         startActivity(regIntent);
                     }
                 });
@@ -155,7 +160,7 @@ public class BaseActivity extends FragmentActivity {
                         // go to create new event page
                         Intent regIntent = new Intent(getApplicationContext(),
                                 AddNewActivity.class);
-                        regIntent.putExtra("userdata", mManager.getUserData());
+                        //regIntent.putExtra("userdata", mManager.getUserData());
                         startActivity(regIntent);
                     }
                 });
@@ -169,7 +174,7 @@ public class BaseActivity extends FragmentActivity {
                     // go to create new event page
                     Intent regIntent = new Intent(getApplicationContext(),
                             UpdateConsoleActivity.class);
-                    regIntent.putExtra("userdata", mManager.getUserData());
+                    //regIntent.putExtra("userdata", mManager.getUserData());
                     startActivity(regIntent);
                 }
                 });

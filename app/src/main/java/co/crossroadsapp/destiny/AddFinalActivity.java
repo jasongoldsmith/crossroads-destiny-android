@@ -110,10 +110,17 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         //mCntrlMngr.getAllActivities(this);
 
         Bundle b = getIntent().getExtras();
-        user = b.getParcelable("userdata");
+        //user = b.getParcelable("userdata");
 
-        boolean ads= b.getBoolean("adcard");
-        String adP = b.getString("adCardId");
+        user = mCntrlMngr.getUserData();
+
+        boolean ads=false;
+        String adP=null;
+
+        if(b!=null) {
+            ads = b.getBoolean("adcard");
+            adP = b.getString("adCardId");
+        }
 
         back = (ImageView) findViewById(R.id.back_btn);
         back.setOnClickListener(new View.OnClickListener() {
@@ -878,7 +885,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
     private void launchListActivityAndFinish() {
         Intent i=new Intent (this, ListActivityFragment.class);
-        i.putExtra("userdata", user);
+        //i.putExtra("userdata", user);
 //        if(localPushEventObj!=null){
 //            i.putExtra("eventIntent", localPushEventObj);
 //        }

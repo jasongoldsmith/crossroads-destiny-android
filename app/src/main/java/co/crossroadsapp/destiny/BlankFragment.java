@@ -395,7 +395,7 @@ public class BlankFragment extends Fragment {
                                     Intent regIntent = new Intent(mContext,
                                             EventDetailActivity.class);
                                     if (regIntent != null) {
-                                        regIntent.putExtra("userdata", user);
+                                        //regIntent.putExtra("userdata", user);
                                         startActivity(regIntent);
                                         mContext.finish();
                                     }
