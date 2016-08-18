@@ -40,6 +40,7 @@ public class EventDetailsFragments extends Fragment {
     private CurrentEventsViewAdapter mAdapter;
     private CurrentEventsCommentsViewAdapter mAdapterComment;
     private RelativeLayout commentLayout;
+    private RecyclerView rv;
 
     // newInstance constructor for creating fragment with arguments
     public static EventDetailsFragments newInstance(int page, EventDetailActivity c, EventData data) {
@@ -66,7 +67,10 @@ public class EventDetailsFragments extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_blank, container, false);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout_eventdetail);
+        SwipeRefreshLayout mSwipeRefreshLayoutOther = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setVisibility(View.VISIBLE);
+        mSwipeRefreshLayoutOther.setVisibility(View.GONE);
 
         TextView clanTag = (TextView) view.findViewById(R.id.clan_tag_text);
 
@@ -78,23 +82,18 @@ public class EventDetailsFragments extends Fragment {
             }
         });
 
-        RelativeLayout rvLayout = (RelativeLayout) view.findViewById(R.id.rv_layout);
-
-        RecyclerView rv = (RecyclerView) view.findViewById(R.id.event_view);
-//        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)mSwipeRefreshLayout.getLayoutParams();
-//        params.setMargins(0, 300, 0, 0);
-//        mSwipeRefreshLayout.setLayoutParams(params);
-//        mSwipeRefreshLayout.requestLayout();
+        rv = (RecyclerView) view.findViewById(R.id.eventdetail_view);
+        //rv = (RecyclerView) view.findViewById(R.id.event_view);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv.setHasFixedSize(true);
 
         if(page==0) {
             // fireteam fragment
             if(currentEvent!=null && currentEvent.getPlayerData()!=null) {
-                    //// TODO: 8/16/16 check clanTag in activity
                     if(currentEvent.getClanName()!=null) {
                         clanTag.setVisibility(View.VISIBLE);
                         clanTag.setText(currentEvent.getClanName());
+                        clanTag.setBackgroundColor(getResources().getColor(R.color.eventdetail_clan));
                     }
                 mAdapter = new CurrentEventsViewAdapter(currentEvent.getPlayerData());
                 rv.setAdapter(mAdapter);
@@ -107,6 +106,7 @@ public class EventDetailsFragments extends Fragment {
                 }
                 mAdapterComment = new CurrentEventsCommentsViewAdapter(currentEvent.getCommentDataList());
                 rv.setAdapter(mAdapterComment);
+                scrollToEnd();
             }
         }
 
@@ -138,6 +138,17 @@ public class EventDetailsFragments extends Fragment {
                     mAdapterComment.commentsLocal.clear();
                     mAdapterComment.commentsLocal = currEvent.getCommentDataList();
                     mAdapterComment.notifyDataSetChanged();
+                    scrollToEnd();
+                }
+            }
+        }
+    }
+
+    private void scrollToEnd() {
+        if(rv!=null) {
+            if(page==1) {
+                if (mAdapterComment != null && !mAdapterComment.commentsLocal.isEmpty()) {
+                    rv.scrollToPosition(mAdapterComment.commentsLocal.size()-1);
                 }
             }
         }
@@ -316,7 +327,12 @@ public class EventDetailsFragments extends Fragment {
                     if(commentsLocal.get(position).getUsername()!=null) {
                         holder.playerNameComment.setText(commentsLocal.get(position).getUsername());
                     }
-
+                    if(commentsLocal.get(position).getCreated()!=null) {
+                        String time = Util.updateLastReceivedDate(commentsLocal.get(position).getCreated(), getActivity().getResources());
+                        if(time!=null) {
+                            holder.time.setText(time);
+                        }
+                    }
                 }
             }
             holder.playerProfileComment.invalidate();

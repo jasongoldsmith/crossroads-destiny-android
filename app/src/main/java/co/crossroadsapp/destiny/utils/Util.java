@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -270,6 +271,31 @@ public class Util {
         format = new SimpleDateFormat("EEE, MMM d - h:mm a");
         String date = format.format(newDate);
         return date;
+    }
+
+    public static String updateLastReceivedDate(final String lastDate, Resources res) {
+        String mTemp = null;
+        Calendar cal = getCalendar(lastDate);
+        if (cal == null) {
+            return null;
+        }
+        long timeDif = System.currentTimeMillis() - cal.getTimeInMillis();
+
+        if (timeDif < Constants.TIME_MINUTE) {
+            int seconds = (int) timeDif / Constants.TIME_SECOND;
+            mTemp = "now";
+        } else if (timeDif >= Constants.TIME_MINUTE && timeDif < Constants.TIME_HOUR) {
+            int minutes = (int) timeDif / Constants.TIME_MINUTE;
+            mTemp = res.getQuantityString(R.plurals.minutes_time, minutes, minutes);
+        } else if (timeDif >= Constants.TIME_HOUR && timeDif < Constants.TIME_DAY) {
+            int hours = (int) timeDif / Constants.TIME_HOUR;
+            mTemp = res.getQuantityString(R.plurals.hours_time, hours, hours);
+        } else if (timeDif >= Constants.TIME_DAY) {
+            int days = (int) timeDif / Constants.TIME_DAY;
+            mTemp = res.getQuantityString(R.plurals.days_time, days, days);
+        }
+
+        return mTemp;
     }
 
     public static long parseDate(String dateString) {

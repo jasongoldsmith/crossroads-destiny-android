@@ -41,6 +41,8 @@ import java.util.Observer;
 import java.util.Random;
 
 import co.crossroadsapp.destiny.data.ActivityData;
+import co.crossroadsapp.destiny.data.CurrentEventDataHolder;
+import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
@@ -843,30 +845,6 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 //        }
 //    }
 
-    private void setCalendarCheckpointToDefault() {
-//        if(vf!=null){
-//            if(vf.getDisplayedChild()==2) {
-                if(date_display!=null) {
-                    date_display.setText(getResources().getString(R.string.date_default));
-                    updateDatePickerCalendar();
-                }
-
-                if(time_display!=null) {
-                    time_display.setText(getResources().getString(R.string.time_default));
-                    updateTimePicker();
-                }
-                //todo hack to fix for bug showing checkpoint for wrong event
-                if(checkpointLayout!=null) {
-                    checkpointLayout.setVisibility(View.GONE);
-                }
-
-//                if(createNewEventLayout!=null) {
-//                    createNewEventLayout.setVisibility(View.GONE);
-//                }
-//            }
-//        }
-    }
-
     private void updateDatePickerCalendar() {
         if(mDatePickerDai!=null) {
             if (mDatePickerDai.getDatePicker() != null) {
@@ -883,12 +861,10 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         }
     }
 
-    private void launchListActivityAndFinish() {
-        Intent i=new Intent (this, ListActivityFragment.class);
-        //i.putExtra("userdata", user);
-//        if(localPushEventObj!=null){
-//            i.putExtra("eventIntent", localPushEventObj);
-//        }
+    private void launchEventDetailAndFinish(EventData eData) {
+        CurrentEventDataHolder ins = CurrentEventDataHolder.getInstance();
+        ins.setData(eData);
+        Intent i=new Intent (this, EventDetailActivity.class);
         startActivity(i);
         finish();
     }
@@ -908,7 +884,9 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
     @Override
     public void update(Observable observable, Object data) {
         hideProgressBar();
-        launchListActivityAndFinish();
+        if(data!=null) {
+            launchEventDetailAndFinish((EventData)data);
+        }
     }
 
     @Override

@@ -169,6 +169,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         TextView tagText = (TextView) findViewById(R.id.event_tag_text);
 
         if(currEvent!=null && currEvent.getActivityData().getTag()!=null && !currEvent.getActivityData().getTag().isEmpty()) {
+            tagText.setVisibility(View.VISIBLE);
             tagText.setText(currEvent.getActivityData().getTag());
             Util.roundCorner(tagText, EventDetailActivity.this);
         }
@@ -253,7 +254,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 //            eventLight.setText("lvl " + currEvent.getActivityData().getActivityLevel());
 //        }
 
-        if (currEvent.getActivityData().getActivityCheckpoint() != null && (!currEvent.getActivityData().getActivityCheckpoint().equalsIgnoreCase("null"))) {
+        if (currEvent.getActivityData().getActivityCheckpoint() != null && !currEvent.getActivityData().getActivityCheckpoint().equalsIgnoreCase("null") && !currEvent.getActivityData().getActivityCheckpoint().isEmpty()) {
             eventCheckpoint.setVisibility(View.VISIBLE);
             eventCheckpoint.setText(currEvent.getActivityData().getActivityCheckpoint());
         }
@@ -719,9 +720,9 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         if (checkUserIsCreator()) {
             if ((this.currEvent.getPlayerData() != null) && this.currEvent.getPlayerData().size() > 1) {
                 bottomBtnLayout.setVisibility(View.VISIBLE);
-                leaveBtn.setVisibility(View.GONE);
+                leaveBtn.setVisibility(View.VISIBLE);
                 joinBtn.setVisibility(View.GONE);
-                msgallBtn.setVisibility(View.VISIBLE);
+                msgallBtn.setVisibility(View.GONE);
             } else {
                 bottomBtnLayout.setVisibility(View.VISIBLE);
                 leaveBtn.setVisibility(View.VISIBLE);

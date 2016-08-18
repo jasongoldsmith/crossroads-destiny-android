@@ -78,6 +78,11 @@ public class Constants {
     public static int EVENT_FULL= 3;
     public static int EVENT_CONSOLE_MISSING= 4;
 
+    public static final int TIME_SECOND = 1000;
+    public static final int TIME_MINUTE = 60 * 1000;
+    public static final int TIME_HOUR = 60 *  60 * 1000;
+    public static final int TIME_DAY = 24 * 60 *  60 * 1000;
+
     //urls
     public static String DEEP_LINK_IMAGE = "http://w3.crossroadsapp.co/bungie/share/branch/v1/";
 }
