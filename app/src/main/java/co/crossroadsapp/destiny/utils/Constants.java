@@ -82,6 +82,9 @@ public class Constants {
     public static final int TIME_MINUTE = 60 * 1000;
     public static final int TIME_HOUR = 60 *  60 * 1000;
     public static final int TIME_DAY = 24 * 60 *  60 * 1000;
+    public static final int WEEK = 7 * 24 * 60 *  60 * 1000;
+
+    public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
     //urls
     public static String DEEP_LINK_IMAGE = "http://w3.crossroadsapp.co/bungie/share/branch/v1/";

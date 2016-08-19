@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -260,17 +261,47 @@ public class Util {
     }
 
     public static String convertUTCtoReadable(String utcDate) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        format.setTimeZone(TimeZone.getTimeZone("UTC"));
-        Date newDate = null;
+        //new time strings
+        //   "yyyy-MM-dd'T'HH:mm:ss.SSSZ",
+        SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
         try {
-            newDate = format.parse(utcDate);
-        } catch (ParseException e) {
+
+            Calendar cal1 = Calendar.getInstance();
+            TimeZone tz = cal1.getTimeZone();
+            long msFromEpochGmt = cal1.getTimeInMillis();
+            long offsetFromUTC = tz.getOffset(msFromEpochGmt);
+
+            Date date = format.parse(utcDate);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.setTimeInMillis(cal.getTimeInMillis() + offsetFromUTC);
+            SimpleDateFormat formatDate = new SimpleDateFormat("EEEE 'at' h:mm a");
+            SimpleDateFormat formatDate1 = new SimpleDateFormat("MMM d 'at' h:mm a");
+            //String finalTime = formatDate.format(cal.getTime());
+            if (cal.getTimeInMillis() - System.currentTimeMillis() > Constants.WEEK) {
+                return formatDate1.format(cal.getTime());
+            } else {
+                return formatDate.format(cal.getTime());
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        format = new SimpleDateFormat("EEE, MMM d - h:mm a");
-        String date = format.format(newDate);
-        return date;
+        return "";
+
+
+        //
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+//        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+//        Date newDate = null;
+//        try {
+//            newDate = format.parse(utcDate);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        format = new SimpleDateFormat("EEE, MMM d - h:mm a");
+//        String date = format.format(newDate);
+//        return date;
     }
 
     public static String updateLastReceivedDate(final String lastDate, Resources res) {
