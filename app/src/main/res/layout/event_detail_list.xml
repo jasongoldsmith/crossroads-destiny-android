@@ -211,6 +211,7 @@
             android:id="@+id/event_detail_icon"
             android:src="@drawable/icon_ghost_default"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:layout_marginLeft="15dp"/>
 
         <RelativeLayout
@@ -218,6 +219,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/activity_name_layout_detail"
             android:layout_toRightOf="@+id/event_detail_icon"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="5dp"
             android:layout_marginLeft="12dp">
 
             <TextView
@@ -229,57 +232,41 @@
                 android:textSize="20sp">
             </TextView>
 
-            <TextView
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/eventDetailCheckpoint"
-                android:layout_below="@+id/activity_name_detail"
-                android:textColor="@color/activity_light_color"
-                android:textSize="12sp"
-                android:paddingRight="8dp"
-                android:paddingBottom="10dp"
-                android:visibility="gone"/>
+                android:id="@+id/checkpoint_date_layout"
+                android:layout_below="@+id/activity_name_detail">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/eventDetailCheckpoint"
+                    android:layout_alignParentStart="true"
+                    android:textColor="@color/activity_light_color"
+                    android:textSize="12sp"
+                    android:paddingRight="8dp"
+                    android:visibility="gone"/>
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_below="@+id/eventDetailCheckpoint"-->
-                <!--android:id="@+id/activity_player_name_detail"-->
-                <!--android:fontFamily="sans-serif"-->
-                <!--android:textColor="@android:color/white"-->
-                <!--android:text="Missing player names"-->
-                <!--android:singleLine="true"-->
-                <!--android:ellipsize="end"-->
-                <!--android:textSize="12sp">-->
-            <!--</TextView>-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/eventDetailDate"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="italic"
+                    android:textColor="@android:color/white"
+                    android:layout_toRightOf="@+id/eventDetailCheckpoint"
+                    android:textSize="12sp"/>
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/activity_player_name_lf_detail"-->
-                <!--android:layout_below="@+id/eventDetailCheckpoint"-->
-                <!--android:textColor="#ffc600"-->
-                <!--android:layout_toRightOf="@+id/activity_player_name_detail"-->
-                <!--android:textSize="12sp" />-->
+            </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/eventDetailDate"
-                android:fontFamily="sans-serif"
-                android:textStyle="italic"
-                android:textColor="@android:color/white"
-                android:layout_toRightOf="@+id/eventDetailCheckpoint"
-                android:paddingBottom="10dp"
-                android:layout_below="@+id/activity_name_detail"
-                android:textSize="12sp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/event_tag_text"
                 android:background="#203236"
-                android:layout_below="@+id/eventDetailCheckpoint"
+                android:layout_below="@+id/checkpoint_date_layout"
                 android:textSize="11dp"
+                android:layout_marginTop="8dp"
                 android:textColor="#9ba8ad"
                 android:visibility="gone"
                 android:gravity="center"

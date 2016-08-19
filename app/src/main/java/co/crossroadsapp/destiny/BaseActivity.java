@@ -384,6 +384,19 @@ public class BaseActivity extends FragmentActivity {
         }
     }
 
+    protected void removeNotiById(String Id) {
+        if(notiList!=null) {
+            for (int y=0; y<notiList.size();y++) {
+                if (notiList.get(y).geteId()!=null) {
+                    if(notiList.get(y).geteId().equalsIgnoreCase(Id)) {
+                        notiList.remove(y);
+                        y--;
+                    }
+                }
+            }
+        }
+    }
+
     protected void getEventNotification(EventData currEvent) {
         if(currEvent.getEventId()!=null) {
             String id = currEvent.getEventId();

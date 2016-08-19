@@ -211,7 +211,11 @@ public class EventDetailsFragments extends Fragment {
                                 R.dimen.eventdetail_player_profile_hgt, R.dimen.eventdetail_player_profile_width, R.drawable.img_profile_blank);
                     }
                     if (playerLocal.get(position).getPsnId() != null) {
-                        holder.playerName.setText(playerLocal.get(position).getPsnId());
+                        String name = playerLocal.get(position).getPsnId();
+                        if (playerLocal.get(position).getClanTag()!=null && !playerLocal.get(position).getClanTag().isEmpty()) {
+                            name = name + " [" + playerLocal.get(position).getClanTag() + "]";
+                        }
+                        holder.playerName.setText(name);
                         holder.playerName.setTextColor(getResources().getColor(R.color.activity_light_color));
                     }
 

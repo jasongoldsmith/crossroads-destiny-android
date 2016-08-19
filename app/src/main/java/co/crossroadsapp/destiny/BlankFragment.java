@@ -333,6 +333,12 @@ public class BlankFragment extends Fragment {
                         }
 
                         allNames = this.elistLocal.get(position).getCreatorData().getPsnId();
+                        if(this.elistLocal.get(position).getCreatorData().getClanTag()!=null) {
+                            String clanT = this.elistLocal.get(position).getCreatorData().getClanTag();
+                            if(!clanT.isEmpty()) {
+                                allNames = allNames + " [" +clanT + "]";
+                            }
+                        }
                         if (!status.equalsIgnoreCase("full")) {
                             allNamesRem = " " + "LF" + reqPlayer + "M";
                         }
@@ -403,14 +409,15 @@ public class BlankFragment extends Fragment {
                             }
                         });
 
-                        holder.eventaLight.setText("");
-                        if (l > 0) {
-                            // unicode to show star
-                            String st = "\u2726";
-                            holder.eventaLight.setText(st + String.valueOf(l));
-                        } else if (level > 0) {
-                            holder.eventaLight.setText("lvl " + String.valueOf(level));
-                        }
+                        String feed = this.elistLocal.get(position).getActivityData().getaFeedMode()!=null?this.elistLocal.get(position).getActivityData().getaFeedMode():"";
+                        holder.eventaLight.setText(feed);
+//                        if (l > 0) {
+//                            // unicode to show star
+//                            String st = "\u2726";
+//                            holder.eventaLight.setText(st + String.valueOf(l));
+//                        } else if (level > 0) {
+//                            holder.eventaLight.setText("lvl " + String.valueOf(level));
+//                        }
 
                         updateJoinButton(holder, status, CreatorIn, CreatorIsPlayer);
 

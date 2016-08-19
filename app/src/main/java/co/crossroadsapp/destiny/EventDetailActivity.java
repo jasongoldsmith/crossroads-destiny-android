@@ -216,6 +216,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         });
 
         editText = (EditText) findViewById(R.id.edittext);
+
         editText.addTextChangedListener(mTextEditorWatcher);
 
         mCharacter = (TextView) findViewById(R.id.character_count);
@@ -243,7 +244,11 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         }
 
         if (currEvent.getActivityData().getActivitySubtype() != null) {
-            eventName.setText(currEvent.getActivityData().getActivitySubtype());
+            String name = currEvent.getActivityData().getActivitySubtype();
+            if(currEvent.getActivityData().getActivityDifficulty()!=null && !currEvent.getActivityData().getActivityDifficulty().isEmpty()) {
+                name = name + " - " + currEvent.getActivityData().getActivityDifficulty();
+            }
+            eventName.setText(name);
         }
 
 //        if (currEvent.getActivityData().getActivityLight() > 0) {
@@ -292,6 +297,8 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             }
         });
 
+        RelativeLayout checkpointDatLayout = (RelativeLayout) findViewById(R.id.checkpoint_date_layout);
+
         if (currEvent.getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING)) {
             upcomingDate = Util.convertUTCtoReadable(currEvent.getLaunchDate());
             if (upcomingDate != null) {
@@ -299,6 +306,9 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             }
         } else {
             eventDetailDate.setText("");
+            if(eventCheckpoint.getVisibility()!=View.VISIBLE) {
+                checkpointDatLayout.setVisibility(View.GONE);
+            }
         }
 
         setPlayerNames();
@@ -347,6 +357,9 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 if(position==1) {
                     changeBottomButtomForComments();
+                    if(currEvent!=null && currEvent.getEventId()!=null) {
+                        removeNotiById(currEvent.getEventId());
+                    }
                 } else if(position==0) {
                     setBottomButtonSelection();
                 }
@@ -1045,7 +1058,6 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     }
 
     private void sendMsgBtnClick() {
-        showProgressBar();
         if (currEvent != null && currEvent.getEventId() != null) {
             String msg = getSendMsgEditText();
             sendMsg.setText("");
@@ -1056,10 +1068,13 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
             if(msg!=null) {
-                RequestParams params = new RequestParams();
-                params.put("eId", currEvent.getEventId());
-                params.put("text", msg);
-                controlManager.postComments(EventDetailActivity.this, params);
+                if (msg.trim().length() > 0) {
+                    showProgressBar();
+                    RequestParams params = new RequestParams();
+                    params.put("eId", currEvent.getEventId());
+                    params.put("text", msg);
+                    controlManager.postComments(EventDetailActivity.this, params);
+                }
             }
         }
     }
