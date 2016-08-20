@@ -25,7 +25,12 @@ import co.crossroadsapp.destiny.utils.Util;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BlankFragment extends Fragment {
 
@@ -410,7 +415,7 @@ public class BlankFragment extends Fragment {
                         });
 
                         String feed = this.elistLocal.get(position).getActivityData().getaFeedMode()!=null?this.elistLocal.get(position).getActivityData().getaFeedMode():"";
-                        holder.eventaLight.setText(feed);
+                        holder.eventaLight.setText(feed.toUpperCase());
 //                        if (l > 0) {
 //                            // unicode to show star
 //                            String st = "\u2726";
@@ -456,6 +461,13 @@ public class BlankFragment extends Fragment {
                             rp.add("aType", adList.get(position-elistLocal.size()).getActivityType());
                             rp.add("includeTags", "true");
                             mManager.postGetActivityList(mContext, rp);
+
+                            //tracking adcard click
+                            Map<String, String> json = new HashMap<String, String>();
+                                if(adList.get(position-elistLocal.size()).getId()!=null && !adList.get(position-elistLocal.size()).getId().isEmpty()) {
+                                    json.put("activityId", adList.get(position - elistLocal.size()).getId().toString());
+                                    Util.postTracking(json, mContext, mManager);
+                                }
                             //mManager.postCreateEvent(adList.get(position-elistLocal.size()).getId(), user.getUserId(), adList.get(position-elistLocal.size()).getMinPlayer(), adList.get(position-elistLocal.size()).getMaxPlayer(), null, mContext);
                         }
                     });

@@ -20,6 +20,7 @@ import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import co.crossroadsapp.destiny.data.ConsoleData;
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 
 public class ConsoleSelectionActivity extends BaseActivity implements AdapterView.OnItemSelectedListener, Observer {
@@ -46,6 +48,7 @@ public class ConsoleSelectionActivity extends BaseActivity implements AdapterVie
     private ControlManager mManager;
     private TextView privacyTerms;
     private WebView webView;
+    private ImageView imgConsole;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,8 @@ public class ConsoleSelectionActivity extends BaseActivity implements AdapterVie
         user_id = (EditText) findViewById(R.id.console_id);
         next = (TextView) findViewById(R.id.next_btn);
         next.setEnabled(false);
+
+        imgConsole = (ImageView) findViewById(R.id.console_img);
 
         privacyTerms = (TextView) findViewById(R.id.privacy_terms);
 
@@ -114,8 +119,14 @@ public class ConsoleSelectionActivity extends BaseActivity implements AdapterVie
                 ((TextView) v).setGravity(Gravity.CENTER);
 
                 ((TextView) v).setPadding(Util.dpToPx(0, ConsoleSelectionActivity.this), 0, 0, 0);
-                ((TextView) v).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                ((TextView) v).setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                 ((TextView) v).setText(((TextView) v).getText());
+
+                if(((TextView) v).getText().toString().equalsIgnoreCase(Constants.CONSOLEXBOXONESTRG) || ((TextView) v).getText().toString().equalsIgnoreCase(Constants.CONSOLEXBOX360STRG)) {
+                    imgConsole.setImageResource(R.drawable.icon_xboxone_consolex);
+                } else {
+                    imgConsole.setImageResource(R.drawable.icon_psn_consolex);
+                }
 
                 return v;
             }
@@ -145,13 +156,20 @@ public class ConsoleSelectionActivity extends BaseActivity implements AdapterVie
         consoleType.setOnItemSelectedListener(this);
     }
 
-    public View getCustomView(int position, View convertView, ViewGroup parent, String[] adapterCheckpoint) {
+    public View getCustomView(int position, View convertView, ViewGroup parent, String[] consoleItems) {
 
         LayoutInflater inflater=getLayoutInflater();
-        View row=inflater.inflate(R.layout.fragment_checkpoint, parent, false);
-        TextView label=(TextView)row.findViewById(R.id.activity_checkpoint_text);
-        if (adapterCheckpoint!=null) {
-            label.setText(adapterCheckpoint[position]);
+        View row=inflater.inflate(R.layout.console_selction_view, parent, false);
+        ImageView addSymbol = (ImageView)row.findViewById(R.id.console_img);
+        if(consoleItems[position].equalsIgnoreCase("PlayStation 4") || consoleItems[position].equalsIgnoreCase("PlayStation 3")){
+            addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_psn_consolex));
+        } else if(consoleItems[position].equalsIgnoreCase("Xbox One") || consoleItems[position].equalsIgnoreCase("Xbox 360")){
+            addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_xboxone_consolex));
+        }
+
+        TextView label=(TextView)row.findViewById(R.id.add_console_text);
+        if (consoleItems!=null) {
+            label.setText(consoleItems[position]);
         }
         return row;
     }

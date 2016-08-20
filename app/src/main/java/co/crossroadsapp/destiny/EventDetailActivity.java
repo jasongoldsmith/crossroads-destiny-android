@@ -61,7 +61,12 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -212,6 +217,12 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             @Override
             public void onClick(View v) {
                 shareIt();
+                //tracking share click
+                Map<String, String> json = new HashMap<String, String>();
+                if(currEvent!=null && currEvent.getEventId()!=null && !currEvent.getEventId().isEmpty()) {
+                    json.put("eventId", currEvent.getEventId().toString());
+                    Util.postTracking(json, EventDetailActivity.this, controlManager);
+                }
             }
         });
 
@@ -245,7 +256,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         if (currEvent.getActivityData().getActivitySubtype() != null) {
             String name = currEvent.getActivityData().getActivitySubtype();
-            if(currEvent.getActivityData().getActivityDifficulty()!=null && !currEvent.getActivityData().getActivityDifficulty().isEmpty()) {
+            if(currEvent.getActivityData().getActivityDifficulty()!=null && !currEvent.getActivityData().getActivityDifficulty().isEmpty() && !currEvent.getActivityData().getActivityDifficulty().equalsIgnoreCase("null")) {
                 name = name + " - " + currEvent.getActivityData().getActivityDifficulty();
             }
             eventName.setText(name);

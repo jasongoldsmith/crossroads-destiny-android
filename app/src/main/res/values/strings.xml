@@ -64,15 +64,15 @@
     <string name="choose_console">CHOOSE YOUR CONSOLE</string>
 
     <string name="console_prompt">PLAYSTATION 4</string>
-    <string name="username_text">USERNAME</string>
-    <string name="username_hint">Enter username</string>
+    <string name="username_text">CROSSROADS USERNAME</string>
+    <string name="username_hint">Enter Crossroads username</string>
 
     <string name="add_activity">ADD ACTIVITY</string>
     <string name="add">ADD</string>
     <string name="support_link"> support@crossroadsapp.co</string>
     <string name="contact_us">Contact Us</string>
     <string name="password_hint">Enter password</string>
-    <string name="create_crossroads_accnt">CREATE CROSSROADS ACCOUNT</string>
+    <string name="create_crossroads_accnt">CREATE NEW CROSSROADS ACCOUNT</string>
     <string name="animation_speed">400</string>
 
     <!--<plurals name="grp_member">-->

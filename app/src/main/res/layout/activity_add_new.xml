@@ -42,6 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/top_text"
         android:layout_marginTop="25dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="33dp">
         <ImageView
             android:layout_width="wrap_content"

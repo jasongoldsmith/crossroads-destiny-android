@@ -22,11 +22,15 @@ import android.widget.Toast;
 import co.crossroadsapp.destiny.AddFinalActivity;
 import co.crossroadsapp.destiny.ControlManager;
 //import co.crossroadsapp.destiny.CreateNewEvent;
+import co.crossroadsapp.destiny.EventDetailActivity;
 import co.crossroadsapp.destiny.ListActivityFragment;
 import co.crossroadsapp.destiny.R;
+import co.crossroadsapp.destiny.RegisterActivity;
+import co.crossroadsapp.destiny.SplashActivity;
 import co.crossroadsapp.destiny.data.UserData;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
+import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -38,8 +42,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 /**
@@ -49,7 +55,7 @@ public class Util {
 
     //To switch between production and development server links
     //where 1 points to development and 2 points to production
-    private static final int network_connection = 1;
+    private static final int network_connection = 2;
 
     private static final String TAG = Util.class.getName();
     public static final String trimbleDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -591,6 +597,25 @@ public class Util {
 //            list.add("Xbox 360");
 //        }
         return list;
+    }
+
+    public static void postTracking(Map obj, Context c, ControlManager cm) {
+        if (c!=null && cm!=null) {
+            if(obj!=null) {
+                RequestParams params = new RequestParams();
+                params.put("trackingData", obj);
+                if(c instanceof SplashActivity) {
+                    params.put("trackingKey", "appInit");
+                } else if(c instanceof EventDetailActivity) {
+                    params.put("trackingKey", "eventSharing");
+                } else if(c instanceof ListActivityFragment) {
+                    params.put("trackingKey", "addCardInit");
+                } else if(c instanceof RegisterActivity) {
+                    params.put("trackingKey", "signupInit");
+                }
+                cm.postTracking(params, c);
+            }
+        }
     }
 
     public static void roundCorner(TextView textView, Context mContext) {

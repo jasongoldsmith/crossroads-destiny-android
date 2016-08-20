@@ -33,6 +33,7 @@ import co.crossroadsapp.destiny.network.LogoutNetwork;
 import co.crossroadsapp.destiny.network.PrivacyLegalUpdateNetwork;
 import co.crossroadsapp.destiny.network.ReportCrashNetwork;
 import co.crossroadsapp.destiny.network.ResendBungieVerification;
+import co.crossroadsapp.destiny.network.TrackingNetwork;
 import co.crossroadsapp.destiny.network.VerifyConsoleIDNetwork;
 import co.crossroadsapp.destiny.network.postGcmNetwork;
 import co.crossroadsapp.destiny.utils.Util;
@@ -95,6 +96,7 @@ public class ControlManager implements Observer{
     private String deepLinkActivityName;
     private PrivacyLegalUpdateNetwork legalPrivacyNetwork;
     private AddCommentNetwork addCommentsNetwork;
+    private TrackingNetwork trackingNetwork;
 
     public ControlManager() {
     }
@@ -684,6 +686,16 @@ public class ControlManager implements Observer{
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void postTracking(RequestParams rp, Context context) {
+        trackingNetwork = new TrackingNetwork(context);
+        try {
+            trackingNetwork.postTracking(rp);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void postCrash(CrashReport c, String userId, String s) {

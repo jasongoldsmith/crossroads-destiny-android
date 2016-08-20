@@ -265,7 +265,6 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
     }
 
     private void refreshActivityUI() {
-
         String actIconUrl = null;
         String backg = null;
         String subType = null;

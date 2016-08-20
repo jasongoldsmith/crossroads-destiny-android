@@ -24,6 +24,8 @@ import co.crossroadsapp.destiny.network.NetworkEngine;
 import co.crossroadsapp.destiny.utils.Constants;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -222,6 +224,9 @@ public class RegisterActivity extends BaseActivity implements Observer {
                     dialog.show();
                     dialog.setCancelable(false);
                     mManager.postLogin(RegisterActivity.this, params, Constants.REGISTER);
+                    //tracking signup initiation
+                    Map<String, String> json = new HashMap<String, String>();
+                    Util.postTracking(json, RegisterActivity.this, mManager);
                 } else {
                     if(username.length()==0){
                         showError(getResources().getString(R.string.username_missing));

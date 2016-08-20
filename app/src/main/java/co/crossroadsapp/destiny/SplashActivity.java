@@ -22,8 +22,14 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
+import co.crossroadsapp.destiny.utils.Util;
 import io.fabric.sdk.android.Fabric;
+
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import co.crossroadsapp.destiny.R;
 import co.crossroadsapp.destiny.utils.TravellerLog;
@@ -62,17 +68,6 @@ public class SplashActivity extends BaseActivity{
         // Automatic session tracking
         //Branch.getAutoInstance(this);
         cManager = ControlManager.getmInstance();
-        //cManager.setCurrentActivity(this);
-//        errLayout = (RelativeLayout) findViewById(R.id.error_layout);
-//        errText = (TextView) findViewById(R.id.error_sub);
-//        close_err = (ImageView) findViewById(R.id.err_close);
-//
-//        close_err.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                errLayout.setVisibility(View.GONE);
-//            }
-//        });
         mHandler = new Handler();
         mLayout = (RelativeLayout) findViewById(R.id.splash_layout);
         if(mLayout!=null) {
@@ -142,10 +137,15 @@ public class SplashActivity extends BaseActivity{
 
         Branch branch = Branch.getInstance(getApplicationContext());
 
+        Map<String, String> json = new HashMap<String, String>();
+
         //todo find better solution to find out if getting start from universal link click
         Intent s = getIntent();
         if (s!=null && s.getData()!=null) {
             if (s.getData().toString().toLowerCase().contains("dlcsrd")) {
+                //tracking
+                    json.put("source", "branch");
+
                 branch.initSession(new Branch.BranchUniversalReferralInitListener() {
                     @Override
                     public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError error) {
@@ -167,8 +167,16 @@ public class SplashActivity extends BaseActivity{
                         }
                     }
                 }, this.getIntent().getData(), this);
+            } else {
+                //tracking
+                json.put("source", "unknown");
             }
+        } else {
+            //tracking
+            json.put("source", "unknown");
         }
+
+        Util.postTracking(json, SplashActivity.this, cManager);
     }
 
     @Override
