@@ -497,7 +497,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                                             if(!checkpointActList.get(i).getTag().isEmpty()) {
                                                 tagList.add(checkpointActList.get(i).getTag().replace("#",""));
                                             }else {
-                                                tagList.add("None");
+                                                tagList.add(Constants.NONE);
                                             }
                                             tagActList.add(checkpointActList.get(i));
                                         }
@@ -509,7 +509,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                                         if(!checkpointActList.get(i).getTag().isEmpty()) {
                                             tagList.add(checkpointActList.get(i).getTag().replace("#",""));
                                         }else {
-                                            tagList.add("None");
+                                            tagList.add(Constants.NONE);
                                         }
                                         tagActList.add(checkpointActList.get(i));
                                     }
@@ -524,7 +524,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                                         if(!checkpointActList.get(i).getTag().isEmpty()) {
                                             tagList.add(checkpointActList.get(i).getTag().replace("#",""));
                                         }else {
-                                            tagList.add("None");
+                                            tagList.add(Constants.NONE);
                                         }
                                         tagActList.add(checkpointActList.get(i));
                                     }
@@ -536,7 +536,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                                     if(!checkpointActList.get(i).getTag().isEmpty()) {
                                         tagList.add(checkpointActList.get(i).getTag().replace("#",""));
                                     }else {
-                                        tagList.add("None");
+                                        tagList.add(Constants.NONE);
                                     }
                                     tagActList.add(checkpointActList.get(i));
                                 }
@@ -547,7 +547,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
             }
         }
         if(tagList.isEmpty()) {
-            tagList.add("None");
+            tagList.add(Constants.NONE);
         }
         updateDrawerTags(tagList);
     }
@@ -622,7 +622,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                 adapterTags = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dataList) {
                     public View getView(int position, View convertView, ViewGroup parent) {
                         View v = super.getView(position, convertView, parent);
-                        if (((TextView) v).getText().toString().equalsIgnoreCase("None")) {
+                        if (((TextView) v).getText().toString().equalsIgnoreCase(Constants.NONE)) {
                             detailText.setText("Details (Optional)");
                         } else {
                             detailText.setText(((TextView) v).getText());
@@ -640,7 +640,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                 dropdownDetails.setAdapter(adapterTags);
                 adapterTags.notifyDataSetChanged();
             } else {
-                if (dataList.get(0).toString().equalsIgnoreCase("None")) {
+                if (dataList.get(0).toString().equalsIgnoreCase(Constants.NONE)) {
                     detailText.setText("Details (Optional)");
                 }
                 dropdownDetails.setEnabled(false);

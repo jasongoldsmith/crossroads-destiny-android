@@ -32,6 +32,7 @@ public class Constants {
     public static final String LICENCE = "https://www.crossroadsapp.co/license"; //"http://68.140.240.194:3000/license"
     public static final String TERMS_OF_SERVICE = "https://www.crossroadsapp.co/terms";
     public static final String PRIVACY_POLICY = "https://www.crossroadsapp.co/privacy";
+    public static final String NONE = "(none)";
 
     public static String NOTIFICATION_INTENT_CHANNEL = "com.example.sharmha.notificationintent";
     public static int INTENT_ID = 9999;

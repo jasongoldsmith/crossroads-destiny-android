@@ -368,7 +368,7 @@
                 android:paddingBottom="12dp"
                 android:textColorHint="@color/comment_text_color"
                 android:textColor="@color/comment_typing_text"
-                android:hint="Write a message"
+                android:hint="@string/comment_hint"
                 android:textSize="16sp"
                 android:paddingRight="50dp"
                 android:textCursorDrawable="@color/comment_text_color"
