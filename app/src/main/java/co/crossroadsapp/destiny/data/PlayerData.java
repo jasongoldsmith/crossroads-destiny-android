@@ -88,9 +88,15 @@ public class PlayerData {
 //                if (!jsonobject.isNull("psnId")) {
 //                    setPsnId(jsonobject.getString("psnId"));
 //                }
-                setUsername(jsonobject.getString("userName"));
-                setPlayerId(jsonobject.getString("_id"));
-                setPlayerImageUrl(jsonobject.getString("imageUrl"));
+                if(jsonobject.has("userName") && !jsonobject.isNull("userName")) {
+                    setUsername(jsonobject.getString("userName"));
+                }
+                if(jsonobject.has("_id") && !jsonobject.isNull("_id")) {
+                    setPlayerId(jsonobject.getString("_id"));
+                }
+                if(jsonobject.has("imageUrl") && !jsonobject.isNull("imageUrl")) {
+                    setPlayerImageUrl(jsonobject.getString("imageUrl"));
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -534,7 +534,12 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private void generateBranchObject() {
         if (currEvent != null) {
             String actName = currEvent.getActivityData().getActivitySubtype();
-            String grpName = controlManager.getGroupObj(currEvent.getClanId()).getGroupName();
+            String grpName="";
+            if(currEvent.getClanId()!=null) {
+                if (controlManager.getGroupObj(currEvent.getClanId()) != null) {
+                    grpName = controlManager.getGroupObj(currEvent.getClanId()).getGroupName()!=null?controlManager.getGroupObj(currEvent.getClanId()).getGroupName():"";
+                }
+            }
             String deepLinkTitle = " ";
             String deepLinkMsg = " ";
             String console = getDeepLinkConsoleType();

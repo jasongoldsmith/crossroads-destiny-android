@@ -54,6 +54,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/level_layout"
+                android:layout_marginLeft="33dp"
+                android:layout_marginRight="33dp"
                 android:layout_below="@id/act_subtype"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp">
@@ -62,6 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/level_text"
+                    android:gravity="center"
                     android:textColor="@color/trimbe_white"
                     android:textSize="12sp"/>
 
