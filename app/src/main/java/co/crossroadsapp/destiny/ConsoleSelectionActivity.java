@@ -206,7 +206,7 @@ public class ConsoleSelectionActivity extends BaseActivity implements AdapterVie
     private void enableSubmitIfReady() {
         if(user_id!=null) {
             if (next!=null) {
-                if (user_id.getText().length() > 4) {
+                if (user_id.getText().length() > 0) {
                     next.setBackgroundColor(getResources().getColor(R.color.app_theme_color));
                     next.setEnabled(true);
                 } else {

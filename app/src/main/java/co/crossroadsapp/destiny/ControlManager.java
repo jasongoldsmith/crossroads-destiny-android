@@ -445,36 +445,38 @@ public class ControlManager implements Observer{
     }
 
     public void showErrorDialogue(String err) {
-        if(err==null){
-            err = "Request failed. Please wait a few seconds and refresh.";
-        }
-        if (this.mCurrentAct!=null) {
-            if (mCurrentAct instanceof SplashActivity) {
-                ((SplashActivity)mCurrentAct).showError(err);
-            } else if(mCurrentAct instanceof LoginActivity) {
-                ((LoginActivity) mCurrentAct).showError(err);
-            } else if(mCurrentAct instanceof RegisterActivity) {
-                ((RegisterActivity) mCurrentAct).showError(err);
-            } else if(mCurrentAct instanceof ListActivityFragment) {
-                ((ListActivityFragment) mCurrentAct).showError(err);
-            } else if(mCurrentAct instanceof AddFinalActivity){
-                ((AddFinalActivity) mCurrentAct).showError(err);
-            } else if (mCurrentAct instanceof EventDetailActivity){
-                ((EventDetailActivity) mCurrentAct).showError(err);
-            } else if (mCurrentAct instanceof ForgotLoginActivity){
-                ((ForgotLoginActivity) mCurrentAct).showError(err);
-            } else if (mCurrentAct instanceof ConsoleSelectionActivity) {
-                ((ConsoleSelectionActivity) mCurrentAct).showError(err);
-            } else if(mCurrentAct instanceof ChangePassword) {
-                ((ChangePassword) mCurrentAct).showError(err);
-            } else if(mCurrentAct instanceof MainActivity) {
-                ((MainActivity) mCurrentAct).showError(err);
-            } else if (mCurrentAct instanceof UpdateConsoleActivity) {
-                ((UpdateConsoleActivity)mCurrentAct).showError(err);
-            } else if(mCurrentAct instanceof AddFinalActivity) {
-                ((AddFinalActivity)mCurrentAct).showError(err);
+//        if(err==null){
+//            //err = "Request failed. Please wait a few seconds and refresh.";
+//        }
+        //if(err!=null) {
+            if (this.mCurrentAct != null) {
+                if (mCurrentAct instanceof SplashActivity) {
+                    ((SplashActivity) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof LoginActivity) {
+                    ((LoginActivity) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof RegisterActivity) {
+                    ((RegisterActivity) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof ListActivityFragment) {
+                    ((ListActivityFragment) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof AddFinalActivity) {
+                    ((AddFinalActivity) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof EventDetailActivity) {
+                    ((EventDetailActivity) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof ForgotLoginActivity) {
+                    ((ForgotLoginActivity) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof ConsoleSelectionActivity) {
+                    ((ConsoleSelectionActivity) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof ChangePassword) {
+                    ((ChangePassword) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof MainActivity) {
+                    ((MainActivity) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof UpdateConsoleActivity) {
+                    ((UpdateConsoleActivity) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof AddFinalActivity) {
+                    ((AddFinalActivity) mCurrentAct).showError(err);
+                }
             }
-        }
+        //}
     }
 
     public void getAndroidVersion(ListActivityFragment activity) {

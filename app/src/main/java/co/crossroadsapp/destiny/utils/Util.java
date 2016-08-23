@@ -54,8 +54,8 @@ import java.util.TimeZone;
 public class Util {
 
     //To switch between production and development server links
-    //where 1 points to development and 2 points to production
-    private static final int network_connection = 2;
+    //where 1 points to development, 2 points to production and 3 points to Dev staging
+    private static final int network_connection = 3;
 
     private static final String TAG = Util.class.getName();
     public static final String trimbleDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -64,13 +64,15 @@ public class Util {
     public static String getNetworkUrl() {
         if (network_connection==2){
             return Constants.NETWORK_PROD_BASE_URL;
+        } else if(network_connection==3) {
+            return Constants.NETWORK_DEV_BASE_STAGING_URL;
         }
         return Constants.NETWORK_DEV_BASE_URL;
     }
 
     public static String getFirebaseUrl(String clanId, String eventId, int channel) {
         String url;
-        if (network_connection==2) {
+        if (network_connection==2 || network_connection==3) {
             url = Constants.FIREBASE_PROD_URL;
         } else {
             url = Constants.FIREBASE_DEV_URL;

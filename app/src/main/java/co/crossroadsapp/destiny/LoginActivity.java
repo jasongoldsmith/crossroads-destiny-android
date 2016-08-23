@@ -112,6 +112,7 @@ public class LoginActivity extends BaseActivity implements Observer {
                         params.put("userName", username);
                         params.put("passWord", password);
                         dialog.show();
+                        login_btn.setImageDrawable(getResources().getDrawable(R.drawable.img_login_btn_tapped));
                         dialog.setCancelable(false);
                         mManager.postLogin(LoginActivity.this, params, Constants.LOGIN);
                     }
@@ -119,20 +120,20 @@ public class LoginActivity extends BaseActivity implements Observer {
             }
         });
 
-        pswd_login.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable arg0) {
-                enableSubmitIfReady();
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-        });
+//        pswd_login.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void afterTextChanged(Editable arg0) {
+//                enableSubmitIfReady();
+//            }
+//
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//            }
+//        });
 
         pswd_login.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -158,20 +159,20 @@ public class LoginActivity extends BaseActivity implements Observer {
             }
         });
 
-        name_login.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable arg0) {
-                enableSubmitIfReady();
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-        });
+//        name_login.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void afterTextChanged(Editable arg0) {
+//                enableSubmitIfReady();
+//            }
+//
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//            }
+//        });
 
     }
 
@@ -181,15 +182,15 @@ public class LoginActivity extends BaseActivity implements Observer {
         setErrText(err);
     }
 
-    private void enableSubmitIfReady() {
-        if(name_login!=null && pswd_login!=null) {
-            if (!name_login.getText().toString().isEmpty() && !pswd_login.getText().toString().isEmpty()) {
-                login_btn.setImageDrawable(getResources().getDrawable(R.drawable.img_login_btn_tapped));
-            } else {
-                login_btn.setImageDrawable(getResources().getDrawable(R.drawable.img_login_btn));
-            }
-        }
-    }
+//    private void enableSubmitIfReady() {
+//        if(name_login!=null && pswd_login!=null) {
+//            if (!name_login.getText().toString().isEmpty() && !pswd_login.getText().toString().isEmpty()) {
+//                login_btn.setImageDrawable(getResources().getDrawable(R.drawable.img_login_btn_tapped));
+//            } else {
+//                login_btn.setImageDrawable(getResources().getDrawable(R.drawable.img_login_btn));
+//            }
+//        }
+//    }
 
     @Override
     public void onBackPressed() {
@@ -208,6 +209,7 @@ public class LoginActivity extends BaseActivity implements Observer {
     public void update(Observable observable, Object data) {
         //dismiss progress
         dialog.dismiss();
+        login_btn.setImageDrawable(getResources().getDrawable(R.drawable.img_login_btn));
         if (data!=null) {
             UserData ud = (UserData) data;
             if (ud!=null && ud.getUserId()!=null) {

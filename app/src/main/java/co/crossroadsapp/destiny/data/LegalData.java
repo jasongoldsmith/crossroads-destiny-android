@@ -47,16 +47,16 @@ public class LegalData {
     public void toJson(JSONObject json) {
         try {
             if(json!=null) {
-                if(json.has("privacyVersion")) {
+                if(json.has("privacyVersion") && !json.isNull("privacyVersion")) {
                     setPrivacyVersion(json.getString("privacyVersion"));
                 }
-                if(json.has("termsVersion")) {
+                if(json.has("termsVersion") && !json.isNull("termsVersion")) {
                     setTermsVersion(json.getString("termsVersion"));
                 }
-                if(json.has("termsNeedsUpdate")) {
+                if(json.has("termsNeedsUpdate") && !json.isNull("termsNeedsUpdate")) {
                     setTermsNeedsUpdate(json.getBoolean("termsNeedsUpdate"));
                 }
-                if(json.has("privacyNeedsUpdate")) {
+                if(json.has("privacyNeedsUpdate") && !json.isNull("privacyNeedsUpdate")) {
                     setPrivacyNeedsUpdate(json.getBoolean("privacyNeedsUpdate"));
                 }
             }

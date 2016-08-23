@@ -356,10 +356,12 @@ public class BlankFragment extends Fragment {
                                         RequestParams rp = new RequestParams();
                                         rp.put("eId", eId);
                                         rp.put("player", user.getUserId());
-                                        mContext.hideProgress();
-                                        mContext.showProgress();
-                                        mManager.postJoinEvent(mContext, rp);
-                                        holder.joinBtn.setClickable(false);
+                                        if(mContext!=null) {
+                                            mContext.hideProgress();
+                                            mContext.showProgress();
+                                            mManager.postJoinEvent(mContext, rp);
+                                            holder.joinBtn.setClickable(false);
+                                        }
                                     }
                                 });
                             } else if (CreatorIn) {
@@ -369,10 +371,12 @@ public class BlankFragment extends Fragment {
                                         RequestParams rp = new RequestParams();
                                         rp.put("eId", eId);
                                         rp.put("player", user.getUserId());
-                                        mContext.hideProgress();
-                                        mContext.showProgress();
-                                        mManager.postUnJoinEvent(mContext, rp);
-                                        holder.unjoinBtn.setClickable(false);
+                                        if(mContext!=null) {
+                                            mContext.hideProgress();
+                                            mContext.showProgress();
+                                            mManager.postUnJoinEvent(mContext, rp);
+                                            holder.unjoinBtn.setClickable(false);
+                                        }
                                     }
                                 });
                             }
@@ -448,7 +452,7 @@ public class BlankFragment extends Fragment {
 
                     Picasso.with(mContext)
                             .load(cardBackgroundImageUrl)
-                            .placeholder(R.drawable.img_adcard_raid_golgoroth)
+                            .placeholder(R.drawable.add_card_default)
                             .fit().centerCrop()
                             .into(adHolder.adCardImg);
 

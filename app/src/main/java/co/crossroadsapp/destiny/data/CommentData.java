@@ -42,26 +42,26 @@ public class CommentData extends PlayerData {
 
     public void toJson(JSONObject data) {
         try {
-            if(data.has("user")) {
+            if(data.has("user") && !data.isNull("user")) {
                 JSONObject creator = data.optJSONObject("user");
-                if(creator.has("_id")) {
+                if(creator.has("_id") && !creator.isNull("_id")) {
                     setPlayerId(creator.getString("_id"));
                 }
-                if(creator.has("userName")) {
+                if(creator.has("userName") && !creator.isNull("userName")) {
                     setUsername(creator.getString("userName"));
                 }
-                if(creator.has("consoles")) {
+                if(creator.has("consoles") && !creator.isNull("consoles")) {
                     JSONArray conArray = creator.optJSONArray("consoles");
                     if (conArray != null) {
                         for (int i = 0; i < conArray.length(); i++) {
                             JSONObject conData = (JSONObject) conArray.get(i);
-                            if (conData.has("isPrimary")) {
+                            if (conData.has("isPrimary") && !conData.isNull("isPrimary")) {
                                 if (conData.getBoolean("isPrimary")) {
                                     if (conData.has("consoleId")) {
                                         String id = conData.getString("consoleId");
                                         setPsnId(id);
                                     }
-                                    if (conData.has("clanTag")) {
+                                    if (conData.has("clanTag") && !conData.isNull("clanTag")) {
                                         String clanTag = conData.getString("clanTag");
                                         setClanTag(clanTag);
                                     }
@@ -70,7 +70,7 @@ public class CommentData extends PlayerData {
                         }
                     }
                 }
-                if(creator.has("imageUrl")) {
+                if(creator.has("imageUrl") && !creator.isNull("imageUrl")) {
                     setPlayerImageUrl(creator.getString("imageUrl"));
                 }
             }

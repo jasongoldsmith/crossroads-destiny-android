@@ -75,7 +75,9 @@ public class BaseActivity extends FragmentActivity {
         }
 
         // show timed error message
-        Util.showErrorMsg(errLayout, errText, errorText);
+        if(errorText!=null && !errorText.isEmpty()) {
+            Util.showErrorMsg(errLayout, errText, errorText);
+        }
 
 //        if(errText!=null && errLayout!=null) {
 //            errLayout.setVisibility(View.GONE);
@@ -271,8 +273,8 @@ public class BaseActivity extends FragmentActivity {
                     } else {
                         grpImageView.setVisibility(View.VISIBLE);
                         msngrImageView.setVisibility(View.GONE);
-                        notiTopSubText.setVisibility(View.VISIBLE);
-                        if (name!=null) {
+                        if (name!=null && !name.isEmpty()) {
+                            notiTopSubText.setVisibility(View.VISIBLE);
                             notiTopSubText.setText(name.toUpperCase());
                         }
                         if (console!=null && grpName!=null) {

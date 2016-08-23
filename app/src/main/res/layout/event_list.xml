@@ -389,7 +389,7 @@
                 android:gravity="center"
                 android:id="@+id/user_profile_layout"
                 android:layout_marginBottom="20dp"
-                android:layout_marginTop="81dp"
+                android:layout_marginTop="84dp"
                 android:layout_centerHorizontal="true">
                 <co.crossroadsapp.destiny.utils.CircularImageView
                     android:layout_width="96dp"
@@ -419,28 +419,28 @@
                 android:gravity="center_horizontal"/>
         </RelativeLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:textSize="10dp"
-            android:id="@+id/console_text"
-            android:layout_below="@+id/profile_header"
-            android:layout_centerHorizontal="true"
-            android:text="CONSOLE"
-            android:textColor="@color/trimbe_white"
-            android:fontFamily="sans-serif"
-            android:textStyle="bold"
-            />
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="25dp"-->
+            <!--android:textSize="10dp"-->
+            <!--android:id="@+id/console_text"-->
+            <!--android:layout_below="@+id/profile_header"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:text="CONSOLE"-->
+            <!--android:textColor="@color/trimbe_white"-->
+            <!--android:fontFamily="sans-serif"-->
+            <!--android:textStyle="bold"-->
+            <!--/>-->
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:id="@+id/multi_console_layout"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="25dp"
             android:layout_marginRight="37dp"
             android:layout_marginLeft="37dp"
-            android:layout_below="@id/console_text">
+            android:layout_below="@id/profile_header">
 
             <Spinner
                 android:id="@+id/console_spinner"

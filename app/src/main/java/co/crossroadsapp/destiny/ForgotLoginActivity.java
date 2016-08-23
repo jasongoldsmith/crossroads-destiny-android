@@ -80,7 +80,7 @@ public class ForgotLoginActivity extends BaseActivity implements Observer, Adapt
             public void onClick(View v) {
                 if (psnId!=null && console!=null) {
                     String psnString = psnId.getText().toString();
-                    if ((!psnString.isEmpty()) && psnString.length() > 3) {
+                    if (!psnString.isEmpty()) {
                         dialog.show();
                         resetPassword.setEnabled(false);
                         RequestParams params = new RequestParams();
@@ -89,7 +89,7 @@ public class ForgotLoginActivity extends BaseActivity implements Observer, Adapt
                         params.add("consoleType", console);
                         mManager.postResetPassword(ForgotLoginActivity.this, params);
                     } else {
-                        showError("Please enter correct ID");
+                        showError("Please enter ID");
                     }
                 }
             }

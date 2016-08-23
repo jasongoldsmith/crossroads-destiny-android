@@ -180,7 +180,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         // get existing event list
         getExistingList();
 
-        mManager.getEventList(this);
+        //mManager.getEventList(this);
 
         mManager.getGroupList(this);
 
@@ -512,13 +512,19 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     private void checkPrivacyDialoge() {
         if(user!=null) {
             if(user.getLegal()!=null) {
-                if( user.getLegal().getPrivacyNeedsUpdate()) {
+                if( user.getLegal().getPrivacyNeedsUpdate() || user.getLegal().getTermsNeedsUpdate()) {
                     //alert pop-up dailogue
                     final TextView message = new TextView(this);
-                    message.setText(Html.fromHtml((getString(R.string.dialog_message))));
-
-                    //
-                    setTextViewHTML(message, (getString(R.string.dialog_message)));
+                    if(user.getLegal().getPrivacyNeedsUpdate()) {
+                        message.setText(Html.fromHtml((getString(R.string.dialog_message_privacy))));
+                        setTextViewHTML(message, (getString(R.string.dialog_message_privacy)));
+                    }else if (user.getLegal().getTermsNeedsUpdate()) {
+                        message.setText(Html.fromHtml((getString(R.string.dialog_message_terms))));
+                        setTextViewHTML(message, (getString(R.string.dialog_message_terms)));
+                    } else {
+                        message.setText(Html.fromHtml((getString(R.string.dialog_message))));
+                        setTextViewHTML(message, (getString(R.string.dialog_message)));
+                    }
 
                     message.setPadding(95,80,95,80);
                     //message.setMovementMethod(LinkMovementMethod.getInstance());
@@ -927,7 +933,6 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                             if(ud.getPsnVerify()!=null) {
                                 psnV = ud.getPsnVerify();
                             }
-
                             if (psnV != null && psnV.equalsIgnoreCase(Constants.PSN_VERIFIED)) {
                                 if (mManager != null && mManager.getUserData() != null) {
                                     UserData u = mManager.getUserData();
@@ -1050,7 +1055,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             if (this.drawerLayout.isDrawerOpen(gravity)) {
                 this.drawerLayout.closeDrawer(gravity);
                 if (gravity == Gravity.RIGHT) {
-                    mManager.getGroupList(this);
+                    //mManager.getGroupList(this);
                 }
             }
         }
@@ -1120,7 +1125,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         if(mManager!=null) {
             mManager.setDeepLinkEvent(null, null);
         }
-        //unregisterFirebase();
+        unregisterFirebase();
         unregisterUserFirebase();
     }
 
@@ -1276,7 +1281,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             View tab = LayoutInflater.from(ListActivityFragment.this).inflate(R.layout.custom_tab, null);
             TextView tv = (TextView) tab.findViewById(R.id.custom_text);
             tv.setTypeface(Typeface.SANS_SERIF, 1);
-            tv.setPadding(Util.dpToPx(43, ListActivityFragment.this), 25, 0, 0);
+            tv.setPadding(0, 25, Util.dpToPx(21, ListActivityFragment.this), 0);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
             tv.setText(tabTitles[position]);
             return tab;
@@ -1354,16 +1359,17 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                         }
                     }
                     //to update all lists in the background
-                    mManager.getEventList(ListActivityFragment.this);
+                    //mManager.getEventList(ListActivityFragment.this);
                 }
             } else if(observable instanceof GroupListNetwork) {
                 if (data != null) {
                     if (data instanceof UserData) {
+                        unregisterFirebase();
                         registerFirbase();
                         mManager.getEventList(this);
                         hideProgress();
                         closeProfileDrawer(Gravity.RIGHT);
-                        mManager.getGroupList(this);
+                        //mManager.getGroupList(this);
                         //gpAct.setSelectedGroup();
                     } else if(data instanceof GroupData) {
                         if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
@@ -1397,13 +1403,17 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             } else if(observable instanceof LogoutNetwork) {
                 Intent regIntent = new Intent(getApplicationContext(),
                         MainActivity.class);
-                startActivity(regIntent);
+                regIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                regIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                regIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                regIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 finish();
+                startActivity(regIntent);
             } else if(observable instanceof HelmetUpdateNetwork) {
                 findViewById(R.id.loadingImg).setVisibility(View.GONE);
                 if(data!=null) {
                     updateUserProfileImage(data.toString());
-                    mManager.getEventList(this);
+                    //mManager.getEventList(this);
                 }
             } else if( observable instanceof ChangeCurrentConsoleNetwork) {
                 hideProgressBar();

@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -284,6 +285,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         if (finalAct != null && !finalAct.getActivitySubtype().isEmpty()) {
             actIconUrl = finalAct.getActivityIconUrl();
             backg = finalAct.getaImagePath();
+            activityType = finalAct.getActivityType();
             subType = finalAct.getActivitySubtype();
             level = finalAct.getActivityLevel();
             light = finalAct.getActivityLight();
@@ -351,6 +353,9 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         modifiersLayout.removeAllViews();
         modifiersLayout2.removeAllViews();
         modifiersLayout3.removeAllViews();
+        modifiersLayout.setVisibility(View.GONE);
+        modifiersLayout2.setVisibility(View.GONE);
+        modifiersLayout3.setVisibility(View.GONE);
         Random rnd = new Random();
         int prevTextViewId = 0;
         int pad = Util.dpToPx(5, AddFinalActivity.this);
@@ -384,13 +389,10 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                     textView.setLayoutParams(params);
 
                     prevTextViewId = curTextViewId;
-                    modifiersLayout.setVisibility(View.GONE);
-                    modifiersLayout2.setVisibility(View.GONE);
-                    modifiersLayout3.setVisibility(View.GONE);
                     if (i < 2) {
                         modifiersLayout3.setVisibility(View.VISIBLE);
                         modifiersLayout3.addView(textView, params);
-                    } else if (i < 6) {
+                    } else if (i < 5) {
                         modifiersLayout2.setVisibility(View.VISIBLE);
                         modifiersLayout2.addView(textView, params);
                     } else {
@@ -412,17 +414,17 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
         if(finalAct==null) {
             //subtypes and difficulty level
-            actSubList = mCntrlMngr.getCustomActivityList(activity.get(0).getActivityType());
-            activityType = actSubList.get(0).getActivityType();
+            //actSubList = mCntrlMngr.getCustomActivityList(activity.get(0).getActivityType());
+            activityType = activity.get(0).getActivityType();
             actSubTypeList = new ArrayList<String>();
-            if (actSubList != null && !actSubList.isEmpty()) {
-                for (int n = 0; n < actSubList.size(); n++) {
+            if (activity != null && !activity.isEmpty()) {
+                for (int n = 0; n < activity.size(); n++) {
                     String subtypeDifficultyName = "";
-                        if (actSubList.get(n).getActivitySubtype() != null && !actSubList.get(n).getActivitySubtype().isEmpty()) {
-                            subActType = actSubList.get(n).getActivitySubtype();
+                        if (activity.get(n).getActivitySubtype() != null && !activity.get(n).getActivitySubtype().isEmpty()) {
+                            subActType = activity.get(n).getActivitySubtype();
                             subtypeDifficultyName = subActType;
-                            if (actSubList.get(n).getActivityDifficulty() != null && !actSubList.get(n).getActivityDifficulty().isEmpty()) {
-                                subtypeDifficulty = actSubList.get(n).getActivityDifficulty();
+                            if (activity.get(n).getActivityDifficulty() != null && !activity.get(n).getActivityDifficulty().isEmpty()) {
+                                subtypeDifficulty = activity.get(n).getActivityDifficulty();
                                 subtypeDifficultyName = subtypeDifficultyName + " - " + subtypeDifficulty;
                             }
                         }
@@ -594,7 +596,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                     }
 
                     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                        return getCustomView(position, convertView, parent, dataList);
+                        return getCheckpointCustomView(position, convertView, parent, dataList);
                     }
                 };
                 adapterCheckpoint.setDropDownViewResource(R.layout.empty_layout);
@@ -631,7 +633,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                     }
 
                     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                        return getCustomView(position, convertView, parent, dataList);
+                        return getTagCustomView(position, convertView, parent, dataList);
                     }
                 };
                 adapterTags.setDropDownViewResource(R.layout.empty_layout);
@@ -681,13 +683,100 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
     private View getCustomView(int position, View convertView, ViewGroup parent, ArrayList<String> adapterCheckpoint) {
         LayoutInflater inflater=getLayoutInflater();
         View row=inflater.inflate(R.layout.fragment_checkpoint, parent, false);
-        CardView card = (CardView)row.findViewById(R.id.activity_checkpoint_card);
-        RelativeLayout cardLayout = (RelativeLayout)row.findViewById(R.id.activity_checkpoint_card_frag);
-        cardLayout.setBackgroundColor(getResources().getColor(R.color.consoleAddColor));
-        card.setCardBackgroundColor(getResources().getColor(R.color.freelancer_background));
-        TextView label=(TextView)row.findViewById(R.id.activity_checkpoint_text);
-        if (adapterCheckpoint!=null) {
-            label.setText(adapterCheckpoint.get(position));
+        CardView card = (CardView) row.findViewById(R.id.activity_checkpoint_card);
+        //// TODO: 8/22/16 fix later with better implementation
+        String sub = actSubtypeDropdownText.getText().toString();
+        String[] parts = sub.split("\\-");
+        String subT = parts[1];
+        subT = subT.trim();
+        String subD=null;
+        if(parts.length>2) {
+            subD = parts[2];
+            subD = subD.trim();
+            //subT = subT +" - "+subD;
+        }
+        String charT=null;
+        String subC = adapterCheckpoint.get(position);
+        String[] parts1 = subC.split("\\-");
+        charT = parts1[0];
+        charT = charT.trim();
+        String charD=null;
+        if(parts1.length>1) {
+            charD = parts1[1];
+            charD = charD.trim();
+        }
+        if(subD==null || charD==null) {
+            if (subT.equalsIgnoreCase(charT)) {
+                row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 0));
+                card.setVisibility(View.GONE);
+            } else {
+                card.setVisibility(View.VISIBLE);
+                RelativeLayout cardLayout = (RelativeLayout) row.findViewById(R.id.activity_checkpoint_card_frag);
+                cardLayout.setBackgroundColor(getResources().getColor(R.color.consoleAddColor));
+                card.setCardBackgroundColor(getResources().getColor(R.color.freelancer_background));
+                TextView label = (TextView) row.findViewById(R.id.activity_checkpoint_text);
+                if (adapterCheckpoint != null) {
+                    label.setText(adapterCheckpoint.get(position));
+                }
+            }
+        }else if(subT.equalsIgnoreCase(charT) && subD.equalsIgnoreCase(charD)){
+            row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 0));
+            card.setVisibility(View.GONE);
+        } else {
+            card.setVisibility(View.VISIBLE);
+            RelativeLayout cardLayout = (RelativeLayout) row.findViewById(R.id.activity_checkpoint_card_frag);
+            cardLayout.setBackgroundColor(getResources().getColor(R.color.consoleAddColor));
+            card.setCardBackgroundColor(getResources().getColor(R.color.freelancer_background));
+            TextView label = (TextView) row.findViewById(R.id.activity_checkpoint_text);
+            if (adapterCheckpoint != null) {
+                label.setText(adapterCheckpoint.get(position));
+            }
+        }
+        return row;
+    }
+
+    private View getCheckpointCustomView(int position, View convertView, ViewGroup parent, ArrayList<String> adapterCheckpoint) {
+        LayoutInflater inflater=getLayoutInflater();
+        View row=inflater.inflate(R.layout.fragment_checkpoint, parent, false);
+        CardView card = (CardView) row.findViewById(R.id.activity_checkpoint_card);
+        //// TODO: 8/22/16 fix later with better implementation
+        String check = checkpointText.getText().toString();
+
+        if(check.equalsIgnoreCase(adapterCheckpoint.get(position).toString())) {
+            row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,0));
+            card.setVisibility(View.GONE);
+        }else {
+            card.setVisibility(View.VISIBLE);
+            RelativeLayout cardLayout = (RelativeLayout) row.findViewById(R.id.activity_checkpoint_card_frag);
+            cardLayout.setBackgroundColor(getResources().getColor(R.color.consoleAddColor));
+            card.setCardBackgroundColor(getResources().getColor(R.color.freelancer_background));
+            TextView label = (TextView) row.findViewById(R.id.activity_checkpoint_text);
+            if (adapterCheckpoint != null) {
+                label.setText(adapterCheckpoint.get(position));
+            }
+        }
+        return row;
+    }
+
+    private View getTagCustomView(int position, View convertView, ViewGroup parent, ArrayList<String> adapterCheckpoint) {
+        LayoutInflater inflater=getLayoutInflater();
+        View row=inflater.inflate(R.layout.fragment_checkpoint, parent, false);
+        CardView card = (CardView) row.findViewById(R.id.activity_checkpoint_card);
+        //// TODO: 8/22/16 fix later with better implementation
+        String tag = detailText.getText().toString();
+
+        if(tag.equalsIgnoreCase(adapterCheckpoint.get(position).toString())) {
+            row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,0));
+            card.setVisibility(View.GONE);
+        }else {
+            card.setVisibility(View.VISIBLE);
+            RelativeLayout cardLayout = (RelativeLayout) row.findViewById(R.id.activity_checkpoint_card_frag);
+            cardLayout.setBackgroundColor(getResources().getColor(R.color.consoleAddColor));
+            card.setCardBackgroundColor(getResources().getColor(R.color.freelancer_background));
+            TextView label = (TextView) row.findViewById(R.id.activity_checkpoint_text);
+            if (adapterCheckpoint != null) {
+                label.setText(adapterCheckpoint.get(position));
+            }
         }
         return row;
     }

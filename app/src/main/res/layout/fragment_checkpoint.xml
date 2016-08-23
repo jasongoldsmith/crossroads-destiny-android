@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:id="@+id/activity_checkpoint_card"
+        conversation:cardCornerRadius="0dp"
         conversation:cardBackgroundColor="#0086d0">
 
         <RelativeLayout

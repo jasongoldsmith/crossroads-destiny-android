@@ -328,8 +328,12 @@ public class EventDetailsFragments extends Fragment {
                         String playerImg = commentsLocal.get(position).getPlayerImageUrl();
                         Util.picassoLoadImageWithoutMeasurement(getActivity(), holder.playerProfileComment, playerImg, R.drawable.img_profile_blank);
                     }
-                    if(commentsLocal.get(position).getUsername()!=null) {
-                        holder.playerNameComment.setText(commentsLocal.get(position).getUsername());
+                    if(commentsLocal.get(position).getPsnId()!=null) {
+                        String name=commentsLocal.get(position).getPsnId();
+                        if(commentsLocal.get(position).getClanTag()!=null) {
+                            name = name + " [" + commentsLocal.get(position).getClanTag() + "]";
+                        }
+                        holder.playerNameComment.setText(name);
                     }
                     if(commentsLocal.get(position).getCreated()!=null) {
                         String time = Util.updateLastReceivedDate(commentsLocal.get(position).getCreated(), getActivity().getResources());

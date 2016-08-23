@@ -97,6 +97,8 @@
 
     <string name="deeplink_full_err">The maximum amount of players has been reached for this activity. Would you like to add one of your own?</string>
     <string name="dialog_message">Our Terms of Service and Privacy Policy have changed.\n  By tapping the “OK” button, you agree to the updated <![CDATA[<a href="https://www.crossroadsapp.co/terms">Terms of Service</a>]]> and <![CDATA[<a href="https://www.crossroadsapp.co/privacy">Privacy Policy</a>]]>.</string>
+    <string name="dialog_message_privacy">Our Privacy Policy has changed.\n  By tapping the “OK” button, you agree to the updated <![CDATA[<a href="https://www.crossroadsapp.co/privacy">Privacy Policy</a>]]>.</string>
+    <string name="dialog_message_terms">Our Terms of Service have changed.\n  By tapping the “OK” button, you agree to the updated <![CDATA[<a href="https://www.crossroadsapp.co/terms">Terms of Service</a>]]>.</string>
     <string name="dialog_title">Update</string>
     <string name="console_selection_text">More than one console? You can add it later!</string>
     <string name="title_activity_add_final">AddFinalActivity</string>

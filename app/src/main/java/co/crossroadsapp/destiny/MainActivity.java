@@ -66,16 +66,16 @@ public class MainActivity extends BaseActivity implements Observer {
 
         //check android version for dev builds
         mManager.getAndroidVersion(this);
-
         forwardAfterVersionCheck();
-
         TravellerLog.w(this, "MainActivity.onCreate ends...");
     }
 
     public void showError(String err) {
-        Util.clearDefaults(this);
-        launchLogin();
-        finish();
+        if (err != null && !err.isEmpty()){
+            Util.clearDefaults(this);
+            launchLogin();
+            finish();
+        }
     }
 
     private void forwardAfterVersionCheck() {

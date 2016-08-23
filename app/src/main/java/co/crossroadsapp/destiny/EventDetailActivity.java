@@ -129,6 +129,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private RelativeLayout commentLayout;
     private EditText sendMsg;
     private ImageView sendMsgBtn;
+    private TabLayout tabLayout;
 //    private TextView errText;
 //    private ImageView close_err;
 
@@ -388,14 +389,10 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         });
 
         // Give the TabLayout the ViewPager
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.eventdetail_tab_layout);
+        tabLayout = (TabLayout) findViewById(R.id.eventdetail_tab_layout);
         tabLayout.setupWithViewPager(viewPager);
 
-        // Iterate over all tabs and set the custom view
-        for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            TabLayout.Tab tab = tabLayout.getTabAt(i);
-            tab.setCustomView(pagerAdapter.getTabView(i));
-        }
+        setCommentTabCount();
 
         viewPager.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -466,6 +463,16 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         }
     }
 
+    private void setCommentTabCount() {
+        if(tabLayout!=null) {
+            // Iterate over all tabs and set the custom view
+            for (int i = 0; i < tabLayout.getTabCount(); i++) {
+                TabLayout.Tab tab = tabLayout.getTabAt(i);
+                tab.setCustomView(pagerAdapter.getTabView(i));
+            }
+        }
+    }
+
     class PagerAdapter extends FragmentPagerAdapter {
 
         String tabTitles[] = new String[] { "FIRETEAM", "COMMENTS" };
@@ -498,7 +505,11 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         @Override
         public CharSequence getPageTitle(int position) {
             // Generate title based on item position
-            return tabTitles[position];
+            if(position==0) {
+                return tabTitles[position];
+            }else {
+                return tabTitles[position] + " (" + currEvent.getCommentDataList().size() + ")";
+            }
         }
 
         @Override
@@ -512,9 +523,13 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             View tab = LayoutInflater.from(EventDetailActivity.this).inflate(R.layout.custom_tab, null);
             TextView tv = (TextView) tab.findViewById(R.id.custom_text);
             tv.setTypeface(Typeface.SANS_SERIF, 1);
-            tv.setPadding(Util.dpToPx(43, EventDetailActivity.this), 25, 0, 0);
+            tv.setPadding(0, 25, Util.dpToPx(21, EventDetailActivity.this), 0);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-            tv.setText(tabTitles[position]);
+            if(position==0) {
+                tv.setText(tabTitles[position]);
+            }else {
+                tv.setText(tabTitles[position] + " (" + currEvent.getCommentDataList().size() + ")");
+            }
             return tab;
         }
     }
@@ -529,6 +544,8 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         if (page != null) {
             ((EventDetailsFragments) page).updateCurrListAdapter(currEvent, 1);
         }
+        pagerAdapter.notifyDataSetChanged();
+        setCommentTabCount();
     }
 
     private void generateBranchObject() {
