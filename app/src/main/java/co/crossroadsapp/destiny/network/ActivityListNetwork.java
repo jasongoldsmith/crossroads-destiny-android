@@ -22,7 +22,7 @@ import cz.msebera.android.httpclient.Header;
  */
 public class ActivityListNetwork extends Observable {
     private NetworkEngine ntwrk;
-    private String url = "activity/list";
+    private String url = "api/v1/activity/list";
     private Context mContext;
     private ControlManager mManager;
 

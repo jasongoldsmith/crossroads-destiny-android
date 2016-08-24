@@ -1,5 +1,6 @@
 package co.crossroadsapp.destiny;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -24,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -32,6 +34,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Field;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,6 +42,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
@@ -105,6 +109,11 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
     private RelativeLayout modifiersLayout2;
     private RelativeLayout modifiersLayout3;
     private RelativeLayout levelLayout;
+
+    TimePicker timePicker;
+    private int TIME_PICKER_INTERVAL = 15;
+    NumberPicker minutePicker;
+    List<String> displayedValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -496,7 +505,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                                     if (checkpointActList.get(i).getActivityCheckpoint().equalsIgnoreCase(cp)) {
                                         if (checkpointActList.get(i).getTag() != null) {
                                             if(!checkpointActList.get(i).getTag().isEmpty()) {
-                                                tagList.add(checkpointActList.get(i).getTag().replace("#",""));
+                                                tagList.add(checkpointActList.get(i).getTag());
                                             }else {
                                                 tagList.add(Constants.NONE);
                                             }
@@ -508,7 +517,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                                 if (checkpointActList.get(i).getActivitySubtype().equalsIgnoreCase(subActType)) {
                                     if (checkpointActList.get(i).getTag() != null) {
                                         if(!checkpointActList.get(i).getTag().isEmpty()) {
-                                            tagList.add(checkpointActList.get(i).getTag().replace("#",""));
+                                            tagList.add(checkpointActList.get(i).getTag());
                                         }else {
                                             tagList.add(Constants.NONE);
                                         }
@@ -523,7 +532,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                                 if (checkpointActList.get(i).getActivityCheckpoint().equalsIgnoreCase(cp)) {
                                     if (checkpointActList.get(i).getTag() != null) {
                                         if(!checkpointActList.get(i).getTag().isEmpty()) {
-                                            tagList.add(checkpointActList.get(i).getTag().replace("#",""));
+                                            tagList.add(checkpointActList.get(i).getTag());
                                         }else {
                                             tagList.add(Constants.NONE);
                                         }
@@ -535,7 +544,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                             if (checkpointActList.get(i).getActivitySubtype().equalsIgnoreCase(subActType)) {
                                 if (checkpointActList.get(i).getTag() != null) {
                                     if(!checkpointActList.get(i).getTag().isEmpty()) {
-                                        tagList.add(checkpointActList.get(i).getTag().replace("#",""));
+                                        tagList.add(checkpointActList.get(i).getTag());
                                     }else {
                                         tagList.add(Constants.NONE);
                                     }
@@ -693,7 +702,6 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         if(parts.length>2) {
             subD = parts[2];
             subD = subD.trim();
-            //subT = subT +" - "+subD;
         }
         String charT=null;
         String subC = adapterCheckpoint.get(position);
@@ -779,6 +787,32 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
             }
         }
         return row;
+    }
+
+    @SuppressLint("NewApi")
+    private void setTimePickerInterval(TimePicker timePicker) {
+        try {
+            Class<?> classForid = Class.forName("com.android.internal.R$id");
+            // Field timePickerField = classForid.getField("timePicker");
+
+            Field field = classForid.getField("minute");
+            NumberPicker minutePicker = (NumberPicker) timePicker
+                    .findViewById(field.getInt(null));
+
+            minutePicker.setMinValue(0);
+            minutePicker.setMaxValue(7);
+            displayedValues = new ArrayList<String>();
+            for (int i = 0; i < 60; i += TIME_PICKER_INTERVAL) {
+                displayedValues.add(String.format("%02d", i));
+            }
+            for (int i = 0; i < 60; i += TIME_PICKER_INTERVAL) {
+                displayedValues.add(String.format("%02d", i));
+            }
+            minutePicker.setDisplayedValues(displayedValues
+                    .toArray(new String[0]));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

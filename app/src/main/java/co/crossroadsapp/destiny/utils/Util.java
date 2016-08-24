@@ -24,6 +24,7 @@ import co.crossroadsapp.destiny.ControlManager;
 //import co.crossroadsapp.destiny.CreateNewEvent;
 import co.crossroadsapp.destiny.EventDetailActivity;
 import co.crossroadsapp.destiny.ListActivityFragment;
+import co.crossroadsapp.destiny.MainActivity;
 import co.crossroadsapp.destiny.R;
 import co.crossroadsapp.destiny.RegisterActivity;
 import co.crossroadsapp.destiny.SplashActivity;
@@ -55,7 +56,7 @@ public class Util {
 
     //To switch between production and development server links
     //where 1 points to development, 2 points to production and 3 points to Dev staging
-    private static final int network_connection = 3;
+    private static final int network_connection = 2;
 
     private static final String TAG = Util.class.getName();
     public static final String trimbleDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -612,7 +613,7 @@ public class Util {
                     params.put("trackingKey", "eventSharing");
                 } else if(c instanceof ListActivityFragment) {
                     params.put("trackingKey", "addCardInit");
-                } else if(c instanceof RegisterActivity) {
+                } else if(c instanceof MainActivity) {
                     params.put("trackingKey", "signupInit");
                 }
                 cm.postTracking(params, c);

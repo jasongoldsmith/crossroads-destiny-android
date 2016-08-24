@@ -19,7 +19,7 @@ public class postGcmNetwork {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "a/installation/android";
+    private String url = "api/v1/a/installation/android";
 
     public postGcmNetwork(Context context) {
         mContext = context;

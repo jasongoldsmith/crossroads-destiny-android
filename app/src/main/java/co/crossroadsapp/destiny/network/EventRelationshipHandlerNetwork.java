@@ -25,9 +25,9 @@ public class EventRelationshipHandlerNetwork extends Observable{
     private Context mContext;
     private NetworkEngine ntwrk;
     private ControlManager mManager;
-    private String url = "a/event/join";
-    private String leaveUrl = "a/event/leave";
-    private String createEventUrl = "a/event/create";
+    private String url = "api/v1/a/event/join";
+    private String leaveUrl = "api/v1/a/event/leave";
+    private String createEventUrl = "api/v1/a/event/create";
 
     public EventRelationshipHandlerNetwork(Context c) {
         this.mContext = c;

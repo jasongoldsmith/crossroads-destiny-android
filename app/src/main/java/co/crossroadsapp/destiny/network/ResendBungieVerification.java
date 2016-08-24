@@ -21,7 +21,7 @@ public class ResendBungieVerification extends Observable {
 
     private final ControlManager mManager;
     private NetworkEngine ntwrk;
-    private String url = "a/account/group/resendBungieMessage";
+    private String url = "api/v1/a/account/group/resendBungieMessage";
     private Context mContext;
 
     public ResendBungieVerification(Context c) {

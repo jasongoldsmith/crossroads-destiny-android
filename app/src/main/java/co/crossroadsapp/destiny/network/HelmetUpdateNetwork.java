@@ -21,7 +21,7 @@ public class HelmetUpdateNetwork extends Observable {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "a/account/updateHelmet";
+    private String url = "api/v1/a/account/updateHelmet";
 
     private ControlManager mManager;
 

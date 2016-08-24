@@ -26,7 +26,7 @@ public class EventListNetwork extends Observable{
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "a/feed/get";
+    private String url = "api/v1/a/feed/get";
 
     private EventList eventList;
     private ActivityList actList;

@@ -1,6 +1,8 @@
 package co.crossroadsapp.destiny.network;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 
 import co.crossroadsapp.destiny.utils.TravellerLog;
 import co.crossroadsapp.destiny.utils.Util;
@@ -27,6 +29,23 @@ public class NetworkEngine {
 
     private NetworkEngine(Context c) {
         client = new AsyncHttpClient();
+        client.addHeader("x-osversion", String.valueOf(android.os.Build.VERSION.SDK_INT));
+        client.addHeader("x-devicetype", android.os.Build.MANUFACTURER);
+        client.addHeader("x-devicemodel", android.os.Build.MODEL);
+        try {
+            PackageInfo pInfo = c.getPackageManager().getPackageInfo(c.getPackageName(), 0);
+            String version = pInfo.versionName;
+            if(version!=null) {
+                client.addHeader("x-appversion", version);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        client.addHeader("x-fbooksdk", "facebook-android-sdk:[4,5)");
+        client.addHeader("x-fbasesdk", "firebase-9.2.0");
+        client.addHeader("x-mpsdk", "mixpanel-android:4.+");
+        client.addHeader("x-branchsdk", "branch-library:1.+");
+        client.addHeader("x-fabricsdk", "answers:1.3.8@aar");
         myCookieStore = new PersistentCookieStore(c);
         //myCookieStore.clear();
         if(myCookieStore!=null) {

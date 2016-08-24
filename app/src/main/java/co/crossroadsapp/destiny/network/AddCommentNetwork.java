@@ -23,7 +23,7 @@ public class AddCommentNetwork extends Observable {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "a/event/addComment";
+    private String url = "api/v1/a/event/addComment";
 
     private ControlManager mManager;
 

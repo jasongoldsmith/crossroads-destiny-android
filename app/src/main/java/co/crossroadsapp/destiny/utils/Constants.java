@@ -42,9 +42,9 @@ public class Constants {
     public static String FIREBASE_PROD_URL = "https://crossroadsapp-live.firebaseio.com/";
 
     //network base url
-    public static String NETWORK_DEV_BASE_URL = "https://travelerbackend.herokuapp.com/api/v1/";
-    public static String NETWORK_PROD_BASE_URL = "https://live.crossroadsapp.co/api/v1/";
-    public static String NETWORK_DEV_BASE_STAGING_URL = "https://travelerbackendproduction.herokuapp.com/api/v1/";
+    public static String NETWORK_DEV_BASE_URL = "https://travelerbackend.herokuapp.com/";
+    public static String NETWORK_PROD_BASE_URL = "https://live.crossroadsapp.co/";
+    public static String NETWORK_DEV_BASE_STAGING_URL = "https://travelerbackendproduction.herokuapp.com/";
 
     //app download links
     public static String DOWNLOAD_DEV_BUILD = "https://goo.gl/6vQpFn";

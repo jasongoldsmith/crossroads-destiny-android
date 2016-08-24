@@ -389,7 +389,7 @@
                 android:gravity="center"
                 android:id="@+id/user_profile_layout"
                 android:layout_marginBottom="20dp"
-                android:layout_marginTop="84dp"
+                android:layout_marginTop="81dp"
                 android:layout_centerHorizontal="true">
                 <co.crossroadsapp.destiny.utils.CircularImageView
                     android:layout_width="96dp"
@@ -440,7 +440,7 @@
             android:layout_marginTop="25dp"
             android:layout_marginRight="37dp"
             android:layout_marginLeft="37dp"
-            android:layout_below="@id/profile_header">
+            android:layout_below="@+id/profile_header">
 
             <Spinner
                 android:id="@+id/console_spinner"
@@ -448,6 +448,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/freelancer_background"
                 android:gravity="center"
+                android:overlapAnchor="false"
                 android:popupElevation="0dp"
                 android:popupBackground="@android:color/transparent"/>
 

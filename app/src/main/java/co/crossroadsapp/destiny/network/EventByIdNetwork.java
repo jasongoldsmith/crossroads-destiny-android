@@ -24,7 +24,7 @@ public class EventByIdNetwork extends Observable {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "a/event/listById";
+    private String url = "api/v1/a/event/listById";
 
     private ControlManager mManager;
 

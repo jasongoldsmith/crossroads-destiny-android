@@ -20,7 +20,7 @@ import cz.msebera.android.httpclient.Header;
 public class GetVersion extends Observable {
 
     private NetworkEngine ntwrk;
-    private String url = "appVersion/android";
+    private String url = "api/v1/appVersion/android";
     private Context mContext;
 
     public GetVersion(Context c) {

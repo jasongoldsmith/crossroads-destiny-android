@@ -25,6 +25,8 @@ import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
 import com.loopj.android.http.RequestParams;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -99,8 +101,9 @@ public class MainActivity extends BaseActivity implements Observer {
             register_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    Intent regIntent = new Intent(getApplicationContext(),
-//                            RegisterActivity.class);
+                    //tracking signup initiation
+                    Map<String, String> json = new HashMap<String, String>();
+                    Util.postTracking(json, MainActivity.this, mManager);
                     TravellerLog.w(this, "Launch console selection page activity");
                     Intent regIntent = new Intent(getApplicationContext(),
                             ConsoleSelectionActivity.class);

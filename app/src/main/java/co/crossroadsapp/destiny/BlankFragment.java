@@ -459,20 +459,22 @@ public class BlankFragment extends Fragment {
                     adHolder.addBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mContext.showProgressBar();
-                            mContext.setAdCardPosition(adList.get(position-elistLocal.size()).getId());
-                            RequestParams rp = new RequestParams();
-                            rp.add("aType", adList.get(position-elistLocal.size()).getActivityType());
-                            rp.add("includeTags", "true");
-                            mManager.postGetActivityList(mContext, rp);
+                            if (mContext != null) {
+                                mContext.showProgressBar();
+                                mContext.setAdCardPosition(adList.get(position - elistLocal.size()).getId());
+                                RequestParams rp = new RequestParams();
+                                rp.add("aType", adList.get(position - elistLocal.size()).getActivityType());
+                                rp.add("includeTags", "true");
+                                mManager.postGetActivityList(mContext, rp);
 
-                            //tracking adcard click
-                            Map<String, String> json = new HashMap<String, String>();
-                                if(adList.get(position-elistLocal.size()).getId()!=null && !adList.get(position-elistLocal.size()).getId().isEmpty()) {
+                                //tracking adcard click
+                                Map<String, String> json = new HashMap<String, String>();
+                                if (adList.get(position - elistLocal.size()).getId() != null && !adList.get(position - elistLocal.size()).getId().isEmpty()) {
                                     json.put("activityId", adList.get(position - elistLocal.size()).getId().toString());
                                     Util.postTracking(json, mContext, mManager);
                                 }
-                            //mManager.postCreateEvent(adList.get(position-elistLocal.size()).getId(), user.getUserId(), adList.get(position-elistLocal.size()).getMinPlayer(), adList.get(position-elistLocal.size()).getMaxPlayer(), null, mContext);
+                                //mManager.postCreateEvent(adList.get(position-elistLocal.size()).getId(), user.getUserId(), adList.get(position-elistLocal.size()).getMinPlayer(), adList.get(position-elistLocal.size()).getMaxPlayer(), null, mContext);
+                            }
                         }
                     });
                     break;

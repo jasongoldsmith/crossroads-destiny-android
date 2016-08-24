@@ -22,7 +22,7 @@ public class VerifyConsoleIDNetwork extends Observable {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "auth/checkBungieAccount";
+    private String url = "api/v1/auth/checkBungieAccount";
     private ControlManager mManager;
 
     public VerifyConsoleIDNetwork(Context c) {

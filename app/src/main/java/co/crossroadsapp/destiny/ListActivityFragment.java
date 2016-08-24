@@ -515,15 +515,15 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 if( user.getLegal().getPrivacyNeedsUpdate() || user.getLegal().getTermsNeedsUpdate()) {
                     //alert pop-up dailogue
                     final TextView message = new TextView(this);
-                    if(user.getLegal().getPrivacyNeedsUpdate()) {
-                        message.setText(Html.fromHtml((getString(R.string.dialog_message_privacy))));
-                        setTextViewHTML(message, (getString(R.string.dialog_message_privacy)));
+                    if(user.getLegal().getPrivacyNeedsUpdate() && user.getLegal().getTermsNeedsUpdate()) {
+                        message.setText(Html.fromHtml((getString(R.string.dialog_message))));
+                        setTextViewHTML(message, (getString(R.string.dialog_message)));
                     }else if (user.getLegal().getTermsNeedsUpdate()) {
                         message.setText(Html.fromHtml((getString(R.string.dialog_message_terms))));
                         setTextViewHTML(message, (getString(R.string.dialog_message_terms)));
-                    } else {
-                        message.setText(Html.fromHtml((getString(R.string.dialog_message))));
-                        setTextViewHTML(message, (getString(R.string.dialog_message)));
+                    } else if(user.getLegal().getPrivacyNeedsUpdate()){
+                        message.setText(Html.fromHtml((getString(R.string.dialog_message_privacy))));
+                        setTextViewHTML(message, (getString(R.string.dialog_message_privacy)));
                     }
 
                     message.setPadding(95,80,95,80);
@@ -646,11 +646,16 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         CardView card = (CardView) row.findViewById(R.id.console_card);
 
         if (position == 0) {
-            card.setCardBackgroundColor(getResources().getColor(R.color.freelancer_background));
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                ImageView dropArw = (ImageView) row.findViewById(R.id.drop_arrow);
-                dropArw.setVisibility(View.VISIBLE);
-            }
+            row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 0));
+            card.setVisibility(View.GONE);
+//            card.setCardBackgroundColor(getResources().getColor(R.color.freelancer_background));
+//            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                ImageView dropArw = (ImageView) row.findViewById(R.id.drop_arrow);
+//                dropArw.setVisibility(View.VISIBLE);
+//            }
+        }else {
+            row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, Util.dpToPx(50, ListActivityFragment.this)));
+            card.setVisibility(View.VISIBLE);
         }
         if(consoleItems.contains("Add Console")) {
         if (position == consoleItems.size() - 1) {
@@ -676,6 +681,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
         TextView label=(TextView)row.findViewById(R.id.add_console_text);
         if (consoleItems!=null) {
+            label.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
             label.setText(consoleItems.get(position));
         }
 
@@ -1081,7 +1087,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             mManager.setDeepLinkEvent(null, null);
         } else {
             //show timed error message
-            Util.showErrorMsg(errLayout, errText, err);
+            setErrText(err);
         }
 
 //        errLayout.setVisibility(View.GONE);
