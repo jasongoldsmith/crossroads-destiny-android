@@ -412,7 +412,7 @@ public class BlankFragment extends Fragment {
                                     if (regIntent != null) {
                                         //regIntent.putExtra("userdata", user);
                                         startActivity(regIntent);
-                                        mContext.finish();
+                                        //mContext.finish();
                                     }
                                 }
                             }
@@ -456,7 +456,7 @@ public class BlankFragment extends Fragment {
                             .fit().centerCrop()
                             .into(adHolder.adCardImg);
 
-                    adHolder.addBtn.setOnClickListener(new View.OnClickListener() {
+                    adHolder.event_adcard.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             if (mContext != null) {
@@ -548,18 +548,18 @@ public class BlankFragment extends Fragment {
                     holder.playerProfileImage3.setVisibility(View.GONE);
                     holder.playerProfileImage2.setVisibility(View.GONE);
                     holder.playerCountImage3.setVisibility(View.GONE);
-                    Util.picassoLoadIcon(mContext, holder.playerProfileImage1, profileUrl, R.dimen.player_icon_hgt, R.dimen.player_icon_width, R.drawable.avatar);
+                    Util.picassoLoadIcon(mContext, holder.playerProfileImage1, profileUrl, R.dimen.player_icon_hgt, R.dimen.player_icon_width, R.drawable.profile_image);
                     break;
                 case 1:
                     holder.playerProfileImage2.setVisibility(View.VISIBLE);
                     holder.playerCountImage3.setVisibility(View.GONE);
-                    Util.picassoLoadIcon(mContext, holder.playerProfileImage2, profileUrl, R.dimen.player_icon_hgt, R.dimen.player_icon_width, R.drawable.avatar);
+                    Util.picassoLoadIcon(mContext, holder.playerProfileImage2, profileUrl, R.dimen.player_icon_hgt, R.dimen.player_icon_width, R.drawable.profile_image);
                     break;
                 default:
                     holder.playerProfileImage3.setVisibility(View.VISIBLE);
                     if (player == 2 && playersCount < 4) {
                         holder.playerCountImage3.setVisibility(View.GONE);
-                        Util.picassoLoadIcon(mContext, holder.playerProfileImage3, profileUrl, R.dimen.player_icon_hgt, R.dimen.player_icon_width, R.drawable.avatar);
+                        Util.picassoLoadIcon(mContext, holder.playerProfileImage3, profileUrl, R.dimen.player_icon_hgt, R.dimen.player_icon_width, R.drawable.profile_image);
                     } else {
                         holder.playerProfileImage3.setImageResource(R.drawable.img_avatar_empty);
                         holder.playerCountImage3.setVisibility(View.VISIBLE);

@@ -144,8 +144,7 @@ public class SplashActivity extends BaseActivity{
         if (s!=null && s.getData()!=null) {
             if (s.getData().toString().toLowerCase().contains("dlcsrd")) {
                 //tracking
-                    json.put("source", "branch");
-
+                json.put("source", "branch");
                 branch.initSession(new Branch.BranchUniversalReferralInitListener() {
                     @Override
                     public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError error) {

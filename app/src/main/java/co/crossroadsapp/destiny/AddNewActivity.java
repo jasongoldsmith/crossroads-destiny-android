@@ -222,10 +222,6 @@ public class AddNewActivity extends BaseActivity implements Observer {
 
     private void launchListActivityAndFinish() {
         Intent i=new Intent (this, ListActivityFragment.class);
-        //i.putExtra("userdata", user);
-//        if(localPushEventObj!=null){
-//            i.putExtra("eventIntent", localPushEventObj);
-//        }
         startActivity(i);
         finish();
     }

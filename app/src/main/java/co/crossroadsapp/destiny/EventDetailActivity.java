@@ -445,8 +445,6 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 //                .addContentMetadata("activityName", currEvent.getActivityData().getActivitySubtype())
 //                .addContentMetadata("eventId", currEvent.getEventId());
 
-        registerFirbase();
-
         showNotifications();
 
     }
@@ -656,10 +654,21 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        registerFirbase();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterFirebase();
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         unregisterReceiver(ReceivefromService);
-        unregisterFirebase();
     }
 
     private void registerFirbase() {
@@ -1147,7 +1156,9 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             sendmsg_bckgrnd.setVisibility(View.GONE);
             hideKeyboard();
         } else {
-            launchListActivityAndFinish();
+            currEvent = null;
+            finish();
+            //launchListActivityAndFinish();
         }
     }
 

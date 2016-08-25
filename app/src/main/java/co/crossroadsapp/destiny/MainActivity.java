@@ -73,10 +73,14 @@ public class MainActivity extends BaseActivity implements Observer {
     }
 
     public void showError(String err) {
-        if (err != null && !err.isEmpty()){
-            Util.clearDefaults(this);
-            launchLogin();
-            finish();
+        if (err != null){
+            if(!err.isEmpty()) {
+                Util.clearDefaults(this);
+                launchLogin();
+                finish();
+            } else {
+                forwardAfterVersionCheck();
+            }
         }
     }
 
@@ -85,7 +89,20 @@ public class MainActivity extends BaseActivity implements Observer {
             //todo check how to minimize api calls to get full event list in future from multiple locations
             TravellerLog.w(this, "Logging user in the background as user data available");
             mManager.getEventList();
-            mManager.getGroupList(null);
+            if(mManager.getEventListCurrent()!=null) {
+                if(mManager.getEventListCurrent().isEmpty()) {
+                    mManager.getEventList();
+                }
+            }else {
+                mManager.getEventList();
+            }
+            if(mManager.getCurrentGroupList()!=null) {
+                if(mManager.getCurrentGroupList().isEmpty()) {
+                    mManager.getGroupList(null);
+                }
+            }else {
+                mManager.getGroupList(null);
+            }
             Util.storeUserData(userData, u, p);
             RequestParams params = new RequestParams();
             params.put("userName", u);
@@ -94,10 +111,8 @@ public class MainActivity extends BaseActivity implements Observer {
         }else {
             TravellerLog.w(this, "Show main activity layout as user data not available");
             setContentView(R.layout.activity_main);
-
             register_layout = findViewById(R.id.register);
             signin_layout = findViewById(R.id.sign_in);
-
             register_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -112,7 +127,6 @@ public class MainActivity extends BaseActivity implements Observer {
                     finish();
                 }
             });
-
             signin_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

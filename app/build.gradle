@@ -14,8 +14,8 @@ android {
         applicationId = theApplicationId
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 69
-        versionName "1.0.7(69)"
+        versionCode 71
+        versionName "1.0.7"
         multiDexEnabled true
     }
 //    buildTypes {

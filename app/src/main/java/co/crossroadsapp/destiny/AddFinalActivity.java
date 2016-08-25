@@ -18,6 +18,7 @@ import android.text.Html;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -55,7 +56,7 @@ import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 
 
-public class AddFinalActivity extends BaseActivity implements Observer, AdapterView.OnItemSelectedListener {
+public class AddFinalActivity extends BaseActivity implements Observer, AdapterView.OnItemSelectedListener, View.OnTouchListener {
 
     private ControlManager mCntrlMngr;
     private UserData user;
@@ -115,6 +116,11 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
     NumberPicker minutePicker;
     List<String> displayedValues;
 
+    boolean ads=false;
+    String adP=null;
+    private boolean adActivity = false;
+    private ActivityData ad;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,12 +136,10 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
         user = mCntrlMngr.getUserData();
 
-        boolean ads=false;
-        String adP=null;
-
         if(b!=null) {
             ads = b.getBoolean("adcard");
             adP = b.getString("adCardId");
+            adActivity = ads;
         }
 
         back = (ImageView) findViewById(R.id.back_btn);
@@ -182,37 +186,27 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
         //checkpoint dropdown
         dropdownCheckpoint = (Spinner)findViewById(R.id.event_creation_checkpoint);
+
         checkpointItems = new ArrayList<String>();
         dropdownCheckpoint.setOnItemSelectedListener(AddFinalActivity.this);
+        dropdownCheckpoint.setOnTouchListener(this);
 
         //activitySubtype dropdown
         dropdownSubtype = (Spinner)findViewById(R.id.event_creation_subtype);
+
         actSubTypeList = new ArrayList<String>();
         dropdownSubtype.setOnItemSelectedListener(AddFinalActivity.this);
+        dropdownSubtype.setOnTouchListener(this);
 
         //details
         dropdownDetails = (Spinner)findViewById(R.id.event_creation_detail);
         tagList = new ArrayList<String>();
         dropdownDetails.setOnItemSelectedListener(AddFinalActivity.this);
+        dropdownDetails.setOnTouchListener(this);
 
         refreshActivityUI();
 
-        if(ads) {
-            ActivityData ad= mCntrlMngr.getAdsActivity(adP);
-            if(ad!=null) {
-                String subtypeDiff = ad.getActivitySubtype();
-                if(!ad.getActivityDifficulty().isEmpty()) {
-                    subtypeDiff = subtypeDiff + " - " + ad.getActivityDifficulty();
-                }
-                dropdownSubtype.setSelection(actSubTypeList.indexOf(subtypeDiff));
-                if(!ad.getActivityCheckpoint().isEmpty()) {
-                    dropdownCheckpoint.setSelection(checkpointItems.indexOf(ad.getActivityCheckpoint()));
-                }
-                if(!ad.getTag().isEmpty()) {
-                    dropdownDetails.setSelection(tagList.indexOf(ad.getTag()));
-                }
-            }
-        }
+        createAds();
 
         date = (RelativeLayout) findViewById(R.id.date);
         date_display = (TextView) findViewById(R.id.date_text);
@@ -248,20 +242,6 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                 }
             }
         });
-
-//        GradientDrawable gd = new GradientDrawable();
-//        //gd.setColor(); // Changes this drawbale to use a single color instead of a gradient
-//        gd.setCornerRadius(5);
-//        gd.setStroke(2, 0xFFFFFFFF);
-//        modifier.setBackgroundDrawable(gd);
-//
-//        //load activity icon
-//        Util.picassoLoadImageWithoutMeasurement(getApplicationContext(), actIcon, activity.get(0).getActivityIconUrl(), R.drawable.icon_ghost_default);
-//
-//        //load background image
-//        Util.picassoLoadImageWithoutMeasurement(getApplicationContext(), background, activity.get(0).getaImagePath(), R.drawable.img_b_g_d_e_f_a_u_l_t);
-//
-//        actSubtype.setText(activity.get(0).getActivitySubtype());
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -271,6 +251,31 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
+    }
+
+    private void createAds() {
+        if(ads) {
+            ad= mCntrlMngr.getAdsActivity(adP);
+            if(ad!=null) {
+                String subtypeDiff = ad.getActivitySubtype();
+                if(subtypeDiff!=null) {
+                    subActType = subtypeDiff;
+                }
+                if(ad.getActivityDifficulty()!=null && !ad.getActivityDifficulty().isEmpty()) {
+                    subtypeDifficulty = ad.getActivityDifficulty();
+                }
+                if(!ad.getActivityDifficulty().isEmpty()) {
+                    subtypeDiff = subtypeDiff + " - " + ad.getActivityDifficulty();
+                }
+                dropdownSubtype.setSelection(actSubTypeList.indexOf(subtypeDiff));
+                if(!ad.getActivityCheckpoint().isEmpty()) {
+                    dropdownCheckpoint.setSelection(checkpointItems.indexOf(ad.getActivityCheckpoint()));
+                }
+                if(!ad.getTag().isEmpty()) {
+                    dropdownDetails.setSelection(tagList.indexOf(ad.getTag()));
+                }
+            }
         }
     }
 
@@ -444,33 +449,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
             actSubTypeList = Util.removeListDuplicates(actSubTypeList);
             sortList(actSubTypeList);
 
-            //checkpoints
-            if (checkpointActList == null) {
-                checkpointActList = new ArrayList<ActivityData>();
-            }else {
-                checkpointActList.clear();
-            }
-//            checkpointActList = mCntrlMngr.getCheckpointActivityList(activity.get(0).getActivitySubtype(), activity.get(0).getActivityDifficulty());
-
-            tagList = new ArrayList<String>();
-
-//            for (int i = 0; i < checkpointActList.size(); i++) {
-//                if (checkpointActList.get(i).getActivityCheckpoint() != null && !checkpointActList.get(i).getActivityCheckpoint().equalsIgnoreCase("null") && !checkpointActList.get(i).getActivityCheckpoint().isEmpty()) {
-//                    checkpointItems.add(checkpointActList.get(i).getActivityCheckpoint());
-//                }
-//            }
-//
-//            //remove duplicates
-//            checkpointItems = Util.removeListDuplicates(checkpointItems);
-//            if(checkpointItems.isEmpty()) {
-//                checkpointActList.clear();
-//            }
-//
-//            getTagList(null);
-
             updateDrawerSubtype(actSubTypeList);
-//            updateDrawer(checkpointItems);
-//            updateDrawerTags(tagList);
         }
     }
 
@@ -789,31 +768,31 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         return row;
     }
 
-    @SuppressLint("NewApi")
-    private void setTimePickerInterval(TimePicker timePicker) {
-        try {
-            Class<?> classForid = Class.forName("com.android.internal.R$id");
-            // Field timePickerField = classForid.getField("timePicker");
-
-            Field field = classForid.getField("minute");
-            NumberPicker minutePicker = (NumberPicker) timePicker
-                    .findViewById(field.getInt(null));
-
-            minutePicker.setMinValue(0);
-            minutePicker.setMaxValue(7);
-            displayedValues = new ArrayList<String>();
-            for (int i = 0; i < 60; i += TIME_PICKER_INTERVAL) {
-                displayedValues.add(String.format("%02d", i));
-            }
-            for (int i = 0; i < 60; i += TIME_PICKER_INTERVAL) {
-                displayedValues.add(String.format("%02d", i));
-            }
-            minutePicker.setDisplayedValues(displayedValues
-                    .toArray(new String[0]));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    @SuppressLint("NewApi")
+//    private void setTimePickerInterval(TimePicker timePicker) {
+//        try {
+//            Class<?> classForid = Class.forName("com.android.internal.R$id");
+//            // Field timePickerField = classForid.getField("timePicker");
+//
+//            Field field = classForid.getField("minute");
+//            NumberPicker minutePicker = (NumberPicker) timePicker
+//                    .findViewById(field.getInt(null));
+//
+//            minutePicker.setMinValue(0);
+//            minutePicker.setMaxValue(7);
+//            displayedValues = new ArrayList<String>();
+//            for (int i = 0; i < 60; i += TIME_PICKER_INTERVAL) {
+//                displayedValues.add(String.format("%02d", i));
+//            }
+//            for (int i = 0; i < 60; i += TIME_PICKER_INTERVAL) {
+//                displayedValues.add(String.format("%02d", i));
+//            }
+//            minutePicker.setDisplayedValues(displayedValues
+//                    .toArray(new String[0]));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     protected Dialog onCreateDialog(int id) {
@@ -955,6 +934,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                 break;
             case R.id.event_creation_detail:
                 setFinalAct(position);
+                createAds();
                 break;
         }
     }
@@ -982,25 +962,6 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        if (vf!=null) {
-//            if(adcardEventId!=null && (!adcardEventId.isEmpty())) {
-//                launchListActivityAndFinish();
-//            }else if(vf.getDisplayedChild()>0){
-//                setVfPrevAnimation();
-//                //todo fix the hack to reset date, time and checkpoint
-//                setCalendarCheckpointToDefault();
-//                vf.setDisplayedChild(vf.getDisplayedChild() - 1);
-//            }else {
-//                vf.clearAnimation();
-//                launchListActivityAndFinish();
-//            }
-//        }else {
-//            launchListActivityAndFinish();
-//        }
-//    }
-
     private void updateDatePickerCalendar() {
         if(mDatePickerDai!=null) {
             if (mDatePickerDai.getDatePicker() != null) {
@@ -1015,6 +976,12 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
             Calendar c = Calendar.getInstance();
             tpd.updateTime(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE));
         }
+    }
+
+    private void launchListActivityAndFinish() {
+        Intent i=new Intent (this, ListActivityFragment.class);
+        startActivity(i);
+        finish();
     }
 
     private void launchEventDetailAndFinish(EventData eData) {
@@ -1047,6 +1014,16 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
     @Override
     public void onBackPressed() {
-        finish();
+        if(adActivity) {
+            launchListActivityAndFinish();
+        }else {
+            finish();
+        }
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        ads=false;
+        return false;
     }
 }

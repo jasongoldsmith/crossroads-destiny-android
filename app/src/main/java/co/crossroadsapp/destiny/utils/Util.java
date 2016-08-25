@@ -183,6 +183,7 @@ public class Util {
                 StringBuilder sb = new StringBuilder();
                 sb.append(pInfo.versionName);
                 version = sb.toString();
+                version = version+"(" + pInfo.versionCode + ")";
             }
         return version;
     }
@@ -286,8 +287,14 @@ public class Util {
             cal.setTimeInMillis(cal.getTimeInMillis() + offsetFromUTC);
             SimpleDateFormat formatDate = new SimpleDateFormat("EEEE 'at' h:mm a");
             SimpleDateFormat formatDate1 = new SimpleDateFormat("MMM d 'at' h:mm a");
+            SimpleDateFormat formatDateToday = new SimpleDateFormat("'Today at' h:mm a");
+            SimpleDateFormat formatDateTmrw = new SimpleDateFormat("'Tomorrow at' h:mm a");
             //String finalTime = formatDate.format(cal.getTime());
-            if (cal.getTimeInMillis() - System.currentTimeMillis() > Constants.WEEK) {
+            if(cal.getTimeInMillis() - System.currentTimeMillis()<Constants.TIME_DAY) {
+                return formatDateToday.format(cal.getTime());
+            } else if(cal.getTimeInMillis() - System.currentTimeMillis()>Constants.TIME_DAY && cal.getTimeInMillis() - System.currentTimeMillis()<Constants.TIME_TWO_DAY) {
+                return formatDateTmrw.format(cal.getTime());
+            } else if (cal.getTimeInMillis() - System.currentTimeMillis() > Constants.WEEK) {
                 return formatDate1.format(cal.getTime());
             } else {
                 return formatDate.format(cal.getTime());

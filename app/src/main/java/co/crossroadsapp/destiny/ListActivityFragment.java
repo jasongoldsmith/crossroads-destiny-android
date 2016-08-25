@@ -1,6 +1,7 @@
 package co.crossroadsapp.destiny;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -182,12 +183,18 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
         //mManager.getEventList(this);
 
-        mManager.getGroupList(this);
+        if(mManager.getCurrentGroupList()!=null) {
+            if(mManager.getCurrentGroupList().isEmpty()) {
+                mManager.getGroupList(this);
+            }
+        }else {
+            mManager.getGroupList(this);
+        }
 
         Firebase.setAndroidContext(this);
 
         //register event listener
-        registerFirbase();
+        //registerFirbase();
 
 //        //register user listener
 //        registerUserFirebase();
@@ -733,8 +740,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
     private void updateUserProfileImage(String url) {
         if((url!=null) || (!url.equalsIgnoreCase("null"))) {
-            Util.picassoLoadIcon(this, userProfile, url, R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.avatar);
-            Util.picassoLoadIcon(this, userProfileDrawer, url, R.dimen.player_profile_drawer_hgt, R.dimen.player_profile_drawer_width, R.drawable.avatar);
+            Util.picassoLoadIcon(this, userProfile, url, R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.profile_image);
+            Util.picassoLoadIcon(this, userProfileDrawer, url, R.dimen.player_profile_drawer_hgt, R.dimen.player_profile_drawer_width, R.drawable.profile_image);
             user.setImageUrl(url);
         }
     }
@@ -1438,7 +1445,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 if(mManager.getCurrentActivityList()!=null && !mManager.getCurrentActivityList().isEmpty()) {
                     //start new activity for add event creation
                     Intent regIntent = new Intent(ListActivityFragment.this,
-                            AddNewActivity.class);
+                            AddFinalActivity.class);
                     //regIntent.putExtra("userdata", user);
                     regIntent.putExtra("adcard", true);
                     regIntent.putExtra("adCardId", adCardPosition);
