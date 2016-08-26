@@ -23,8 +23,8 @@ public class LoginNetwork extends Observable {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "auth/login";
-    private String url_reg = "auth/register";
+    private String url = "api/v1/auth/login";
+    private String url_reg = "api/v1/auth/register";
     private UserData user;
     private ControlManager mManager;
 

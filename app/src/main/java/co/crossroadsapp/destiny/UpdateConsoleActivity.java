@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.app.Activity;
-import android.os.Parcelable;
-import android.support.v7.internal.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -71,7 +68,7 @@ public class UpdateConsoleActivity extends BaseActivity implements AdapterView.O
         if(mManager.getUserData()!=null) {
             user = mManager.getUserData();
         } else if(b!=null){
-            user = b.getParcelable("userdata");
+            //user = b.getParcelable("userdata");
         }
 
         //spinner customization
@@ -260,25 +257,6 @@ public class UpdateConsoleActivity extends BaseActivity implements AdapterView.O
         LayoutInflater inflater=getLayoutInflater();
         View row=inflater.inflate(R.layout.console_selction_view, parent, false);
         ImageView addSymbol = (ImageView)row.findViewById(R.id.console_img);
-        CardView card = (CardView)row.findViewById(R.id.console_card);
-//        if(position==0) {
-//            card.setBackgroundColor(getResources().getColor(R.color.freelancer_background));
-//            ImageView dropArw = (ImageView)row.findViewById(R.id.drop_arrow);
-//            dropArw.setVisibility(View.VISIBLE);
-//        }
-//        if (position==consoleItems.size()-1) {
-//            addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_add_console));
-//            card.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    //start new activity for event
-//                    Intent regIntent = new Intent(UpdateConsoleActivity.this,
-//                            UpdateConsoleActivity.class);
-//                    regIntent.putExtra("userdata", user);
-//                    startActivity(regIntent);
-//                }
-//            });
-//        }
         if(consoleItems.get(position).equalsIgnoreCase("PlayStation 4") || consoleItems.get(position).equalsIgnoreCase("PlayStation 3")){
             addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_psn_consolex));
         } else if(consoleItems.get(position).equalsIgnoreCase("Xbox One") || consoleItems.get(position).equalsIgnoreCase("Xbox 360")){

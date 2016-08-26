@@ -14,27 +14,37 @@ public class CreatorData extends PlayerData {
 
     public void toJson(JSONObject creator) {
         try {
-            setPlayerId(creator.getString("_id"));
-            setUsername(creator.getString("userName"));
-            JSONArray conArray = creator.optJSONArray("consoles");
-            JSONObject conData = (JSONObject) conArray.get(0);
-//            if(conData.has("consoleType")) {
-//                String cType = conData.getString("consoleType");
-//                setConsoleType(cType);
-//            }
-
-            if(conData.has("consoleId")) {
-                String id = conData.getString("consoleId");
-                setPsnId(id);
+            if(creator.has("_id") && !creator.isNull("_id")) {
+                setPlayerId(creator.getString("_id"));
+            }
+            if(creator.has("userName") && !creator.isNull("userName")) {
+                setUsername(creator.getString("userName"));
+            }
+            if(creator.has("consoles") && !creator.isNull("consoles")) {
+                JSONArray conArray = creator.optJSONArray("consoles");
+                if (conArray != null) {
+                    for (int i = 0; i < conArray.length(); i++) {
+                        JSONObject conData = (JSONObject) conArray.get(i);
+                        if (conData.has("isPrimary")) {
+                            if (conData.getBoolean("isPrimary")) {
+                                if (conData.has("consoleId")) {
+                                    String id = conData.getString("consoleId");
+                                    setPsnId(id);
+                                }
+                                if (conData.has("clanTag")) {
+                                    String clanTag = conData.getString("clanTag");
+                                    setClanTag(clanTag);
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
-//            if(conData.has("verifyStatus")){
-//                String verifyS = conData.getString("verifyStatus");
-//                setPsnVerify(verifyS);
-//            }
-
             //setPsnId(creator.getString("psnId"));
-            setPlayerImageUrl("imageUrl");
+            if(creator.has("imageUrl") && !creator.isNull("imageUrl")) {
+                setPlayerImageUrl(creator.getString("imageUrl"));
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

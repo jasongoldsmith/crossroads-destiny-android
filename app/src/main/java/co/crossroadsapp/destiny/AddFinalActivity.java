@@ -1,5 +1,6 @@
 package co.crossroadsapp.destiny;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -17,12 +18,15 @@ import android.text.Html;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -31,22 +35,28 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Field;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
 
 import co.crossroadsapp.destiny.data.ActivityData;
+import co.crossroadsapp.destiny.data.CurrentEventDataHolder;
+import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 
 
-public class AddFinalActivity extends BaseActivity implements Observer, AdapterView.OnItemSelectedListener {
+public class AddFinalActivity extends BaseActivity implements Observer, AdapterView.OnItemSelectedListener, View.OnTouchListener {
 
     private ControlManager mCntrlMngr;
     private UserData user;
@@ -83,6 +93,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
     private DatePickerDialog mDatePickerDai;
     private TimePickerDialog tpd;
     private ArrayList<String> tagList;
+    private String activityType;
     private String subActType;
     private String subtypeDifficulty;
     private Spinner dropdownDetails;
@@ -98,6 +109,17 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
     private RelativeLayout modifiersLayout;
     private RelativeLayout modifiersLayout2;
     private RelativeLayout modifiersLayout3;
+    private RelativeLayout levelLayout;
+
+    TimePicker timePicker;
+    private int TIME_PICKER_INTERVAL = 15;
+    NumberPicker minutePicker;
+    List<String> displayedValues;
+
+    boolean ads=false;
+    String adP=null;
+    private boolean adActivity = false;
+    private ActivityData ad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,10 +132,15 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         //mCntrlMngr.getAllActivities(this);
 
         Bundle b = getIntent().getExtras();
-        user = b.getParcelable("userdata");
+        //user = b.getParcelable("userdata");
 
-        boolean ads= b.getBoolean("adcard");
-        String adP = b.getString("adCardId");
+        user = mCntrlMngr.getUserData();
+
+        if(b!=null) {
+            ads = b.getBoolean("adcard");
+            adP = b.getString("adCardId");
+            adActivity = ads;
+        }
 
         back = (ImageView) findViewById(R.id.back_btn);
         back.setOnClickListener(new View.OnClickListener() {
@@ -130,6 +157,8 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         actSubtype = (TextView) findViewById(R.id.act_subtype);
 
         levelTextView = (TextView) findViewById(R.id.level_text);
+
+        levelLayout = (RelativeLayout) findViewById(R.id.level_layout);
 
         lightTextView = (TextView) findViewById(R.id.light);
 
@@ -157,37 +186,27 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
         //checkpoint dropdown
         dropdownCheckpoint = (Spinner)findViewById(R.id.event_creation_checkpoint);
+
         checkpointItems = new ArrayList<String>();
         dropdownCheckpoint.setOnItemSelectedListener(AddFinalActivity.this);
+        dropdownCheckpoint.setOnTouchListener(this);
 
         //activitySubtype dropdown
         dropdownSubtype = (Spinner)findViewById(R.id.event_creation_subtype);
+
         actSubTypeList = new ArrayList<String>();
         dropdownSubtype.setOnItemSelectedListener(AddFinalActivity.this);
+        dropdownSubtype.setOnTouchListener(this);
 
         //details
         dropdownDetails = (Spinner)findViewById(R.id.event_creation_detail);
         tagList = new ArrayList<String>();
         dropdownDetails.setOnItemSelectedListener(AddFinalActivity.this);
+        dropdownDetails.setOnTouchListener(this);
 
         refreshActivityUI();
 
-        if(ads) {
-            ActivityData ad= mCntrlMngr.getAdsActivity(adP);
-            if(ad!=null) {
-                String subtypeDiff = ad.getActivitySubtype();
-                if(!ad.getActivityDifficulty().isEmpty()) {
-                    subtypeDiff = subtypeDiff + " - " + ad.getActivityDifficulty();
-                }
-                dropdownSubtype.setSelection(actSubTypeList.indexOf(subtypeDiff));
-                if(!ad.getActivityCheckpoint().isEmpty()) {
-                    dropdownCheckpoint.setSelection(checkpointItems.indexOf(ad.getActivityCheckpoint()));
-                }
-                if(!ad.getTag().isEmpty()) {
-                    dropdownDetails.setSelection(tagList.indexOf(ad.getTag()));
-                }
-            }
-        }
+        createAds();
 
         date = (RelativeLayout) findViewById(R.id.date);
         date_display = (TextView) findViewById(R.id.date_text);
@@ -235,8 +254,32 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         }
     }
 
-    private void refreshActivityUI() {
+    private void createAds() {
+        if(ads) {
+            ad= mCntrlMngr.getAdsActivity(adP);
+            if(ad!=null) {
+                String subtypeDiff = ad.getActivitySubtype();
+                if(subtypeDiff!=null) {
+                    subActType = subtypeDiff;
+                }
+                if(ad.getActivityDifficulty()!=null && !ad.getActivityDifficulty().isEmpty()) {
+                    subtypeDifficulty = ad.getActivityDifficulty();
+                }
+                if(!ad.getActivityDifficulty().isEmpty()) {
+                    subtypeDiff = subtypeDiff + " - " + ad.getActivityDifficulty();
+                }
+                dropdownSubtype.setSelection(actSubTypeList.indexOf(subtypeDiff));
+                if(!ad.getActivityCheckpoint().isEmpty()) {
+                    dropdownCheckpoint.setSelection(checkpointItems.indexOf(ad.getActivityCheckpoint()));
+                }
+                if(!ad.getTag().isEmpty()) {
+                    dropdownDetails.setSelection(tagList.indexOf(ad.getTag()));
+                }
+            }
+        }
+    }
 
+    private void refreshActivityUI() {
         String actIconUrl = null;
         String backg = null;
         String subType = null;
@@ -256,6 +299,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         if (finalAct != null && !finalAct.getActivitySubtype().isEmpty()) {
             actIconUrl = finalAct.getActivityIconUrl();
             backg = finalAct.getaImagePath();
+            activityType = finalAct.getActivityType();
             subType = finalAct.getActivitySubtype();
             level = finalAct.getActivityLevel();
             light = finalAct.getActivityLight();
@@ -312,12 +356,20 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
             levelText = description;
         }
 
-        levelTextView.setText(levelText);
+        if(!levelText.isEmpty()) {
+            levelLayout.setVisibility(View.VISIBLE);
+            levelTextView.setText(levelText);
+        } else {
+            levelLayout.setVisibility(View.GONE);
+        }
 
         //show modifiers and bonuses
         modifiersLayout.removeAllViews();
         modifiersLayout2.removeAllViews();
         modifiersLayout3.removeAllViews();
+        modifiersLayout.setVisibility(View.GONE);
+        modifiersLayout2.setVisibility(View.GONE);
+        modifiersLayout3.setVisibility(View.GONE);
         Random rnd = new Random();
         int prevTextViewId = 0;
         int pad = Util.dpToPx(5, AddFinalActivity.this);
@@ -332,6 +384,8 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                         textView.setText(bonus.get(listSize - i - 1));
                     }
                     textView.setTextColor(getResources().getColor(R.color.trimbe_white));
+                    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,10);
+                    textView.setAllCaps(true);
                     textView.setPadding(pad, pad, pad, pad);
                     GradientDrawable gd = new GradientDrawable();
                     gd.setCornerRadius(5);
@@ -350,10 +404,13 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
                     prevTextViewId = curTextViewId;
                     if (i < 2) {
+                        modifiersLayout3.setVisibility(View.VISIBLE);
                         modifiersLayout3.addView(textView, params);
-                    } else if (i < 6) {
+                    } else if (i < 5) {
+                        modifiersLayout2.setVisibility(View.VISIBLE);
                         modifiersLayout2.addView(textView, params);
                     } else {
+                        modifiersLayout.setVisibility(View.VISIBLE);
                         modifiersLayout.addView(textView, params);
                     }
                 }
@@ -367,53 +424,42 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         Util.picassoLoadImageWithoutMeasurement(getApplicationContext(), background, backg, R.drawable.img_b_g_d_e_f_a_u_l_t);
 
         actSubtype.setText(subType);
+        actSubtype.setAllCaps(true);
 
         if(finalAct==null) {
             //subtypes and difficulty level
-            actSubList = mCntrlMngr.getCustomActivityList(activity.get(0).getActivityType());
+            //actSubList = mCntrlMngr.getCustomActivityList(activity.get(0).getActivityType());
+            activityType = activity.get(0).getActivityType();
             actSubTypeList = new ArrayList<String>();
-            if (actSubList != null && !actSubList.isEmpty()) {
-                for (int n = 0; n < actSubList.size(); n++) {
+            if (activity != null && !activity.isEmpty()) {
+                for (int n = 0; n < activity.size(); n++) {
                     String subtypeDifficultyName = "";
-                    if (actSubList.get(n).getActivitySubtype() != null && !actSubList.get(n).getActivitySubtype().isEmpty()) {
-                        subActType = actSubList.get(n).getActivitySubtype();
-                        subtypeDifficultyName = subActType;
-                        if (actSubList.get(n).getActivityDifficulty() != null && !actSubList.get(n).getActivityDifficulty().isEmpty()) {
-                            subtypeDifficulty = actSubList.get(n).getActivityDifficulty();
-                            subtypeDifficultyName = subActType + " - " + subtypeDifficulty;
+                        if (activity.get(n).getActivitySubtype() != null && !activity.get(n).getActivitySubtype().isEmpty()) {
+                            subActType = activity.get(n).getActivitySubtype();
+                            subtypeDifficultyName = subActType;
+                            if (activity.get(n).getActivityDifficulty() != null && !activity.get(n).getActivityDifficulty().isEmpty()) {
+                                subtypeDifficulty = activity.get(n).getActivityDifficulty();
+                                subtypeDifficultyName = subtypeDifficultyName + " - " + subtypeDifficulty;
+                            }
                         }
-                    }
                     actSubTypeList.add(subtypeDifficultyName);
                 }
             }
 
             actSubTypeList = Util.removeListDuplicates(actSubTypeList);
-
-            //checkpoints
-            if (checkpointActList == null) {
-                checkpointActList = new ArrayList<ActivityData>();
-            }else {
-                checkpointActList.clear();
-            }
-            checkpointActList = mCntrlMngr.getCheckpointActivityList(activity.get(0).getActivitySubtype(), activity.get(0).getActivityDifficulty());
-
-            tagList = new ArrayList<String>();
-
-            for (int i = 0; i < checkpointActList.size(); i++) {
-                if (checkpointActList.get(i).getActivityCheckpoint() != null && !checkpointActList.get(i).getActivityCheckpoint().equalsIgnoreCase("null") && !checkpointActList.get(i).getActivityCheckpoint().isEmpty()) {
-                    checkpointItems.add(checkpointActList.get(i).getActivityCheckpoint());
-                }
-            }
-
-            //remove duplicates
-            checkpointItems = Util.removeListDuplicates(checkpointItems);
-
-            getTagList(null);
+            sortList(actSubTypeList);
 
             updateDrawerSubtype(actSubTypeList);
-            updateDrawer(checkpointItems);
-            updateDrawerTags(tagList);
         }
+    }
+
+    private void sortList(ArrayList<String> list) {
+        Collections.sort(list, new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                return s1.compareToIgnoreCase(s2);
+            }
+        });
     }
 
     private void getTagList(String checkPoint) {
@@ -421,7 +467,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         if(checkpointItems!=null && !checkpointItems.isEmpty()) {
             if(checkPoint!=null) {
                 cp = checkPoint;
-            } else {
+            }else {
                 cp = checkpointItems.get(0);
             }
         }
@@ -438,9 +484,9 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                                     if (checkpointActList.get(i).getActivityCheckpoint().equalsIgnoreCase(cp)) {
                                         if (checkpointActList.get(i).getTag() != null) {
                                             if(!checkpointActList.get(i).getTag().isEmpty()) {
-                                                tagList.add(checkpointActList.get(i).getTag().replace("#",""));
+                                                tagList.add(checkpointActList.get(i).getTag());
                                             }else {
-                                                tagList.add("None");
+                                                tagList.add(Constants.NONE);
                                             }
                                             tagActList.add(checkpointActList.get(i));
                                         }
@@ -450,9 +496,9 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                                 if (checkpointActList.get(i).getActivitySubtype().equalsIgnoreCase(subActType)) {
                                     if (checkpointActList.get(i).getTag() != null) {
                                         if(!checkpointActList.get(i).getTag().isEmpty()) {
-                                            tagList.add(checkpointActList.get(i).getTag().replace("#",""));
+                                            tagList.add(checkpointActList.get(i).getTag());
                                         }else {
-                                            tagList.add("None");
+                                            tagList.add(Constants.NONE);
                                         }
                                         tagActList.add(checkpointActList.get(i));
                                     }
@@ -465,9 +511,9 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                                 if (checkpointActList.get(i).getActivityCheckpoint().equalsIgnoreCase(cp)) {
                                     if (checkpointActList.get(i).getTag() != null) {
                                         if(!checkpointActList.get(i).getTag().isEmpty()) {
-                                            tagList.add(checkpointActList.get(i).getTag().replace("#",""));
+                                            tagList.add(checkpointActList.get(i).getTag());
                                         }else {
-                                            tagList.add("None");
+                                            tagList.add(Constants.NONE);
                                         }
                                         tagActList.add(checkpointActList.get(i));
                                     }
@@ -477,9 +523,9 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                             if (checkpointActList.get(i).getActivitySubtype().equalsIgnoreCase(subActType)) {
                                 if (checkpointActList.get(i).getTag() != null) {
                                     if(!checkpointActList.get(i).getTag().isEmpty()) {
-                                        tagList.add(checkpointActList.get(i).getTag().replace("#",""));
+                                        tagList.add(checkpointActList.get(i).getTag());
                                     }else {
-                                        tagList.add("None");
+                                        tagList.add(Constants.NONE);
                                     }
                                     tagActList.add(checkpointActList.get(i));
                                 }
@@ -490,7 +536,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
             }
         }
         if(tagList.isEmpty()) {
-            tagList.add("None");
+            tagList.add(Constants.NONE);
         }
         updateDrawerTags(tagList);
     }
@@ -514,6 +560,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
         //remove duplicates
         checkpointItems = Util.removeListDuplicates(checkpointItems);
+        sortList(checkpointItems);
 
         updateDrawer(checkpointItems);
 
@@ -537,7 +584,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                     }
 
                     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                        return getCustomView(position, convertView, parent, dataList);
+                        return getCheckpointCustomView(position, convertView, parent, dataList);
                     }
                 };
                 adapterCheckpoint.setDropDownViewResource(R.layout.empty_layout);
@@ -564,7 +611,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                 adapterTags = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dataList) {
                     public View getView(int position, View convertView, ViewGroup parent) {
                         View v = super.getView(position, convertView, parent);
-                        if (((TextView) v).getText().toString().equalsIgnoreCase("None")) {
+                        if (((TextView) v).getText().toString().equalsIgnoreCase(Constants.NONE)) {
                             detailText.setText("Details (Optional)");
                         } else {
                             detailText.setText(((TextView) v).getText());
@@ -574,7 +621,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                     }
 
                     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                        return getCustomView(position, convertView, parent, dataList);
+                        return getTagCustomView(position, convertView, parent, dataList);
                     }
                 };
                 adapterTags.setDropDownViewResource(R.layout.empty_layout);
@@ -582,7 +629,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                 dropdownDetails.setAdapter(adapterTags);
                 adapterTags.notifyDataSetChanged();
             } else {
-                if (dataList.get(0).toString().equalsIgnoreCase("None")) {
+                if (dataList.get(0).toString().equalsIgnoreCase(Constants.NONE)) {
                     detailText.setText("Details (Optional)");
                 }
                 dropdownDetails.setEnabled(false);
@@ -598,7 +645,9 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                 adapterSubtypes = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dataList) {
                     public View getView(int position, View convertView, ViewGroup parent) {
                         View v = super.getView(position, convertView, parent);
-                        actSubtypeDropdownText.setText(((TextView) v).getText());
+                            if(activityType!=null && !activityType.isEmpty()) {
+                                actSubtypeDropdownText.setText(activityType + " - " + ((TextView) v).getText());
+                            }
                         ((TextView) v).setVisibility(View.GONE);
                         return v;
                     }
@@ -622,16 +671,128 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
     private View getCustomView(int position, View convertView, ViewGroup parent, ArrayList<String> adapterCheckpoint) {
         LayoutInflater inflater=getLayoutInflater();
         View row=inflater.inflate(R.layout.fragment_checkpoint, parent, false);
-        CardView card = (CardView)row.findViewById(R.id.activity_checkpoint_card);
-        RelativeLayout cardLayout = (RelativeLayout)row.findViewById(R.id.activity_checkpoint_card_frag);
-        cardLayout.setBackgroundColor(getResources().getColor(R.color.consoleAddColor));
-        card.setCardBackgroundColor(getResources().getColor(R.color.freelancer_background));
-        TextView label=(TextView)row.findViewById(R.id.activity_checkpoint_text);
-        if (adapterCheckpoint!=null) {
-            label.setText(adapterCheckpoint.get(position));
+        CardView card = (CardView) row.findViewById(R.id.activity_checkpoint_card);
+        //// TODO: 8/22/16 fix later with better implementation
+        String sub = actSubtypeDropdownText.getText().toString();
+        String[] parts = sub.split("\\-");
+        String subT = parts[1];
+        subT = subT.trim();
+        String subD=null;
+        if(parts.length>2) {
+            subD = parts[2];
+            subD = subD.trim();
+        }
+        String charT=null;
+        String subC = adapterCheckpoint.get(position);
+        String[] parts1 = subC.split("\\-");
+        charT = parts1[0];
+        charT = charT.trim();
+        String charD=null;
+        if(parts1.length>1) {
+            charD = parts1[1];
+            charD = charD.trim();
+        }
+        if(subD==null || charD==null) {
+            if (subT.equalsIgnoreCase(charT)) {
+                row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 0));
+                card.setVisibility(View.GONE);
+            } else {
+                card.setVisibility(View.VISIBLE);
+                RelativeLayout cardLayout = (RelativeLayout) row.findViewById(R.id.activity_checkpoint_card_frag);
+                cardLayout.setBackgroundColor(getResources().getColor(R.color.consoleAddColor));
+                card.setCardBackgroundColor(getResources().getColor(R.color.freelancer_background));
+                TextView label = (TextView) row.findViewById(R.id.activity_checkpoint_text);
+                if (adapterCheckpoint != null) {
+                    label.setText(adapterCheckpoint.get(position));
+                }
+            }
+        }else if(subT.equalsIgnoreCase(charT) && subD.equalsIgnoreCase(charD)){
+            row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 0));
+            card.setVisibility(View.GONE);
+        } else {
+            card.setVisibility(View.VISIBLE);
+            RelativeLayout cardLayout = (RelativeLayout) row.findViewById(R.id.activity_checkpoint_card_frag);
+            cardLayout.setBackgroundColor(getResources().getColor(R.color.consoleAddColor));
+            card.setCardBackgroundColor(getResources().getColor(R.color.freelancer_background));
+            TextView label = (TextView) row.findViewById(R.id.activity_checkpoint_text);
+            if (adapterCheckpoint != null) {
+                label.setText(adapterCheckpoint.get(position));
+            }
         }
         return row;
     }
+
+    private View getCheckpointCustomView(int position, View convertView, ViewGroup parent, ArrayList<String> adapterCheckpoint) {
+        LayoutInflater inflater=getLayoutInflater();
+        View row=inflater.inflate(R.layout.fragment_checkpoint, parent, false);
+        CardView card = (CardView) row.findViewById(R.id.activity_checkpoint_card);
+        //// TODO: 8/22/16 fix later with better implementation
+        String check = checkpointText.getText().toString();
+
+        if(check.equalsIgnoreCase(adapterCheckpoint.get(position).toString())) {
+            row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,0));
+            card.setVisibility(View.GONE);
+        }else {
+            card.setVisibility(View.VISIBLE);
+            RelativeLayout cardLayout = (RelativeLayout) row.findViewById(R.id.activity_checkpoint_card_frag);
+            cardLayout.setBackgroundColor(getResources().getColor(R.color.consoleAddColor));
+            card.setCardBackgroundColor(getResources().getColor(R.color.freelancer_background));
+            TextView label = (TextView) row.findViewById(R.id.activity_checkpoint_text);
+            if (adapterCheckpoint != null) {
+                label.setText(adapterCheckpoint.get(position));
+            }
+        }
+        return row;
+    }
+
+    private View getTagCustomView(int position, View convertView, ViewGroup parent, ArrayList<String> adapterCheckpoint) {
+        LayoutInflater inflater=getLayoutInflater();
+        View row=inflater.inflate(R.layout.fragment_checkpoint, parent, false);
+        CardView card = (CardView) row.findViewById(R.id.activity_checkpoint_card);
+        //// TODO: 8/22/16 fix later with better implementation
+        String tag = detailText.getText().toString();
+
+        if(tag.equalsIgnoreCase(adapterCheckpoint.get(position).toString())) {
+            row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,0));
+            card.setVisibility(View.GONE);
+        }else {
+            card.setVisibility(View.VISIBLE);
+            RelativeLayout cardLayout = (RelativeLayout) row.findViewById(R.id.activity_checkpoint_card_frag);
+            cardLayout.setBackgroundColor(getResources().getColor(R.color.consoleAddColor));
+            card.setCardBackgroundColor(getResources().getColor(R.color.freelancer_background));
+            TextView label = (TextView) row.findViewById(R.id.activity_checkpoint_text);
+            if (adapterCheckpoint != null) {
+                label.setText(adapterCheckpoint.get(position));
+            }
+        }
+        return row;
+    }
+
+//    @SuppressLint("NewApi")
+//    private void setTimePickerInterval(TimePicker timePicker) {
+//        try {
+//            Class<?> classForid = Class.forName("com.android.internal.R$id");
+//            // Field timePickerField = classForid.getField("timePicker");
+//
+//            Field field = classForid.getField("minute");
+//            NumberPicker minutePicker = (NumberPicker) timePicker
+//                    .findViewById(field.getInt(null));
+//
+//            minutePicker.setMinValue(0);
+//            minutePicker.setMaxValue(7);
+//            displayedValues = new ArrayList<String>();
+//            for (int i = 0; i < 60; i += TIME_PICKER_INTERVAL) {
+//                displayedValues.add(String.format("%02d", i));
+//            }
+//            for (int i = 0; i < 60; i += TIME_PICKER_INTERVAL) {
+//                displayedValues.add(String.format("%02d", i));
+//            }
+//            minutePicker.setDisplayedValues(displayedValues
+//                    .toArray(new String[0]));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     protected Dialog onCreateDialog(int id) {
@@ -773,6 +934,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                 break;
             case R.id.event_creation_detail:
                 setFinalAct(position);
+                createAds();
                 break;
         }
     }
@@ -787,60 +949,17 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         String[] parts = sub.split("\\-");
         subActType = parts[0];
         subActType = subActType.trim();
+        subtypeDifficulty = "";
         if(parts.length>1) {
             subtypeDifficulty = parts[1];
             subtypeDifficulty = subtypeDifficulty.trim();
         }
-
         getCheckpointList();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
-    }
-
-//    @Override
-//    public void onBackPressed() {
-//        if (vf!=null) {
-//            if(adcardEventId!=null && (!adcardEventId.isEmpty())) {
-//                launchListActivityAndFinish();
-//            }else if(vf.getDisplayedChild()>0){
-//                setVfPrevAnimation();
-//                //todo fix the hack to reset date, time and checkpoint
-//                setCalendarCheckpointToDefault();
-//                vf.setDisplayedChild(vf.getDisplayedChild() - 1);
-//            }else {
-//                vf.clearAnimation();
-//                launchListActivityAndFinish();
-//            }
-//        }else {
-//            launchListActivityAndFinish();
-//        }
-//    }
-
-    private void setCalendarCheckpointToDefault() {
-//        if(vf!=null){
-//            if(vf.getDisplayedChild()==2) {
-                if(date_display!=null) {
-                    date_display.setText(getResources().getString(R.string.date_default));
-                    updateDatePickerCalendar();
-                }
-
-                if(time_display!=null) {
-                    time_display.setText(getResources().getString(R.string.time_default));
-                    updateTimePicker();
-                }
-                //todo hack to fix for bug showing checkpoint for wrong event
-                if(checkpointLayout!=null) {
-                    checkpointLayout.setVisibility(View.GONE);
-                }
-
-//                if(createNewEventLayout!=null) {
-//                    createNewEventLayout.setVisibility(View.GONE);
-//                }
-//            }
-//        }
     }
 
     private void updateDatePickerCalendar() {
@@ -861,10 +980,14 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
     private void launchListActivityAndFinish() {
         Intent i=new Intent (this, ListActivityFragment.class);
-        i.putExtra("userdata", user);
-//        if(localPushEventObj!=null){
-//            i.putExtra("eventIntent", localPushEventObj);
-//        }
+        startActivity(i);
+        finish();
+    }
+
+    private void launchEventDetailAndFinish(EventData eData) {
+        CurrentEventDataHolder ins = CurrentEventDataHolder.getInstance();
+        ins.setData(eData);
+        Intent i=new Intent (this, EventDetailActivity.class);
         startActivity(i);
         finish();
     }
@@ -884,11 +1007,23 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
     @Override
     public void update(Observable observable, Object data) {
         hideProgressBar();
-        launchListActivityAndFinish();
+        if(data!=null) {
+            launchEventDetailAndFinish((EventData)data);
+        }
     }
 
     @Override
     public void onBackPressed() {
-        finish();
+        if(adActivity) {
+            launchListActivityAndFinish();
+        }else {
+            finish();
+        }
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        ads=false;
+        return false;
     }
 }

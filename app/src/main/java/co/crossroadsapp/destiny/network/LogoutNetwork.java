@@ -22,7 +22,7 @@ public class LogoutNetwork extends Observable {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "auth/logout";
+    private String url = "api/v1/auth/logout";
     private UserData user;
     private ControlManager mManager;
 

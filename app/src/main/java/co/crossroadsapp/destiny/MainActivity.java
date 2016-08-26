@@ -25,6 +25,8 @@ import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
 import com.loopj.android.http.RequestParams;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -66,16 +68,20 @@ public class MainActivity extends BaseActivity implements Observer {
 
         //check android version for dev builds
         mManager.getAndroidVersion(this);
-
         forwardAfterVersionCheck();
-
         TravellerLog.w(this, "MainActivity.onCreate ends...");
     }
 
     public void showError(String err) {
-        Util.clearDefaults(this);
-        launchLogin();
-        finish();
+        if (err != null){
+            if(!err.isEmpty()) {
+                Util.clearDefaults(this);
+                launchLogin();
+                finish();
+            } else {
+                forwardAfterVersionCheck();
+            }
+        }
     }
 
     private void forwardAfterVersionCheck() {
@@ -83,7 +89,20 @@ public class MainActivity extends BaseActivity implements Observer {
             //todo check how to minimize api calls to get full event list in future from multiple locations
             TravellerLog.w(this, "Logging user in the background as user data available");
             mManager.getEventList();
-            mManager.getGroupList(null);
+            if(mManager.getEventListCurrent()!=null) {
+                if(mManager.getEventListCurrent().isEmpty()) {
+                    mManager.getEventList();
+                }
+            }else {
+                mManager.getEventList();
+            }
+            if(mManager.getCurrentGroupList()!=null) {
+                if(mManager.getCurrentGroupList().isEmpty()) {
+                    mManager.getGroupList(null);
+                }
+            }else {
+                mManager.getGroupList(null);
+            }
             Util.storeUserData(userData, u, p);
             RequestParams params = new RequestParams();
             params.put("userName", u);
@@ -92,24 +111,22 @@ public class MainActivity extends BaseActivity implements Observer {
         }else {
             TravellerLog.w(this, "Show main activity layout as user data not available");
             setContentView(R.layout.activity_main);
-
             register_layout = findViewById(R.id.register);
             signin_layout = findViewById(R.id.sign_in);
-
             register_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    Intent regIntent = new Intent(getApplicationContext(),
-//                            RegisterActivity.class);
+                    //tracking signup initiation
+                    Map<String, String> json = new HashMap<String, String>();
+                    Util.postTracking(json, MainActivity.this, mManager);
                     TravellerLog.w(this, "Launch console selection page activity");
                     Intent regIntent = new Intent(getApplicationContext(),
                             ConsoleSelectionActivity.class);
-                    regIntent.putExtra("userdata", userData);
+                    //regIntent.putExtra("userdata", userData);
                     startActivity(regIntent);
                     finish();
                 }
             });
-
             signin_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -123,7 +140,7 @@ public class MainActivity extends BaseActivity implements Observer {
     private void launchLogin() {
         Intent signinIntent = new Intent(getApplicationContext(),
                 LoginActivity.class);
-        signinIntent.putExtra("userdata", userData);
+        //signinIntent.putExtra("userdata", userData);
         if(contentIntent!=null) {
             signinIntent.putExtra("eventIntent", contentIntent);
         }
@@ -213,7 +230,7 @@ public class MainActivity extends BaseActivity implements Observer {
 //                    regIntent = new Intent(getApplicationContext(),
 //                            CreateNewEvent.class);
 //                }
-                    regIntent.putExtra("userdata", ud);
+                    //regIntent.putExtra("userdata", ud);
                     startActivity(regIntent);
                     finish();
                 } else {

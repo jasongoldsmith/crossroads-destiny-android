@@ -10,14 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/activity_card"
-        android:layout_marginTop="15dp"
-        conversation:cardBackgroundColor="@android:color/transparent"
+        android:layout_marginTop="1dp"
+        conversation:cardBackgroundColor="@color/event_detail_fireteam_cardbackground"
         conversation:cardElevation="0dp"
         conversation:cardUseCompatPadding="false" >
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="36dp">
+            android:layout_height="54dp">
 
             <co.crossroadsapp.destiny.utils.CircularImageView
                 android:layout_width="36dp"
@@ -27,17 +27,19 @@
                 app:border="true"
                 app:borderColor="#979797"
                 app:circularBorderWidth="1dp"
-                android:layout_alignParentLeft="true"/>
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="9dp"
+                android:layout_marginLeft="17dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/player_name"
                 android:text="MISSING String"
-                android:textSize="12sp"
-                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:textColor="@color/activity_light_color"
                 android:layout_toRightOf="@+id/event_detail_player_profile"
-                android:layout_marginLeft="18dp"
+                android:layout_marginLeft="20dp"
                 android:layout_centerVertical="true"/>
 
             <ImageView

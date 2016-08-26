@@ -23,7 +23,7 @@ public class AddNewConsoleNetwork extends Observable {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "a/user/addConsole";
+    private String url = "api/v1/a/user/addConsole";
     private ControlManager mManager;
 
     public AddNewConsoleNetwork(Context c) {

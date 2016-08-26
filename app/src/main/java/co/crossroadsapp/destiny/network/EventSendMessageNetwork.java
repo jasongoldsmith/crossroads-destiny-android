@@ -22,7 +22,7 @@ public class EventSendMessageNetwork extends Observable {
     private Context mContext;
     private NetworkEngine ntwrk;
     private ControlManager mManager;
-    private String url = "a/messages/send";
+    private String url = "api/v1/a/messages/send";
 
     public EventSendMessageNetwork(Context c) {
         this.mContext = c;

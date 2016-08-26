@@ -25,7 +25,12 @@ import co.crossroadsapp.destiny.utils.Util;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BlankFragment extends Fragment {
 
@@ -333,6 +338,12 @@ public class BlankFragment extends Fragment {
                         }
 
                         allNames = this.elistLocal.get(position).getCreatorData().getPsnId();
+                        if(this.elistLocal.get(position).getCreatorData().getClanTag()!=null) {
+                            String clanT = this.elistLocal.get(position).getCreatorData().getClanTag();
+                            if(!clanT.isEmpty()) {
+                                allNames = allNames + " [" +clanT + "]";
+                            }
+                        }
                         if (!status.equalsIgnoreCase("full")) {
                             allNamesRem = " " + "LF" + reqPlayer + "M";
                         }
@@ -345,10 +356,12 @@ public class BlankFragment extends Fragment {
                                         RequestParams rp = new RequestParams();
                                         rp.put("eId", eId);
                                         rp.put("player", user.getUserId());
-                                        mContext.hideProgress();
-                                        mContext.showProgress();
-                                        mManager.postJoinEvent(mContext, rp);
-                                        holder.joinBtn.setClickable(false);
+                                        if(mContext!=null) {
+                                            mContext.hideProgress();
+                                            mContext.showProgress();
+                                            mManager.postJoinEvent(mContext, rp);
+                                            holder.joinBtn.setClickable(false);
+                                        }
                                     }
                                 });
                             } else if (CreatorIn) {
@@ -358,10 +371,12 @@ public class BlankFragment extends Fragment {
                                         RequestParams rp = new RequestParams();
                                         rp.put("eId", eId);
                                         rp.put("player", user.getUserId());
-                                        mContext.hideProgress();
-                                        mContext.showProgress();
-                                        mManager.postUnJoinEvent(mContext, rp);
-                                        holder.unjoinBtn.setClickable(false);
+                                        if(mContext!=null) {
+                                            mContext.hideProgress();
+                                            mContext.showProgress();
+                                            mManager.postUnJoinEvent(mContext, rp);
+                                            holder.unjoinBtn.setClickable(false);
+                                        }
                                     }
                                 });
                             }
@@ -395,22 +410,23 @@ public class BlankFragment extends Fragment {
                                     Intent regIntent = new Intent(mContext,
                                             EventDetailActivity.class);
                                     if (regIntent != null) {
-                                        regIntent.putExtra("userdata", user);
+                                        //regIntent.putExtra("userdata", user);
                                         startActivity(regIntent);
-                                        mContext.finish();
+                                        //mContext.finish();
                                     }
                                 }
                             }
                         });
 
-                        holder.eventaLight.setText("");
-                        if (l > 0) {
-                            // unicode to show star
-                            String st = "\u2726";
-                            holder.eventaLight.setText(st + String.valueOf(l));
-                        } else if (level > 0) {
-                            holder.eventaLight.setText("lvl " + String.valueOf(level));
-                        }
+                        String feed = this.elistLocal.get(position).getActivityData().getaFeedMode()!=null?this.elistLocal.get(position).getActivityData().getaFeedMode():"";
+                        holder.eventaLight.setText(feed.toUpperCase());
+//                        if (l > 0) {
+//                            // unicode to show star
+//                            String st = "\u2726";
+//                            holder.eventaLight.setText(st + String.valueOf(l));
+//                        } else if (level > 0) {
+//                            holder.eventaLight.setText("lvl " + String.valueOf(level));
+//                        }
 
                         updateJoinButton(holder, status, CreatorIn, CreatorIsPlayer);
 
@@ -436,20 +452,29 @@ public class BlankFragment extends Fragment {
 
                     Picasso.with(mContext)
                             .load(cardBackgroundImageUrl)
-                            .placeholder(R.drawable.img_adcard_raid_golgoroth)
+                            .placeholder(R.drawable.add_card_default)
                             .fit().centerCrop()
                             .into(adHolder.adCardImg);
 
-                    adHolder.addBtn.setOnClickListener(new View.OnClickListener() {
+                    adHolder.event_adcard.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mContext.showProgressBar();
-                            mContext.setAdCardPosition(adList.get(position-elistLocal.size()).getId());
-                            RequestParams rp = new RequestParams();
-                            rp.add("aType", adList.get(position-elistLocal.size()).getActivityType());
-                            rp.add("includeTags", "true");
-                            mManager.postGetActivityList(mContext, rp);
-                            //mManager.postCreateEvent(adList.get(position-elistLocal.size()).getId(), user.getUserId(), adList.get(position-elistLocal.size()).getMinPlayer(), adList.get(position-elistLocal.size()).getMaxPlayer(), null, mContext);
+                            if (mContext != null) {
+                                mContext.showProgressBar();
+                                mContext.setAdCardPosition(adList.get(position - elistLocal.size()).getId());
+                                RequestParams rp = new RequestParams();
+                                rp.add("aType", adList.get(position - elistLocal.size()).getActivityType());
+                                rp.add("includeTags", "true");
+                                mManager.postGetActivityList(mContext, rp);
+
+                                //tracking adcard click
+                                Map<String, String> json = new HashMap<String, String>();
+                                if (adList.get(position - elistLocal.size()).getId() != null && !adList.get(position - elistLocal.size()).getId().isEmpty()) {
+                                    json.put("activityId", adList.get(position - elistLocal.size()).getId().toString());
+                                    Util.postTracking(json, mContext, mManager);
+                                }
+                                //mManager.postCreateEvent(adList.get(position-elistLocal.size()).getId(), user.getUserId(), adList.get(position-elistLocal.size()).getMinPlayer(), adList.get(position-elistLocal.size()).getMaxPlayer(), null, mContext);
+                            }
                         }
                     });
                     break;
@@ -523,18 +548,18 @@ public class BlankFragment extends Fragment {
                     holder.playerProfileImage3.setVisibility(View.GONE);
                     holder.playerProfileImage2.setVisibility(View.GONE);
                     holder.playerCountImage3.setVisibility(View.GONE);
-                    Util.picassoLoadIcon(mContext, holder.playerProfileImage1, profileUrl, R.dimen.player_icon_hgt, R.dimen.player_icon_width, R.drawable.avatar);
+                    Util.picassoLoadIcon(mContext, holder.playerProfileImage1, profileUrl, R.dimen.player_icon_hgt, R.dimen.player_icon_width, R.drawable.profile_image);
                     break;
                 case 1:
                     holder.playerProfileImage2.setVisibility(View.VISIBLE);
                     holder.playerCountImage3.setVisibility(View.GONE);
-                    Util.picassoLoadIcon(mContext, holder.playerProfileImage2, profileUrl, R.dimen.player_icon_hgt, R.dimen.player_icon_width, R.drawable.avatar);
+                    Util.picassoLoadIcon(mContext, holder.playerProfileImage2, profileUrl, R.dimen.player_icon_hgt, R.dimen.player_icon_width, R.drawable.profile_image);
                     break;
                 default:
                     holder.playerProfileImage3.setVisibility(View.VISIBLE);
                     if (player == 2 && playersCount < 4) {
                         holder.playerCountImage3.setVisibility(View.GONE);
-                        Util.picassoLoadIcon(mContext, holder.playerProfileImage3, profileUrl, R.dimen.player_icon_hgt, R.dimen.player_icon_width, R.drawable.avatar);
+                        Util.picassoLoadIcon(mContext, holder.playerProfileImage3, profileUrl, R.dimen.player_icon_hgt, R.dimen.player_icon_width, R.drawable.profile_image);
                     } else {
                         holder.playerProfileImage3.setImageResource(R.drawable.img_avatar_empty);
                         holder.playerCountImage3.setVisibility(View.VISIBLE);

@@ -13,6 +13,7 @@ public class PlayerData {
     private String username;
     private String psnId;
     private String playerImageUrl;
+    private String playerClanTag;
 
     public void setPlayerId(String id) {
         playerId = id;
@@ -46,19 +47,40 @@ public class PlayerData {
         return this.playerImageUrl;
     }
 
+    public void setClanTag(String clanT) {
+        playerClanTag = clanT;
+    }
+
+    public String getClanTag() {
+        return this.playerClanTag;
+    }
+
     public void toJson(JSONObject jsonobject) {
         if (jsonobject!= null) {
             try {
-                JSONArray conArray = jsonobject.optJSONArray("consoles");
-                JSONObject conData = (JSONObject) conArray.get(0);
+                if(jsonobject.has("consoles") && !jsonobject.isNull("consoles")) {
+                    JSONArray conArray = jsonobject.optJSONArray("consoles");
 //                if(conData.has("consoleType")) {
 //                    String cType = conData.getString("consoleType");
 //                    setConsoleType(cType);
 //                }
-
-                if(conData.has("consoleId")) {
-                    String id = conData.getString("consoleId");
-                    setPsnId(id);
+                    if (conArray != null) {
+                        for (int i = 0; i < conArray.length(); i++) {
+                            JSONObject conData = (JSONObject) conArray.get(i);
+                            if (conData.has("isPrimary") && !conData.isNull("isPrimary")) {
+                                if (conData.getBoolean("isPrimary")) {
+                                    if (conData.has("consoleId") && !conData.isNull("consoleId")) {
+                                        String id = conData.getString("consoleId");
+                                        setPsnId(id);
+                                    }
+                                    if (conData.has("clanTag") && !conData.isNull("clanTag")) {
+                                        String clanTag = conData.getString("clanTag");
+                                        setClanTag(clanTag);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
 //                if(conData.has("verifyStatus")){
@@ -68,9 +90,15 @@ public class PlayerData {
 //                if (!jsonobject.isNull("psnId")) {
 //                    setPsnId(jsonobject.getString("psnId"));
 //                }
-                setUsername(jsonobject.getString("userName"));
-                setPlayerId(jsonobject.getString("_id"));
-                setPlayerImageUrl(jsonobject.getString("imageUrl"));
+                if(jsonobject.has("userName") && !jsonobject.isNull("userName")) {
+                    setUsername(jsonobject.getString("userName"));
+                }
+                if(jsonobject.has("_id") && !jsonobject.isNull("_id")) {
+                    setPlayerId(jsonobject.getString("_id"));
+                }
+                if(jsonobject.has("imageUrl") && !jsonobject.isNull("imageUrl")) {
+                    setPlayerImageUrl(jsonobject.getString("imageUrl"));
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

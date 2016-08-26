@@ -18,7 +18,7 @@ import cz.msebera.android.httpclient.Header;
 public class ReportCrashNetwork {
 
     private NetworkEngine ntwrk;
-    private String url = "a/report/create";
+    private String url = "api/v1/a/report/create";
     private Context mContext;
 
     public ReportCrashNetwork(Context c) {

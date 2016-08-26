@@ -8,12 +8,13 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/img_background_map"/>
+        android:background="@drawable/img_background"/>
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:scaleType="fitXY"
         android:src="@drawable/img_b_g_choose_activity"/>
 
     <ImageView
@@ -42,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/top_text"
         android:layout_marginTop="25dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="33dp">
         <ImageView
             android:layout_width="wrap_content"

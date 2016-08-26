@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -21,11 +22,16 @@ import android.widget.Toast;
 import co.crossroadsapp.destiny.AddFinalActivity;
 import co.crossroadsapp.destiny.ControlManager;
 //import co.crossroadsapp.destiny.CreateNewEvent;
+import co.crossroadsapp.destiny.EventDetailActivity;
 import co.crossroadsapp.destiny.ListActivityFragment;
+import co.crossroadsapp.destiny.MainActivity;
 import co.crossroadsapp.destiny.R;
+import co.crossroadsapp.destiny.RegisterActivity;
+import co.crossroadsapp.destiny.SplashActivity;
 import co.crossroadsapp.destiny.data.UserData;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
+import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -37,7 +43,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 /**
@@ -46,8 +55,8 @@ import java.util.TimeZone;
 public class Util {
 
     //To switch between production and development server links
-    //where 1 points to development and 2 points to production
-    private static final int network_connection = 1;
+    //where 1 points to development, 2 points to production and 3 points to Dev staging
+    private static final int network_connection = 2;
 
     private static final String TAG = Util.class.getName();
     public static final String trimbleDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -56,13 +65,15 @@ public class Util {
     public static String getNetworkUrl() {
         if (network_connection==2){
             return Constants.NETWORK_PROD_BASE_URL;
+        } else if(network_connection==3) {
+            return Constants.NETWORK_DEV_BASE_STAGING_URL;
         }
         return Constants.NETWORK_DEV_BASE_URL;
     }
 
     public static String getFirebaseUrl(String clanId, String eventId, int channel) {
         String url;
-        if (network_connection==2) {
+        if (network_connection==2 || network_connection==3) {
             url = Constants.FIREBASE_PROD_URL;
         } else {
             url = Constants.FIREBASE_DEV_URL;
@@ -172,6 +183,7 @@ public class Util {
                 StringBuilder sb = new StringBuilder();
                 sb.append(pInfo.versionName);
                 version = sb.toString();
+                version = version+"(" + pInfo.versionCode + ")";
             }
         return version;
     }
@@ -259,17 +271,78 @@ public class Util {
     }
 
     public static String convertUTCtoReadable(String utcDate) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        format.setTimeZone(TimeZone.getTimeZone("UTC"));
-        Date newDate = null;
+        //new time strings
+        //   "yyyy-MM-dd'T'HH:mm:ss.SSSZ",
+        SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
         try {
-            newDate = format.parse(utcDate);
-        } catch (ParseException e) {
+
+            Calendar cal1 = Calendar.getInstance();
+            TimeZone tz = cal1.getTimeZone();
+            long msFromEpochGmt = cal1.getTimeInMillis();
+            long offsetFromUTC = tz.getOffset(msFromEpochGmt);
+
+            Date date = format.parse(utcDate);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.setTimeInMillis(cal.getTimeInMillis() + offsetFromUTC);
+            SimpleDateFormat formatDate = new SimpleDateFormat("EEEE 'at' h:mm a");
+            SimpleDateFormat formatDate1 = new SimpleDateFormat("MMM d 'at' h:mm a");
+            SimpleDateFormat formatDateToday = new SimpleDateFormat("'Today at' h:mm a");
+            SimpleDateFormat formatDateTmrw = new SimpleDateFormat("'Tomorrow at' h:mm a");
+            //String finalTime = formatDate.format(cal.getTime());
+            if(cal.getTimeInMillis() - System.currentTimeMillis()<Constants.TIME_DAY) {
+                return formatDateToday.format(cal.getTime());
+            } else if(cal.getTimeInMillis() - System.currentTimeMillis()>Constants.TIME_DAY && cal.getTimeInMillis() - System.currentTimeMillis()<Constants.TIME_TWO_DAY) {
+                return formatDateTmrw.format(cal.getTime());
+            } else if (cal.getTimeInMillis() - System.currentTimeMillis() > Constants.WEEK) {
+                return formatDate1.format(cal.getTime());
+            } else {
+                return formatDate.format(cal.getTime());
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        format = new SimpleDateFormat("EEE, MMM d - h:mm a");
-        String date = format.format(newDate);
-        return date;
+        return "";
+
+
+        //
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+//        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+//        Date newDate = null;
+//        try {
+//            newDate = format.parse(utcDate);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        format = new SimpleDateFormat("EEE, MMM d - h:mm a");
+//        String date = format.format(newDate);
+//        return date;
+    }
+
+    public static String updateLastReceivedDate(final String lastDate, Resources res) {
+        String mTemp = null;
+        Calendar cal = getCalendar(lastDate);
+        if (cal == null) {
+            return null;
+        }
+        long timeDif = System.currentTimeMillis() - cal.getTimeInMillis();
+
+        if (timeDif < Constants.TIME_MINUTE) {
+            int seconds = (int) timeDif / Constants.TIME_SECOND;
+            mTemp = "now";
+        } else if (timeDif >= Constants.TIME_MINUTE && timeDif < Constants.TIME_HOUR) {
+            int minutes = (int) timeDif / Constants.TIME_MINUTE;
+            mTemp = res.getQuantityString(R.plurals.minutes_time, minutes, minutes);
+        } else if (timeDif >= Constants.TIME_HOUR && timeDif < Constants.TIME_DAY) {
+            int hours = (int) timeDif / Constants.TIME_HOUR;
+            mTemp = res.getQuantityString(R.plurals.hours_time, hours, hours);
+        } else if (timeDif >= Constants.TIME_DAY) {
+            int days = (int) timeDif / Constants.TIME_DAY;
+            mTemp = res.getQuantityString(R.plurals.days_time, days, days);
+        }
+
+        return mTemp;
     }
 
     public static long parseDate(String dateString) {
@@ -536,11 +609,32 @@ public class Util {
         return list;
     }
 
-    public static void roundCorner(TextView textView, ListActivityFragment mContext) {
-        GradientDrawable gd = new GradientDrawable();
-        gd.setCornerRadius(5);
-        gd.setStroke(2, 0xFF203236);
-        gd.setColor(mContext.getResources().getColor(R.color.tag_background));
-        textView.setBackgroundDrawable(gd);
+    public static void postTracking(Map obj, Context c, ControlManager cm) {
+        if (c!=null && cm!=null) {
+            if(obj!=null) {
+                RequestParams params = new RequestParams();
+                params.put("trackingData", obj);
+                if(c instanceof SplashActivity) {
+                    params.put("trackingKey", "appInit");
+                } else if(c instanceof EventDetailActivity) {
+                    params.put("trackingKey", "eventSharing");
+                } else if(c instanceof ListActivityFragment) {
+                    params.put("trackingKey", "addCardInit");
+                } else if(c instanceof MainActivity) {
+                    params.put("trackingKey", "signupInit");
+                }
+                cm.postTracking(params, c);
+            }
+        }
+    }
+
+    public static void roundCorner(TextView textView, Context mContext) {
+        if(mContext!=null) {
+            GradientDrawable gd = new GradientDrawable();
+            gd.setCornerRadius(5);
+            gd.setStroke(2, 0xFF203236);
+            gd.setColor(mContext.getResources().getColor(R.color.tag_background));
+            textView.setBackgroundDrawable(gd);
+        }
     }
 }

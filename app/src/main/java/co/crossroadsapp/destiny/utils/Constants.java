@@ -32,6 +32,7 @@ public class Constants {
     public static final String LICENCE = "https://www.crossroadsapp.co/license"; //"http://68.140.240.194:3000/license"
     public static final String TERMS_OF_SERVICE = "https://www.crossroadsapp.co/terms";
     public static final String PRIVACY_POLICY = "https://www.crossroadsapp.co/privacy";
+    public static final String NONE = "(none)";
 
     public static String NOTIFICATION_INTENT_CHANNEL = "com.example.sharmha.notificationintent";
     public static int INTENT_ID = 9999;
@@ -41,8 +42,9 @@ public class Constants {
     public static String FIREBASE_PROD_URL = "https://crossroadsapp-live.firebaseio.com/";
 
     //network base url
-    public static String NETWORK_DEV_BASE_URL = "https://travelerbackend.herokuapp.com/api/v1/";
-    public static String NETWORK_PROD_BASE_URL = "https://live.crossroadsapp.co/api/v1/";
+    public static String NETWORK_DEV_BASE_URL = "https://travelerbackend.herokuapp.com/";
+    public static String NETWORK_PROD_BASE_URL = "https://live.crossroadsapp.co/";
+    public static String NETWORK_DEV_BASE_STAGING_URL = "https://travelerbackendproduction.herokuapp.com/";
 
     //app download links
     public static String DOWNLOAD_DEV_BUILD = "https://goo.gl/6vQpFn";
@@ -77,6 +79,15 @@ public class Constants {
     public static int EVENT_MISSING = 2;
     public static int EVENT_FULL= 3;
     public static int EVENT_CONSOLE_MISSING= 4;
+
+    public static final int TIME_SECOND = 1000;
+    public static final int TIME_MINUTE = 60 * 1000;
+    public static final int TIME_HOUR = 60 *  60 * 1000;
+    public static final int TIME_DAY = 24 * 60 *  60 * 1000;
+    public static final int TIME_TWO_DAY = 2 * 24 * 60 *  60 * 1000;
+    public static final int WEEK = 7 * 24 * 60 *  60 * 1000;
+
+    public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
     //urls
     public static String DEEP_LINK_IMAGE = "http://w3.crossroadsapp.co/bungie/share/branch/v1/";

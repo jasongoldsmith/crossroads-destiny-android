@@ -2,12 +2,25 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/rv_layout">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textColor="@color/trimbe_white"
+        android:textSize="12sp"
+        android:padding="15dp"
+        android:id="@+id/clan_tag_text"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below ="@+id/clan_tag_text">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/event_view"
@@ -15,6 +28,18 @@
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
             android:clipToPadding="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout_eventdetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_below ="@+id/clan_tag_text">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/eventdetail_view"
+            android:background="@android:color/transparent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </android.support.v4.widget.SwipeRefreshLayout>

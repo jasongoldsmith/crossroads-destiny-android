@@ -1,6 +1,7 @@
 package co.crossroadsapp.destiny;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -180,14 +181,20 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         // get existing event list
         getExistingList();
 
-        mManager.getEventList(this);
+        //mManager.getEventList(this);
 
-        mManager.getGroupList(this);
+        if(mManager.getCurrentGroupList()!=null) {
+            if(mManager.getCurrentGroupList().isEmpty()) {
+                mManager.getGroupList(this);
+            }
+        }else {
+            mManager.getGroupList(this);
+        }
 
         Firebase.setAndroidContext(this);
 
         //register event listener
-        registerFirbase();
+        //registerFirbase();
 
 //        //register user listener
 //        registerUserFirebase();
@@ -345,7 +352,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 // go to create new event page
                 Intent regIntent = new Intent(getApplicationContext(),
                         AddNewActivity.class);
-                regIntent.putExtra("userdata", user);
+                //regIntent.putExtra("userdata", user);
                 startActivity(regIntent);
                 //finish();
             }
@@ -497,7 +504,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             public void onClick(View v) {
                 Intent regIntent = new Intent(getApplicationContext(),
                         CrashReport.class);
-                regIntent.putExtra("userdata", user);
+                //regIntent.putExtra("userdata", user);
                 startActivity(regIntent);
             }
         });
@@ -512,13 +519,19 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     private void checkPrivacyDialoge() {
         if(user!=null) {
             if(user.getLegal()!=null) {
-                if( user.getLegal().getPrivacyNeedsUpdate()) {
+                if( user.getLegal().getPrivacyNeedsUpdate() || user.getLegal().getTermsNeedsUpdate()) {
                     //alert pop-up dailogue
                     final TextView message = new TextView(this);
-                    message.setText(Html.fromHtml((getString(R.string.dialog_message))));
-
-                    //
-                    setTextViewHTML(message, (getString(R.string.dialog_message)));
+                    if(user.getLegal().getPrivacyNeedsUpdate() && user.getLegal().getTermsNeedsUpdate()) {
+                        message.setText(Html.fromHtml((getString(R.string.dialog_message))));
+                        setTextViewHTML(message, (getString(R.string.dialog_message)));
+                    }else if (user.getLegal().getTermsNeedsUpdate()) {
+                        message.setText(Html.fromHtml((getString(R.string.dialog_message_terms))));
+                        setTextViewHTML(message, (getString(R.string.dialog_message_terms)));
+                    } else if(user.getLegal().getPrivacyNeedsUpdate()){
+                        message.setText(Html.fromHtml((getString(R.string.dialog_message_privacy))));
+                        setTextViewHTML(message, (getString(R.string.dialog_message_privacy)));
+                    }
 
                     message.setPadding(95,80,95,80);
                     //message.setMovementMethod(LinkMovementMethod.getInstance());
@@ -640,11 +653,16 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         CardView card = (CardView) row.findViewById(R.id.console_card);
 
         if (position == 0) {
-            card.setCardBackgroundColor(getResources().getColor(R.color.freelancer_background));
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                ImageView dropArw = (ImageView) row.findViewById(R.id.drop_arrow);
-                dropArw.setVisibility(View.VISIBLE);
-            }
+            row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 0));
+            card.setVisibility(View.GONE);
+//            card.setCardBackgroundColor(getResources().getColor(R.color.freelancer_background));
+//            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                ImageView dropArw = (ImageView) row.findViewById(R.id.drop_arrow);
+//                dropArw.setVisibility(View.VISIBLE);
+//            }
+        }else {
+            row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, Util.dpToPx(50, ListActivityFragment.this)));
+            card.setVisibility(View.VISIBLE);
         }
         if(consoleItems.contains("Add Console")) {
         if (position == consoleItems.size() - 1) {
@@ -656,7 +674,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                     //start new activity for event
                     Intent regIntent = new Intent(ListActivityFragment.this,
                             UpdateConsoleActivity.class);
-                    regIntent.putExtra("userdata", user);
+                    //regIntent.putExtra("userdata", user);
                     startActivity(regIntent);
                 }
             });
@@ -670,6 +688,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
         TextView label=(TextView)row.findViewById(R.id.add_console_text);
         if (consoleItems!=null) {
+            label.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
             label.setText(consoleItems.get(position));
         }
 
@@ -721,8 +740,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
     private void updateUserProfileImage(String url) {
         if((url!=null) || (!url.equalsIgnoreCase("null"))) {
-            Util.picassoLoadIcon(this, userProfile, url, R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.avatar);
-            Util.picassoLoadIcon(this, userProfileDrawer, url, R.dimen.player_profile_drawer_hgt, R.dimen.player_profile_drawer_width, R.drawable.avatar);
+            Util.picassoLoadIcon(this, userProfile, url, R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.profile_image);
+            Util.picassoLoadIcon(this, userProfileDrawer, url, R.dimen.player_profile_drawer_hgt, R.dimen.player_profile_drawer_width, R.drawable.profile_image);
             user.setImageUrl(url);
         }
     }
@@ -927,7 +946,6 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                             if(ud.getPsnVerify()!=null) {
                                 psnV = ud.getPsnVerify();
                             }
-
                             if (psnV != null && psnV.equalsIgnoreCase(Constants.PSN_VERIFIED)) {
                                 if (mManager != null && mManager.getUserData() != null) {
                                     UserData u = mManager.getUserData();
@@ -1014,7 +1032,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                     //start new activity for event
                     Intent regIntent = new Intent(this,
                             EventDetailActivity.class);
-                    regIntent.putExtra("userdata", user);
+                    //regIntent.putExtra("userdata", user);
                     startActivity(regIntent);
                     finish();
                 }
@@ -1050,7 +1068,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             if (this.drawerLayout.isDrawerOpen(gravity)) {
                 this.drawerLayout.closeDrawer(gravity);
                 if (gravity == Gravity.RIGHT) {
-                    mManager.getGroupList(this);
+                    //mManager.getGroupList(this);
                 }
             }
         }
@@ -1076,7 +1094,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             mManager.setDeepLinkEvent(null, null);
         } else {
             //show timed error message
-            Util.showErrorMsg(errLayout, errText, err);
+            setErrText(err);
         }
 
 //        errLayout.setVisibility(View.GONE);
@@ -1120,7 +1138,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         if(mManager!=null) {
             mManager.setDeepLinkEvent(null, null);
         }
-        //unregisterFirebase();
+        unregisterFirebase();
         unregisterUserFirebase();
     }
 
@@ -1276,7 +1294,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             View tab = LayoutInflater.from(ListActivityFragment.this).inflate(R.layout.custom_tab, null);
             TextView tv = (TextView) tab.findViewById(R.id.custom_text);
             tv.setTypeface(Typeface.SANS_SERIF, 1);
-            tv.setPadding(Util.dpToPx(43, ListActivityFragment.this), 25, 0, 0);
+            tv.setPadding(0, 25, Util.dpToPx(21, ListActivityFragment.this), 0);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
             tv.setText(tabTitles[position]);
             return tab;
@@ -1354,16 +1372,17 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                         }
                     }
                     //to update all lists in the background
-                    mManager.getEventList(ListActivityFragment.this);
+                    //mManager.getEventList(ListActivityFragment.this);
                 }
             } else if(observable instanceof GroupListNetwork) {
                 if (data != null) {
                     if (data instanceof UserData) {
+                        unregisterFirebase();
                         registerFirbase();
                         mManager.getEventList(this);
                         hideProgress();
                         closeProfileDrawer(Gravity.RIGHT);
-                        mManager.getGroupList(this);
+                        //mManager.getGroupList(this);
                         //gpAct.setSelectedGroup();
                     } else if(data instanceof GroupData) {
                         if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
@@ -1397,13 +1416,17 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             } else if(observable instanceof LogoutNetwork) {
                 Intent regIntent = new Intent(getApplicationContext(),
                         MainActivity.class);
-                startActivity(regIntent);
+                regIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                regIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                regIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                regIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 finish();
+                startActivity(regIntent);
             } else if(observable instanceof HelmetUpdateNetwork) {
                 findViewById(R.id.loadingImg).setVisibility(View.GONE);
                 if(data!=null) {
                     updateUserProfileImage(data.toString());
-                    mManager.getEventList(this);
+                    //mManager.getEventList(this);
                 }
             } else if( observable instanceof ChangeCurrentConsoleNetwork) {
                 hideProgressBar();
@@ -1422,8 +1445,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 if(mManager.getCurrentActivityList()!=null && !mManager.getCurrentActivityList().isEmpty()) {
                     //start new activity for add event creation
                     Intent regIntent = new Intent(ListActivityFragment.this,
-                            AddNewActivity.class);
-                    regIntent.putExtra("userdata", user);
+                            AddFinalActivity.class);
+                    //regIntent.putExtra("userdata", user);
                     regIntent.putExtra("adcard", true);
                     regIntent.putExtra("adCardId", adCardPosition);
                     startActivity(regIntent);

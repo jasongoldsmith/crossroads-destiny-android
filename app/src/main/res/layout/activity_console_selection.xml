@@ -43,28 +43,33 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:id="@+id/spinner_layout"
-        android:background="@color/app_theme_color"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginLeft="50dp"
+        android:background="@color/freelancer_background"
+        android:layout_margin="10dp"
         android:layout_below="@+id/relativeLayout">
 
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/spinner"
-            android:background="@color/app_theme_color"
+            android:background="@color/freelancer_background"
             android:gravity="center"
             android:popupElevation="0dp"
             android:popupBackground="@android:color/transparent" />
         <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:id="@+id/console_img"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="14dp"
+            android:layout_centerVertical="true"
+            android:scaleType="fitXY"/>
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_arrowdown"
+            android:src="@drawable/icon_arrow_dwn"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:padding="8dp"/>
+            android:padding="15dp"/>
     </RelativeLayout>
 
     <RelativeLayout

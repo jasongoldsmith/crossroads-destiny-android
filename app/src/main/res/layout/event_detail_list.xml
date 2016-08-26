@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <!--<RelativeLayout-->
@@ -57,12 +60,24 @@
         android:src="@drawable/img_background_map"
         android:scaleType="fitXY"/>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="261dp"
+        android:id="@+id/background"
+        android:layout_alignParentTop="true"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/navi_bottom"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="81dp"
+        android:background="@drawable/img_nav_gradient_bg"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="130dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:id="@+id/eventdetail_top_layout"
-        android:background="@drawable/img_header_bg_eventdetail">
+        android:id="@+id/eventdetail_top_layout">
         <!--<ImageView-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="wrap_content"-->
@@ -73,7 +88,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/eventdetail_backbtn"
             android:src="@drawable/icon_back_arrow"
-            android:paddingTop="9dp"
+            android:paddingTop="32dp"
             android:paddingBottom="20dp"
             android:paddingRight="20dp"
             android:layout_alignParentLeft="true"/>
@@ -82,31 +97,11 @@
             android:layout_height="wrap_content"
             android:id="@+id/eventdetail_sharebtn"
             android:src="@drawable/icon_share"
-            android:paddingTop="9dp"
+            android:paddingTop="32dp"
             android:paddingBottom="20dp"
             android:paddingRight="11dp"
             android:paddingLeft="20dp"
             android:layout_alignParentRight="true"/>
-        <co.crossroadsapp.destiny.utils.CircularImageView
-            android:layout_width="@dimen/player_profile_width"
-            android:layout_height="@dimen/player_profile_hgt"
-            android:visibility="gone"
-            android:id="@+id/userProfile_event"
-            android:src="@drawable/img_avatar_you"
-            android:layout_marginEnd="11dp"
-            android:layout_marginTop="14dp"
-            android:layout_alignParentRight="true" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:fontFamily="sans-serif"
-            android:textStyle="bold"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="11dp"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            android:text="ACTIVITY DETAILS"/>
     </RelativeLayout>
 
     <co.crossroadsapp.destiny.SwipeFrameLayout
@@ -207,109 +202,110 @@
         android:layout_height="wrap_content"
         android:id="@+id/event_detail_top_frag"
         android:orientation="horizontal"
-        android:layout_below="@+id/notification_bar_layout"
-        android:layout_marginTop="22dp">
+        android:layout_above="@+id/viewpager_layout"
+        android:layout_marginBottom="50dp">
 
-        <co.crossroadsapp.destiny.utils.CircularImageView
+        <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/event_detail_icon"
             android:src="@drawable/icon_ghost_default"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="11dp"/>
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="15dp"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/activity_name_layout_detail"
             android:layout_toRightOf="@+id/event_detail_icon"
-            android:layout_marginLeft="10dp">
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="12dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/activity_name_detail"
                 android:fontFamily="sans-serif"
-                android:text="Missing Event Name"
                 android:textColor="@android:color/white"
                 android:textSize="20sp">
             </TextView>
 
-            <TextView
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/eventDetailCheckpoint"
-                android:layout_below="@+id/activity_name_detail"
-                android:textColor="@color/activity_light_color"
-                android:textSize="12sp"
-                android:visibility="gone"/>
+                android:id="@+id/checkpoint_date_layout"
+                android:layout_below="@+id/activity_name_detail">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/eventDetailCheckpoint"
+                    android:layout_alignParentStart="true"
+                    android:textColor="@color/activity_light_color"
+                    android:textSize="12sp"
+                    android:paddingRight="8dp"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/eventDetailDate"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="italic"
+                    android:textColor="@android:color/white"
+                    android:layout_toRightOf="@+id/eventDetailCheckpoint"
+                    android:textSize="12sp"/>
+
+            </RelativeLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/eventDetailCheckpoint"
-                android:id="@+id/activity_player_name_detail"
-                android:fontFamily="sans-serif"
-                android:textColor="@android:color/white"
-                android:text="Missing player names"
-                android:singleLine="true"
-                android:ellipsize="end"
-                android:textSize="12sp">
-            </TextView>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/activity_player_name_lf_detail"
-                android:layout_below="@+id/eventDetailCheckpoint"
-                android:textColor="#ffc600"
-                android:layout_toRightOf="@+id/activity_player_name_detail"
-                android:textSize="12sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/eventDetailDate"
-                android:fontFamily="sans-serif"
-                android:textStyle="italic"
-                android:textColor="@android:color/white"
-                android:layout_below="@+id/activity_player_name_detail"
-                android:textSize="12sp"/>
+                android:id="@+id/event_tag_text"
+                android:background="#203236"
+                android:layout_below="@+id/checkpoint_date_layout"
+                android:textSize="11dp"
+                android:layout_marginTop="8dp"
+                android:textColor="#9ba8ad"
+                android:visibility="gone"
+                android:gravity="center"
+                android:padding="6dp"/>
         </RelativeLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:id="@+id/activity_aLight_detail"
-            android:textSize="20sp"
-            android:textColor="@color/activity_light_color"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="14dp">
-        </TextView>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text=""-->
+            <!--android:id="@+id/activity_aLight_detail"-->
+            <!--android:textSize="20sp"-->
+            <!--android:textColor="@color/activity_light_color"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_marginRight="14dp">-->
+        <!--</TextView>-->
 
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Currently Going"
-        android:id="@+id/currentgoing"
-        android:textColor="@android:color/white"
-        android:textSize="14sp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="30dp"
-        android:layout_below="@+id/event_detail_top_frag"/>
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Currently Going"-->
+        <!--android:id="@+id/currentgoing"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:textSize="14sp"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:layout_marginTop="30dp"-->
+        <!--android:layout_below="@+id/event_detail_top_frag"/>-->
 
-    <ProgressBar
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:id="@+id/bar"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginRight="15dp"
-        android:background="#979797"
-        android:layout_below="@+id/currentgoing"/>
+    <!--<ProgressBar-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:id="@+id/bar"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:layout_marginTop="6dp"-->
+        <!--android:layout_marginRight="15dp"-->
+        <!--android:background="#979797"-->
+        <!--android:layout_below="@+id/currentgoing"/>-->
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -356,17 +352,109 @@
             android:layout_alignParentBottom="true"
             android:gravity="center"
             android:visibility="gone"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/send_comment_layout"
+            android:visibility="gone">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/trimbe_white"
+                android:id="@+id/comment_edittext"
+                android:paddingLeft="14dp"
+                android:paddingTop="9dp"
+                android:paddingBottom="12dp"
+                android:textColorHint="@color/comment_text_color"
+                android:textColor="@color/comment_typing_text"
+                android:hint="@string/comment_hint"
+                android:textSize="16sp"
+                android:paddingRight="50dp"
+                android:textCursorDrawable="@color/comment_text_color"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLines="4"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/send_msg_btn"
+                android:src="@drawable/icon_s_e_n_d"
+                android:padding="3dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+
+
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:id="@+id/send_comment_layout"-->
+            <!--android:background="@color/trimbe_white"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:visibility="gone">-->
+
+            <!--<EditText-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/comment_edittext"-->
+                <!--android:layout_marginLeft="14dp"-->
+                <!--android:paddingTop="9dp"-->
+                <!--android:hint="Write a message"-->
+                <!--android:textSize="26sp"-->
+                <!--android:inputType="textMultiLine"-->
+                <!--/>-->
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@drawable/img_send_btn"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:padding="3dp"/>-->
+        <!--</RelativeLayout>-->
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/event_player"
-        android:layout_below="@+id/bar"
-        android:layout_above="@+id/detail_bottom_btn"
-        android:background="@android:color/transparent"
-        android:layout_marginLeft="17dp"
-        android:layout_marginRight="9dp"
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/event_player"-->
+        <!--android:layout_below="@+id/bar"-->
+        <!--android:layout_above="@+id/detail_bottom_btn"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:layout_marginLeft="17dp"-->
+        <!--android:layout_marginRight="9dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"/>-->
+
+    <!--view pager for tabs-->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:id="@+id/viewpager_layout"
+        android:layout_below="@+id/navi_bottom"
+        android:layout_above="@+id/detail_bottom_btn"
+        android:layout_marginTop="-48dp">
+        <android.support.design.widget.TabLayout
+            android:id="@+id/eventdetail_tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/transparent"
+            android:layout_gravity="center_horizontal"
+            android:elevation="0dp"
+            app:tabTextColor="#d3d3d3"
+            app:tabSelectedTextColor="#ffffff"
+            app:tabIndicatorColor="@color/app_theme_color"
+            app:tabPaddingStart="20dp"
+            app:tabPaddingEnd="0dp"
+            android:minHeight="?attr/actionBarSize" />
+        <android.support.v4.view.ViewPager
+            android:id="@+id/eventdetail_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_below="@+id/eventdetail_tab_layout"
+            android:background="@android:color/transparent">
+        </android.support.v4.view.ViewPager>
+        <!--</android.support.v4.widget.SwipeRefreshLayout>-->
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

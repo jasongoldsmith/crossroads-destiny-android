@@ -30,6 +30,7 @@ public class ActivityData {
     private String aImageBaseUrl=null;
     private String aImagePath=null;
     private String tag;
+    private String aFeedMode;
 
     public ActivityData () {
         adCardData = new AdCardData();
@@ -161,6 +162,14 @@ public class ActivityData {
         return aLocation;
     }
 
+    private void setaFeedMode(String mode) {
+        aFeedMode = mode;
+    }
+
+    public String getaFeedMode() {
+        return aFeedMode;
+    }
+
     public ArrayList<ModifierData> getModifierList() {
         return modifierList;
     }
@@ -203,6 +212,10 @@ public class ActivityData {
 
                 if (actData.has("tag") && !actData.isNull("tag")) {
                     setTag(actData.getString("tag"));
+                }
+
+                if (actData.has("aFeedMode") && !actData.isNull("aFeedMode")) {
+                    setaFeedMode(actData.getString("aFeedMode"));
                 }
 
                 if(actData.has("aDescription") && !actData.isNull("aDescription")) {

@@ -22,7 +22,7 @@ public class ChangeCurrentConsoleNetwork extends Observable {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "a/user/changePrimaryConsole";
+    private String url = "api/v1/a/user/changePrimaryConsole";
     private ControlManager mManager;
 
     public ChangeCurrentConsoleNetwork(Context c) {

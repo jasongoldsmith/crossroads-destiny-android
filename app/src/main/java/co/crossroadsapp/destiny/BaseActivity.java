@@ -46,17 +46,22 @@ public class BaseActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        registerReceiver(ReceivefromService, new IntentFilter("subtype_flag"));
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        registerReceiver(ReceivefromService, new IntentFilter("subtype_flag"));
     }
 
     @Override
     public void onStop() {
         super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         unregisterReceiver(ReceivefromService);
     }
 
@@ -70,7 +75,9 @@ public class BaseActivity extends FragmentActivity {
         }
 
         // show timed error message
-        Util.showErrorMsg(errLayout, errText, errorText);
+        if(errorText!=null && !errorText.isEmpty()) {
+            Util.showErrorMsg(errLayout, errText, errorText);
+        }
 
 //        if(errText!=null && errLayout!=null) {
 //            errLayout.setVisibility(View.GONE);
@@ -126,7 +133,7 @@ public class BaseActivity extends FragmentActivity {
                         // go to create new event page
                         Intent regIntent = new Intent(getApplicationContext(),
                                 AddNewActivity.class);
-                        regIntent.putExtra("userdata", mManager.getUserData());
+                        //regIntent.putExtra("userdata", mManager.getUserData());
                         startActivity(regIntent);
                     }
                 });
@@ -155,7 +162,7 @@ public class BaseActivity extends FragmentActivity {
                         // go to create new event page
                         Intent regIntent = new Intent(getApplicationContext(),
                                 AddNewActivity.class);
-                        regIntent.putExtra("userdata", mManager.getUserData());
+                        //regIntent.putExtra("userdata", mManager.getUserData());
                         startActivity(regIntent);
                     }
                 });
@@ -169,7 +176,7 @@ public class BaseActivity extends FragmentActivity {
                     // go to create new event page
                     Intent regIntent = new Intent(getApplicationContext(),
                             UpdateConsoleActivity.class);
-                    regIntent.putExtra("userdata", mManager.getUserData());
+                    //regIntent.putExtra("userdata", mManager.getUserData());
                     startActivity(regIntent);
                 }
                 });
@@ -266,8 +273,8 @@ public class BaseActivity extends FragmentActivity {
                     } else {
                         grpImageView.setVisibility(View.VISIBLE);
                         msngrImageView.setVisibility(View.GONE);
-                        notiTopSubText.setVisibility(View.VISIBLE);
-                        if (name!=null) {
+                        if (name!=null && !name.isEmpty()) {
+                            notiTopSubText.setVisibility(View.VISIBLE);
                             notiTopSubText.setText(name.toUpperCase());
                         }
                         if (console!=null && grpName!=null) {
@@ -373,6 +380,19 @@ public class BaseActivity extends FragmentActivity {
                         //removeEventNotiFromNotiList(eventNotiList.get(position).geteId());
                         eventNotiList.remove(position);
                         adapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        }
+    }
+
+    protected void removeNotiById(String Id) {
+        if(notiList!=null) {
+            for (int y=0; y<notiList.size();y++) {
+                if (notiList.get(y).geteId()!=null) {
+                    if(notiList.get(y).geteId().equalsIgnoreCase(Id)) {
+                        notiList.remove(y);
+                        y--;
                     }
                 }
             }

@@ -20,8 +20,8 @@ import cz.msebera.android.httpclient.Header;
 public class ForgotPasswordNetwork extends Observable {
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "auth/request/resetPassword";
-    private String changePswrdUrl = "a/user/updatePassword";
+    private String url = "api/v1/auth/request/resetPassword";
+    private String changePswrdUrl = "api/v1/a/user/updatePassword";
     private ControlManager mManager;
 
     public ForgotPasswordNetwork(Context c) {

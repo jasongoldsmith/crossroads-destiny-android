@@ -25,9 +25,9 @@ public class GroupListNetwork extends Observable {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "a/account/group/list";
-    private String selectedGroupUrl = "a/user/updateGroup";
-    private String groupMuteUrl = "a/account/group/mute";
+    private String url = "api/v1/a/account/group/list";
+    private String selectedGroupUrl = "api/v1/a/user/updateGroup";
+    private String groupMuteUrl = "api/v1/a/account/group/mute";
     private ArrayList<GroupData> groupList;
 
     //private EventList eventList;

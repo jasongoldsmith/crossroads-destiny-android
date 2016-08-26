@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Created by sharmha on 2/23/16.
  */
-public class UserData implements Parcelable {
+public class UserData {
 
     private LegalData legal;
     private String user=null;
@@ -27,6 +27,7 @@ public class UserData implements Parcelable {
     private String consoleType=null;
     private int authenticationId;
     private ArrayList<ConsoleData> consoles;
+    private String clanTag=null;
 
     public UserData() {
         consoles = new ArrayList<ConsoleData>();
@@ -117,6 +118,14 @@ public class UserData implements Parcelable {
         return this.imageUrl;
     }
 
+    public void setClanTag(String clanT) {
+        clanTag = clanT;
+    }
+
+    public String getClanTag() {
+        return this.clanTag;
+    }
+
     public void setAuthenticationId(int id) {
         authenticationId = id;
     }
@@ -131,64 +140,71 @@ public class UserData implements Parcelable {
 
     public void toJson(JSONObject json) {
         try {
-            if (json.has("value")) {
+            if (json.has("value") && !json.isNull("value")) {
                 JSONObject jsonData = json.optJSONObject("value");
                 if (jsonData!=null) {
-                    if (jsonData.has("userName")) {
+                    if (jsonData.has("userName") && !jsonData.isNull("userName")) {
                         String n = jsonData.getString("userName");
                         setUser(n);
                     }
-                if (jsonData.has("bungieMemberShipId")) {
+                if (jsonData.has("bungieMemberShipId") && !jsonData.isNull("bungieMemberShipId")) {
                     String memid = jsonData.getString("bungieMemberShipId");
                     setMembershipId(memid);
                 }
 
-                if (jsonData.has("clanId")) {
+                if (jsonData.has("clanId") && !jsonData.isNull("clanId")) {
                     String clanId = jsonData.getString("clanId");
                     setClanId(clanId);
                 }
-                if (jsonData.has("imageUrl")) {
+                if (jsonData.has("imageUrl") && !jsonData.isNull("imageUrl")) {
                     String profileImg = jsonData.getString("imageUrl");
                     setImageUrl(profileImg);
                 }
-                if (jsonData.has("_id")) {
+                if (jsonData.has("_id") && !jsonData.isNull("_id")) {
                     String uId = jsonData.getString("_id");
                     setUserId(uId);
                 }
-                    if(jsonData.has("legal")) {
+                    if(jsonData.has("legal") && !jsonData.isNull("legal")) {
                         JSONObject legalData = jsonData.optJSONObject("legal");
                         legal.toJson(legalData);
                     }
-                    if (jsonData.has("consoles")) {
+                    if (jsonData.has("consoles") && !jsonData.isNull("consoles")) {
                     JSONArray conArray = jsonData.optJSONArray("consoles");
                     if (conArray != null) {
                         for (int i=0; i<conArray.length();i++) {
                         JSONObject conData = (JSONObject) conArray.get(i);
                         if (conData != null) {
                             ConsoleData cData = new ConsoleData();
-                            if(conData.has("isPrimary")) {
+                            if(conData.has("isPrimary") && !conData.isNull("isPrimary")) {
                                 cData.setPrimary(conData.getBoolean("isPrimary"));
                             }
-                            if (conData.has("consoleType")) {
+                            if (conData.has("consoleType") && !conData.isNull("consoleType")) {
                                 String cType = conData.getString("consoleType");
                                 if(cData.getPrimary()) {
                                     setConsoleType(cType);
                                 }
                                 cData.setcType(cType);
                             }
-                            if (conData.has("consoleId")) {
+                            if (conData.has("consoleId") && !conData.isNull("consoleId")) {
                                 String id = conData.getString("consoleId");
                                 if(cData.getPrimary()) {
                                     setPsnId(id);
                                 }
                                 cData.setcId(id);
                             }
-                            if (conData.has("verifyStatus")) {
+                            if (conData.has("verifyStatus") && !conData.isNull("verifyStatus")) {
                                 String verifyS = conData.getString("verifyStatus");
                                 if(cData.getPrimary()) {
                                     setPsnVerify(verifyS);
                                 }
                                 cData.setVerifyStatus(verifyS);
+                            }
+                            if (conData.has("clanTag") && !conData.isNull("clanTag")) {
+                                String clanTag = conData.getString("clanTag");
+                                if(cData.getPrimary()) {
+                                    setClanTag(clanTag);
+                                }
+                                cData.setClanTag(clanTag);
                             }
                             consoles.add(cData);
                         }
@@ -203,47 +219,51 @@ public class UserData implements Parcelable {
         }
     }
 
-    public static final Creator<UserData> CREATOR = new Creator<UserData>() {
-        @Override
-        public UserData createFromParcel(Parcel in) {
-            return new UserData(in);
-        }
-
-        @Override
-        public UserData[] newArray(int size) {
-            return new UserData[size];
-        }
-    };
-
-    public UserData(Parcel in){
-        this.user = in.readString();
-        this.password = in.readString();
-        this.psnId = in.readString();
-        this.imageUrl = in.readString();
-        this.userId = in.readString();
-        this.clanId = in.readString();
-        this.psnVerify = in.readString();
-        this.consoleType = in.readString();
-        this.membershipId = in.readString();
-        this.authenticationId = in.readInt();
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.user);
-        dest.writeString(this.password);
-        dest.writeString(this.psnId);
-        dest.writeString(this.imageUrl);
-        dest.writeString(this.userId);
-        dest.writeString(this.clanId);
-        dest.writeString(this.psnVerify);
-        dest.writeString(this.consoleType);
-        dest.writeString(this.membershipId);
-        dest.writeInt(this.authenticationId);
-    }
+//    public static final Creator<UserData> CREATOR = new Creator<UserData>() {
+//        @Override
+//        public UserData createFromParcel(Parcel in) {
+//            return new UserData(in);
+//        }
+//
+//        @Override
+//        public UserData[] newArray(int size) {
+//            return new UserData[size];
+//        }
+//    };
+//
+//    public UserData(Parcel in){
+//        this.user = in.readString();
+//        this.password = in.readString();
+//        this.psnId = in.readString();
+//        this.imageUrl = in.readString();
+//        this.userId = in.readString();
+//        this.clanId = in.readString();
+//        this.psnVerify = in.readString();
+//        this.consoleType = in.readString();
+//        this.membershipId = in.readString();
+//        this.authenticationId = in.readInt();
+//        this.clanTag = in.readString();
+//        this.consoles = in.readArrayList(ConsoleData.class.getClassLoader());
+//    }
+//
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel dest, int flags) {
+//        dest.writeString(this.user);
+//        dest.writeString(this.password);
+//        dest.writeString(this.psnId);
+//        dest.writeString(this.imageUrl);
+//        dest.writeString(this.userId);
+//        dest.writeString(this.clanId);
+//        dest.writeString(this.psnVerify);
+//        dest.writeString(this.consoleType);
+//        dest.writeString(this.membershipId);
+//        dest.writeInt(this.authenticationId);
+//        dest.writeString(this.clanTag);
+//        dest.writeList(this.consoles);
+//    }
 }

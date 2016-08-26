@@ -18,6 +18,7 @@ import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.GroupList;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.network.ActivityListNetwork;
+import co.crossroadsapp.destiny.network.AddCommentNetwork;
 import co.crossroadsapp.destiny.network.AddNewConsoleNetwork;
 import co.crossroadsapp.destiny.network.ChangeCurrentConsoleNetwork;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
@@ -32,6 +33,7 @@ import co.crossroadsapp.destiny.network.LogoutNetwork;
 import co.crossroadsapp.destiny.network.PrivacyLegalUpdateNetwork;
 import co.crossroadsapp.destiny.network.ReportCrashNetwork;
 import co.crossroadsapp.destiny.network.ResendBungieVerification;
+import co.crossroadsapp.destiny.network.TrackingNetwork;
 import co.crossroadsapp.destiny.network.VerifyConsoleIDNetwork;
 import co.crossroadsapp.destiny.network.postGcmNetwork;
 import co.crossroadsapp.destiny.utils.Util;
@@ -93,6 +95,8 @@ public class ControlManager implements Observer{
     private ChangeCurrentConsoleNetwork changeCurrentConsoleNetwork;
     private String deepLinkActivityName;
     private PrivacyLegalUpdateNetwork legalPrivacyNetwork;
+    private AddCommentNetwork addCommentsNetwork;
+    private TrackingNetwork trackingNetwork;
 
     public ControlManager() {
     }
@@ -441,36 +445,38 @@ public class ControlManager implements Observer{
     }
 
     public void showErrorDialogue(String err) {
-        if(err==null){
-            err = "Request failed. Please wait a few seconds and refresh.";
-        }
-        if (this.mCurrentAct!=null) {
-            if (mCurrentAct instanceof SplashActivity) {
-                ((SplashActivity)mCurrentAct).showError(err);
-            } else if(mCurrentAct instanceof LoginActivity) {
-                ((LoginActivity) mCurrentAct).showError(err);
-            } else if(mCurrentAct instanceof RegisterActivity) {
-                ((RegisterActivity) mCurrentAct).showError(err);
-            } else if(mCurrentAct instanceof ListActivityFragment) {
-                ((ListActivityFragment) mCurrentAct).showError(err);
-            } else if(mCurrentAct instanceof AddFinalActivity){
-                ((AddFinalActivity) mCurrentAct).showError(err);
-            } else if (mCurrentAct instanceof EventDetailActivity){
-                ((EventDetailActivity) mCurrentAct).showError(err);
-            } else if (mCurrentAct instanceof ForgotLoginActivity){
-                ((ForgotLoginActivity) mCurrentAct).showError(err);
-            } else if (mCurrentAct instanceof ConsoleSelectionActivity) {
-                ((ConsoleSelectionActivity) mCurrentAct).showError(err);
-            } else if(mCurrentAct instanceof ChangePassword) {
-                ((ChangePassword) mCurrentAct).showError(err);
-            } else if(mCurrentAct instanceof MainActivity) {
-                ((MainActivity) mCurrentAct).showError(err);
-            } else if (mCurrentAct instanceof UpdateConsoleActivity) {
-                ((UpdateConsoleActivity)mCurrentAct).showError(err);
-            } else if(mCurrentAct instanceof AddFinalActivity) {
-                ((AddFinalActivity)mCurrentAct).showError(err);
+//        if(err==null){
+//            //err = "Request failed. Please wait a few seconds and refresh.";
+//        }
+        //if(err!=null) {
+            if (this.mCurrentAct != null) {
+                if (mCurrentAct instanceof SplashActivity) {
+                    ((SplashActivity) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof LoginActivity) {
+                    ((LoginActivity) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof RegisterActivity) {
+                    ((RegisterActivity) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof ListActivityFragment) {
+                    ((ListActivityFragment) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof AddFinalActivity) {
+                    ((AddFinalActivity) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof EventDetailActivity) {
+                    ((EventDetailActivity) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof ForgotLoginActivity) {
+                    ((ForgotLoginActivity) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof ConsoleSelectionActivity) {
+                    ((ConsoleSelectionActivity) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof ChangePassword) {
+                    ((ChangePassword) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof MainActivity) {
+                    ((MainActivity) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof UpdateConsoleActivity) {
+                    ((UpdateConsoleActivity) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof AddFinalActivity) {
+                    ((AddFinalActivity) mCurrentAct).showError(err);
+                }
             }
-        }
+        //}
     }
 
     public void getAndroidVersion(ListActivityFragment activity) {
@@ -684,6 +690,16 @@ public class ControlManager implements Observer{
         }
     }
 
+    public void postTracking(RequestParams rp, Context context) {
+        trackingNetwork = new TrackingNetwork(context);
+        try {
+            trackingNetwork.postTracking(rp);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void postCrash(CrashReport c, String userId, String s) {
         RequestParams requestParams = new RequestParams();
         requestParams.put("reporter", userId);
@@ -709,6 +725,17 @@ public class ControlManager implements Observer{
         }
     }
 
+    public void postComments(EventDetailActivity activity, RequestParams params) {
+        try {
+            addCommentsNetwork = new AddCommentNetwork(activity);
+            addCommentsNetwork.addObserver(activity);
+            addCommentsNetwork.postComments(params);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void setDeepLinkEvent(String deepLinkEvent, String actName) {
         this.deepLinkEvent = deepLinkEvent;
         this.deepLinkActivityName = actName;
@@ -724,11 +751,13 @@ public class ControlManager implements Observer{
 
     public ArrayList<String> getConsoleList() {
         consoleList = new ArrayList<>();
-        if(user!=null && user.getConsoleType()!=null) {
-            consoleList.add(user.getConsoleType());
-            for (int n = 0; n < user.getConsoles().size(); n++) {
-                if (!user.getConsoles().get(n).getcType().equalsIgnoreCase(user.getConsoleType())) {
-                    consoleList.add(user.getConsoles().get(n).getcType());
+        if(user!=null) {
+            if(user.getConsoleType()!=null) {
+                consoleList.add(user.getConsoleType());
+                for (int n = 0; n < user.getConsoles().size(); n++) {
+                    if (!user.getConsoles().get(n).getcType().equalsIgnoreCase(user.getConsoleType())) {
+                        consoleList.add(user.getConsoles().get(n).getcType());
+                    }
                 }
             }
         }

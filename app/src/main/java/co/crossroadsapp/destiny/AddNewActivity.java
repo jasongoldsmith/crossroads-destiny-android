@@ -24,6 +24,15 @@ public class AddNewActivity extends BaseActivity implements Observer {
     private ControlManager mCntrlMngr;
     private UserData user;
     private ImageView back;
+    private ImageView exoticAct;
+    private ImageView questAct;
+    private ImageView storyAct;
+    private ImageView patrolAct;
+    private ImageView strikeAct;
+    private ImageView crucibleAct;
+    private ImageView arenaAct;
+    private ImageView raiddAct;
+    private ImageView featuredAct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +44,21 @@ public class AddNewActivity extends BaseActivity implements Observer {
         mCntrlMngr = ControlManager.getmInstance();
         mCntrlMngr.setCurrentActivity(this);
         //mCntrlMngr.getAllActivities(this);
+        boolean ads= false;
+        String adP=null;
 
         Bundle b = getIntent().getExtras();
-        user = b.getParcelable("userdata");
-        boolean ads= b.getBoolean("adcard");
-        String adP = b.getString("adCardId");
+        //user = b.getParcelable("userdata");
+        if(b!=null) {
+            if (b.containsKey("adcard")) {
+                ads = b.getBoolean("adcard");
+            }
+            if (b.containsKey("adCardId")) {
+                adP = b.getString("adCardId");
+            }
+        }
+
+        user = mCntrlMngr.getUserData();
 
         checkIfAdFlow(ads, adP);
 
@@ -52,111 +71,84 @@ public class AddNewActivity extends BaseActivity implements Observer {
         });
 
         //Raid
-        ImageView featuredAct = (ImageView) findViewById(R.id.first_act);
+        featuredAct = (ImageView) findViewById(R.id.first_act);
         featuredAct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressBar();
-                RequestParams rp = new RequestParams();
-                rp.add("aType", "Featured");
-                rp.add("includeTags", "true");
-                mCntrlMngr.postGetActivityList(AddNewActivity.this, rp);
+                featuredAct.setImageResource(R.drawable.img_featured_selected);
+                callPostGetActivity("Featured");
             }
         });
 
-        ImageView raiddAct = (ImageView) findViewById(R.id.second_act);
+        raiddAct = (ImageView) findViewById(R.id.second_act);
         raiddAct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressBar();
-                RequestParams rp = new RequestParams();
-                rp.add("aType", "Raid");
-                rp.add("includeTags", "true");
-                mCntrlMngr.postGetActivityList(AddNewActivity.this, rp);
+                raiddAct.setImageResource(R.drawable.img_raids_selected);
+                callPostGetActivity("Raid");
             }
         });
 
-        ImageView arenaAct = (ImageView) findViewById(R.id.third_act);
+        arenaAct = (ImageView) findViewById(R.id.third_act);
         arenaAct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressBar();
-                RequestParams rp = new RequestParams();
-                rp.add("aType", "Arena");
-                rp.add("includeTags", "true");
-                mCntrlMngr.postGetActivityList(AddNewActivity.this, rp);
+                arenaAct.setImageResource(R.drawable.img_arena_selected);
+                callPostGetActivity("Arena");
             }
         });
 
-        ImageView crucibleAct = (ImageView) findViewById(R.id.fourth_act);
+        crucibleAct = (ImageView) findViewById(R.id.fourth_act);
         crucibleAct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressBar();
-                RequestParams rp = new RequestParams();
-                rp.add("aType", "Crucible");
-                rp.add("includeTags", "true");
-                mCntrlMngr.postGetActivityList(AddNewActivity.this, rp);
+                crucibleAct.setImageResource(R.drawable.img_cruicible_selected);
+                callPostGetActivity("Crucible");
             }
         });
 
-        ImageView strikeAct = (ImageView) findViewById(R.id.fifth_act);
+        strikeAct = (ImageView) findViewById(R.id.fifth_act);
         strikeAct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressBar();
-                RequestParams rp = new RequestParams();
-                rp.add("aType", "Strike");
-                rp.add("includeTags", "true");
-                mCntrlMngr.postGetActivityList(AddNewActivity.this, rp);
+                strikeAct.setImageResource(R.drawable.img_strikes_selected);
+                callPostGetActivity("Strike");
             }
         });
 
-        ImageView patrolAct = (ImageView) findViewById(R.id.sixth_act);
+        patrolAct = (ImageView) findViewById(R.id.sixth_act);
         patrolAct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressBar();
-                RequestParams rp = new RequestParams();
-                rp.add("aType", "Patrol");
-                rp.add("includeTags", "true");
-                mCntrlMngr.postGetActivityList(AddNewActivity.this, rp);
+                patrolAct.setImageResource(R.drawable.img_patrol_selected);
+                callPostGetActivity("Patrol");
             }
         });
 
-        ImageView storyAct = (ImageView) findViewById(R.id.seventh_act);
+        storyAct = (ImageView) findViewById(R.id.seventh_act);
         storyAct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressBar();
-                RequestParams rp = new RequestParams();
-                rp.add("aType", "Story");
-                rp.add("includeTags", "true");
-                mCntrlMngr.postGetActivityList(AddNewActivity.this, rp);
+                storyAct.setImageResource(R.drawable.img_story_selected);
+                callPostGetActivity("Story");
             }
         });
 
-        ImageView questAct = (ImageView) findViewById(R.id.eigth_act);
+        questAct = (ImageView) findViewById(R.id.eigth_act);
         questAct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressBar();
-                RequestParams rp = new RequestParams();
-                rp.add("aType", "Quest");
-                rp.add("includeTags", "true");
-                mCntrlMngr.postGetActivityList(AddNewActivity.this, rp);
+                questAct.setImageResource(R.drawable.img_quest_selected);
+                callPostGetActivity("Quest");
             }
         });
 
-        ImageView exoticAct = (ImageView) findViewById(R.id.ninth_act);
+        exoticAct = (ImageView) findViewById(R.id.ninth_act);
         exoticAct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressBar();
-                RequestParams rp = new RequestParams();
-                rp.add("aType", "Exotic");
-                rp.add("includeTags", "true");
-                mCntrlMngr.postGetActivityList(AddNewActivity.this, rp);
+                exoticAct.setImageResource(R.drawable.img_exotic_selected);
+                callPostGetActivity("Exotic");
             }
         });
         //todo handle adscard here
@@ -165,15 +157,37 @@ public class AddNewActivity extends BaseActivity implements Observer {
 //        }
     }
 
+    private void setButtonDefaultStates() {
+        exoticAct.setImageResource(R.drawable.img_exotic);
+        questAct.setImageResource(R.drawable.img_quest);
+        storyAct.setImageResource(R.drawable.img_story);
+        patrolAct.setImageResource(R.drawable.img_patrol);
+        strikeAct.setImageResource(R.drawable.img_strikes);
+        crucibleAct.setImageResource(R.drawable.img_cruicible);
+        arenaAct.setImageResource(R.drawable.img_arena);
+        raiddAct.setImageResource(R.drawable.img_raids);
+        featuredAct.setImageResource(R.drawable.img_featured);
+    }
+
+    private void callPostGetActivity(String type) {
+        showProgressBar();
+        RequestParams rp = new RequestParams();
+        rp.add("aType", type);
+        rp.add("includeTags", "true");
+        mCntrlMngr.postGetActivityList(AddNewActivity.this, rp);
+    }
+
     private void checkIfAdFlow(boolean ads, String adP) {
         if(ads) {
-            //start new activity for add event creation
-            Intent regIntent = new Intent(AddNewActivity.this,
-                    AddFinalActivity.class);
-            regIntent.putExtra("userdata", user);
-            regIntent.putExtra("adcard", ads);
-            regIntent.putExtra("adCardId", adP);
-            startActivity(regIntent);
+            if(adP!=null) {
+                //start new activity for add event creation
+                Intent regIntent = new Intent(AddNewActivity.this,
+                        AddFinalActivity.class);
+                //regIntent.putExtra("userdata", user);
+                regIntent.putExtra("adcard", ads);
+                regIntent.putExtra("adCardId", adP);
+                startActivity(regIntent);
+            }
         }
     }
 
@@ -190,6 +204,7 @@ public class AddNewActivity extends BaseActivity implements Observer {
     public void showError(String err) {
         hideProgressBar();
         setErrText(err);
+        setButtonDefaultStates();
     }
 
 
@@ -200,19 +215,26 @@ public class AddNewActivity extends BaseActivity implements Observer {
             //start new activity for add event creation
             Intent regIntent = new Intent(AddNewActivity.this,
                     AddFinalActivity.class);
-            regIntent.putExtra("userdata", user);
+            //regIntent.putExtra("userdata", user);
             startActivity(regIntent);
         }
     }
 
     private void launchListActivityAndFinish() {
         Intent i=new Intent (this, ListActivityFragment.class);
-        i.putExtra("userdata", user);
-//        if(localPushEventObj!=null){
-//            i.putExtra("eventIntent", localPushEventObj);
-//        }
         startActivity(i);
         finish();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setButtonDefaultStates();
     }
 
     @Override

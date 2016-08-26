@@ -7,7 +7,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="?attr/selectableItemBackground"
-        android:gravity="center"
+        android:layout_gravity="center"
         android:textSize="16dip"
         android:textColor="#ffffff"
         android:singleLine="true" />

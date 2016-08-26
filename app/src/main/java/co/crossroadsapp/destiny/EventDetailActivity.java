@@ -1,18 +1,31 @@
 package co.crossroadsapp.destiny;
 
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
+import android.util.SparseArray;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -28,6 +41,7 @@ import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.PlayerData;
 import co.crossroadsapp.destiny.data.PushNotification;
 import co.crossroadsapp.destiny.data.UserData;
+import co.crossroadsapp.destiny.network.AddCommentNetwork;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
 import co.crossroadsapp.destiny.network.EventRelationshipHandlerNetwork;
 import co.crossroadsapp.destiny.network.EventSendMessageNetwork;
@@ -47,7 +61,12 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -104,6 +123,13 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private String eventId;
     private SwipeFrameLayout cardStackLayout;
     private String upcomingDate;
+    private ImageView background;
+    private ViewPager viewPager;
+    private PagerAdapter pagerAdapter;
+    private RelativeLayout commentLayout;
+    private EditText sendMsg;
+    private ImageView sendMsgBtn;
+    private TabLayout tabLayout;
 //    private TextView errText;
 //    private ImageView close_err;
 
@@ -113,12 +139,16 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         setContentView(R.layout.event_detail_list);
 
         Bundle b = getIntent().getExtras();
-        user = b.getParcelable("userdata");
+//        user = b.getParcelable("userdata");
+
+        setTRansparentStatusBar();
 
         joinBtn = (TextView) findViewById(R.id.join_btn);
         leaveBtn = (TextView) findViewById(R.id.leave_btn);
         msgallBtn = (TextView) findViewById(R.id.messageall_btn);
         bottomBtnLayout = (RelativeLayout) findViewById(R.id.detail_bottom_btn);
+
+        background = (ImageView) findViewById(R.id.background);
 
         progressBar = (RelativeLayout) findViewById(R.id.progress_bar_eventdetail_layout);
 
@@ -130,9 +160,11 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         controlManager.setCurrentActivity(EventDetailActivity.this);
 
+        user = controlManager.getUserData();
+
         _handler = new Handler();
 
-        userProfile = (CircularImageView) findViewById(R.id.userProfile_event);
+        //userProfile = (CircularImageView) findViewById(R.id.userProfile_event);
 
         currEvent = new EventData();
 
@@ -140,14 +172,38 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         currEvent = inst.getData();
         //joinBtnActive = inst.getJoinVisible();
 
+        TextView tagText = (TextView) findViewById(R.id.event_tag_text);
+
+        if(currEvent!=null && currEvent.getActivityData().getTag()!=null && !currEvent.getActivityData().getTag().isEmpty()) {
+            tagText.setVisibility(View.VISIBLE);
+            tagText.setText(currEvent.getActivityData().getTag());
+            Util.roundCorner(tagText, EventDetailActivity.this);
+        }
+
+        //load background image
+        Util.picassoLoadImageWithoutMeasurement(getApplicationContext(), background, currEvent.getActivityData().getaImagePath(), R.drawable.img_b_g_d_e_f_a_u_l_t);
+
         eventProfileImg = (ImageView) findViewById(R.id.event_detail_icon);
         eventName = (TextView) findViewById(R.id.activity_name_detail);
-        eventSubName = (TextView) findViewById(R.id.activity_player_name_detail);
-        eventSubNameLF = (TextView) findViewById(R.id.activity_player_name_lf_detail);
-        eventLight = (TextView) findViewById(R.id.activity_aLight_detail);
+//        eventSubName = (TextView) findViewById(R.id.activity_player_name_detail);
+//        eventSubNameLF = (TextView) findViewById(R.id.activity_player_name_lf_detail);
+//        eventLight = (TextView) findViewById(R.id.activity_aLight_detail);
         back = (ImageView) findViewById(R.id.eventdetail_backbtn);
         share = (ImageView) findViewById(R.id.eventdetail_sharebtn);
         eventDetailDate = (TextView) findViewById(R.id.eventDetailDate);
+
+        commentLayout = (RelativeLayout) findViewById(R.id.send_comment_layout);
+
+        sendMsg = (EditText) findViewById(R.id.comment_edittext);
+        sendMsg.addTextChangedListener(mTextEditorWatcher);
+        sendMsgBtn = (ImageView) findViewById(R.id.send_msg_btn);
+
+        sendMsgBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMsgBtnClick();
+            }
+        });
 
         sendmsg_bckgrnd = (RelativeLayout) findViewById(R.id.sendmsg_background);
 
@@ -162,10 +218,17 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             @Override
             public void onClick(View v) {
                 shareIt();
+                //tracking share click
+                Map<String, String> json = new HashMap<String, String>();
+                if(currEvent!=null && currEvent.getEventId()!=null && !currEvent.getEventId().isEmpty()) {
+                    json.put("eventId", currEvent.getEventId().toString());
+                    Util.postTracking(json, EventDetailActivity.this, controlManager);
+                }
             }
         });
 
         editText = (EditText) findViewById(R.id.edittext);
+
         editText.addTextChangedListener(mTextEditorWatcher);
 
         mCharacter = (TextView) findViewById(R.id.character_count);
@@ -193,25 +256,29 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         }
 
         if (currEvent.getActivityData().getActivitySubtype() != null) {
-            eventName.setText(currEvent.getActivityData().getActivitySubtype());
+            String name = currEvent.getActivityData().getActivitySubtype();
+            if(currEvent.getActivityData().getActivityDifficulty()!=null && !currEvent.getActivityData().getActivityDifficulty().isEmpty() && !currEvent.getActivityData().getActivityDifficulty().equalsIgnoreCase("null")) {
+                name = name + " - " + currEvent.getActivityData().getActivityDifficulty();
+            }
+            eventName.setText(name);
         }
 
-        if (currEvent.getActivityData().getActivityLight() > 0) {
-            // unicode to show star
-            String st = "\u2726";
-            eventLight.setText(st + currEvent.getActivityData().getActivityLight());
-        } else if (currEvent.getActivityData().getActivityLevel() > 0) {
-            eventLight.setText("lvl " + currEvent.getActivityData().getActivityLevel());
-        }
+//        if (currEvent.getActivityData().getActivityLight() > 0) {
+//            // unicode to show star
+//            String st = "\u2726";
+//            eventLight.setText(st + currEvent.getActivityData().getActivityLight());
+//        } else if (currEvent.getActivityData().getActivityLevel() > 0) {
+//            eventLight.setText("lvl " + currEvent.getActivityData().getActivityLevel());
+//        }
 
-        if (currEvent.getActivityData().getActivityCheckpoint() != null && (!currEvent.getActivityData().getActivityCheckpoint().equalsIgnoreCase("null"))) {
+        if (currEvent.getActivityData().getActivityCheckpoint() != null && !currEvent.getActivityData().getActivityCheckpoint().equalsIgnoreCase("null") && !currEvent.getActivityData().getActivityCheckpoint().isEmpty()) {
             eventCheckpoint.setVisibility(View.VISIBLE);
             eventCheckpoint.setText(currEvent.getActivityData().getActivityCheckpoint());
         }
 
-        if (user.getImageUrl() != null) {
-            Util.picassoLoadIcon(EventDetailActivity.this, userProfile, user.getImageUrl(), R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.img_avatar_you);
-        }
+//        if (user.getImageUrl() != null) {
+//            Util.picassoLoadIcon(EventDetailActivity.this, userProfile, user.getImageUrl(), R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.img_avatar_you);
+//        }
 
         checkUserIsPlayer();
         joinBtn.setOnClickListener(new View.OnClickListener() {
@@ -242,6 +309,8 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             }
         });
 
+        RelativeLayout checkpointDatLayout = (RelativeLayout) findViewById(R.id.checkpoint_date_layout);
+
         if (currEvent.getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING)) {
             upcomingDate = Util.convertUTCtoReadable(currEvent.getLaunchDate());
             if (upcomingDate != null) {
@@ -249,13 +318,14 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             }
         } else {
             eventDetailDate.setText("");
+            if(eventCheckpoint.getVisibility()!=View.VISIBLE) {
+                checkpointDatLayout.setVisibility(View.GONE);
+            }
         }
 
         setPlayerNames();
 
         userIsPlayer = checkUserIsPlayer();
-
-        setBottomButtonSelection();
 
         sendMessageLayout = (RelativeLayout) findViewById(R.id.send_message_layout);
 
@@ -271,18 +341,64 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         //checkLeaveBtn();
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.event_player);
-
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        mAdapter = new CurrentEventsViewAdapter(currEvent.getPlayerData());
-
-        mRecyclerView.setAdapter(mAdapter);
+//        mRecyclerView = (RecyclerView) findViewById(R.id.event_player);
+//
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//
+//        mAdapter = new CurrentEventsViewAdapter(currEvent.getPlayerData());
+//
+//        mRecyclerView.setAdapter(mAdapter);
 
         msgallBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendMsgToAll();
+            }
+        });
+
+        // Get the ViewPager and set it's PagerAdapter so that it can display items
+        viewPager = (ViewPager) findViewById(R.id.eventdetail_viewpager);
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), EventDetailActivity.this);
+        viewPager.setAdapter(pagerAdapter);
+
+        setBottomButtonSelection();
+
+        //viewpager change listener
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if(position==1) {
+                    changeBottomButtomForComments();
+                    if(currEvent!=null && currEvent.getEventId()!=null) {
+                        removeNotiById(currEvent.getEventId());
+                    }
+                } else if(position==0) {
+                    setBottomButtonSelection();
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        // Give the TabLayout the ViewPager
+        tabLayout = (TabLayout) findViewById(R.id.eventdetail_tab_layout);
+        tabLayout.setupWithViewPager(viewPager);
+
+        setCommentTabCount();
+
+        viewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                viewPager.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
             }
         });
 
@@ -329,16 +445,116 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 //                .addContentMetadata("activityName", currEvent.getActivityData().getActivitySubtype())
 //                .addContentMetadata("eventId", currEvent.getEventId());
 
-        registerFirbase();
-
         showNotifications();
 
+    }
+
+    private void changeBottomButtomForComments() {
+        if(userIsPlayer) {
+            bottomBtnLayout.setVisibility(View.VISIBLE);
+            joinBtn.setVisibility(View.GONE);
+            leaveBtn.setVisibility(View.GONE);
+            msgallBtn.setVisibility(View.GONE);
+            commentLayout.setVisibility(View.VISIBLE);
+        } else {
+            setBottomButtonSelection();
+        }
+    }
+
+    private void setCommentTabCount() {
+        if(tabLayout!=null) {
+            // Iterate over all tabs and set the custom view
+            for (int i = 0; i < tabLayout.getTabCount(); i++) {
+                TabLayout.Tab tab = tabLayout.getTabAt(i);
+                tab.setCustomView(pagerAdapter.getTabView(i));
+            }
+        }
+    }
+
+    class PagerAdapter extends FragmentPagerAdapter {
+
+        String tabTitles[] = new String[] { "FIRETEAM", "COMMENTS" };
+        Context context;
+        SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
+
+        public PagerAdapter(FragmentManager fm, Context context) {
+            super(fm);
+            this.context = context;
+        }
+
+        @Override
+        public int getCount() {
+            return tabTitles.length;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+
+            switch (position) {
+                case 0:
+                    return EventDetailsFragments.newInstance(0, EventDetailActivity.this, currEvent);
+                case 1:
+                    return EventDetailsFragments.newInstance(1, EventDetailActivity.this, null);
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            // Generate title based on item position
+            if(position==0) {
+                return tabTitles[position];
+            }else {
+                return tabTitles[position] + " (" + currEvent.getCommentDataList().size() + ")";
+            }
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            Fragment fragment = (Fragment) super.instantiateItem(container, position);
+            //registeredFragments.put(position, fragment);
+            return fragment;
+        }
+
+        public View getTabView(int position) {
+            View tab = LayoutInflater.from(EventDetailActivity.this).inflate(R.layout.custom_tab, null);
+            TextView tv = (TextView) tab.findViewById(R.id.custom_text);
+            tv.setTypeface(Typeface.SANS_SERIF, 1);
+            tv.setPadding(0, 25, Util.dpToPx(21, EventDetailActivity.this), 0);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            if(position==0) {
+                tv.setText(tabTitles[position]);
+            }else {
+                tv.setText(tabTitles[position] + " (" + currEvent.getCommentDataList().size() + ")");
+            }
+            return tab;
+        }
+    }
+
+    private void updateCurrentFrag() {
+        Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.eventdetail_viewpager + ":" + 0);
+        if (page != null) {
+            ((EventDetailsFragments) page).updateCurrListAdapter(currEvent, 0);
+        }
+
+        page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.eventdetail_viewpager + ":" + 1);
+        if (page != null) {
+            ((EventDetailsFragments) page).updateCurrListAdapter(currEvent, 1);
+        }
+        pagerAdapter.notifyDataSetChanged();
+        setCommentTabCount();
     }
 
     private void generateBranchObject() {
         if (currEvent != null) {
             String actName = currEvent.getActivityData().getActivitySubtype();
-            String grpName = controlManager.getGroupObj(currEvent.getClanId()).getGroupName();
+            String grpName="";
+            if(currEvent.getClanId()!=null) {
+                if (controlManager.getGroupObj(currEvent.getClanId()) != null) {
+                    grpName = controlManager.getGroupObj(currEvent.getClanId()).getGroupName()!=null?controlManager.getGroupObj(currEvent.getClanId()).getGroupName():"";
+                }
+            }
             String deepLinkTitle = " ";
             String deepLinkMsg = " ";
             String console = getDeepLinkConsoleType();
@@ -438,10 +654,21 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        registerFirbase();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterFirebase();
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         unregisterReceiver(ReceivefromService);
-        unregisterFirebase();
     }
 
     private void registerFirbase() {
@@ -459,6 +686,13 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                 }
             }
         }
+    }
+
+    public EventData getCurrentEventData() {
+        if(currEvent!=null) {
+            return currEvent;
+        }
+        return null;
     }
 
     private void setupEventListener() {
@@ -517,12 +751,33 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     };
 
     private void setBottomButtonSelection() {
-        if(checkUserIsCreator()){
-            if((this.currEvent.getPlayerData()!=null) && this.currEvent.getPlayerData().size()>1) {
+        int p=5;
+        if(viewPager!=null) {
+            p = viewPager.getCurrentItem();
+        }
+        if(p==1) {
+            if(checkUserIsPlayer()) {
                 bottomBtnLayout.setVisibility(View.VISIBLE);
-                leaveBtn.setVisibility(View.GONE);
                 joinBtn.setVisibility(View.GONE);
-                msgallBtn.setVisibility(View.VISIBLE);
+                leaveBtn.setVisibility(View.GONE);
+                msgallBtn.setVisibility(View.GONE);
+                commentLayout.setVisibility(View.VISIBLE);
+            }else {
+                setBottomBtn();
+            }
+        }else {
+            setBottomBtn();
+        }
+    }
+
+    private void setBottomBtn() {
+        commentLayout.setVisibility(View.GONE);
+        if (checkUserIsCreator()) {
+            if ((this.currEvent.getPlayerData() != null) && this.currEvent.getPlayerData().size() > 1) {
+                bottomBtnLayout.setVisibility(View.VISIBLE);
+                leaveBtn.setVisibility(View.VISIBLE);
+                joinBtn.setVisibility(View.GONE);
+                msgallBtn.setVisibility(View.GONE);
             } else {
                 bottomBtnLayout.setVisibility(View.VISIBLE);
                 leaveBtn.setVisibility(View.VISIBLE);
@@ -534,7 +789,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             leaveBtn.setVisibility(View.VISIBLE);
             joinBtn.setVisibility(View.GONE);
             msgallBtn.setVisibility(View.GONE);
-        } else if(!currEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)){
+        } else if (!currEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)) {
             bottomBtnLayout.setVisibility(View.VISIBLE);
             leaveBtn.setVisibility(View.GONE);
             joinBtn.setVisibility(View.VISIBLE);
@@ -598,17 +853,19 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             allNamesRem = " " + "LF" +reqPlayer+"M";
         }
 
-        eventSubName.setText(allNames);
-        eventSubNameLF.setText(allNamesRem);
+//        eventSubName.setText(allNames);
+//        eventSubNameLF.setText(allNamesRem);
     }
 
     @Override
     public void update(Observable observable, Object data) {
-            hideProgress();
-            if (observable instanceof EventRelationshipHandlerNetwork || observable instanceof EventByIdNetwork) {
+        hideProgress();
+        hideProgressBar();
+            if (observable instanceof EventRelationshipHandlerNetwork || observable instanceof EventByIdNetwork || observable instanceof AddCommentNetwork) {
                 this.currEvent = (EventData) data;
                 if (currEvent != null) {
                     if ((currEvent.getPlayerData() != null) && (currEvent.getPlayerData().size()>0)) {
+                        updateCurrentFrag();
                         if (mAdapter != null) {
                             mAdapter.playerLocal.clear();
                             mAdapter.addItem(currEvent.getPlayerData());
@@ -647,6 +904,16 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             }
         }
         return false;
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setTRansparentStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
     }
 
     private boolean checkUserIsCreator() {
@@ -821,6 +1088,39 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         return null;
     }
 
+    private String getSendMsgEditText() {
+        if (sendMsg != null) {
+            if (sendMsg.getText() != null) {
+                if (sendMsg.getText().toString().length() > 0) {
+                    return sendMsg.getText().toString();
+                }
+            }
+        }
+        return null;
+    }
+
+    private void sendMsgBtnClick() {
+        if (currEvent != null && currEvent.getEventId() != null) {
+            String msg = getSendMsgEditText();
+            sendMsg.setText("");
+            // Check if no view has focus:
+            View view = this.getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+            if(msg!=null) {
+                if (msg.trim().length() > 0) {
+                    showProgressBar();
+                    RequestParams params = new RequestParams();
+                    params.put("eId", currEvent.getEventId());
+                    params.put("text", msg);
+                    controlManager.postComments(EventDetailActivity.this, params);
+                }
+            }
+        }
+    }
+
     private void sendMessage(final String currentPlayerId, final String msg) {
         //final String pId = currentPlayerId;
 //        if (editText != null) {
@@ -844,7 +1144,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
     private void launchListActivityAndFinish() {
         Intent i=new Intent (this, ListActivityFragment.class);
-        i.putExtra("userdata", user);
+        //i.putExtra("userdata", user);
         startActivity(i);
         currEvent = null;
         finish();
@@ -856,7 +1156,9 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             sendmsg_bckgrnd.setVisibility(View.GONE);
             hideKeyboard();
         } else {
-            launchListActivityAndFinish();
+            currEvent = null;
+            finish();
+            //launchListActivityAndFinish();
         }
     }
 
@@ -872,7 +1174,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         // filter event related message notification
         getEventNotification(currEvent);
         if(eventNotiList!=null && (!eventNotiList.isEmpty())) {
-            cardStackLayout.setVisibility(View.VISIBLE);
+            //cardStackLayout.setVisibility(View.VISIBLE);
         }
         if(n==0) {
             if(eventNotiList!=null && (!eventNotiList.isEmpty())){
@@ -885,46 +1187,46 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         }
 
 
-        cardStack = null;
-        cardStack = (SwipeDeck) findViewById(R.id.swipe_deck);
-        if(adapter != null) {
-            adapter = null;
-        }
+//        cardStack = null;
+//        cardStack = (SwipeDeck) findViewById(R.id.swipe_deck);
+//        if(adapter != null) {
+//            adapter = null;
+//        }
+//
+//        adapter = new SwipeStackAdapter(eventNotiList, this);
+//        cardStack.setAdapter(adapter);
+//        adapter.notifyDataSetChanged();
 
-        adapter = new SwipeStackAdapter(eventNotiList, this);
-        cardStack.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-
-        cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
-            @Override
-            public void cardSwipedLeft(int position) {
-                checkAndRemoveNoti(EventDetailActivity.this, position, adapter);
-                //notiList.remove(position);
-
-            }
-
-            @Override
-            public void cardSwipedRight(int position) {
-                checkAndRemoveNoti(EventDetailActivity.this, position, adapter);
-            }
-
-            @Override
-            public void cardsDepleted() {
-                if(eventNotiList.isEmpty()) {
-                    cardStackLayout.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void cardActionDown() {
-
-            }
-
-            @Override
-            public void cardActionUp() {
-
-            }
-        });
+//        cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
+//            @Override
+//            public void cardSwipedLeft(int position) {
+//                checkAndRemoveNoti(EventDetailActivity.this, position, adapter);
+//                //notiList.remove(position);
+//
+//            }
+//
+//            @Override
+//            public void cardSwipedRight(int position) {
+//                checkAndRemoveNoti(EventDetailActivity.this, position, adapter);
+//            }
+//
+//            @Override
+//            public void cardsDepleted() {
+//                if(eventNotiList.isEmpty()) {
+//                    cardStackLayout.setVisibility(View.GONE);
+//                }
+//            }
+//
+//            @Override
+//            public void cardActionDown() {
+//
+//            }
+//
+//            @Override
+//            public void cardActionUp() {
+//
+//            }
+//        });
 
     }
 }
