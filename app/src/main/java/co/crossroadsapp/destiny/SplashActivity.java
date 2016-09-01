@@ -14,14 +14,17 @@ import android.widget.RelativeLayout;
 import com.crashlytics.android.answers.Answers;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.applinks.AppLinkData;
 import com.google.android.gms.appinvite.AppInvite;
 import com.google.android.gms.appinvite.AppInviteInvitationResult;
 import com.google.android.gms.appinvite.AppInviteReferral;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.mixpanel.android.mpmetrics.MPConfig;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import io.fabric.sdk.android.Fabric;
 
@@ -44,11 +47,12 @@ import io.branch.referral.util.LinkProperties;
  */
 //public class SplashActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener {
 public class SplashActivity extends BaseActivity{
-    private static final int SPLASH_DELAY = 500;
+    private static final int SPLASH_DELAY = 1000;
     private Handler mHandler;
     private RelativeLayout mLayout;
     private ControlManager cManager;
     private GoogleApiClient mGoogleApiClient;
+    private Map<String, String> jsonFacebook;
 //    private RelativeLayout errLayout;
 //    private TextView errText;
 //    private ImageView close_err;
@@ -62,13 +66,17 @@ public class SplashActivity extends BaseActivity{
         FacebookSdk.sdkInitialize(SplashActivity.this);
         AppEventsLogger.activateApp(SplashActivity.this);
         setContentView(R.layout.splash_loading);
+        mHandler = new Handler();
+        cManager = ControlManager.getmInstance();
+        cManager.setClient(SplashActivity.this);
+        cManager.setCurrentActivity(SplashActivity.this);
         //mixpanel token
-        String projectToken =  getResources().getString(R.string.mix_panel_token);//"23f27698695b0137adfef97f173b9f91";
+        String projectToken =  getResources().getString(R.string.mix_panel_token);
         MixpanelAPI mixpanel = MixpanelAPI.getInstance(SplashActivity.this, projectToken);
+        cManager.addClientHeader("x-mixpanelid", mixpanel.getDistinctId()!=null?mixpanel.getDistinctId():"");
+
         // Automatic session tracking
         //Branch.getAutoInstance(this);
-        cManager = ControlManager.getmInstance();
-        mHandler = new Handler();
         mLayout = (RelativeLayout) findViewById(R.id.splash_layout);
         if(mLayout!=null) {
             mLayout.setVisibility(View.VISIBLE);
@@ -77,47 +85,16 @@ public class SplashActivity extends BaseActivity{
             mLayout.startAnimation(anim);
         }
 
-        //deeplink handling
-        // Build GoogleApiClient with AppInvite API for receiving deep links
-//        mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                .enableAutoManage(this, this)
-//                .addApi(AppInvite.API)
-//                .build();
-//
-//        // Check if this app was launched from a deep link. Setting autoLaunchDeepLink to true
-//        // would automatically launch the deep link if one is found.
-//        boolean autoLaunchDeepLink = true;
-//        AppInvite.AppInviteApi.getInvitation(mGoogleApiClient, this, autoLaunchDeepLink)
-//                .setResultCallback(
-//                        new ResultCallback<AppInviteInvitationResult>() {
-//                            @Override
-//                            public void onResult(@NonNull AppInviteInvitationResult result) {
-//                                if (result.getStatus().isSuccess()) {
-//                                    // Extract deep link from Intent
-//                                    Intent intent = result.getInvitationIntent();
-//                                    String deepLink = AppInviteReferral.getDeepLink(intent);
-//
-//                                    // Handle the deep link. For example, open the linked
-//                                    // content, or apply promotional credit to the user's
-//                                    // account.
-//
-//                                    mHandler.postDelayed(new Runnable() {
-//                                        @Override
-//                                        public void run() {
-//                                            Intent homeIntent = new Intent(getApplicationContext(),
-//                                                    MainActivity.class);
-//                                            startActivity(homeIntent);
-//                                            overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-//                                            finish();
-//                                        }
-//
-//                                    }, SPLASH_DELAY);
-//                                    // ...
-//                                } else {
-//                                    TravellerLog.d(this, "getInvitation: no deep link found.");
-//                                }
-//                            }
-//                        });
+        //Starting service for listening ad callbacks
+        String s = Util.getDefaults("appInstall", SplashActivity.this);
+        if (s==null) {
+            Util.setDefaults("appInstall", Constants.UNKNOWN_SOURCE, SplashActivity.this);
+            Intent in = new Intent(SplashActivity.this, CallbackService.class);
+            SplashActivity.this.startService(in);
+        } else if(s.equalsIgnoreCase(Constants.UNKNOWN_SOURCE)) {
+            Util.setOrganicAppInstall(cManager);
+        }
+
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -129,6 +106,22 @@ public class SplashActivity extends BaseActivity{
             }
 
         }, SPLASH_DELAY);
+    }
+
+    private void checkAppInstall(final Map<String, String> json) {
+        String s = Util.getDefaults("appInstall", SplashActivity.this);
+        if (s==null) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Util.postTracking(json, SplashActivity.this, cManager, "appInstall");
+                    if (json != null && json.containsKey("ads")) {
+                        Util.setDefaults("appInstall", json.get("ads"), SplashActivity.this);
+                    }
+                }
+
+            }, 500);
+        }
     }
 
     @Override
@@ -144,7 +137,7 @@ public class SplashActivity extends BaseActivity{
         if (s!=null && s.getData()!=null) {
             if (s.getData().toString().toLowerCase().contains("dlcsrd")) {
                 //tracking
-                json.put("source", "branch");
+                json.put("source", Constants.BRANCH_SOURCE);
                 branch.initSession(new Branch.BranchUniversalReferralInitListener() {
                     @Override
                     public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError error) {
@@ -153,6 +146,11 @@ public class SplashActivity extends BaseActivity{
                             Branch.getInstance().resetUserSession();
                             // params are the deep linked params associated with the link that the user clicked before showing up
                             if (branchUniversalObject != null) {
+                                Map<String, String> jsonBranch = new HashMap<String, String>();
+                                jsonBranch.put("ads", Constants.BRANCH_SOURCE);
+//                                Util.postTracking(jsonBranch, SplashActivity.this, cManager, "appInstall");
+//                                Util.setDefaults("appInstall", "branch", SplashActivity.this);
+                                checkAppInstall(jsonBranch);
                                 if (branchUniversalObject.getMetadata().containsKey("eventId") && branchUniversalObject.getMetadata().containsKey("activityName")) {
                                     String eId = branchUniversalObject.getMetadata().get("eventId");
                                     String aName = branchUniversalObject.getMetadata().get("activityName");
@@ -168,14 +166,14 @@ public class SplashActivity extends BaseActivity{
                 }, this.getIntent().getData(), this);
             } else {
                 //tracking
-                json.put("source", "unknown");
+                json.put("source", Constants.UNKNOWN_SOURCE);
             }
         } else {
             //tracking
-            json.put("source", "unknown");
+            json.put("source", Constants.UNKNOWN_SOURCE);
         }
 
-        Util.postTracking(json, SplashActivity.this, cManager);
+        Util.postTracking(json, SplashActivity.this, cManager, "appInit");
     }
 
     @Override

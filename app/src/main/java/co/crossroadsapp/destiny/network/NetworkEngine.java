@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import co.crossroadsapp.destiny.ControlManager;
 import co.crossroadsapp.destiny.utils.TravellerLog;
 import co.crossroadsapp.destiny.utils.Util;
 import com.loopj.android.http.AsyncHttpClient;
@@ -16,6 +17,7 @@ import com.loopj.android.http.RequestParams;
  */
 public class NetworkEngine {
 
+    private final ControlManager mManager;
     PersistentCookieStore myCookieStore;
     private static NetworkEngine mInstance;
 
@@ -28,24 +30,14 @@ public class NetworkEngine {
     //private final static String BASE_URL = "https://travelerbackendproduction.herokuapp.com/api/v1/";
 
     private NetworkEngine(Context c) {
+        mManager = ControlManager.getmInstance();
         client = new AsyncHttpClient();
-        client.addHeader("x-osversion", String.valueOf(android.os.Build.VERSION.SDK_INT));
-        client.addHeader("x-devicetype", android.os.Build.MANUFACTURER);
-        client.addHeader("x-devicemodel", android.os.Build.MODEL);
-        try {
-            PackageInfo pInfo = c.getPackageManager().getPackageInfo(c.getPackageName(), 0);
-            String version = pInfo.versionName;
-            if(version!=null) {
-                client.addHeader("x-appversion", version);
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+        if(mManager.getClient()!=null) {
+            client = mManager.getClient();
+        } else {
+            mManager.setClient(c);
+            client = mManager.getClient();
         }
-        client.addHeader("x-fbooksdk", "facebook-android-sdk:[4,5)");
-        client.addHeader("x-fbasesdk", "firebase-9.2.0");
-        client.addHeader("x-mpsdk", "mixpanel-android:4.+");
-        client.addHeader("x-branchsdk", "branch-library:1.+");
-        client.addHeader("x-fabricsdk", "answers:1.3.8@aar");
         myCookieStore = new PersistentCookieStore(c);
         //myCookieStore.clear();
         if(myCookieStore!=null) {

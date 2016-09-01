@@ -174,15 +174,6 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         TextView tagText = (TextView) findViewById(R.id.event_tag_text);
 
-        if(currEvent!=null && currEvent.getActivityData().getTag()!=null && !currEvent.getActivityData().getTag().isEmpty()) {
-            tagText.setVisibility(View.VISIBLE);
-            tagText.setText(currEvent.getActivityData().getTag());
-            Util.roundCorner(tagText, EventDetailActivity.this);
-        }
-
-        //load background image
-        Util.picassoLoadImageWithoutMeasurement(getApplicationContext(), background, currEvent.getActivityData().getaImagePath(), R.drawable.img_b_g_d_e_f_a_u_l_t);
-
         eventProfileImg = (ImageView) findViewById(R.id.event_detail_icon);
         eventName = (TextView) findViewById(R.id.activity_name_detail);
 //        eventSubName = (TextView) findViewById(R.id.activity_player_name_detail);
@@ -207,6 +198,35 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         sendmsg_bckgrnd = (RelativeLayout) findViewById(R.id.sendmsg_background);
 
+        if(currEvent!=null && currEvent.getActivityData()!=null) {
+            if(currEvent.getActivityData().getTag()!=null && !currEvent.getActivityData().getTag().isEmpty()) {
+                tagText.setVisibility(View.VISIBLE);
+                tagText.setText(currEvent.getActivityData().getTag());
+                Util.roundCorner(tagText, EventDetailActivity.this);
+            }
+
+            if(currEvent.getActivityData().getaImagePath()!=null) {
+                //load background image
+                Util.picassoLoadImageWithoutMeasurement(getApplicationContext(), background, currEvent.getActivityData().getaImagePath(), R.drawable.img_b_g_d_e_f_a_u_l_t);
+            }
+            if (currEvent.getActivityData().getActivityIconUrl() != null) {
+                Util.picassoLoadIcon(EventDetailActivity.this, eventProfileImg, currEvent.getActivityData().getActivityIconUrl(), R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.icon_ghost_default);
+            }
+
+            if (currEvent.getActivityData().getActivitySubtype() != null) {
+                String name = currEvent.getActivityData().getActivitySubtype();
+                if(currEvent.getActivityData().getActivityDifficulty()!=null && !currEvent.getActivityData().getActivityDifficulty().isEmpty() && !currEvent.getActivityData().getActivityDifficulty().equalsIgnoreCase("null")) {
+                    name = name + " - " + currEvent.getActivityData().getActivityDifficulty();
+                }
+                eventName.setText(name);
+            }
+
+            if (currEvent.getActivityData().getActivityCheckpoint() != null && !currEvent.getActivityData().getActivityCheckpoint().equalsIgnoreCase("null") && !currEvent.getActivityData().getActivityCheckpoint().isEmpty()) {
+                eventCheckpoint.setVisibility(View.VISIBLE);
+                eventCheckpoint.setText(currEvent.getActivityData().getActivityCheckpoint());
+            }
+        }
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -222,7 +242,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                 Map<String, String> json = new HashMap<String, String>();
                 if(currEvent!=null && currEvent.getEventId()!=null && !currEvent.getEventId().isEmpty()) {
                     json.put("eventId", currEvent.getEventId().toString());
-                    Util.postTracking(json, EventDetailActivity.this, controlManager);
+                    Util.postTracking(json, EventDetailActivity.this, controlManager, null);
                 }
             }
         });
@@ -250,35 +270,6 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 //                notiBar.setVisibility(View.GONE);
 //            }
 //        });
-
-        if (currEvent.getActivityData().getActivityIconUrl() != null) {
-            Util.picassoLoadIcon(EventDetailActivity.this, eventProfileImg, currEvent.getActivityData().getActivityIconUrl(), R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.icon_ghost_default);
-        }
-
-        if (currEvent.getActivityData().getActivitySubtype() != null) {
-            String name = currEvent.getActivityData().getActivitySubtype();
-            if(currEvent.getActivityData().getActivityDifficulty()!=null && !currEvent.getActivityData().getActivityDifficulty().isEmpty() && !currEvent.getActivityData().getActivityDifficulty().equalsIgnoreCase("null")) {
-                name = name + " - " + currEvent.getActivityData().getActivityDifficulty();
-            }
-            eventName.setText(name);
-        }
-
-//        if (currEvent.getActivityData().getActivityLight() > 0) {
-//            // unicode to show star
-//            String st = "\u2726";
-//            eventLight.setText(st + currEvent.getActivityData().getActivityLight());
-//        } else if (currEvent.getActivityData().getActivityLevel() > 0) {
-//            eventLight.setText("lvl " + currEvent.getActivityData().getActivityLevel());
-//        }
-
-        if (currEvent.getActivityData().getActivityCheckpoint() != null && !currEvent.getActivityData().getActivityCheckpoint().equalsIgnoreCase("null") && !currEvent.getActivityData().getActivityCheckpoint().isEmpty()) {
-            eventCheckpoint.setVisibility(View.VISIBLE);
-            eventCheckpoint.setText(currEvent.getActivityData().getActivityCheckpoint());
-        }
-
-//        if (user.getImageUrl() != null) {
-//            Util.picassoLoadIcon(EventDetailActivity.this, userProfile, user.getImageUrl(), R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.img_avatar_you);
-//        }
 
         checkUserIsPlayer();
         joinBtn.setOnClickListener(new View.OnClickListener() {

@@ -828,6 +828,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/img_background_map"
         android:visibility="gone"
+        android:clickable="true"
         android:id="@+id/verify_fail">
 
         <ImageView

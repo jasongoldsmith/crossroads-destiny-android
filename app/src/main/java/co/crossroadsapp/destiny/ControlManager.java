@@ -5,8 +5,20 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.graphics.Point;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.nfc.NfcAdapter;
+import android.nfc.NfcManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.WindowManager;
 
 import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.ActivityList;
@@ -42,7 +54,12 @@ import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.ErrorShowDialog;
 import co.crossroadsapp.destiny.utils.TravellerDialogueHelper;
 import co.crossroadsapp.destiny.utils.Version;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
+import com.mixpanel.android.mpmetrics.MPConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -97,6 +114,7 @@ public class ControlManager implements Observer{
     private PrivacyLegalUpdateNetwork legalPrivacyNetwork;
     private AddCommentNetwork addCommentsNetwork;
     private TrackingNetwork trackingNetwork;
+    private AsyncHttpClient client;
 
     public ControlManager() {
     }
@@ -801,5 +819,112 @@ public class ControlManager implements Observer{
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setClient(Context c) {
+        client = new AsyncHttpClient();
+        ConnectivityManager connManager = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        DisplayMetrics metrics = c.getResources().getDisplayMetrics();
+        client.addHeader("$wifi", String.valueOf(mWifi.isConnected()));
+        client.addHeader("$screen_dpi", String.valueOf(metrics.densityDpi));
+        client.addHeader("$screen_height", String.valueOf(metrics.heightPixels));
+        client.addHeader("$screen_width", String.valueOf(metrics.widthPixels));
+        client.addHeader("$android_lib_version", MPConfig.VERSION);
+        client.addHeader("$android_os", "Android");
+        client.addHeader("$android_os_version", Build.VERSION.RELEASE == null ? "UNKNOWN" : Build.VERSION.RELEASE);
+        client.addHeader("$android_manufacturer", Build.MANUFACTURER == null ? "UNKNOWN" : Build.MANUFACTURER);
+        client.addHeader("$android_brand", Build.BRAND == null ? "UNKNOWN" : Build.BRAND);
+        client.addHeader("$android_model", Build.MODEL == null ? "UNKNOWN" : Build.MODEL);
+        try {
+            if (c != null && c.getPackageManager() != null) {
+                if (c.getPackageName() != null) {
+                    PackageInfo pInfo = c.getPackageManager().getPackageInfo(c.getPackageName(), 0);
+                    String version = pInfo.versionName;
+                    if (version != null) {
+                        client.addHeader("$android_app_version", version);
+                        client.addHeader("$android_app_version_code", Integer.toString(pInfo.versionCode));
+                    }
+                }
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        client.addHeader("x-fbooksdk", "facebook-android-sdk:[4,5)");
+        client.addHeader("x-fbasesdk", "firebase-9.2.0");
+        client.addHeader("x-mpsdk", "mixpanel-android:4.+");
+        client.addHeader("x-branchsdk", "branch-library:1.+");
+        client.addHeader("x-fabricsdk", "answers:1.3.8@aar");
+
+        try {
+            try {
+                final int servicesAvailable = GooglePlayServicesUtil.isGooglePlayServicesAvailable(c);
+                switch (servicesAvailable) {
+                    case ConnectionResult.SUCCESS:
+                        client.addHeader("$google_play_services", "available");
+                        break;
+                    case ConnectionResult.SERVICE_MISSING:
+                        client.addHeader("$google_play_services", "missing");
+                        break;
+                    case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
+                        client.addHeader("$google_play_services", "out of date");
+                        break;
+                    case ConnectionResult.SERVICE_DISABLED:
+                        client.addHeader("$google_play_services", "disabled");
+                        break;
+                    case ConnectionResult.SERVICE_INVALID:
+                        client.addHeader("$google_play_services", "invalid");
+                        break;
+                }
+            } catch (RuntimeException e) {
+                // Turns out even checking for the service will cause explosions
+                // unless we've set up meta-data
+                client.addHeader("$google_play_services", "not configured");
+            }
+
+        } catch (NoClassDefFoundError e) {
+            client.addHeader("$google_play_services", "not included");
+        }
+
+        NfcManager managerNfc = (NfcManager) c.getSystemService(Context.NFC_SERVICE);
+        NfcAdapter adapter = managerNfc.getDefaultAdapter();
+        if (adapter != null) {
+            client.addHeader("$has_nfc", String.valueOf(adapter.isEnabled()));
+        }
+
+        TelephonyManager manager = (TelephonyManager)c.getSystemService(Context.TELEPHONY_SERVICE);
+        client.addHeader("$carrier", manager.getNetworkOperator()!=null?manager.getNetworkOperator():"UNKNOWN");
+
+//            client.addHeader("x-osversion", String.valueOf(android.os.Build.VERSION.SDK_INT));
+//            client.addHeader("x-devicetype", android.os.Build.MANUFACTURER);
+//            client.addHeader("x-devicemodel", android.os.Build.MODEL);
+//            try {
+//                if (c != null && c.getPackageManager() != null) {
+//                    if (c.getPackageName() != null) {
+//                        PackageInfo pInfo = c.getPackageManager().getPackageInfo(c.getPackageName(), 0);
+//                        String version = pInfo.versionName;
+//                        if (version != null) {
+//                            client.addHeader("x-appversion", version);
+//                        }
+//                    }
+//                }
+//            } catch (PackageManager.NameNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//            client.addHeader("x-fbooksdk", "facebook-android-sdk:[4,5)");
+//            client.addHeader("x-fbasesdk", "firebase-9.2.0");
+//            client.addHeader("x-mpsdk", "mixpanel-android:4.+");
+//            client.addHeader("x-branchsdk", "branch-library:1.+");
+//            client.addHeader("x-fabricsdk", "answers:1.3.8@aar");
+    }
+
+    public void addClientHeader(String headerKey, String headerValue) {
+        if(client!=null) {
+            client.addHeader(headerKey, headerValue);
+        }
+    }
+
+    public AsyncHttpClient getClient() {
+        return client;
     }
 }

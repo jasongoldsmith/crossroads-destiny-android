@@ -64,6 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="261dp"
         android:id="@+id/background"
+        android:background="@drawable/img_b_g_d_e_f_a_u_l_t"
         android:layout_alignParentTop="true"/>
     <ImageView
         android:layout_width="match_parent"

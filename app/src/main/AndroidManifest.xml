@@ -102,11 +102,11 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <!--<activity-->
-            <!--android:name=".CreateNewEvent"-->
-            <!--android:label="@string/app_name"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/MyTheme" />-->
+        <!-- <activity -->
+        <!-- android:name=".CreateNewEvent" -->
+        <!-- android:label="@string/app_name" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- android:theme="@style/MyTheme" /> -->
         <activity
             android:name=".BaseActivity"
             android:label="@string/title_activity_base"
@@ -131,23 +131,29 @@
             android:name=".UpdateConsoleActivity"
             android:label="@string/title_activity_update_console"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"></activity>
+            android:theme="@android:style/Theme.NoTitleBar" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="11f888057a583a50a91f1434bf728d87358f6d8e"/>
+            android:value="11f888057a583a50a91f1434bf728d87358f6d8e" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:value="@string/facebook_app_id" />
+        android:theme="@android:style/Theme.NoTitleBar" />
         <activity
             android:name=".AddNewActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".AddFinalActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <service
+            android:name=".CallbackService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

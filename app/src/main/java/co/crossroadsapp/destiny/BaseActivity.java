@@ -1,7 +1,9 @@
 package co.crossroadsapp.destiny;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -25,7 +27,9 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.PushNotification;
@@ -42,6 +46,7 @@ public class BaseActivity extends FragmentActivity {
     private ControlManager mManager = ControlManager.getmInstance();
     protected static ArrayList<PushNotification> notiList;
     protected ArrayList<PushNotification> eventNotiList=new ArrayList<PushNotification>();
+    private boolean appBackground;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +57,23 @@ public class BaseActivity extends FragmentActivity {
     @Override
     public void onStart() {
         super.onStart();
+        if(appBackground) {
+            //tracking resume
+            Map<String, String> json = new HashMap<String, String>();
+            Util.postTracking(json, null, mManager, null);
+            appBackground = false;
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+        ComponentName componentInfo = taskInfo.get(0).topActivity;
+        if(!componentInfo.getPackageName().equalsIgnoreCase(getApplicationContext().getPackageName())){
+            appBackground = true;
+        }
     }
 
     @Override

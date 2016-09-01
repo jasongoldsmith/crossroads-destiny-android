@@ -89,6 +89,11 @@ public class Constants {
 
     public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
+    public static final String UNKNOWN_SOURCE = "unknown";
+    public static final String ORGANIC_SOURCE = "organic";
+    public static final String FACEBOOK_SOURCE = "facebook";
+    public static final String BRANCH_SOURCE = "branch";
+
     //urls
     public static String DEEP_LINK_IMAGE = "http://w3.crossroadsapp.co/bungie/share/branch/v1/";
 }

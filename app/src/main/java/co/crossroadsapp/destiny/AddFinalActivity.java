@@ -118,7 +118,6 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
     boolean ads=false;
     String adP=null;
-    private boolean adActivity = false;
     private ActivityData ad;
 
     @Override
@@ -139,7 +138,6 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         if(b!=null) {
             ads = b.getBoolean("adcard");
             adP = b.getString("adCardId");
-            adActivity = ads;
         }
 
         back = (ImageView) findViewById(R.id.back_btn);
@@ -233,12 +231,13 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         createNewEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (finalAct!=null) {
+                if (finalAct!=null && user!=null) {
                     hideProgressBar();
                     showProgressBar();
-                                    //linlaHeaderProgress.setVisibility(View.VISIBLE);
                     String dateTime = getCreateEventDateTime();
-                    mCntrlMngr.postCreateEvent(finalAct.getId(), user.getUserId(), finalAct.getMinPlayer(), finalAct.getMaxPlayer(), dateTime, AddFinalActivity.this);
+                    if(finalAct.getId()!=null && user.getUserId()!=null) {
+                        mCntrlMngr.postCreateEvent(finalAct.getId(), user.getUserId(), finalAct.getMinPlayer(), finalAct.getMaxPlayer(), dateTime, AddFinalActivity.this);
+                    }
                 }
             }
         });
@@ -283,8 +282,8 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         String actIconUrl = null;
         String backg = null;
         String subType = null;
-        int level;
-        int light;
+        int level=0;
+        int light=0;
         String description = null;
         String levelText = null;
         String lightText = null;
@@ -322,21 +321,23 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                 }
             }
         } else {
-            actIconUrl = activity.get(0).getActivityIconUrl();
-            backg = activity.get(0).getaImagePath();
-            subType = activity.get(0).getActivitySubtype();
-            level = activity.get(0).getActivityLevel();
-            light = activity.get(0).getActivityLight();
-            description = activity.get(0).getaDescription();
-            location = activity.get(0).getaLocation();
-            if (activity.get(0).getModifierList() != null && !activity.get(0).getModifierList().isEmpty()) {
-                for (int y = 0; y < activity.get(0).getModifierList().size(); y++) {
-                    modi.add(activity.get(0).getModifierList().get(y).getaModifierName());
+            if (activity != null && activity.get(0) != null) {
+                actIconUrl = activity.get(0).getActivityIconUrl()!=null?activity.get(0).getActivityIconUrl():null;
+                backg = activity.get(0).getaImagePath()!=null?activity.get(0).getaImagePath():null;
+                subType = activity.get(0).getActivitySubtype()!=null?activity.get(0).getActivitySubtype():"";
+                level = activity.get(0).getActivityLevel();
+                light = activity.get(0).getActivityLight();
+                description = activity.get(0).getaDescription()!=null?activity.get(0).getaDescription():"";
+                location = activity.get(0).getaLocation()!=null?activity.get(0).getaLocation():"";
+                if (activity.get(0).getModifierList() != null && !activity.get(0).getModifierList().isEmpty()) {
+                    for (int y = 0; y < activity.get(0).getModifierList().size(); y++) {
+                        modi.add(activity.get(0).getModifierList().get(y).getaModifierName());
+                    }
                 }
-            }
-            if (activity.get(0).getBonusList() != null && !activity.get(0).getBonusList().isEmpty()) {
-                for (int y = 0; y < activity.get(0).getBonusList().size(); y++) {
-                    bonus.add(activity.get(0).getBonusList().get(y).getaBonusName());
+                if (activity.get(0).getBonusList() != null && !activity.get(0).getBonusList().isEmpty()) {
+                    for (int y = 0; y < activity.get(0).getBonusList().size(); y++) {
+                        bonus.add(activity.get(0).getBonusList().get(y).getaBonusName());
+                    }
                 }
             }
         }
@@ -694,7 +695,11 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         }
         if(subD==null || charD==null) {
             if (subT.equalsIgnoreCase(charT)) {
-                row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 0));
+                 row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 0));
+//                RelativeLayout.LayoutParams lp = new RelativeLayout();
+//                lp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+//                lp.height = 0;
+//                row.requestLayout();
                 card.setVisibility(View.GONE);
             } else {
                 card.setVisibility(View.VISIBLE);
@@ -1014,7 +1019,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
     @Override
     public void onBackPressed() {
-        if(adActivity) {
+        if(ads) {
             launchListActivityAndFinish();
         }else {
             finish();

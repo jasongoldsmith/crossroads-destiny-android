@@ -105,7 +105,8 @@
 
     <string name="facebook_app_id">855221411276321</string>
 
-    <string name="mix_panel_token">23f27698695b0137adfef97f173b9f91</string>
+    <string name="mix_panel_token_old">23f27698695b0137adfef97f173b9f91</string>
+    <string name="mix_panel_token">bb632ab8cea71f50d51a013d97a673ef</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

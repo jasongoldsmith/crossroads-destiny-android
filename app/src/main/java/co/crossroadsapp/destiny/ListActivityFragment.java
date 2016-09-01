@@ -77,6 +77,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -205,7 +206,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
         sendMsgAgain.setText(Html.fromHtml(getResources().getString(R.string.message_missing_tryagain)));
 
-        //check user erification
+        //check user verification
         checkUserPSNVerification();
 
         progress = (RelativeLayout) findViewById(R.id.progress_bar_layout);
@@ -223,6 +224,9 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
         if (user!=null) {
             updateUserProfileImage(user.getImageUrl());
+            if (user.getUser()!=null){
+                userNameDrawer.setText(user.getUser());
+            }
         }
 
         //hemlet update
@@ -233,10 +237,6 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 mManager.postHelmet(ListActivityFragment.this);
             }
         });
-
-        if (user.getUser()!=null){
-            userNameDrawer.setText(user.getUser());
-        }
 
         fragmentCurrentEventList = new ArrayList<EventData>();
         fragmentupcomingEventList = new ArrayList<EventData>();
@@ -478,26 +478,31 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             }
         });
 
-//        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//                //hack to update upcoming fragment
-//                if(position==1){
-//                    updateCurrentFrag();
-//                    //getSupportFragmentManager().getFragments().get(position).
-//                }
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//
-//            }
-//        });
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                //hack to update upcoming fragment
+                if(position==0){
+                    //tracking current click
+                    Map<String, String> json = new HashMap<String, String>();
+                    Util.postTracking(json, ListActivityFragment.this, mManager, "currentTabInit");
+                } else if(position==1) {
+                    //tracking upcoming click
+                    Map<String, String> json = new HashMap<String, String>();
+                    Util.postTracking(json, ListActivityFragment.this, mManager, "upcomingTabInit");
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         crash_report.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -792,23 +797,25 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     }
 
     private void checkUserPSNVerification() {
-        if (user.getPsnVerify()!=null) {
-            if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
-                //register user listener
-                registerUserFirebase();
-                verify_username = (TextView) findViewById(R.id.top_text);
-                verify_user_bottom_text = (TextView) findViewById(R.id.verify_bottom_text);
-                verify_user_bottom_text.setText(Html.fromHtml((getString(R.string.verify_accnt_bottomtext))));
-                verify_user_bottom_text.setMovementMethod(LinkMovementMethod.getInstance());
-                verify_username.setText("Hi " + user.getUser() + "!");
-                unverifiedUserScreen.setVisibility(View.VISIBLE);
-            } else {
-                if (unverifiedUserScreen!=null) {
-                    unverifiedUserScreen.setVisibility(View.GONE);
-                    checkClanSet();
+        if(user!=null) {
+            if (user.getPsnVerify() != null) {
+                if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                    //register user listener
+                    registerUserFirebase();
+                    verify_username = (TextView) findViewById(R.id.top_text);
+                    verify_user_bottom_text = (TextView) findViewById(R.id.verify_bottom_text);
+                    verify_user_bottom_text.setText(Html.fromHtml((getString(R.string.verify_accnt_bottomtext))));
+                    verify_user_bottom_text.setMovementMethod(LinkMovementMethod.getInstance());
+                    verify_username.setText("Hi " + user.getUser() + "!");
+                    unverifiedUserScreen.setVisibility(View.VISIBLE);
+                } else {
+                    if (unverifiedUserScreen != null) {
+                        unverifiedUserScreen.setVisibility(View.GONE);
+                        checkClanSet();
+                    }
+                    unregisterUserFirebase();
+                    checkIfExternalDeepLinkPresent();
                 }
-                unregisterUserFirebase();
-                checkIfExternalDeepLinkPresent();
             }
         }
     }

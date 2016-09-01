@@ -471,7 +471,7 @@ public class BlankFragment extends Fragment {
                                 Map<String, String> json = new HashMap<String, String>();
                                 if (adList.get(position - elistLocal.size()).getId() != null && !adList.get(position - elistLocal.size()).getId().isEmpty()) {
                                     json.put("activityId", adList.get(position - elistLocal.size()).getId().toString());
-                                    Util.postTracking(json, mContext, mManager);
+                                    Util.postTracking(json, mContext, mManager, null);
                                 }
                                 //mManager.postCreateEvent(adList.get(position-elistLocal.size()).getId(), user.getUserId(), adList.get(position-elistLocal.size()).getMinPlayer(), adList.get(position-elistLocal.size()).getMaxPlayer(), null, mContext);
                             }

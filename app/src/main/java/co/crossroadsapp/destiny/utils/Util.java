@@ -48,6 +48,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.regex.Pattern;
 
 /**
  * Created by sharmha on 2/23/16.
@@ -56,7 +57,7 @@ public class Util {
 
     //To switch between production and development server links
     //where 1 points to development, 2 points to production and 3 points to Dev staging
-    private static final int network_connection = 2;
+    private static final int network_connection = 1;
 
     private static final String TAG = Util.class.getName();
     public static final String trimbleDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -199,7 +200,9 @@ public class Util {
     public static void clearDefaults(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.clear();
+        editor.remove("user");
+        editor.remove("password");
+        //editor.clear();
         editor.commit();
     }
 
@@ -208,7 +211,6 @@ public class Util {
         SimpleDateFormat parseFormat = new SimpleDateFormat("MM-dd-yyyy hh:mm a");
         Date date = parseFormat.parse(argsDate + " " + args);
         return displayFormat.format(date);
-        //System.out.println(parseFormat.format(date) + " = " + displayFormat.format(date));
     }
 
     public static String updateTime(int hours, int mins){
@@ -275,7 +277,6 @@ public class Util {
         //   "yyyy-MM-dd'T'HH:mm:ss.SSSZ",
         SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
         try {
-
             Calendar cal1 = Calendar.getInstance();
             TimeZone tz = cal1.getTimeZone();
             long msFromEpochGmt = cal1.getTimeInMillis();
@@ -478,7 +479,7 @@ public class Util {
     }
 
     public static void picassoLoadIcon(Context c, ImageView eventIcon, String url, int height, int width, int avatar) {
-        if (url != null) {
+        if (url != null && eventIcon!=null) {
             Picasso.with(c).load(url)
                     .resizeDimen(width, height)
                     .centerCrop().placeholder(avatar)
@@ -609,22 +610,29 @@ public class Util {
         return list;
     }
 
-    public static void postTracking(Map obj, Context c, ControlManager cm) {
-        if (c!=null && cm!=null) {
-            if(obj!=null) {
-                RequestParams params = new RequestParams();
-                params.put("trackingData", obj);
-                if(c instanceof SplashActivity) {
-                    params.put("trackingKey", "appInit");
-                } else if(c instanceof EventDetailActivity) {
-                    params.put("trackingKey", "eventSharing");
-                } else if(c instanceof ListActivityFragment) {
-                    params.put("trackingKey", "addCardInit");
-                } else if(c instanceof MainActivity) {
-                    params.put("trackingKey", "signupInit");
-                }
-                cm.postTracking(params, c);
+    public static void postTracking(Map obj, Context c, ControlManager cm, String key) {
+        if (cm!=null) {
+            if(obj==null) {
+                obj = new HashMap<String, String>();
             }
+            RequestParams params = new RequestParams();
+            params.put("trackingData", obj);
+            if(c == null) {
+                params.put("trackingKey", "appResume");
+            }else if(c instanceof SplashActivity) {
+                params.put("trackingKey", key!=null?key:"UNKNOWN");
+            } else if(c instanceof EventDetailActivity) {
+                params.put("trackingKey", "eventSharing");
+            } else if(c instanceof ListActivityFragment) {
+                if(key!=null) {
+                    params.put("trackingKey", key);
+                }else {
+                    params.put("trackingKey", "adCardInit");
+                }
+            } else if(c instanceof MainActivity) {
+                params.put("trackingKey", "signupInit");
+            }
+            cm.postTracking(params, c!=null?c:cm.getCurrentActivity());
         }
     }
 
@@ -635,6 +643,32 @@ public class Util {
             gd.setStroke(2, 0xFF203236);
             gd.setColor(mContext.getResources().getColor(R.color.tag_background));
             textView.setBackgroundDrawable(gd);
+        }
+    }
+
+    public static Map<String, String> parseDeferredLink(String s) {
+        String[] sub = s.split(Pattern.quote("://"));
+        if(sub.length>1) {
+            String firstParam = sub[1];
+            if (firstParam != null && !firstParam.isEmpty()) {
+                String[] paramKeys = firstParam.split("[/]", 2);
+                Map<String, String> json = new HashMap<String, String>();
+                if(paramKeys.length>1) {
+                    json.put(paramKeys[0], paramKeys[1]);
+                }
+                return json;
+            }
+        }
+        return null;
+    }
+
+    public static void setOrganicAppInstall(ControlManager cManager) {
+        String s = Util.getDefaults("appInstall", cManager.getCurrentActivity());
+        if (s==null || s.equalsIgnoreCase(Constants.UNKNOWN_SOURCE)) {
+            Map<String, String> jsonOrganic = new HashMap<String, String>();
+            jsonOrganic.put("ads", Constants.ORGANIC_SOURCE);
+            Util.postTracking(jsonOrganic, cManager.getCurrentActivity(), cManager, "appInstall");
+            Util.setDefaults("appInstall", Constants.ORGANIC_SOURCE, cManager.getCurrentActivity());
         }
     }
 }
