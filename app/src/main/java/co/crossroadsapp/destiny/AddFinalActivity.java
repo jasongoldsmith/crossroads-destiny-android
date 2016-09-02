@@ -326,6 +326,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                 backg = activity.get(0).getaImagePath()!=null?activity.get(0).getaImagePath():null;
                 subType = activity.get(0).getActivitySubtype()!=null?activity.get(0).getActivitySubtype():"";
                 level = activity.get(0).getActivityLevel();
+                check = activity.get(0).getActivityCheckpoint();
                 light = activity.get(0).getActivityLight();
                 description = activity.get(0).getaDescription()!=null?activity.get(0).getaDescription():"";
                 location = activity.get(0).getaLocation()!=null?activity.get(0).getaLocation():"";
@@ -347,7 +348,6 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         if (level != 0) {
             levelText = "LEVEL " + level;
             if (light != 0) {
-                //next = "<font color='#ffc600'>\u2726 </font>";
                 levelText = levelText + "  Recommended Light: ";
                 lightTextView.setText("\u2726" + light);
             } else {
@@ -374,15 +374,26 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         Random rnd = new Random();
         int prevTextViewId = 0;
         int pad = Util.dpToPx(5, AddFinalActivity.this);
-        if (!modi.isEmpty() || !bonus.isEmpty()) {
-            int listSize = modi.size() + bonus.size();
+        if (!modi.isEmpty() || !bonus.isEmpty() || check!=null) {
+            int listSize=modi.size() + bonus.size();
+            if(modi.isEmpty() && check!=null && !check.isEmpty()) {
+                listSize++;
+            }
             if (listSize < 11) {
                 for (int i = 0; i < listSize; i++) {
                     final TextView textView = new TextView(this);
                     if (i < modi.size()) {
                         textView.setText(modi.get(i));
                     } else {
-                        textView.setText(bonus.get(listSize - i - 1));
+                        if(i==0 && check!=null && !check.isEmpty()) {
+                            textView.setText(check);
+                        }else {
+                            if(check!=null) {
+                                textView.setText(bonus.get(listSize - i - 2));
+                            } else {
+                                textView.setText(bonus.get(listSize - i - 1));
+                            }
+                        }
                     }
                     textView.setTextColor(getResources().getColor(R.color.trimbe_white));
                     textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,10);
@@ -635,6 +646,8 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                 }
                 dropdownDetails.setEnabled(false);
                 tagDropdownArw.setVisibility(View.GONE);
+                setFinalAct(0);
+                createAds();
             }
         }
     }

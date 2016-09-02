@@ -51,11 +51,6 @@ public class SplashActivity extends BaseActivity{
     private Handler mHandler;
     private RelativeLayout mLayout;
     private ControlManager cManager;
-    private GoogleApiClient mGoogleApiClient;
-    private Map<String, String> jsonFacebook;
-//    private RelativeLayout errLayout;
-//    private TextView errText;
-//    private ImageView close_err;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

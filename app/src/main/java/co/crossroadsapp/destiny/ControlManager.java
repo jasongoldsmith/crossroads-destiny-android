@@ -830,20 +830,20 @@ public class ControlManager implements Observer{
         client.addHeader("$screen_dpi", String.valueOf(metrics.densityDpi));
         client.addHeader("$screen_height", String.valueOf(metrics.heightPixels));
         client.addHeader("$screen_width", String.valueOf(metrics.widthPixels));
-        client.addHeader("$android_lib_version", MPConfig.VERSION);
-        client.addHeader("$android_os", "Android");
-        client.addHeader("$android_os_version", Build.VERSION.RELEASE == null ? "UNKNOWN" : Build.VERSION.RELEASE);
-        client.addHeader("$android_manufacturer", Build.MANUFACTURER == null ? "UNKNOWN" : Build.MANUFACTURER);
-        client.addHeader("$android_brand", Build.BRAND == null ? "UNKNOWN" : Build.BRAND);
-        client.addHeader("$android_model", Build.MODEL == null ? "UNKNOWN" : Build.MODEL);
+        client.addHeader("$lib_version", MPConfig.VERSION);
+        client.addHeader("$os", "Android");
+        client.addHeader("$os_version", Build.VERSION.RELEASE == null ? "UNKNOWN" : Build.VERSION.RELEASE);
+        client.addHeader("$manufacturer", Build.MANUFACTURER == null ? "UNKNOWN" : Build.MANUFACTURER);
+        client.addHeader("$brand", Build.BRAND == null ? "UNKNOWN" : Build.BRAND);
+        client.addHeader("$model", Build.MODEL == null ? "UNKNOWN" : Build.MODEL);
         try {
             if (c != null && c.getPackageManager() != null) {
                 if (c.getPackageName() != null) {
                     PackageInfo pInfo = c.getPackageManager().getPackageInfo(c.getPackageName(), 0);
                     String version = pInfo.versionName;
                     if (version != null) {
-                        client.addHeader("$android_app_version", version);
-                        client.addHeader("$android_app_version_code", Integer.toString(pInfo.versionCode));
+                        client.addHeader("$app_version", version);
+                        client.addHeader("$app_version_code", Integer.toString(pInfo.versionCode));
                     }
                 }
             }
