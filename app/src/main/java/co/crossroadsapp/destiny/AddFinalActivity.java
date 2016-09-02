@@ -374,34 +374,18 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         Random rnd = new Random();
         int prevTextViewId = 0;
         int pad = Util.dpToPx(5, AddFinalActivity.this);
-        ArrayList<String> completList = concat(modi, bonus);
+        ArrayList<String> completList = new ArrayList<String>();
+        completList.addAll(modi);
+        completList.addAll(bonus);
         if(modi.isEmpty()) {
             if(check!=null && !check.isEmpty()) {
                 completList.add(check);
             }
         }
-
         if (!completList.isEmpty()) {
-//            int listSize=modi.size() + bonus.size();
-//            if(modi.isEmpty() && check!=null && !check.isEmpty()) {
-//                listSize++;
-//            }
             if (completList.size() < 11) {
                 for (int i = 0; i < completList.size(); i++) {
                     final TextView textView = new TextView(this);
-//                    if (i < modi.size()) {
-//                        textView.setText(modi.get(i));
-//                    } else {
-//                        if(i==0 && check!=null && !check.isEmpty()) {
-//                            textView.setText(check);
-//                        }else {
-//                            if(check!=null && !check.isEmpty()) {
-//                                textView.setText(bonus.get(listSize - i - 2));
-//                            } else {
-//                                textView.setText(bonus.get(listSize - i - 1));
-//                            }
-//                        }
-//                    }
                     textView.setText(completList.get(i));
                     textView.setTextColor(getResources().getColor(R.color.trimbe_white));
                     textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,10);
@@ -477,6 +461,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         int aLen = a.size();
         int bLen = b.size();
         ArrayList<String> c= new ArrayList<String>();
+        a.addAll(b);
         System.arraycopy(a, 0, c, 0, aLen);
         System.arraycopy(b, 0, c, aLen, bLen);
         return c;
