@@ -242,7 +242,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                 Map<String, String> json = new HashMap<String, String>();
                 if(currEvent!=null && currEvent.getEventId()!=null && !currEvent.getEventId().isEmpty()) {
                     json.put("eventId", currEvent.getEventId().toString());
-                    Util.postTracking(json, EventDetailActivity.this, controlManager, null);
+                    Util.postTracking(json, EventDetailActivity.this, controlManager, Constants.APP_EVENTSHARING);
                 }
             }
         });
@@ -588,17 +588,19 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     }
 
     private String getDeepLinkConsoleType() {
-        String s;
-        switch (user.getConsoleType()) {
-            case "XBOX360":
-                s = "360";
-                break;
-            case "XBOXONE":
-                s = "XB1";
-                break;
-            default:
-                s = user.getConsoleType();
-                break;
+        String s= "";
+        if(user!=null && user.getConsoleType()!=null) {
+            switch (user.getConsoleType()) {
+                case "XBOX360":
+                    s = "360";
+                    break;
+                case "XBOXONE":
+                    s = "XB1";
+                    break;
+                default:
+                    s = user.getConsoleType();
+                    break;
+            }
         }
         return s;
     }

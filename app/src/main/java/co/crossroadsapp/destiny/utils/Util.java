@@ -57,7 +57,7 @@ public class Util {
 
     //To switch between production and development server links
     //where 1 points to development, 2 points to production and 3 points to Dev staging
-    private static final int network_connection = 2;
+    private static final int network_connection = 3;
 
     private static final String TAG = Util.class.getName();
     public static final String trimbleDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -479,7 +479,7 @@ public class Util {
     }
 
     public static void picassoLoadIcon(Context c, ImageView eventIcon, String url, int height, int width, int avatar) {
-        if (url != null && eventIcon!=null) {
+        if (c!=null && url != null && eventIcon!=null) {
             Picasso.with(c).load(url)
                     .resizeDimen(width, height)
                     .centerCrop().placeholder(avatar)
@@ -617,21 +617,22 @@ public class Util {
             }
             RequestParams params = new RequestParams();
             params.put("trackingData", obj);
-            if(c == null) {
-                params.put("trackingKey", "appResume");
-            }else if(c instanceof SplashActivity) {
-                params.put("trackingKey", key!=null?key:"UNKNOWN");
-            } else if(c instanceof EventDetailActivity) {
-                params.put("trackingKey", "eventSharing");
-            } else if(c instanceof ListActivityFragment) {
-                if(key!=null) {
-                    params.put("trackingKey", key);
-                }else {
-                    params.put("trackingKey", "adCardInit");
-                }
-            } else if(c instanceof MainActivity) {
-                params.put("trackingKey", "signupInit");
-            }
+            params.put("trackingKey", key!=null?key:"UNKNOWN");
+//            if(c == null) {
+//                params.put("trackingKey", "appResume");
+//            }else if(c instanceof SplashActivity) {
+//                params.put("trackingKey", key!=null?key:"UNKNOWN");
+//            } else if(c instanceof EventDetailActivity) {
+//                params.put("trackingKey", "eventSharing");
+//            } else if(c instanceof ListActivityFragment) {
+//                if(key!=null) {
+//                    params.put("trackingKey", key);
+//                }else {
+//                    params.put("trackingKey", "adCardInit");
+//                }
+//            } else if(c instanceof MainActivity) {
+//                params.put("trackingKey", "signupInit");
+//            }
             cm.postTracking(params, c!=null?c:cm.getCurrentActivity());
         }
     }
@@ -667,7 +668,7 @@ public class Util {
         if (s==null || s.equalsIgnoreCase(Constants.UNKNOWN_SOURCE)) {
             Map<String, String> jsonOrganic = new HashMap<String, String>();
             jsonOrganic.put("ads", Constants.ORGANIC_SOURCE);
-            Util.postTracking(jsonOrganic, cManager.getCurrentActivity(), cManager, "appInstall");
+            Util.postTracking(jsonOrganic, cManager.getCurrentActivity(), cManager, Constants.APP_INSTALL);
             Util.setDefaults("appInstall", Constants.ORGANIC_SOURCE, cManager.getCurrentActivity());
         }
     }

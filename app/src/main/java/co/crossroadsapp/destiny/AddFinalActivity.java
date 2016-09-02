@@ -374,27 +374,35 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         Random rnd = new Random();
         int prevTextViewId = 0;
         int pad = Util.dpToPx(5, AddFinalActivity.this);
-        if (!modi.isEmpty() || !bonus.isEmpty() || check!=null) {
-            int listSize=modi.size() + bonus.size();
-            if(modi.isEmpty() && check!=null && !check.isEmpty()) {
-                listSize++;
+        ArrayList<String> completList = concat(modi, bonus);
+        if(modi.isEmpty()) {
+            if(check!=null && !check.isEmpty()) {
+                completList.add(check);
             }
-            if (listSize < 11) {
-                for (int i = 0; i < listSize; i++) {
+        }
+
+        if (!completList.isEmpty()) {
+//            int listSize=modi.size() + bonus.size();
+//            if(modi.isEmpty() && check!=null && !check.isEmpty()) {
+//                listSize++;
+//            }
+            if (completList.size() < 11) {
+                for (int i = 0; i < completList.size(); i++) {
                     final TextView textView = new TextView(this);
-                    if (i < modi.size()) {
-                        textView.setText(modi.get(i));
-                    } else {
-                        if(i==0 && check!=null && !check.isEmpty()) {
-                            textView.setText(check);
-                        }else {
-                            if(check!=null) {
-                                textView.setText(bonus.get(listSize - i - 2));
-                            } else {
-                                textView.setText(bonus.get(listSize - i - 1));
-                            }
-                        }
-                    }
+//                    if (i < modi.size()) {
+//                        textView.setText(modi.get(i));
+//                    } else {
+//                        if(i==0 && check!=null && !check.isEmpty()) {
+//                            textView.setText(check);
+//                        }else {
+//                            if(check!=null && !check.isEmpty()) {
+//                                textView.setText(bonus.get(listSize - i - 2));
+//                            } else {
+//                                textView.setText(bonus.get(listSize - i - 1));
+//                            }
+//                        }
+//                    }
+                    textView.setText(completList.get(i));
                     textView.setTextColor(getResources().getColor(R.color.trimbe_white));
                     textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,10);
                     textView.setAllCaps(true);
@@ -463,6 +471,15 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
             updateDrawerSubtype(actSubTypeList);
         }
+    }
+
+    public ArrayList<String> concat(ArrayList<String> a, ArrayList<String> b) {
+        int aLen = a.size();
+        int bLen = b.size();
+        ArrayList<String> c= new ArrayList<String>();
+        System.arraycopy(a, 0, c, 0, aLen);
+        System.arraycopy(b, 0, c, aLen, bLen);
+        return c;
     }
 
     private void sortList(ArrayList<String> list) {
@@ -1002,6 +1019,15 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         finish();
     }
 
+    private void launchListActivityAndFinish(EventData eData) {
+        CurrentEventDataHolder ins = CurrentEventDataHolder.getInstance();
+        ins.setData(eData);
+        Intent i=new Intent (this, ListActivityFragment.class);
+        i.putExtra("gotoEventDetail", true);
+        startActivity(i);
+        finish();
+    }
+
     private void launchEventDetailAndFinish(EventData eData) {
         CurrentEventDataHolder ins = CurrentEventDataHolder.getInstance();
         ins.setData(eData);
@@ -1026,7 +1052,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
     public void update(Observable observable, Object data) {
         hideProgressBar();
         if(data!=null) {
-            launchEventDetailAndFinish((EventData)data);
+            launchListActivityAndFinish((EventData)data);
         }
     }
 

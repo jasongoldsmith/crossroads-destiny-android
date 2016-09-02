@@ -109,7 +109,7 @@ public class SplashActivity extends BaseActivity{
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Util.postTracking(json, SplashActivity.this, cManager, "appInstall");
+                    Util.postTracking(json, SplashActivity.this, cManager, Constants.APP_INSTALL);
                     if (json != null && json.containsKey("ads")) {
                         Util.setDefaults("appInstall", json.get("ads"), SplashActivity.this);
                     }
@@ -168,7 +168,7 @@ public class SplashActivity extends BaseActivity{
             json.put("source", Constants.UNKNOWN_SOURCE);
         }
 
-        Util.postTracking(json, SplashActivity.this, cManager, "appInit");
+        Util.postTracking(json, SplashActivity.this, cManager, Constants.APP_INIT);
     }
 
     @Override

@@ -165,7 +165,6 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         } else if(b!=null){
             user = b.getParcelable("userdata");
         }
-
         //checkEventIntent();
 //        if(b.containsKey("eventIntent")){
 //            Intent localPushEventObj = (Intent)b.get("eventIntent");
@@ -481,21 +480,21 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                //hack to update upcoming fragment
-                if(position==0){
-                    //tracking current click
-                    Map<String, String> json = new HashMap<String, String>();
-                    Util.postTracking(json, ListActivityFragment.this, mManager, "currentTabInit");
-                } else if(position==1) {
-                    //tracking upcoming click
-                    Map<String, String> json = new HashMap<String, String>();
-                    Util.postTracking(json, ListActivityFragment.this, mManager, "upcomingTabInit");
-                }
+
             }
 
             @Override
             public void onPageSelected(int position) {
-
+                //track tab changes
+                if(position==0){
+                    //tracking current click
+                    Map<String, String> json = new HashMap<String, String>();
+                    Util.postTracking(json, ListActivityFragment.this, mManager, Constants.APP_CURRENTTAB);
+                } else if(position==1) {
+                    //tracking upcoming click
+                    Map<String, String> json = new HashMap<String, String>();
+                    Util.postTracking(json, ListActivityFragment.this, mManager, Constants.APP_UPCOMINGTAB);
+                }
             }
 
             @Override
@@ -519,6 +518,14 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         checkClanSet();
 
         showNotifications();
+
+        // check if just created new event to go to eventdetail
+        if(b!=null) {
+            if(b.containsKey("gotoEventDetail")){
+                Intent i=new Intent (this, EventDetailActivity.class);
+                startActivity(i);
+            }
+        }
     }
 
     private void checkPrivacyDialoge() {
@@ -1576,8 +1583,6 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             if (notiList==null) {
                 notiList = new ArrayList<PushNotification>();
             }
-            System.out.println("Hardik notilist is " + notiList.size());
-            System.out.println("Hardik elist is " + localNoti.size());
             adapter = new SwipeStackAdapter(localNoti, this);
             cardStack.setAdapter(adapter);
             adapter.notifyDataSetChanged();

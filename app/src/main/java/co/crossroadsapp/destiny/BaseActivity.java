@@ -60,7 +60,7 @@ public class BaseActivity extends FragmentActivity {
         if(appBackground) {
             //tracking resume
             Map<String, String> json = new HashMap<String, String>();
-            Util.postTracking(json, null, mManager, null);
+            Util.postTracking(json, null, mManager, Constants.APP_RESUME);
             appBackground = false;
         }
     }

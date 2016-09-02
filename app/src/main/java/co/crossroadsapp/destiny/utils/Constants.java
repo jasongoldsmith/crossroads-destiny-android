@@ -93,6 +93,14 @@ public class Constants {
     public static final String ORGANIC_SOURCE = "organic";
     public static final String FACEBOOK_SOURCE = "facebook";
     public static final String BRANCH_SOURCE = "branch";
+    public static final String APP_RESUME = "appResume";
+    public static final String APP_INSTALL = "appInstall";
+    public static final String APP_SIGNUP = "signupInit";
+    public static final String APP_INIT = "appInit";
+    public static final String APP_ADCARD = "adCardInit";
+    public static final String APP_EVENTSHARING = "eventSharing";
+    public static final String APP_CURRENTTAB = "currentTabInit";
+    public static final String APP_UPCOMINGTAB = "upcomingTabInit";
 
     //urls
     public static String DEEP_LINK_IMAGE = "http://w3.crossroadsapp.co/bungie/share/branch/v1/";

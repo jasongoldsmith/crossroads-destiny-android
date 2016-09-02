@@ -118,7 +118,7 @@ public class MainActivity extends BaseActivity implements Observer {
                 public void onClick(View v) {
                     //tracking signup initiation
                     Map<String, String> json = new HashMap<String, String>();
-                    Util.postTracking(json, MainActivity.this, mManager, null);
+                    Util.postTracking(json, MainActivity.this, mManager, Constants.APP_SIGNUP);
                     TravellerLog.w(this, "Launch console selection page activity");
                     Intent regIntent = new Intent(getApplicationContext(),
                             ConsoleSelectionActivity.class);

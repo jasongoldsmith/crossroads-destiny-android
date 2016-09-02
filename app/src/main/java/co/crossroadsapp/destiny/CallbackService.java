@@ -40,8 +40,8 @@ public class CallbackService extends Service {
                                     @Override
                                     public void run() {
                                         Map<String, String> jsonFacebook = Util.parseDeferredLink(appLinkData.getTargetUri().toString());
-                                        Util.postTracking(jsonFacebook, cManager.getCurrentActivity(), cManager, "appInstall");
-                                        Util.setDefaults("appInstall", Constants.FACEBOOK_SOURCE, cManager.getCurrentActivity());
+                                        Util.postTracking(jsonFacebook, cManager.getCurrentActivity(), cManager, Constants.APP_INSTALL);
+                                        Util.setDefaults(Constants.APP_INSTALL, Constants.FACEBOOK_SOURCE, cManager.getCurrentActivity());
                                     }
 
                                 }, 500);
