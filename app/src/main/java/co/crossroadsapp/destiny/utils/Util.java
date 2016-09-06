@@ -12,6 +12,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
+import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
@@ -57,7 +58,7 @@ public class Util {
 
     //To switch between production and development server links
     //where 1 points to development, 2 points to production and 3 points to Dev staging
-    private static final int network_connection = 3;
+    private static final int network_connection = 2;
 
     private static final String TAG = Util.class.getName();
     public static final String trimbleDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -282,6 +283,10 @@ public class Util {
             long msFromEpochGmt = cal1.getTimeInMillis();
             long offsetFromUTC = tz.getOffset(msFromEpochGmt);
 
+            //tomorrow's date
+            Calendar cal2 = Calendar.getInstance();
+            cal2.add(Calendar.DAY_OF_YEAR, 1);
+
             Date date = format.parse(utcDate);
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
@@ -290,10 +295,10 @@ public class Util {
             SimpleDateFormat formatDate1 = new SimpleDateFormat("MMM d 'at' h:mm a");
             SimpleDateFormat formatDateToday = new SimpleDateFormat("'Today at' h:mm a");
             SimpleDateFormat formatDateTmrw = new SimpleDateFormat("'Tomorrow at' h:mm a");
-            //String finalTime = formatDate.format(cal.getTime());
-            if(cal.getTimeInMillis() - System.currentTimeMillis()<Constants.TIME_DAY) {
+            if(DateUtils.isToday(cal.getTimeInMillis())) {
                 return formatDateToday.format(cal.getTime());
-            } else if(cal.getTimeInMillis() - System.currentTimeMillis()>Constants.TIME_DAY && cal.getTimeInMillis() - System.currentTimeMillis()<Constants.TIME_TWO_DAY) {
+            } else if(cal.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
+                    && cal.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)) {
                 return formatDateTmrw.format(cal.getTime());
             } else if (cal.getTimeInMillis() - System.currentTimeMillis() > Constants.WEEK) {
                 return formatDate1.format(cal.getTime());
@@ -618,21 +623,6 @@ public class Util {
             RequestParams params = new RequestParams();
             params.put("trackingData", obj);
             params.put("trackingKey", key!=null?key:"UNKNOWN");
-//            if(c == null) {
-//                params.put("trackingKey", "appResume");
-//            }else if(c instanceof SplashActivity) {
-//                params.put("trackingKey", key!=null?key:"UNKNOWN");
-//            } else if(c instanceof EventDetailActivity) {
-//                params.put("trackingKey", "eventSharing");
-//            } else if(c instanceof ListActivityFragment) {
-//                if(key!=null) {
-//                    params.put("trackingKey", key);
-//                }else {
-//                    params.put("trackingKey", "adCardInit");
-//                }
-//            } else if(c instanceof MainActivity) {
-//                params.put("trackingKey", "signupInit");
-//            }
             cm.postTracking(params, c!=null?c:cm.getCurrentActivity());
         }
     }

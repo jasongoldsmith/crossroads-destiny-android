@@ -388,8 +388,10 @@ public class BaseActivity extends FragmentActivity {
     protected void checkAndRemoveNoti(Context c, int position, SwipeStackAdapter adapter) {
         if(c!=null) {
             if (c instanceof ListActivityFragment) {
-                notiList.remove(position);
-                adapter.notifyDataSetChanged();
+                if(notiList!=null && notiList.get(position)!=null) {
+                    notiList.remove(position);
+                    adapter.notifyDataSetChanged();
+                }
             } else {
                 if(eventNotiList!=null && eventNotiList.get(position)!=null){
                     if(eventNotiList.get(position)!=null) {

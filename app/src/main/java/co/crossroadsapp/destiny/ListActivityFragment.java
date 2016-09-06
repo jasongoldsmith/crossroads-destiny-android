@@ -924,7 +924,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     }
 
     private void unregisterFirebase() {
-        if(listener!=null) {
+        if(refFirebase!=null && listener!=null) {
             refFirebase.removeEventListener(listener);
         }
     }

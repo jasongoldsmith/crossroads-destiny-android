@@ -889,10 +889,12 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     }
 
     private boolean checkUserIsPlayer(){
-        if(this.currEvent.getPlayerData()!=null) {
-            for (int i = 0; i < currEvent.getPlayerData().size(); i++) {
-                if (user.getUserId().equalsIgnoreCase(currEvent.getPlayerData().get(i).getPlayerId())) {
-                    return true;
+        if(currEvent!=null) {
+            if (this.currEvent.getPlayerData() != null) {
+                for (int i = 0; i < currEvent.getPlayerData().size(); i++) {
+                    if (user.getUserId().equalsIgnoreCase(currEvent.getPlayerData().get(i).getPlayerId())) {
+                        return true;
+                    }
                 }
             }
         }
@@ -910,9 +912,13 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     }
 
     private boolean checkUserIsCreator() {
-        if(this.currEvent.getPlayerData()!=null) {
-            if (user.getUserId().equalsIgnoreCase(currEvent.getCreatorData().getPlayerId())) {
-                return true;
+        if(currEvent!=null) {
+            if (this.currEvent.getCreatorData() != null && currEvent.getCreatorData().getPlayerId()!=null) {
+                if(user!=null && user.getUserId()!=null) {
+                    if (user.getUserId().equalsIgnoreCase(currEvent.getCreatorData().getPlayerId())) {
+                        return true;
+                    }
+                }
             }
         }
         return false;

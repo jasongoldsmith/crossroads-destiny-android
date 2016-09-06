@@ -14,8 +14,8 @@
     <string name="date_default">Date - Today</string>
     <string name="time_default">Time - Now</string>
 
-    <string name="leave_event">LEAVE ACTIVITY</string>
-    <string name="join_event">JOIN ACTIVITY</string>
+    <string name="leave_event">LEAVE</string>
+    <string name="join_event">JOIN</string>
     <string name="message_all">MESSAGE ALL</string>
 
     <string name="logout">Log Out</string>
