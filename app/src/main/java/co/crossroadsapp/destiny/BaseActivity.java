@@ -260,6 +260,10 @@ public class BaseActivity extends FragmentActivity {
                         @Override
                         public void onClick(View v) {
                             if (id != null) {
+                                //tracking OS pushnotification initiation
+                                Map<String, Boolean> json = new HashMap<>();
+                                json.put("inApp", true);
+                                Util.postTracking(json, null, mManager, Constants.APP_PUSHNOTIFICATION);
                                 goToDetail(id, console, grpId);
                             }
                         }

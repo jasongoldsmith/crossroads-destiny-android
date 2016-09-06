@@ -96,6 +96,7 @@ public class Constants {
     public static final String APP_RESUME = "appResume";
     public static final String APP_INSTALL = "appInstall";
     public static final String APP_SIGNUP = "signupInit";
+    public static final String APP_PUSHNOTIFICATION = "pushNotification";
     public static final String APP_INIT = "appInit";
     public static final String APP_ADCARD = "adCardInit";
     public static final String APP_EVENTSHARING = "eventSharing";

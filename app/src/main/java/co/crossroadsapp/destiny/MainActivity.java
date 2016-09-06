@@ -1,18 +1,11 @@
 package co.crossroadsapp.destiny;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.view.View;
-import android.widget.TextView;
 
 import co.crossroadsapp.destiny.data.AppVersion;
 import co.crossroadsapp.destiny.network.GetVersion;
@@ -20,7 +13,6 @@ import co.crossroadsapp.destiny.network.LoginNetwork;
 import co.crossroadsapp.destiny.utils.TravellerLog;
 import co.crossroadsapp.destiny.utils.Util;
 import co.crossroadsapp.destiny.utils.Version;
-import co.crossroadsapp.destiny.R;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
 import com.loopj.android.http.RequestParams;
@@ -55,6 +47,10 @@ public class MainActivity extends BaseActivity implements Observer {
 
         // getting contentIntent from push notification click
         if (this.getIntent().hasExtra(Constants.TRAVELER_NOTIFICATION_INTENT)) {
+            //tracking OS pushnotification initiation
+            Map<String, Boolean> json = new HashMap<>();
+            json.put("inApp", false);
+            Util.postTracking(json, MainActivity.this, mManager, Constants.APP_PUSHNOTIFICATION);
             TravellerLog.w(this, "Push notification intent present");
             Intent messageIntent = (Intent) this.getIntent().getExtras().get(Constants.TRAVELER_NOTIFICATION_INTENT);
             if (messageIntent == null) {
