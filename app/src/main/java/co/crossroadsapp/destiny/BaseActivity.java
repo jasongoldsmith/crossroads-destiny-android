@@ -303,11 +303,13 @@ public class BaseActivity extends FragmentActivity {
                             notiTopText.setText(first);
                         }
                         if(grpImage!=null && (!grpImage.isEmpty())) {
-                            Picasso.with(getApplicationContext())
-                                    .load(grpImage)
-                                    .placeholder(R.drawable.icon_alert)
-                                    .fit().centerCrop()
-                                    .into(grpImageView);
+                            if(getApplicationContext()!=null) {
+                                Picasso.with(getApplicationContext())
+                                        .load(grpImage)
+                                        .placeholder(R.drawable.icon_alert)
+                                        .fit().centerCrop()
+                                        .into(grpImageView);
+                            }
                         }
                     }
                     if(msg!=null) {

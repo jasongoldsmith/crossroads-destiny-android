@@ -53,7 +53,7 @@ public class CallbackService extends Service {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Util.setOrganicAppInstall(cManager);
+                    //Util.setOrganicAppInstall(cManager);
                     stopSelf();
                 }
 

@@ -449,12 +449,13 @@ public class BlankFragment extends Fragment {
                     String iconImageUrl = adList.get(position-elistLocal.size()).getActivityIconUrl();
                     Util.picassoLoadIcon(mContext, adHolder.eventAdIcon, iconImageUrl, R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.icon_ghost_default);
                     //Util.picassoLoadIcon(mContext, adHolder.adCardImg, cardBackgroundImageUrl, R.dimen.ad_hgt, R.dimen.ad_width, R.drawable.img_adcard_raid_golgoroth);
-
-                    Picasso.with(mContext)
-                            .load(cardBackgroundImageUrl)
-                            .placeholder(R.drawable.add_card_default)
-                            .fit().centerCrop()
-                            .into(adHolder.adCardImg);
+                    if(mContext!=null) {
+                        Picasso.with(mContext)
+                                .load(cardBackgroundImageUrl)
+                                .placeholder(R.drawable.add_card_default)
+                                .fit().centerCrop()
+                                .into(adHolder.adCardImg);
+                    }
 
                     adHolder.event_adcard.setOnClickListener(new View.OnClickListener() {
                         @Override

@@ -118,6 +118,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
     boolean ads=false;
     String adP=null;
+    boolean adActivity;
     private ActivityData ad;
 
     @Override
@@ -138,6 +139,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         if(b!=null) {
             ads = b.getBoolean("adcard");
             adP = b.getString("adCardId");
+            adActivity = ads;
         }
 
         back = (ImageView) findViewById(R.id.back_btn);
@@ -711,7 +713,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         if(subD==null || charD==null) {
             if (subT.equalsIgnoreCase(charT)) {
                  row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 0));
-//                RelativeLayout.LayoutParams lp = new RelativeLayout();
+//                ViewGroup.LayoutParams lp = row.getLayoutParams();
 //                lp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
 //                lp.height = 0;
 //                row.requestLayout();
@@ -1043,7 +1045,7 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
 
     @Override
     public void onBackPressed() {
-        if(ads) {
+        if(adActivity) {
             launchListActivityAndFinish();
         }else {
             finish();

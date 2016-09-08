@@ -711,6 +711,8 @@ public class ControlManager implements Observer{
     public void postTracking(RequestParams rp, Context context) {
         trackingNetwork = new TrackingNetwork(context);
         try {
+            if(context instanceof SplashActivity)
+            trackingNetwork.addObserver((SplashActivity)context);
             trackingNetwork.postTracking(rp);
         } catch (JSONException e) {
             e.printStackTrace();

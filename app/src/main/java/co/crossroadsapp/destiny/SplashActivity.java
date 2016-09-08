@@ -24,6 +24,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.mixpanel.android.mpmetrics.MPConfig;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
+import co.crossroadsapp.destiny.network.TrackingNetwork;
 import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import io.fabric.sdk.android.Fabric;
@@ -33,6 +34,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 
 import co.crossroadsapp.destiny.R;
 import co.crossroadsapp.destiny.utils.TravellerLog;
@@ -46,18 +49,19 @@ import io.branch.referral.util.LinkProperties;
  * Created by sharmha on 2/19/16.
  */
 //public class SplashActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener {
-public class SplashActivity extends BaseActivity{
+public class SplashActivity extends BaseActivity implements Observer {
     private static final int SPLASH_DELAY = 1000;
     private Handler mHandler;
     private RelativeLayout mLayout;
     private ControlManager cManager;
+    private boolean appInstallSuccess=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //fabric
         Fabric.with(this, new Answers());
-        //facebood adk
+        //facebood sdk
         FacebookSdk.sdkInitialize(SplashActivity.this);
         AppEventsLogger.activateApp(SplashActivity.this);
         setContentView(R.layout.splash_loading);
@@ -84,12 +88,25 @@ public class SplashActivity extends BaseActivity{
         String s = Util.getDefaults("appInstall", SplashActivity.this);
         if (s==null) {
             Util.setDefaults("appInstall", Constants.UNKNOWN_SOURCE, SplashActivity.this);
+            Map<String, String> jsonOrganic = new HashMap<String, String>();
+            jsonOrganic.put("ads", Constants.ORGANIC_SOURCE);
+            Util.postTracking(jsonOrganic, SplashActivity.this, cManager, Constants.APP_INSTALL);
             Intent in = new Intent(SplashActivity.this, CallbackService.class);
             SplashActivity.this.startService(in);
-        } else if(s.equalsIgnoreCase(Constants.UNKNOWN_SOURCE)) {
-            Util.setOrganicAppInstall(cManager);
+        } else {
+            if(s.equalsIgnoreCase(Constants.UNKNOWN_SOURCE)) {
+                Util.setDefaults("appInstall", Constants.ORGANIC_SOURCE, SplashActivity.this);
+                Map<String, String> jsonOrganic = new HashMap<String, String>();
+                jsonOrganic.put("ads", Constants.ORGANIC_SOURCE);
+                Util.postTracking(jsonOrganic, SplashActivity.this, cManager, Constants.APP_INSTALL);
+            } else {
+                branchInitializationAndInit();
+                launchNextActivity();
+            }
         }
+    }
 
+    private void launchNextActivity() {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -103,26 +120,7 @@ public class SplashActivity extends BaseActivity{
         }, SPLASH_DELAY);
     }
 
-    private void checkAppInstall(final Map<String, String> json) {
-        String s = Util.getDefaults("appInstall", SplashActivity.this);
-        if (s==null) {
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Util.postTracking(json, SplashActivity.this, cManager, Constants.APP_INSTALL);
-                    if (json != null && json.containsKey("ads")) {
-                        Util.setDefaults("appInstall", json.get("ads"), SplashActivity.this);
-                    }
-                }
-
-            }, 500);
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
+    private void branchInitializationAndInit() {
         Branch branch = Branch.getInstance(getApplicationContext());
 
         Map<String, String> json = new HashMap<String, String>();
@@ -171,19 +169,51 @@ public class SplashActivity extends BaseActivity{
         Util.postTracking(json, SplashActivity.this, cManager, Constants.APP_INIT);
     }
 
+    private void checkAppInstall(final Map<String, String> json) {
+        String s = Util.getDefaults("appInstall", SplashActivity.this);
+        if (s==null || s.equalsIgnoreCase(Constants.UNKNOWN_SOURCE)) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Util.postTracking(json, SplashActivity.this, cManager, Constants.APP_INSTALL);
+                    if (json != null && json.containsKey("ads")) {
+                        Util.setDefaults("appInstall", Constants.BRANCH_SOURCE, SplashActivity.this);
+                    }
+                }
+
+            }, 500);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
     @Override
     public void onNewIntent(Intent intent) {
         this.setIntent(intent);
     }
 
     public void showError(String err) {
-        setErrText(err);
-//        errLayout.setVisibility(View.VISIBLE);
-//        errText.setText(err);
+        branchInitializationAndInit();
+        launchNextActivity();
     }
 
-//    @Override
-//    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-//
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void update(Observable observable, Object data) {
+        if(observable instanceof TrackingNetwork) {
+            if(!appInstallSuccess) {
+                branchInitializationAndInit();
+                launchNextActivity();
+                appInstallSuccess = true;
+            }
+        }
+    }
+
 }
