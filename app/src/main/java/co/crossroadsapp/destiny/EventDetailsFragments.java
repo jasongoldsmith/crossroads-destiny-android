@@ -109,7 +109,6 @@ public class EventDetailsFragments extends Fragment {
                 scrollToEnd();
             }
         }
-
         return view;
     }
 
@@ -208,7 +207,7 @@ public class EventDetailsFragments extends Fragment {
                     }
                     if (playerLocal.get(position).getPlayerImageUrl() != null) {
                         Util.picassoLoadIcon(((EventDetailActivity)getActivity()), holder.playerProfile, playerLocal.get(position).getPlayerImageUrl(),
-                                R.dimen.eventdetail_player_profile_hgt, R.dimen.eventdetail_player_profile_width, R.drawable.img_profile_blank);
+                                R.dimen.eventdetail_player_profile_hgt, R.dimen.eventdetail_player_profile_width, R.drawable.profile_image);
                     }
                     if (playerLocal.get(position).getPsnId() != null) {
                         String name = playerLocal.get(position).getPsnId();
@@ -258,16 +257,16 @@ public class EventDetailsFragments extends Fragment {
         }
     }
 
-    @Override
-    public int getItemCount() {
+        @Override
+        public int getItemCount() {
         return getMaxPlayer();
     }
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
 
-}
+        @Override
+        public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+            super.onAttachedToRecyclerView(recyclerView);
+        }
+    }
 
     private int getMaxPlayer() {
         if(currentEvent!=null){
@@ -326,7 +325,7 @@ public class EventDetailsFragments extends Fragment {
                     }
                     if(commentsLocal.get(position).getPlayerImageUrl()!=null && !commentsLocal.get(position).getPlayerImageUrl().isEmpty()) {
                         String playerImg = commentsLocal.get(position).getPlayerImageUrl();
-                        Util.picassoLoadImageWithoutMeasurement(getActivity(), holder.playerProfileComment, playerImg, R.drawable.img_profile_blank);
+                        Util.picassoLoadImageWithoutMeasurement(getActivity(), holder.playerProfileComment, playerImg, R.drawable.profile_image);
                     }
                     if(commentsLocal.get(position).getPsnId()!=null) {
                         String name=commentsLocal.get(position).getPsnId();

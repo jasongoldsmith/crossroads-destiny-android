@@ -712,11 +712,8 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         }
         if(subD==null || charD==null) {
             if (subT.equalsIgnoreCase(charT)) {
-                 row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 0));
-//                ViewGroup.LayoutParams lp = row.getLayoutParams();
-//                lp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
-//                lp.height = 0;
-//                row.requestLayout();
+//              row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 0));
+                setLayoutParams(row);
                 card.setVisibility(View.GONE);
             } else {
                 card.setVisibility(View.VISIBLE);
@@ -729,7 +726,8 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                 }
             }
         }else if(subT.equalsIgnoreCase(charT) && subD.equalsIgnoreCase(charD)){
-            row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 0));
+            //row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 0));
+            setLayoutParams(row);
             card.setVisibility(View.GONE);
         } else {
             card.setVisibility(View.VISIBLE);
@@ -752,7 +750,8 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         String check = checkpointText.getText().toString();
 
         if(check.equalsIgnoreCase(adapterCheckpoint.get(position).toString())) {
-            row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,0));
+            //row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,0));
+            setLayoutParams(row);
             card.setVisibility(View.GONE);
         }else {
             card.setVisibility(View.VISIBLE);
@@ -775,7 +774,8 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         String tag = detailText.getText().toString();
 
         if(tag.equalsIgnoreCase(adapterCheckpoint.get(position).toString())) {
-            row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,0));
+            //row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,0));
+            setLayoutParams(row);
             card.setVisibility(View.GONE);
         }else {
             card.setVisibility(View.VISIBLE);
@@ -790,31 +790,14 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         return row;
     }
 
-//    @SuppressLint("NewApi")
-//    private void setTimePickerInterval(TimePicker timePicker) {
-//        try {
-//            Class<?> classForid = Class.forName("com.android.internal.R$id");
-//            // Field timePickerField = classForid.getField("timePicker");
-//
-//            Field field = classForid.getField("minute");
-//            NumberPicker minutePicker = (NumberPicker) timePicker
-//                    .findViewById(field.getInt(null));
-//
-//            minutePicker.setMinValue(0);
-//            minutePicker.setMaxValue(7);
-//            displayedValues = new ArrayList<String>();
-//            for (int i = 0; i < 60; i += TIME_PICKER_INTERVAL) {
-//                displayedValues.add(String.format("%02d", i));
-//            }
-//            for (int i = 0; i < 60; i += TIME_PICKER_INTERVAL) {
-//                displayedValues.add(String.format("%02d", i));
-//            }
-//            minutePicker.setDisplayedValues(displayedValues
-//                    .toArray(new String[0]));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private void setLayoutParams(View view) {
+        if(view!=null) {
+            ViewGroup.LayoutParams lp = view.getLayoutParams();
+            lp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+            lp.height = 0;
+            view.requestLayout();
+        }
+    }
 
     @Override
     protected Dialog onCreateDialog(int id) {
