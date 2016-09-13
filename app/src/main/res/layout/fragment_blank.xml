@@ -26,6 +26,8 @@
             android:id="@+id/event_view"
             android:background="@android:color/transparent"
             android:paddingTop="6dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="10dp"
             android:paddingBottom="6dp"
             android:clipToPadding="false"
             android:layout_width="match_parent"

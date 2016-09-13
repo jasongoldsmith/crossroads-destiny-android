@@ -5,6 +5,7 @@ import android.content.Context;
 import co.crossroadsapp.destiny.ControlManager;
 import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.ActivityList;
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.EventList;
@@ -27,6 +28,7 @@ public class EventListNetwork extends Observable{
     private Context mContext;
     private NetworkEngine ntwrk;
     private String url = "api/v1/a/feed/get";
+    private String publicFeedUrl = "api/v1/feed/public";
 
     private EventList eventList;
     private ActivityList actList;
@@ -47,9 +49,13 @@ public class EventListNetwork extends Observable{
         actList = new ActivityList();
     }
 
-    public void getEvents() throws JSONException {
+    public void getEvents(int feed) throws JSONException {
         if (Util.isNetworkAvailable(mContext)) {
-            ntwrk.get(url, new JsonHttpResponseHandler() {
+            String localUrl = url;
+            if(feed== Constants.PUBLIC_EVENT_FEED) {
+                localUrl = publicFeedUrl;
+            }
+            ntwrk.get(localUrl, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     parseFeed(response);
@@ -117,7 +123,6 @@ public class EventListNetwork extends Observable{
 
         setChanged();
         notifyObservers(this);
-
     }
 
     private void parseAddActList(JSONArray adActivitiesArray) throws JSONException {

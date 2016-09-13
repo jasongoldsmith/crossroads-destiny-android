@@ -38,7 +38,9 @@ public class NetworkEngine {
             mManager.setClient(c);
             client = mManager.getClient();
         }
-        myCookieStore = new PersistentCookieStore(c);
+        if(c!=null) {
+            myCookieStore = new PersistentCookieStore(c);
+        }
         //myCookieStore.clear();
         if(myCookieStore!=null) {
             client.setCookieStore(myCookieStore);

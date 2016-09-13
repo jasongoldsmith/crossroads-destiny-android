@@ -1,13 +1,21 @@
 package co.crossroadsapp.destiny;
 
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import co.crossroadsapp.destiny.data.AppVersion;
+import co.crossroadsapp.destiny.data.EventData;
+import co.crossroadsapp.destiny.network.EventListNetwork;
 import co.crossroadsapp.destiny.network.GetVersion;
 import co.crossroadsapp.destiny.network.LoginNetwork;
 import co.crossroadsapp.destiny.utils.TravellerLog;
@@ -17,6 +25,7 @@ import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
 import com.loopj.android.http.RequestParams;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
@@ -31,6 +40,9 @@ public class MainActivity extends BaseActivity implements Observer {
     private String p;
     private String u;
     private ControlManager mManager;
+    private RecyclerView horizontal_recycler_view;
+    private ArrayList<EventData> horizontalList;
+    private EventCardAdapter horizontalAdapter;
 
     @Override
     protected void onCreate(Bundle outState) {
@@ -71,12 +83,22 @@ public class MainActivity extends BaseActivity implements Observer {
     public void showError(String err) {
         if (err != null){
             if(!err.isEmpty()) {
-                Util.clearDefaults(this);
+                //Util.clearDefaults(this);
                 launchLogin();
                 finish();
             } else {
                 forwardAfterVersionCheck();
             }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setTRansparentStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
     }
 
@@ -107,6 +129,42 @@ public class MainActivity extends BaseActivity implements Observer {
         }else {
             TravellerLog.w(this, "Show main activity layout as user data not available");
             setContentView(R.layout.activity_main);
+            setTRansparentStatusBar();
+            if(mManager!=null && mManager.getEventListCurrent()!=null && !mManager.getEventListCurrent().isEmpty()) {
+                horizontal_recycler_view = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
+                horizontalList=new ArrayList<EventData>();
+                horizontalList = mManager.getEventListCurrent();
+                horizontalAdapter=new EventCardAdapter(horizontalList, null, MainActivity.this, mManager, Constants.PUBLIC_EVENT_FEED);
+                LinearLayoutManager horizontalLayoutManagaer
+                        = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                horizontal_recycler_view.setLayoutManager(horizontalLayoutManagaer);
+                horizontal_recycler_view.setAdapter(horizontalAdapter);
+
+                if(horizontalAdapter.elistLocal.size()>2) {
+                    final int speedScroll = 2000;
+                    final Handler handler = new Handler();
+                    final Runnable runnable = new Runnable() {
+                        int count = 0;
+
+                        @Override
+                        public void run() {
+                            if (count < horizontalAdapter.elistLocal.size()) {
+                                horizontal_recycler_view.smoothScrollToPosition(++count);
+                                handler.postDelayed(this, speedScroll);
+                            } else {
+                                count = 0;
+                                horizontal_recycler_view.scrollToPosition(count);
+                                handler.postDelayed(this, speedScroll);
+                            }
+                        }
+                    };
+
+                    handler.postDelayed(runnable, speedScroll);
+                }
+
+                } else {
+                mManager.getPublicEventList(MainActivity.this);
+            }
             register_layout = findViewById(R.id.register);
             signin_layout = findViewById(R.id.sign_in);
             register_layout.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +185,7 @@ public class MainActivity extends BaseActivity implements Observer {
                 @Override
                 public void onClick(View v) {
                     TravellerLog.w(this, "Launch login page activity");
+
                     launchLogin();
                 }
             });
@@ -238,6 +297,12 @@ public class MainActivity extends BaseActivity implements Observer {
             } else {
                 TravellerLog.w(this, "Show main activity layout as user data not available from login response");
                 setContentView(R.layout.activity_main);
+            }
+        } else if(observable instanceof EventListNetwork) {
+            if(data!=null) {
+                horizontalAdapter.elistLocal.clear();
+                horizontalAdapter.addItem(mManager.getEventListCurrent(), null);
+                horizontalAdapter.notifyDataSetChanged();
             }
         }
     }

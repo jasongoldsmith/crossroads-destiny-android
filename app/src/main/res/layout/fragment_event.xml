@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/event"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="6dp"
         android:layout_marginTop="6dp"
         conversation:cardBackgroundColor="@android:color/transparent"
         app:border="true"
@@ -31,7 +30,7 @@
             android:id="@+id/event_top_frag"
             android:orientation="horizontal"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="16dp"
             android:layout_marginLeft="10dp">
 
             <ImageView
@@ -134,9 +133,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/event_bottom_frag"
-            android:layout_below="@+id/event_top_frag"
+            android:layout_alignParentBottom="true"
             android:orientation="horizontal"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="12dp">
 
             <!--<PlayerProfileImageView-->
                 <!--android:id="@+id/profile_icon"-->

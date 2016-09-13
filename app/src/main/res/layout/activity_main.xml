@@ -6,15 +6,22 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/img_background_login"
-        android:scaleType="fitXY" />
+        android:src="@drawable/img_background_map"
+        android:adjustViewBounds="true" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/img_b_g_v_nightfall_strike_default"
+        android:layout_alignParentTop="true"
+        android:adjustViewBounds="true"/>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/traveller_bdg"
         android:src="@drawable/img_traveler_badge"
-        android:layout_marginTop="159dp"
+        android:layout_marginTop="129dp"
         android:layout_centerHorizontal="true"/>
 
     <LinearLayout
@@ -30,7 +37,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#B3035166"/>
+                android:background="#0086d0"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -49,7 +56,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#B3036647"/>
+                android:background="#60b800"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -61,6 +68,29 @@
                 android:textSize="14sp"/>
         </RelativeLayout>
     </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/horizontal_recycler_view"
+        android:layout_below="@+id/gaurdian_text"
+        android:layout_above="@+id/btn_layout"
+        android:background="@android:color/transparent"
+        android:paddingTop="10dp"
+        android:paddingLeft="7dp"
+        android:paddingBottom="10dp"
+        android:clipToPadding="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/gaurdian_text"
+        android:gravity="center"
+        android:layout_below="@+id/traveller_bdg"
+        android:layout_marginTop="29dp"
+        android:text="@string/gaurdian_for_help"
+        android:textSize="12sp"
+        android:textColor="@color/trimbe_white"/>
 
     <TextView
         android:layout_width="wrap_content"

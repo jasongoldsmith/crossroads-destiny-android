@@ -55,6 +55,7 @@ public class SplashActivity extends BaseActivity implements Observer {
     private RelativeLayout mLayout;
     private ControlManager cManager;
     private boolean appInstallSuccess=false;
+    MixpanelAPI mixpanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +72,7 @@ public class SplashActivity extends BaseActivity implements Observer {
         cManager.setCurrentActivity(SplashActivity.this);
         //mixpanel token
         String projectToken =  getResources().getString(R.string.mix_panel_token);
-        MixpanelAPI mixpanel = MixpanelAPI.getInstance(SplashActivity.this, projectToken);
+        mixpanel = MixpanelAPI.getInstance(SplashActivity.this, projectToken);
         cManager.addClientHeader("x-mixpanelid", mixpanel.getDistinctId()!=null?mixpanel.getDistinctId():"");
 
         // Automatic session tracking
@@ -188,6 +189,10 @@ public class SplashActivity extends BaseActivity implements Observer {
     @Override
     public void onStart() {
         super.onStart();
+        if(Util.getDefaults("user", getApplicationContext())==null) {
+            cManager.getPublicEventList(null);
+            cManager.setShowFullEvent(mixpanel.booleanTweak("showFullCards", false).get());
+        }
     }
 
     @Override

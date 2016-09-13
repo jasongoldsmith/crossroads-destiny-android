@@ -636,7 +636,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         adapterConsole.notifyDataSetChanged();
     }
 
-    public void setAdCardPosition(String adAct) {
+    protected void setAdCardPosition(String adAct) {
         adCardPosition = adAct;
     }
 
@@ -754,7 +754,9 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         if((url!=null) || (!url.equalsIgnoreCase("null"))) {
             Util.picassoLoadIcon(this, userProfile, url, R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.profile_image);
             Util.picassoLoadIcon(this, userProfileDrawer, url, R.dimen.player_profile_drawer_hgt, R.dimen.player_profile_drawer_width, R.drawable.profile_image);
-            user.setImageUrl(url);
+            if(user!=null) {
+                user.setImageUrl(url);
+            }
         }
     }
 
@@ -1001,7 +1003,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         }
     }
 
-    public void hideProgress() {
+    protected void hideProgress() {
         if(progress!=null) {
             progress.setVisibility(View.GONE);
         }

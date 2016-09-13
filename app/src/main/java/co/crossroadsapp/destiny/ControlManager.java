@@ -115,6 +115,7 @@ public class ControlManager implements Observer{
     private AddCommentNetwork addCommentsNetwork;
     private TrackingNetwork trackingNetwork;
     private AsyncHttpClient client;
+    private Boolean showFullEvent;
 
     public ControlManager() {
     }
@@ -151,6 +152,8 @@ public class ControlManager implements Observer{
     public void setEventList(EventList el) {
         if(eData==null) {
             eData = new ArrayList<EventData>();
+        } else {
+            eData.clear();
         }
         eData = el.getEventList();
     }
@@ -174,7 +177,7 @@ public class ControlManager implements Observer{
             eventListNtwrk = new EventListNetwork(activity);
             eventListNtwrk.addObserver(activity);
             //eventListNtwrk.addObserver(this);
-            eventListNtwrk.getEvents();
+            eventListNtwrk.getEvents(Constants.EVENT_FEED);
             //todo commenting out get android version for google release
             getAndroidVersion(activity);
         } catch (JSONException e) {
@@ -196,7 +199,20 @@ public class ControlManager implements Observer{
         try {
             eventListNtwrk = new EventListNetwork(mCurrentAct);
             eventListNtwrk.addObserver(this);
-            eventListNtwrk.getEvents();
+            eventListNtwrk.getEvents(Constants.EVENT_FEED);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getPublicEventList(MainActivity mainActivity) {
+        try {
+            eventListNtwrk = new EventListNetwork(mCurrentAct);
+            eventListNtwrk.addObserver(this);
+            if(mainActivity !=null) {
+                eventListNtwrk.addObserver(this);
+            }
+            eventListNtwrk.getEvents(Constants.PUBLIC_EVENT_FEED);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -928,5 +944,13 @@ public class ControlManager implements Observer{
 
     public AsyncHttpClient getClient() {
         return client;
+    }
+
+    public void setShowFullEvent(Boolean showFullEvent) {
+        this.showFullEvent = showFullEvent;
+    }
+
+    public boolean getshowFullEvent() {
+        return showFullEvent;
     }
 }

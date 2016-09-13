@@ -74,6 +74,9 @@ public class Constants {
     public static int USER_CHANNEL = 2;
     public static int EVENT_CHANNEL = 1;
 
+    public static int PUBLIC_EVENT_FEED = 1;
+    public static int EVENT_FEED = 2;
+
     //deeplink error types
     public static int EVENT_GRP_MISSING = 1;
     public static int EVENT_MISSING = 2;
