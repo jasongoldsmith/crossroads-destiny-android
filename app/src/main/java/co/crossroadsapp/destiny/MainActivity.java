@@ -140,7 +140,7 @@ public class MainActivity extends BaseActivity implements Observer {
                 horizontal_recycler_view.setLayoutManager(horizontalLayoutManagaer);
                 horizontal_recycler_view.setAdapter(horizontalAdapter);
 
-                if(horizontalAdapter.elistLocal.size()>2) {
+                if(horizontalAdapter.elistLocal.size()>1) {
                     final int speedScroll = 2000;
                     final Handler handler = new Handler();
                     final Runnable runnable = new Runnable() {

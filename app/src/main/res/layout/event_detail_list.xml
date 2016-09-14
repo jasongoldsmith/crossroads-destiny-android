@@ -379,7 +379,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/send_msg_btn"
-                android:src="@drawable/icon_s_e_n_d"
                 android:padding="3dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"/>
