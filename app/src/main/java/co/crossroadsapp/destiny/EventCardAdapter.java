@@ -424,7 +424,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 if(mContext!=null) {
                     Picasso.with(mContext)
                             .load(cardBackgroundImageUrl)
-                            .placeholder(R.drawable.add_card_default)
+                            .placeholder(null)
                             .fit().centerCrop()
                             .into(adHolder.adCardImg);
                 }

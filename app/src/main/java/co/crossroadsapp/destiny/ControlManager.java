@@ -174,12 +174,14 @@ public class ControlManager implements Observer{
 
     public void getEventList(ListActivityFragment activity) {
         try {
-            eventListNtwrk = new EventListNetwork(activity);
-            eventListNtwrk.addObserver(activity);
-            //eventListNtwrk.addObserver(this);
-            eventListNtwrk.getEvents(Constants.EVENT_FEED);
-            //todo commenting out get android version for google release
-            getAndroidVersion(activity);
+            if(activity!=null) {
+                eventListNtwrk = new EventListNetwork(activity);
+                eventListNtwrk.addObserver(activity);
+                //eventListNtwrk.addObserver(this);
+                eventListNtwrk.getEvents(Constants.EVENT_FEED);
+                //todo commenting out get android version for google release
+                getAndroidVersion(activity);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

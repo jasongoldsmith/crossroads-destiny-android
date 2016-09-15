@@ -3,18 +3,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/splash_layout">
-
-    <!--<ImageView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:src="@drawable/img_bg_gradient" />-->
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/img_background_map"
-        android:scaleType="fitXY"/>
+    android:id="@+id/splash_layout"
+    android:background="@drawable/img_background_map">
 
     <ImageView
         android:layout_width="wrap_content"
