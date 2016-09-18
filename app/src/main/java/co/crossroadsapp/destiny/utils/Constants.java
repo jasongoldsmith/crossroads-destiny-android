@@ -55,6 +55,7 @@ public class Constants {
     public static String PSN_NOT_INITIATED = "NOT_INITIATED";
     public static String PSN_INITIATED = "INITIATED";
     public static String PSN_FAILED_INITIATED = "FAILED_INITIATION";
+    public static String PSN_DELETED = "DELETED";
 
     public static String CONSOLEXBOXONE = "XBOXONE";
     public static String CONSOLEXBOX360 = "XBOX360";
@@ -108,4 +109,10 @@ public class Constants {
 
     //urls
     public static String DEEP_LINK_IMAGE = "http://w3.crossroadsapp.co/bungie/share/branch/v1/";
+    public static String BUNGIE_ERROR = "BungieError";
+    public static String BUNGIE_LEGACY_ERROR = "BungieLegacyConsoleError";
+
+    public static String LEGACY_ERROR_TITLE = "Legacy Consoles";
+    public static String LEGACY_ERROR_MSG = "In line with Rise of Iron, we now only support next-gen consoles. When you’ve upgraded your console, please come\n" +
+            "back and join us!";
 }

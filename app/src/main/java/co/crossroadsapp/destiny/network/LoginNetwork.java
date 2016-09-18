@@ -3,6 +3,7 @@ package co.crossroadsapp.destiny.network;
 import android.content.Context;
 
 import co.crossroadsapp.destiny.ControlManager;
+import co.crossroadsapp.destiny.LoginActivity;
 import co.crossroadsapp.destiny.utils.Util;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
@@ -48,7 +49,15 @@ public class LoginNetwork extends Observable {
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
 //                    Toast.makeText(mContext, "Signup error from server  - " + statusCode,
 //                            Toast.LENGTH_LONG).show();
-                    mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
+                    if(errorResponse.has("errorType")) {
+                        try {
+                            ((LoginActivity)mContext).showError(Util.getErrorMessage(errorResponse), errorResponse.getString("errorType"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
+                    }
                 }
             });
         }else {

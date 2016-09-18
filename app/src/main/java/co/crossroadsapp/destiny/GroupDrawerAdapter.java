@@ -49,7 +49,7 @@ public class GroupDrawerAdapter {
     private TextView gotoBungie;
     private RelativeLayout selectedGrpCard;
 
-    public GroupDrawerAdapter(ListActivityFragment act) {
+    public GroupDrawerAdapter(final ListActivityFragment act) {
         c = act;
 
         mCntrlMngr = ControlManager.getmInstance();
@@ -57,10 +57,6 @@ public class GroupDrawerAdapter {
         if(mCntrlMngr.getUserData()!=null) {
             user = mCntrlMngr.getUserData();
         }
-
-        //groupSelectedBtn = (CheckBox) view.findViewById(R.id.group_selected_radio_btn);
-
-        //setSelectedGroup(objGroup);
 
         groupSelectedImage = (ImageView) act.findViewById(R.id.group_selected_image);
         groupSelectedName = (TextView) act.findViewById(R.id.group_selected_name);
@@ -73,7 +69,7 @@ public class GroupDrawerAdapter {
         emptyGrpText = (TextView) act.findViewById(R.id.empty_grp_text);
         gotoBungie = (TextView) act.findViewById(R.id.goto_bungie);
 
-        emptyGrpText.setText(Html.fromHtml((c.getString(R.string.nogroup_text))));
+        emptyGrpText.setText(Html.fromHtml((c.getString(R.string.unverified_bungie_text))));
         emptyGrpText.setMovementMethod(LinkMovementMethod.getInstance());
         gotoBungie.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +98,14 @@ public class GroupDrawerAdapter {
 
         mRecyclerView.setAdapter(mAdapter);
 
+        if(empty_group_layout!=null) {
+            empty_group_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((ListActivityFragment)c).showUnverifiedUserMsg();
+                }
+            });
+        }
     }
 
     private void getGrpList() {
@@ -114,13 +118,13 @@ public class GroupDrawerAdapter {
     }
 
     private void checkSignleGrpView() {
-        if(localGroupList!=null && localGroupList.size()==0) {
+        if(user!=null && user.getPsnVerify()!=null && user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
             if (empty_group_layout != null) {
-                empty_group_layout.setVisibility(View.VISIBLE);
+                empty_group_layout.setVisibility(View.GONE);
             }
         } else {
             if (empty_group_layout != null) {
-                empty_group_layout.setVisibility(View.GONE);
+                empty_group_layout.setVisibility(View.VISIBLE);
             }
         }
     }

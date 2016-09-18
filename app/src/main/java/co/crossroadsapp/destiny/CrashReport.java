@@ -1,16 +1,23 @@
 package co.crossroadsapp.destiny;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.loopj.android.http.RequestParams;
+
+import java.util.Observable;
+import java.util.Observer;
 
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.R;
@@ -18,13 +25,14 @@ import co.crossroadsapp.destiny.R;
 /**
  * Created by sharmha on 3/31/16.
  */
-public class CrashReport extends Activity {
+public class CrashReport extends BaseActivity implements Observer {
 
     private EditText crash_text;
-    private CardView send_crash;
+    private TextView send_crash;
     private UserData user;
     private ControlManager controlManager;
     private ImageView backBtn;
+    private EditText email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +46,8 @@ public class CrashReport extends Activity {
         user = controlManager.getUserData();
 
         crash_text = (EditText) findViewById(R.id.crash_edittext);
-        send_crash = (CardView) findViewById(R.id.send_crash);
+        email = (EditText) findViewById(R.id.crash_email);
+        send_crash = (TextView) findViewById(R.id.send_crash);
         backBtn = (ImageView) findViewById(R.id.back);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,15 +71,41 @@ public class CrashReport extends Activity {
         send_crash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(crash_text.getText().toString().length()>0){
+                if(crash_text.getText().toString().length()>0 && !email.getText().toString().isEmpty()){
                     //send crash report
                     if(user.getUserId()!=null) {
-                        controlManager.postCrash(CrashReport.this, user.getUserId(), crash_text.getText().toString());
+                        showProgressBar();
+                        RequestParams requestParams = new RequestParams();
+                        requestParams.put("reporter", user.getUserId());
+                        requestParams.put("reporterEmail", email.getText().toString());
+                        requestParams.put("reportDetails", crash_text.getText().toString());
+                        controlManager.postCrash(CrashReport.this, requestParams);
                     }
-                    showToastAndClose();
+                    //showToastAndClose();
                 }
             }
         });
+    }
+
+    public void showError(String err) {
+        hideProgressBar();
+        showError(err);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        hideKeyboard();
+    }
+
+    private void showKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(CrashReport.this.getCurrentFocus().getWindowToken(),0);
     }
 
     private void showToastAndClose() {
@@ -85,5 +120,14 @@ public class CrashReport extends Activity {
                                 finish();
                             }
                         }, timeInMillisecondTheToastIsShowingFor);
+    }
+
+    @Override
+    public void update(Observable observable, Object data) {
+        hideProgressBar();
+        Intent intent = new Intent(getApplicationContext(),
+                MessageSent.class);
+        startActivity(intent);
+        finish();
     }
 }

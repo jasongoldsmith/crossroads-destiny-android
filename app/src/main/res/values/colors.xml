@@ -23,9 +23,13 @@
     <color name="theme_color">#FF00AE</color>
     <color name="semi_transparent_chip">#80FF00AE</color>
 
+    <color name="hinttext_color">#80ffffff</color>
+
     <drawable name="semi_transperant_overlay">#aa000000</drawable>
     <color name="trimbe_white">#ffffff</color>
     <color name="trimbe_black">#000000</color>
+    <color name="edittext_background">#4f000000</color>
+    <color name="fifty_black">#80000000</color>
     <color name="hiden_text_bg">#434c4f</color>
     <color name="seventy_percent_couch_mark_bg">#b3000000</color>
     <color name="tour_skip_text_color">#3ea5d7</color>
@@ -38,6 +42,7 @@
     <color name="related_video_divider_color">#738388</color>
     <color name="event_user_image_background">#365d65</color>
     <color name="create_new_event_green">#60b800</color>
+    <color name="signin_pressed">#529d00</color>
     <color name="orbit_text_color">#989898</color>
 
     <color name="activity_light_color">#ffc600</color>

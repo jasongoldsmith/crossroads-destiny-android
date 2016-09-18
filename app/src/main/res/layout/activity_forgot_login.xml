@@ -1,113 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:conversation="http://schemas.android.com/apk/res-auto"
-    tools:context=".ForgotLoginActivity">
+    android:background="@drawable/img_background_map">
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/img_background_map"
-        android:scaleType="fitXY"/>
+        android:layout_height="wrap_content"
+        android:src="@drawable/img_b_g_s_i_g_n_i_n"
+        android:layout_alignParentTop="true"
+        android:id="@+id/hero_img"
+        android:adjustViewBounds="true"/>
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/error_layout">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/forgotlogin_text"
-        android:layout_centerHorizontal="true"
-        android:text="Forgot Login"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:layout_marginTop="16dp"/>
+    <ImageView
+        android:layout_width="64dp"
+        android:layout_height="73dp"
+        android:id="@+id/traveller_bdg"
+        android:src="@drawable/img_logo_badge"
+        android:layout_marginBottom="63dp"
+        android:layout_above="@+id/forgot_layout"
+        android:layout_centerHorizontal="true"/>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/back"
         android:src="@drawable/icon_back_arrow"
-        android:paddingTop="8dp"
+        android:padding="6dp"
         android:layout_alignParentStart="true"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/globe"
-            android:src="@drawable/img_globe_icon"
-            android:layout_marginTop="45dp"
-            android:layout_below="@id/forgotlogin_text"
-            android:layout_centerHorizontal="true"
-            />
-
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/forgot_layout"
+        android:layout_above="@+id/reset_text">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/forgotlogin_subtext"
-        android:layout_below="@id/globe"
+        android:id="@+id/forgotlogin_text"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:text="@string/forgotlogin_text"
-        android:gravity="center"
-        android:textColor="@color/trimbe_white"
-        android:textSize="20sp"/>
+        android:text="FORGOT PASSWORD"
+        android:layout_alignParentTop="true"
+        android:fontFamily="sans-serif"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:layout_marginTop="18dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/forgot_login_console_text"
-            android:layout_below="@+id/forgotlogin_subtext"
-            android:fontFamily="sans-serif"
-            android:textColor="@color/trimbe_white"
-            android:textStyle="bold"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
-            android:text="@string/choose_console"
-            android:textSize="12sp"/>
-
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/spinner_layout_forgot_login"
-            android:background="@color/app_theme_color"
-            android:layout_marginTop="7dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginLeft="50dp"
-            android:layout_below="@+id/forgot_login_console_text">
-
-            <Spinner
+            android:layout_height="44dp"
+            android:id="@+id/console"
+            android:layout_below="@+id/forgotlogin_text"
+            android:layout_marginTop="27dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp">
+            <android.support.v7.widget.CardView
+                xmlns:conversation="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/spinner_forgot_login"
-                android:background="@color/app_theme_color"
-                android:gravity="center"
-                android:popupElevation="0dp"
-                android:popupBackground="@android:color/transparent" />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_arrowdown"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:padding="8dp"/>
-        </RelativeLayout>
+                android:id="@+id/playstation_btn"
+                android:layout_weight="1"
+                app:border="true"
+                app:borderColor="#979797"
+                app:circularBorderWidth="1dp"
+                conversation:cardBackgroundColor="@color/app_theme_color"
+                conversation:cardElevation="0dp">
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:id="@+id/ps_image"
+                        android:src="@drawable/icon_psn_consolex"
+                        android:layout_marginLeft="13dp"
+                        android:layout_gravity="center_vertical"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/playstation_text"
+                        android:text="PlayStation 4"
+                        android:textColor="@color/trimbe_white"
+                        android:layout_toRightOf="@+id/ps_image"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif"
+                        android:textStyle="bold"/>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+            <android.support.v7.widget.CardView
+                xmlns:conversation="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/xbox_btn"
+                app:border="true"
+                app:borderColor="#979797"
+                conversation:cardBackgroundColor="@color/edittext_background"
+                app:circularBorderWidth="1dp"
+                conversation:cardElevation="0dp">
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:id="@+id/xbox_image"
+                        android:src="@drawable/icon_xboxone_consolex"
+                        android:layout_marginLeft="13dp"
+                        android:layout_gravity="center_vertical"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/xbox_text"
+                        android:text="Xbox One"
+                        android:layout_toRightOf="@+id/xbox_image"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif"
+                        android:textStyle="bold"/>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:id="@+id/psnid_forgot_layout"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:background="#4f000000"
-        android:layout_below="@+id/spinner_layout_forgot_login">
+        android:layout_below="@+id/console">
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
@@ -117,54 +147,53 @@
             android:layout_marginStart="17dp"
             android:layout_marginTop="13dp"
             android:layout_marginBottom="22dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/psn_forgot_login"
-            android:layout_toRightOf="@+id/psn_icon"
-            android:fontFamily="sans-serif"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="13dp"
-            android:textSize="10sp"
-            android:text="PLAYSTATION ID/XBOX GAMERTAG"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/forgot_psn"
+            android:hint="@string/playstation_hint"
             android:textCursorDrawable="@drawable/cursor_draw"
             android:textColor="@android:color/white"
             android:singleLine="true"
             android:imeOptions="actionDone"
             android:background="@null"
-            android:textSize="14sp"
+            android:inputType="textVisiblePassword"
+            android:textSize="18sp"
             android:layout_toRightOf="@+id/psn_icon"
-            android:layout_below="@+id/psn_forgot_login"
-            android:layout_marginTop="9dp"
-            android:layout_marginBottom="10dp"
+            android:gravity="center_vertical"
             android:layout_marginLeft="25dp" />
     </RelativeLayout>
 
-    <android.support.v7.widget.CardView
-        android:layout_width="60dp"
-        android:layout_height="30dp"
-        android:id="@+id/send_forgotlogin"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="15dp"
-        conversation:cardBackgroundColor="@color/app_theme_color">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="SEND"
-                android:textColor="@android:color/white" />
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/reset_text"
+        android:text="@string/reset_pswd_test"
+        android:textColor="@color/trimbe_white"
+        android:textSize="16sp"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:paddingTop="20dp"
+        android:paddingRight="25dp"
+        android:paddingLeft="25dp"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/reset_pswd"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/reset_pswd"
+        android:background="#0086d0"
+        android:text="@string/reset_pswd"
+        android:fontFamily="sans-serif"
+        android:layout_marginTop="60dp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"/>
 
     <include layout="@layout/activity_base" />
 

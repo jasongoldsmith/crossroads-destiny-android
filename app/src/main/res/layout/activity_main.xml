@@ -19,55 +19,23 @@
         android:layout_marginTop="129dp"
         android:layout_centerHorizontal="true"/>
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:id="@+id/signin"
+        android:background="#0086d0"
+        android:text="@string/signin"
+        android:fontFamily="sans-serif"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
         android:layout_alignParentBottom="true"
-        android:id="@+id/btn_layout">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:id="@+id/register">
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#0086d0"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:textColor="@android:color/white"
-                android:fontFamily="sans-serif"
-                android:textStyle="bold"
-                android:text="SIGN UP"
-                android:textSize="14sp"/>
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:id="@+id/sign_in">
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#60b800"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:textColor="@android:color/white"
-                android:fontFamily="sans-serif"
-                android:textStyle="bold"
-                android:text="LOG IN"
-                android:textSize="14sp"/>
-        </RelativeLayout>
-    </LinearLayout>
+        android:gravity="center"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/horizontal_recycler_view"
         android:layout_below="@+id/guardian_text_layout"
-        android:layout_above="@+id/btn_layout"
+        android:layout_above="@+id/signin"
         android:background="@android:color/transparent"
         android:paddingTop="10dp"
         android:paddingLeft="2dp"
@@ -105,11 +73,35 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_layout"
+        android:layout_above="@+id/signin"
         android:layout_marginBottom="19dp"
         android:textColor="@color/copyright_text"
         android:textSize="12sp"
+        android:id="@+id/catalyst_text"
         android:layout_centerHorizontal="true"
         android:text="@string/copyright_string"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:id="@+id/privacy_terms"
+        android:textColorLink="@color/app_theme_color"
+        android:layout_above="@+id/catalyst_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginLeft="2dp"
+        android:textColor="@color/copyright_text"
+        android:textSize="12sp"
+        android:text="@string/terms_conditions"/>
+
+    <WebView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/web"
+        android:visibility="gone">
+    </WebView>
 
 </RelativeLayout>

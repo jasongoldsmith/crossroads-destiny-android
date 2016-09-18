@@ -456,6 +456,17 @@ public class ControlManager implements Observer{
         }
     }
 
+    public void postLogout(MainActivity act, RequestParams params) {
+        try {
+            logoutNetwork = new LogoutNetwork(act);
+            //logoutNetwork.addObserver(this);
+            logoutNetwork.addObserver(act);
+            logoutNetwork.doLogout(params);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void postHelmet(ListActivityFragment act) {
         try {
             helmetUpdateNetwork = new HelmetUpdateNetwork(act);
@@ -489,7 +500,7 @@ public class ControlManager implements Observer{
                 if (mCurrentAct instanceof SplashActivity) {
                     ((SplashActivity) mCurrentAct).showError(err);
                 } else if (mCurrentAct instanceof LoginActivity) {
-                    ((LoginActivity) mCurrentAct).showError(err);
+                    ((LoginActivity) mCurrentAct).showError(err, null);
                 } else if (mCurrentAct instanceof RegisterActivity) {
                     ((RegisterActivity) mCurrentAct).showError(err);
                 } else if (mCurrentAct instanceof ListActivityFragment) {
@@ -738,13 +749,10 @@ public class ControlManager implements Observer{
 
     }
 
-    public void postCrash(CrashReport c, String userId, String s) {
-        RequestParams requestParams = new RequestParams();
-        requestParams.put("reporter", userId);
-        requestParams.put("reportDetails", s);
-
+    public void postCrash(CrashReport c, RequestParams requestParams) {
         try {
             crashReportNetwork = new ReportCrashNetwork(c);
+            crashReportNetwork.addObserver(c);
             crashReportNetwork.doCrashReport(requestParams);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -953,6 +961,9 @@ public class ControlManager implements Observer{
     }
 
     public boolean getshowFullEvent() {
-        return showFullEvent;
+        if(showFullEvent!=null) {
+            return showFullEvent;
+        }
+        return false;
     }
 }

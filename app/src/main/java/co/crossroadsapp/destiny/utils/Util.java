@@ -11,7 +11,9 @@ import android.content.res.Resources;
 import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -58,7 +60,7 @@ public class Util {
 
     //To switch between production and development server links
     //where 1 points to development, 2 points to production and 3 points to Dev staging
-    private static final int network_connection = 1;
+    private static final int network_connection = 3;
 
     private static final String TAG = Util.class.getName();
     public static final String trimbleDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -661,5 +663,32 @@ public class Util {
             Util.postTracking(jsonOrganic, cManager.getCurrentActivity(), cManager, Constants.APP_INSTALL);
             Util.setDefaults("appInstall", Constants.ORGANIC_SOURCE, cManager.getCurrentActivity());
         }
+    }
+
+    public static void createAlert(String title, String msg, String ok, Activity act) {
+        AlertDialog.Builder builder;
+        AlertDialog dialog;
+        if(title!=null && msg!=null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(act, android.R.style.Theme_Material_Light_Dialog_Alert);
+            } else {
+                builder = new AlertDialog.Builder(act);
+            }
+
+            builder.setTitle(title)
+                    .setMessage(msg)
+                    .setPositiveButton(ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // continue with finish activity
+                            dialog.dismiss();
+                        }
+                    });
+            dialog = builder.create();
+            dialog.show();
+        }
+    }
+
+    public final static boolean isValidEmail(CharSequence target) {
+        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 }

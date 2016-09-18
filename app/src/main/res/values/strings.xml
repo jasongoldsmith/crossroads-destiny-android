@@ -65,12 +65,14 @@
 
     <string name="console_prompt">PLAYSTATION 4</string>
     <string name="username_text">CROSSROADS USERNAME</string>
-    <string name="username_hint">Enter Crossroads username</string>
+    <string name="username_hint">Enter Id</string>
+    <string name="playstation_hint">Enter PlayStation ID</string>
+    <string name="xbox_hint">Enter Xbox One ID</string>
 
     <string name="add_activity">ADD ACTIVITY</string>
     <string name="add">ADD</string>
     <string name="support_link"> support@crossroadsapp.co</string>
-    <string name="contact_us">Contact Us</string>
+    <string name="contact_us">CONTACT US</string>
     <string name="password_hint">Enter password</string>
     <string name="create_crossroads_accnt">CREATE NEW CROSSROADS ACCOUNT</string>
     <string name="animation_speed">400</string>
@@ -111,7 +113,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="comment_hint">Type your comment</string>
-    <string name="gaurdian_for_help">Guardians waiting for your help:</string>
+    <string name="gaurdian_for_help">Guardians searching for fireteams:</string>
+    <string name="signin">SIGN IN</string>
+    <string name="reset_pswd">RESET PASSWORD</string>
+    <string name="reset_pswd_test">Instructions on how to reset your password will be sent to your Bungie account.</string>
+    <string name="unverified_bungie_text">Check your messages on <![CDATA[<a href="http://www.bungie.net">Bungie.net</a>]]> for a verification link from Crossroads.</string>
 
     <plurals name="minutes_time">
         <item quantity="one">%d minute ago</item>

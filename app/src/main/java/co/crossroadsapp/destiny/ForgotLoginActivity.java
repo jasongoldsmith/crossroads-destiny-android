@@ -1,7 +1,12 @@
 package co.crossroadsapp.destiny;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.CardView;
@@ -11,7 +16,9 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -29,12 +36,12 @@ import java.util.Observable;
 import java.util.Observer;
 
 
-public class ForgotLoginActivity extends BaseActivity implements Observer, AdapterView.OnItemSelectedListener {
+public class ForgotLoginActivity extends BaseActivity implements Observer{
 
     private ImageView backBtn;
     private EditText psnId;
-    private CardView resetPassword;
-    private String console=null;
+    private TextView resetPassword;
+    private String console="PS4";
 
 //    private RelativeLayout errLayout;
 //    private TextView errText;
@@ -43,12 +50,18 @@ public class ForgotLoginActivity extends BaseActivity implements Observer, Adapt
     private ControlManager mManager;
     private Spinner consoleType;
     private TextView psnId_text;
+    private ImageView back;
+    private CardView playstationBtn;
+    private CardView xboxBtn;
+    private TextView playstationBtnText;
+    private TextView xboxBtnText;
+    private ImageView heroImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_login);
-
+        //setTRansparentStatusBar();
         mManager = ControlManager.getmInstance();
         mManager.setCurrentActivity(this);
 
@@ -62,18 +75,60 @@ public class ForgotLoginActivity extends BaseActivity implements Observer, Adapt
 
         dialog = new ProgressDialog(this);
 
-//        errLayout = (RelativeLayout) findViewById(R.id.error_layout);
-//        errText = (TextView) findViewById(R.id.error_sub);
-//        close_err = (ImageView) findViewById(R.id.err_close);
-//
-//        close_err.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                errLayout.setVisibility(View.GONE);
-//            }
-//        });
+        back = (ImageView) findViewById(R.id.back);
 
-        resetPassword = (CardView) findViewById(R.id.send_forgotlogin);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        resetPassword = (TextView) findViewById(R.id.reset_pswd);
+
+        psnId = (EditText) findViewById(R.id.forgot_psn);
+
+        heroImg = (ImageView) findViewById(R.id.hero_img);
+
+        psnId.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
+                    // the user is done typing.
+                    resetPassword.performClick();
+                }
+                return false;
+            }
+        });
+
+        playstationBtn = (CardView) findViewById(R.id.playstation_btn);
+        xboxBtn = (CardView) findViewById(R.id.xbox_btn);
+        playstationBtnText = (TextView) findViewById(R.id.playstation_text);
+        xboxBtnText = (TextView) findViewById(R.id.xbox_text);
+
+        playstationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playstationBtn.setCardBackgroundColor(getResources().getColor(R.color.app_theme_color));
+                playstationBtnText.setTextColor(getResources().getColor(R.color.trimbe_white));
+                psnId.setHint(getResources().getString(R.string.playstation_hint));
+                xboxBtn.setCardBackgroundColor(getResources().getColor(R.color.edittext_background));
+                xboxBtnText.setTextColor(getResources().getColor(R.color.hinttext_color));
+                console = "PS4";
+            }
+        });
+
+        xboxBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                xboxBtn.setCardBackgroundColor(getResources().getColor(R.color.app_theme_color));
+                xboxBtnText.setTextColor(getResources().getColor(R.color.trimbe_white));
+                psnId.setHint(getResources().getString(R.string.xbox_hint));
+                playstationBtn.setCardBackgroundColor(getResources().getColor(R.color.edittext_background));
+                playstationBtnText.setTextColor(getResources().getColor(R.color.hinttext_color));
+                console = "XBOXONE";
+            }
+        });
 
         resetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,83 +150,70 @@ public class ForgotLoginActivity extends BaseActivity implements Observer, Adapt
             }
         });
 
-        consoleType = (Spinner) findViewById(R.id.spinner_forgot_login);
-
-        setSpinnerAdapter();
-
-        consoleType.setOnItemSelectedListener(this);
-
-        psnId_text = (TextView) findViewById(R.id.psn_forgot_login);
-
-        psnId = (EditText) findViewById(R.id.forgot_psn);
-
-        psnId.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        final View contentView = this.findViewById(android.R.id.content);
+        contentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
-                    // the user is done typing.
-                    resetPassword.performClick();
+            public void onGlobalLayout() {
+
+                Rect r = new Rect();
+                contentView.getWindowVisibleDisplayFrame(r);
+                int screenHeight = contentView.getRootView().getHeight();
+
+                // r.bottom is the position above soft keypad or device button.
+                // if keypad is shown, the r.bottom is smaller than that before.
+                int keypadHeight = screenHeight - r.bottom;
+
+                if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
+                    // keyboard is opened
+                    heroImg.setVisibility(View.GONE);
                 }
-                return false;
+                else {
+                    // keyboard is closed
+                    heroImg.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
 
-    private void setSpinnerAdapter() {
-        // Array of console types
-        final String[] objects = { "PlayStation 4", "PlayStation 3", "Xbox One", "Xbox 360"};
-
-        // Initializing an ArrayAdapter
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, objects){
-            int FONT_STYLE = Typeface.BOLD;
-
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
-
-                ((TextView) v).setTypeface(Typeface.SANS_SERIF, FONT_STYLE);
-                ((TextView) v).setTextColor(
-                        getResources().getColorStateList(R.color.trimbe_white)
-                );
-                ((TextView) v).setGravity(Gravity.CENTER);
-
-                ((TextView) v).setPadding(Util.dpToPx(0, ForgotLoginActivity.this), 0, 0, 0);
-                ((TextView) v).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                ((TextView) v).setText(((TextView) v).getText());
-
-                return v;
+    @Override
+    public void onResume() {
+        super.onResume();
+        Handler mHandler = new Handler();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showKeyboard();
             }
 
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-
-                //View v = super.getDropDownView(position, convertView,parent);
-
-                return getCustomView(position, convertView, parent, objects);
-
-//                        ((TextView) v).setGravity(Gravity.CENTER);
-//
-//                        v.setBackgroundColor(getResources().getColor(R.color.app_theme_color));
-//                        ((TextView) v).setTextColor(getResources().getColor(R.color.trimbe_white));
-//                        ((TextView) v).setHeight(Util.dpToPx(50, CreateNewEvent.this));
-//
-//                        return v;
-
-            }
-        };
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-
-        consoleType.setAdapter(spinnerArrayAdapter);
+        }, 1000);
     }
 
-    public View getCustomView(int position, View convertView, ViewGroup parent, String[] adapterCheckpoint) {
+    @Override
+    public void onStop() {
+        super.onStop();
+        hideKeyboard();
+    }
 
-        LayoutInflater inflater=getLayoutInflater();
-        View row=inflater.inflate(R.layout.fragment_checkpoint, parent, false);
-        TextView label=(TextView)row.findViewById(R.id.activity_checkpoint_text);
-        if (adapterCheckpoint!=null) {
-            label.setText(adapterCheckpoint[position]);
+    private void showKeyboard() {
+        psnId.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+    }
+
+    private void hideKeyboard() {
+        psnId.setText("");
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(ForgotLoginActivity.this.getCurrentFocus().getWindowToken(),0);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setTRansparentStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
-        return row;
     }
 
     public void showError(String err) {
@@ -183,52 +225,22 @@ public class ForgotLoginActivity extends BaseActivity implements Observer, Adapt
     @Override
     public void update(Observable observable, Object data) {
         dialog.dismiss();
-        Toast.makeText(this, "Instructions for resetting your password have been sent to your Bungie.net account. Follow the instructions to choose a new password.",
-                Toast.LENGTH_LONG).show();
-        long timeInMillisecondTheToastIsShowingFor = 3000;
-        (new Handler())
-                .postDelayed(
-                        new Runnable() {
-                            public void run() {
-                                // finish this activity here
-                                finish();
-                            }
-                        }, timeInMillisecondTheToastIsShowingFor);
+        psnId.setText("");
+        Intent intent = new Intent(getApplicationContext(),
+                PasswordReset.class);
+        startActivity(intent);
+        finish();
+//        Toast.makeText(this, "Instructions for resetting your password have been sent to your Bungie.net account. Follow the instructions to choose a new password.",
+//                Toast.LENGTH_LONG).show();
+//        long timeInMillisecondTheToastIsShowingFor = 3000;
+//        (new Handler())
+//                .postDelayed(
+//                        new Runnable() {
+//                            public void run() {
+//                                // finish this activity here
+//                                finish();
+//                            }
+//                        }, timeInMillisecondTheToastIsShowingFor);
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        console = parent.getItemAtPosition(position).toString();
-        if(console!=null) {
-            switch (console)
-            {
-                case "PlayStation 3" :
-                    psnId_text.setText("PLAYSTATION ID");
-                    psnId.setHint("Enter PlayStation ID");
-                    console = "PS3";
-                    break;
-                case "PlayStation 4" :
-                    psnId_text.setText("PLAYSTATION ID");
-                    psnId.setHint("Enter PlayStation ID");
-                    console = "PS4";
-                    break;
-                case "Xbox One":
-                    psnId_text.setText("XBOX GAMERTAG");
-                    psnId.setHint("Enter Xbox Gamertag");
-                    console = "XBOXONE";
-                    break;
-                case "Xbox 360":
-                    psnId_text.setText("XBOX GAMERTAG");
-                    psnId.setHint("Enter Xbox Gamertag");
-                    console = "XBOX360";
-                    break;
-
-            }
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 }

@@ -14,6 +14,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -33,6 +35,7 @@ import java.util.Map;
 
 import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.PushNotification;
+import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.CircularImageView;
 import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
@@ -115,6 +118,110 @@ public class BaseActivity extends FragmentActivity {
     public void closeView(View view) {
         if(errLayout!=null) {
             errLayout.setVisibility(View.GONE);
+        }
+    }
+
+    public void showUnverifiedUserMsg() {
+        final RelativeLayout unverifiedMsg = (RelativeLayout) findViewById(R.id.new_user_msg);
+        CircularImageView userHeader = (CircularImageView) findViewById(R.id.unverified_player);
+        TextView username = (TextView) findViewById(R.id.username_text);
+        ImageView closeBtn = (ImageView) findViewById(R.id.close_btn);
+        CardView verifyBungieBtn = (CardView) findViewById(R.id.verify_btn);
+        TextView notNow = (TextView) findViewById(R.id.not_now);
+        TextView unverifiedBungieText = (TextView) findViewById(R.id.bungie_text);
+
+        UserData userData = mManager.getUserData();
+
+        unverifiedMsg.setVisibility(View.VISIBLE);
+
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unverifiedMsg.setVisibility(View.GONE);
+                Util.setDefaults("showUnverifiedMsg", "true", mManager.getCurrentActivity());
+            }
+        });
+
+        notNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unverifiedMsg.setVisibility(View.GONE);
+                Util.setDefaults("showUnverifiedMsg", "true", mManager.getCurrentActivity());
+            }
+        });
+
+        if(userData!=null) {
+            if(userData.getPsnId()!=null) {
+                if(userData.getClanTag()!=null && !userData.getClanTag().isEmpty()) {
+                    username.setText(userData.getPsnId() + "[" + userData.getClanTag() + "]");
+                } else {
+                    username.setText(userData.getPsnId());
+                }
+            }
+
+            if(userData.getImageUrl()!=null) {
+                Util.picassoLoadIcon(mManager.getCurrentActivity(), userHeader, userData.getImageUrl(), R.dimen.activity_profile_icon_hgt, R.dimen.activity_profile_icon_width, R.drawable.profile_image);
+            }
+        }
+
+        unverifiedBungieText.setText(Html.fromHtml((getString(R.string.unverified_bungie_text))));
+        unverifiedBungieText.setMovementMethod(LinkMovementMethod.getInstance());
+
+        unverifiedBungieText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Util.setDefaults("showUnverifiedMsg", "true", mManager.getCurrentActivity());
+                unverifiedMsg.setVisibility(View.GONE);
+            }
+        });
+
+        verifyBungieBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Util.setDefaults("showUnverifiedMsg", "true", mManager.getCurrentActivity());
+                unverifiedMsg.setVisibility(View.GONE);
+                String uri = "http://www.bungie.net";
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                mManager.getCurrentActivity().startActivity(browserIntent);
+            }
+        });
+    }
+
+    public void showGenericError(String title, String msg, String btnText) {
+        if(deeplinkError!=null) {
+            deeplinkError.setVisibility(View.GONE);
+        }
+        deeplinkError = (RelativeLayout) findViewById(R.id.deeplink_error);
+        TextView errMsgG = (TextView) findViewById(R.id.msg);
+        TextView btnTextG = (TextView) findViewById(R.id.btn_text);
+        CardView btn = (CardView) findViewById(R.id.add_btn);
+        TextView titleG = (TextView) findViewById(R.id.eyesup_text);
+        deeplinkError.setVisibility(View.VISIBLE);
+        TextView noBtnG = (TextView) findViewById(R.id.no_thanks);
+        ImageView closeG= (ImageView) findViewById(R.id.close);
+
+        closeG.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deeplinkError.setVisibility(View.GONE);
+            }
+        });
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deeplinkError.setVisibility(View.GONE);
+            }
+        });
+        noBtnG.setVisibility(View.GONE);
+        if(title!=null && !title.isEmpty()) {
+            titleG.setText(title);
+        }
+        if (msg!=null && !msg.isEmpty()) {
+            errMsgG.setText(msg);
+        }
+        if(btnText!=null && !btnText.isEmpty()) {
+            btnTextG.setText(btnText);
         }
     }
 

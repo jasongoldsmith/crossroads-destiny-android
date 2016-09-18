@@ -160,6 +160,10 @@ public class UserData {
                     String profileImg = jsonData.getString("imageUrl");
                     setImageUrl(profileImg);
                 }
+                    if (jsonData.has("verifyStatus") && !jsonData.isNull("verifyStatus")) {
+                        String verifyS = jsonData.getString("verifyStatus");
+                        setPsnVerify(verifyS);
+                    }
                 if (jsonData.has("_id") && !jsonData.isNull("_id")) {
                     String uId = jsonData.getString("_id");
                     setUserId(uId);
@@ -189,16 +193,17 @@ public class UserData {
                                 String id = conData.getString("consoleId");
                                 if(cData.getPrimary()) {
                                     setPsnId(id);
+                                    setUser(id);
                                 }
                                 cData.setcId(id);
                             }
-                            if (conData.has("verifyStatus") && !conData.isNull("verifyStatus")) {
-                                String verifyS = conData.getString("verifyStatus");
-                                if(cData.getPrimary()) {
-                                    setPsnVerify(verifyS);
-                                }
-                                cData.setVerifyStatus(verifyS);
-                            }
+//                            if (conData.has("verifyStatus") && !conData.isNull("verifyStatus")) {
+//                                String verifyS = conData.getString("verifyStatus");
+//                                if(cData.getPrimary()) {
+//                                    setPsnVerify(verifyS);
+//                                }
+//                                cData.setVerifyStatus(verifyS);
+//                            }
                             if (conData.has("clanTag") && !conData.isNull("clanTag")) {
                                 String clanTag = conData.getString("clanTag");
                                 if(cData.getPrimary()) {

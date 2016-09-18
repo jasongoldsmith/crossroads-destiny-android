@@ -11,13 +11,22 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.URLSpan;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.TextView;
 
 import co.crossroadsapp.destiny.data.AppVersion;
 import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.network.EventListNetwork;
 import co.crossroadsapp.destiny.network.GetVersion;
 import co.crossroadsapp.destiny.network.LoginNetwork;
+import co.crossroadsapp.destiny.network.LogoutNetwork;
 import co.crossroadsapp.destiny.utils.TravellerLog;
 import co.crossroadsapp.destiny.utils.Util;
 import co.crossroadsapp.destiny.utils.Version;
@@ -33,8 +42,8 @@ import java.util.Observer;
 
 public class MainActivity extends BaseActivity implements Observer {
 
-    private View register_layout;
-    private View signin_layout;
+    //private View register_layout;
+    private TextView signin_layout;
     public UserData userData;
     Intent contentIntent;
     private String p;
@@ -43,6 +52,9 @@ public class MainActivity extends BaseActivity implements Observer {
     private RecyclerView horizontal_recycler_view;
     private ArrayList<EventData> horizontalList;
     private EventCardAdapter horizontalAdapter;
+    private TextView privacyTerms;
+    private WebView webView;
+    private String console;
 
     @Override
     protected void onCreate(Bundle outState) {
@@ -51,6 +63,7 @@ public class MainActivity extends BaseActivity implements Observer {
         TravellerLog.w(this, "MainActivity.onCreate starts...");
         u= Util.getDefaults("user", getApplicationContext());
         p = Util.getDefaults("password", getApplicationContext());
+        console = Util.getDefaults("consoleType", getApplicationContext());
 
         userData = new UserData();
 
@@ -103,93 +116,116 @@ public class MainActivity extends BaseActivity implements Observer {
     }
 
     private void forwardAfterVersionCheck() {
-        if (u != null && p!= null && !u.isEmpty() && !p.isEmpty()) {
+        if (u != null && p!= null && console!=null && !u.isEmpty() && !p.isEmpty() && !console.isEmpty()) {
             //todo check how to minimize api calls to get full event list in future from multiple locations
             TravellerLog.w(this, "Logging user in the background as user data available");
-            mManager.getEventList();
-            if(mManager.getEventListCurrent()!=null) {
-                if(mManager.getEventListCurrent().isEmpty()) {
+            //check if existing user with version below 1.1.0
+            String newUser = Util.getDefaults("showUnverifiedMsg", getApplicationContext());
+            if(newUser==null) {
+                // continue with delete
+                RequestParams rp = new RequestParams();
+                rp.put("userName", u);
+                mManager.postLogout(MainActivity.this, rp);
+            } else {
+                mManager.getEventList();
+                if (mManager.getEventListCurrent() != null) {
+                    if (mManager.getEventListCurrent().isEmpty()) {
+                        mManager.getEventList();
+                    }
+                } else {
                     mManager.getEventList();
                 }
-            }else {
-                mManager.getEventList();
-            }
-            if(mManager.getCurrentGroupList()!=null) {
-                if(mManager.getCurrentGroupList().isEmpty()) {
+                if (mManager.getCurrentGroupList() != null) {
+                    if (mManager.getCurrentGroupList().isEmpty()) {
+                        mManager.getGroupList(null);
+                    }
+                } else {
                     mManager.getGroupList(null);
                 }
-            }else {
-                mManager.getGroupList(null);
+                Util.storeUserData(userData, u, p);
+                RequestParams params = new RequestParams();
+                HashMap<String, String> consoles = new HashMap<String, String>();
+                consoles.put("consoleType", console);
+                consoles.put("consoleId", u);
+                params.put("consoles", consoles);
+                params.put("passWord", p);
+                mManager.postLogin(MainActivity.this, params, Constants.LOGIN);
             }
-            Util.storeUserData(userData, u, p);
-            RequestParams params = new RequestParams();
-            params.put("userName", u);
-            params.put("passWord", p);
-            mManager.postLogin(MainActivity.this, params, Constants.LOGIN);
         }else {
-            TravellerLog.w(this, "Show main activity layout as user data not available");
-            setContentView(R.layout.activity_main);
-            setTRansparentStatusBar();
-            if(mManager!=null && mManager.getEventListCurrent()!=null && !mManager.getEventListCurrent().isEmpty()) {
-                horizontal_recycler_view = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
-                horizontalList=new ArrayList<EventData>();
-                horizontalList = mManager.getEventListCurrent();
-                horizontalAdapter=new EventCardAdapter(horizontalList, null, MainActivity.this, mManager, Constants.PUBLIC_EVENT_FEED);
-                LinearLayoutManager horizontalLayoutManagaer
-                        = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
-                horizontal_recycler_view.setLayoutManager(horizontalLayoutManagaer);
-                horizontal_recycler_view.setAdapter(horizontalAdapter);
-
-                if(horizontalAdapter.elistLocal.size()>1) {
-                    final int speedScroll = 2000;
-                    final Handler handler = new Handler();
-                    final Runnable runnable = new Runnable() {
-                        int count = 0;
-
-                        @Override
-                        public void run() {
-                            if (count < horizontalAdapter.elistLocal.size()) {
-                                horizontal_recycler_view.smoothScrollToPosition(++count);
-                                handler.postDelayed(this, speedScroll);
-                            } else {
-                                count = 0;
-                                horizontal_recycler_view.scrollToPosition(count);
-                                handler.postDelayed(this, speedScroll);
-                            }
-                        }
-                    };
-
-                    handler.postDelayed(runnable, speedScroll);
-                }
-
-                } else {
-                mManager.getPublicEventList(MainActivity.this);
-            }
-            register_layout = findViewById(R.id.register);
-            signin_layout = findViewById(R.id.sign_in);
-            register_layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //tracking signup initiation
-                    Map<String, String> json = new HashMap<String, String>();
-                    Util.postTracking(json, MainActivity.this, mManager, Constants.APP_SIGNUP);
-                    TravellerLog.w(this, "Launch console selection page activity");
-                    Intent regIntent = new Intent(getApplicationContext(),
-                            ConsoleSelectionActivity.class);
-                    //regIntent.putExtra("userdata", userData);
-                    startActivity(regIntent);
-                    finish();
-                }
-            });
-            signin_layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    TravellerLog.w(this, "Launch login page activity");
-
-                    launchLogin();
-                }
-            });
+            launchMainLayout();
         }
+    }
+
+    private void launchMainLayout() {
+        TravellerLog.w(this, "Show main activity layout as user data not available");
+        setContentView(R.layout.activity_main);
+        setTRansparentStatusBar();
+
+        privacyTerms = (TextView) findViewById(R.id.privacy_terms);
+
+        webView = (WebView) findViewById(R.id.web);
+
+        setTextViewHTML(privacyTerms, getString(R.string.terms_conditions));
+
+        if(mManager!=null && mManager.getEventListCurrent()!=null && !mManager.getEventListCurrent().isEmpty()) {
+            horizontal_recycler_view = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
+            horizontalList=new ArrayList<EventData>();
+            horizontalList = mManager.getEventListCurrent();
+            horizontalAdapter=new EventCardAdapter(horizontalList, null, MainActivity.this, mManager, Constants.PUBLIC_EVENT_FEED);
+            LinearLayoutManager horizontalLayoutManagaer
+                    = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+            horizontal_recycler_view.setLayoutManager(horizontalLayoutManagaer);
+            horizontal_recycler_view.setAdapter(horizontalAdapter);
+
+            if(horizontalAdapter.elistLocal.size()>1) {
+                final int speedScroll = 2000;
+                final Handler handler = new Handler();
+                final Runnable runnable = new Runnable() {
+                    int count = 0;
+
+                    @Override
+                    public void run() {
+                        if (count < horizontalAdapter.elistLocal.size()) {
+                            horizontal_recycler_view.smoothScrollToPosition(++count);
+                            handler.postDelayed(this, speedScroll);
+                        } else {
+                            count = 0;
+                            horizontal_recycler_view.scrollToPosition(count);
+                            handler.postDelayed(this, speedScroll);
+                        }
+                    }
+                };
+
+                handler.postDelayed(runnable, speedScroll);
+            }
+
+        } else {
+            mManager.getPublicEventList(MainActivity.this);
+        }
+        //register_layout = findViewById(R.id.register);
+        signin_layout = (TextView) findViewById(R.id.signin);
+//            register_layout.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    //tracking signup initiation
+//                    Map<String, String> json = new HashMap<String, String>();
+//                    Util.postTracking(json, MainActivity.this, mManager, Constants.APP_SIGNUP);
+//                    TravellerLog.w(this, "Launch console selection page activity");
+//                    Intent regIntent = new Intent(getApplicationContext(),
+//                            ConsoleSelectionActivity.class);
+//                    //regIntent.putExtra("userdata", userData);
+//                    startActivity(regIntent);
+//                    finish();
+//                }
+//            });
+        signin_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TravellerLog.w(this, "Launch login page activity");
+
+                launchLogin();
+            }
+        });
     }
 
     private void launchLogin() {
@@ -201,6 +237,35 @@ public class MainActivity extends BaseActivity implements Observer {
         }
         startActivity(signinIntent);
         finish();
+    }
+
+    protected void setTextViewHTML(TextView text, String html)
+    {
+        CharSequence sequence = Html.fromHtml(html);
+        SpannableStringBuilder strBuilder = new SpannableStringBuilder(sequence);
+        URLSpan[] urls = strBuilder.getSpans(0, sequence.length(), URLSpan.class);
+        for(URLSpan span : urls) {
+            makeLinkClickable(strBuilder, span);
+        }
+        text.setText(strBuilder);
+        text.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    protected void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span)
+    {
+        int start = strBuilder.getSpanStart(span);
+        int end = strBuilder.getSpanEnd(span);
+        int flags = strBuilder.getSpanFlags(span);
+        ClickableSpan clickable = new ClickableSpan() {
+            public void onClick(View view) {
+                // Do something with span.getURL() to handle the link click...
+                webView.setVisibility(View.VISIBLE);
+                webView.setWebViewClient(new WebViewClient());
+                webView.loadUrl(span.getURL());
+            }
+        };
+        strBuilder.setSpan(clickable, start, end, flags);
+        strBuilder.removeSpan(span);
     }
 
     @Override
@@ -246,8 +311,12 @@ public class MainActivity extends BaseActivity implements Observer {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+        if(webView!=null && webView.getVisibility()==View.VISIBLE) {
+            webView.setVisibility(View.GONE);
+        } else {
+            super.onBackPressed();
+            finish();
+        }
     }
 
     @Override
@@ -298,6 +367,10 @@ public class MainActivity extends BaseActivity implements Observer {
                 TravellerLog.w(this, "Show main activity layout as user data not available from login response");
                 setContentView(R.layout.activity_main);
             }
+        }else if(observable instanceof LogoutNetwork) {
+            launchMainLayout();
+            showGenericError("CHANGES TO SIGN IN", "Your gamertag now replaces your Crossroads username when logging in.\n" +
+                    "(your password is still the same)", "OK");
         } else if(observable instanceof EventListNetwork) {
             if(data!=null) {
                 horizontalAdapter.elistLocal.clear();

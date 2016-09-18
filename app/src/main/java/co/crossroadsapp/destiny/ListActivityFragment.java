@@ -143,6 +143,9 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     private AlertDialog dialogPrivacy;
     private SwipeFrameLayout cardStackLayout;
     private String adCardPosition;
+    private String showUnverifiedMsg;
+    private ImageView down_arw_img;
+    private TextView consoleText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,6 +167,11 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             user = mManager.getUserData();
         } else if(b!=null){
             user = b.getParcelable("userdata");
+        }
+
+        showUnverifiedMsg = Util.getDefaults("showUnverifiedMsg", getApplicationContext());
+        if(showUnverifiedMsg==null) {
+            showUnverifiedUserMsg();
         }
         //checkEventIntent();
 //        if(b.containsKey("eventIntent")){
@@ -224,7 +232,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         if (user!=null) {
             updateUserProfileImage(user.getImageUrl());
             if (user.getUser()!=null){
-                userNameDrawer.setText(user.getUser());
+                userNameDrawer.setText(user.getPsnId());
             }
         }
 
@@ -232,8 +240,14 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         userProfileDrawer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                findViewById(R.id.loadingImg).setVisibility(View.VISIBLE);
-                mManager.postHelmet(ListActivityFragment.this);
+                if(user!=null && user.getPsnVerify()!=null) {
+                    if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                        showUnverifiedUserMsg();
+                    } else {
+                        findViewById(R.id.loadingImg).setVisibility(View.VISIBLE);
+                        mManager.postHelmet(ListActivityFragment.this);
+                    }
+                }
             }
         });
 
@@ -359,6 +373,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
         changePassword = (TextView) findViewById(R.id.reset);
         imgConsole = (ImageView) findViewById(R.id.console_icon);
+        down_arw_img = (ImageView) findViewById(R.id.down_arw_img);
+        consoleText = (TextView) findViewById(R.id.consoletype_text);
 
         dropdown = (Spinner) findViewById(R.id.console_spinner);
 
@@ -598,42 +614,52 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         consoleItems = Util.getCorrectConsoleName(mManager.getConsoleList());
         //final ArrayList<String> consoleItems = mManager.getConsoleList();
         if(needToAdd(consoleItems)) {
-            consoleItems.add("Add Console");
+            //consoleItems.add("Add Console");
         }
+        if (consoleItems.size()>1) {
+            down_arw_img.setVisibility(View.VISIBLE);
+            adapterConsole = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, consoleItems) {
 
-        adapterConsole = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, consoleItems) {
+                int FONT_STYLE = Typeface.BOLD;
 
-            int FONT_STYLE = Typeface.BOLD;
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    View v = super.getView(position, convertView, parent);
 
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
+                    ((TextView) v).setTypeface(Typeface.SANS_SERIF, FONT_STYLE);
+                    ((TextView) v).setTextColor(
+                            getResources().getColorStateList(R.color.trimbe_white)
+                    );
+                    ((TextView) v).setGravity(Gravity.CENTER);
 
-                ((TextView) v).setTypeface(Typeface.SANS_SERIF, FONT_STYLE);
-                ((TextView) v).setTextColor(
-                        getResources().getColorStateList(R.color.trimbe_white)
-                );
-                ((TextView) v).setGravity(Gravity.CENTER);
+                    ((TextView) v).setPadding(Util.dpToPx(0, ListActivityFragment.this), 0, 0, 0);
+                    ((TextView) v).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                    ((TextView) v).setText(((TextView) v).getText());
 
-                ((TextView) v).setPadding(Util.dpToPx(0, ListActivityFragment.this), 0, 0, 0);
-                ((TextView) v).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                ((TextView) v).setText(((TextView) v).getText());
+                    if (((TextView) v).getText().toString().equalsIgnoreCase(Constants.CONSOLEXBOXONESTRG) || ((TextView) v).getText().toString().equalsIgnoreCase(Constants.CONSOLEXBOX360STRG)) {
+                        imgConsole.setImageResource(R.drawable.icon_xboxone_consolex);
+                    } else {
+                        imgConsole.setImageResource(R.drawable.icon_psn_consolex);
+                    }
 
-                if(((TextView) v).getText().toString().equalsIgnoreCase(Constants.CONSOLEXBOXONESTRG) || ((TextView) v).getText().toString().equalsIgnoreCase(Constants.CONSOLEXBOX360STRG)) {
-                    imgConsole.setImageResource(R.drawable.icon_xboxone_consolex);
-                } else {
-                    imgConsole.setImageResource(R.drawable.icon_psn_consolex);
+                    return v;
                 }
 
-                return v;
+                public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                    return getCustomView(position, convertView, parent, consoleItems);
+                }
+            };
+            adapterConsole.setDropDownViewResource(R.layout.empty_layout);
+            dropdown.setAdapter(adapterConsole);
+            adapterConsole.notifyDataSetChanged();
+        } else {
+            if(consoleItems.get(0).equalsIgnoreCase(Constants.CONSOLEXBOXONESTRG)) {
+                imgConsole.setImageResource(R.drawable.icon_xboxone_consolex);
+            } else if (consoleItems.get(0).equalsIgnoreCase(Constants.CONSOLEPS4STRG)) {
+                imgConsole.setImageResource(R.drawable.icon_psn_consolex);
             }
-
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                return getCustomView(position, convertView, parent, consoleItems);
-            }
-        };
-        adapterConsole.setDropDownViewResource(R.layout.empty_layout);
-        dropdown.setAdapter(adapterConsole);
-        adapterConsole.notifyDataSetChanged();
+            down_arw_img.setVisibility(View.GONE);
+            consoleText.setText(consoleItems.get(0).toString());
+        }
     }
 
     protected void setAdCardPosition(String adAct) {
@@ -781,11 +807,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                         closeProfileDrawer(Gravity.LEFT);
                         showProgress();
                         // continue with delete
-                        RequestParams rp = new RequestParams();
-                        if (user.getUser() != null) {
-                            rp.put("userName", user.getUser());
-                        }
-                        mManager.postLogout(ListActivityFragment.this, rp);
+                        logout();
                     }
                 })
                 .setNegativeButton(getResources().getString(R.string.cancel_btn), new DialogInterface.OnClickListener() {
@@ -794,6 +816,14 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                     }
                 })
                 .show();
+    }
+
+    private void logout() {
+        RequestParams rp = new RequestParams();
+        if (user!=null && user.getUser() != null) {
+            rp.put("userName", user.getPsnId());
+        }
+        mManager.postLogout(ListActivityFragment.this, rp);
     }
 
     private void showLegalWebView(final String service) {
@@ -811,12 +841,12 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
                     //register user listener
                     registerUserFirebase();
-                    verify_username = (TextView) findViewById(R.id.top_text);
-                    verify_user_bottom_text = (TextView) findViewById(R.id.verify_bottom_text);
-                    verify_user_bottom_text.setText(Html.fromHtml((getString(R.string.verify_accnt_bottomtext))));
-                    verify_user_bottom_text.setMovementMethod(LinkMovementMethod.getInstance());
-                    verify_username.setText("Hi " + user.getUser() + "!");
-                    unverifiedUserScreen.setVisibility(View.VISIBLE);
+//                    verify_username = (TextView) findViewById(R.id.top_text);
+//                    verify_user_bottom_text = (TextView) findViewById(R.id.verify_bottom_text);
+//                    verify_user_bottom_text.setText(Html.fromHtml((getString(R.string.verify_accnt_bottomtext))));
+//                    verify_user_bottom_text.setMovementMethod(LinkMovementMethod.getInstance());
+//                    verify_username.setText("Hi " + user.getUser() + "!");
+//                    unverifiedUserScreen.setVisibility(View.VISIBLE);
                 } else {
                     if (unverifiedUserScreen != null) {
                         unverifiedUserScreen.setVisibility(View.GONE);
@@ -962,12 +992,17 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                             if(ud.getPsnVerify()!=null) {
                                 psnV = ud.getPsnVerify();
                             }
-                            if (psnV != null && psnV.equalsIgnoreCase(Constants.PSN_VERIFIED)) {
-                                if (mManager != null && mManager.getUserData() != null) {
-                                    UserData u = mManager.getUserData();
-                                    u.setPsnVerify(psnV);
+                            if (psnV != null) {
+                                if (psnV.equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                                    if (mManager != null && mManager.getUserData() != null) {
+                                        UserData u = mManager.getUserData();
+                                        u.setPsnVerify(psnV);
+                                    }
+                                    checkUserPSNVerification();
+                                } else if(psnV.equalsIgnoreCase(Constants.PSN_DELETED)){
+                                    Util.clearDefaults(ListActivityFragment.this.getApplicationContext());
+                                    afterLogout();
                                 }
-                                checkUserPSNVerification();
                             }
                     }
                 }
@@ -977,6 +1012,17 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 System.out.println("The read failed: " + firebaseError.getMessage());
             }
         };
+    }
+
+    private void afterLogout() {
+        Intent regIntent = new Intent(getApplicationContext(),
+                MainActivity.class);
+        regIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        regIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        regIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        regIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(regIntent);
     }
 
     private void setupEventListener() {
@@ -1430,14 +1476,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                     }
                 }
             } else if(observable instanceof LogoutNetwork) {
-                Intent regIntent = new Intent(getApplicationContext(),
-                        MainActivity.class);
-                regIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                regIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                regIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                regIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                finish();
-                startActivity(regIntent);
+                afterLogout();
             } else if(observable instanceof HelmetUpdateNetwork) {
                 findViewById(R.id.loadingImg).setVisibility(View.GONE);
                 if(data!=null) {
