@@ -39,6 +39,8 @@ public class CrashReport extends BaseActivity implements Observer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.crash_report_activity);
 
+        getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.img_background_map));
+
         controlManager = ControlManager.getmInstance();
 
         Bundle b = getIntent().getExtras();

@@ -184,27 +184,7 @@ public class MainActivity extends BaseActivity implements Observer {
         horizontal_recycler_view.setLayoutManager(horizontalLayoutManagaer);
         horizontal_recycler_view.setAdapter(horizontalAdapter);
 
-        if(horizontalAdapter.elistLocal.size()>1) {
-            final int speedScroll = 2000;
-            final Handler handler = new Handler();
-            final Runnable runnable = new Runnable() {
-                int count = 0;
-
-                @Override
-                public void run() {
-                    if (count < horizontalAdapter.elistLocal.size()) {
-                        horizontal_recycler_view.smoothScrollToPosition(++count);
-                        handler.postDelayed(this, speedScroll);
-                    } else {
-                        count = 0;
-                        horizontal_recycler_view.scrollToPosition(count);
-                        handler.postDelayed(this, speedScroll);
-                    }
-                }
-            };
-
-            handler.postDelayed(runnable, speedScroll);
-        }
+        startSpinner();
 
 //        if(mManager!=null && mManager.getEventListCurrent()!=null && !mManager.getEventListCurrent().isEmpty()) {
 //            horizontal_recycler_view = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
@@ -266,6 +246,32 @@ public class MainActivity extends BaseActivity implements Observer {
                 finish();
             }
         });
+    }
+
+    private void startSpinner() {
+        if(horizontalAdapter!=null && horizontal_recycler_view!=null) {
+            if (horizontalAdapter.elistLocal!=null && horizontalAdapter.elistLocal.size() > 1) {
+                final int speedScroll = 2000;
+                final Handler handler = new Handler();
+                final Runnable runnable = new Runnable() {
+                    int count = 0;
+
+                    @Override
+                    public void run() {
+                        if (count < horizontalAdapter.elistLocal.size()) {
+                            horizontal_recycler_view.smoothScrollToPosition(++count);
+                            handler.postDelayed(this, speedScroll);
+                        } else {
+                            count = 0;
+                            horizontal_recycler_view.scrollToPosition(count);
+                            handler.postDelayed(this, speedScroll);
+                        }
+                    }
+                };
+
+                handler.postDelayed(runnable, speedScroll);
+            }
+        }
     }
 
     private void launchLogin() {
@@ -417,6 +423,7 @@ public class MainActivity extends BaseActivity implements Observer {
                 horizontalAdapter.elistLocal.clear();
                 horizontalAdapter.addItem(mManager.getEventListCurrent(), null);
                 horizontalAdapter.notifyDataSetChanged();
+                startSpinner();
             }
         }
     }

@@ -67,6 +67,8 @@ public class LoginActivity extends BaseActivity implements Observer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
+        getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.img_background_map));
+
         //setTRansparentStatusBar();
 
         Bundle b = getIntent().getExtras();

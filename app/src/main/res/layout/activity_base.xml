@@ -88,13 +88,17 @@
                 android:id="@+id/eyesup_text"
                 android:textColor="@color/trimbe_white"
                 android:text="EYES UP, GUARDIAN!"
-                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                android:textStyle="bold"
+                android:textSize="16sp"
                 android:layout_marginTop="15dp"
                 android:layout_centerHorizontal="true"/>
             <ImageView
                 android:layout_width="55dp"
                 android:layout_height="1dp"
-                android:layout_marginTop="15dp"
+                android:id="@+id/divider"
+                android:layout_marginTop="17dp"
+                android:layout_marginBottom="17dp"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/img_break_line"
                 android:layout_below="@+id/eyesup_text"/>
@@ -102,12 +106,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sorry, that activity is no longer available. Would you like to add one of your own?"
-                android:layout_below="@+id/eyesup_text"
+                android:layout_below="@+id/divider"
                 android:textColor="@color/trimbe_white"
+                android:textSize="16sp"
                 android:id="@+id/msg"
-                android:layout_marginTop="40dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
+                android:layout_marginLeft="17dp"
+                android:layout_marginRight="17dp"
                 android:gravity="center"/>
 
             <android.support.v7.widget.CardView
@@ -128,7 +132,7 @@
                     android:padding="8dp"
                     android:layout_gravity="center"
                     android:textColor="@color/trimbe_white"
-                    android:textSize="12sp"/>
+                    android:textSize="16sp"/>
             </android.support.v7.widget.CardView>
             <TextView
                 android:layout_width="wrap_content"
@@ -136,7 +140,7 @@
                 android:text="No thanks"
                 android:id="@+id/no_thanks"
                 android:textColor="@color/trimbe_white"
-                android:textSize="12sp"
+                android:textSize="16sp"
                 android:layout_below="@+id/add_btn"
                 android:layout_centerHorizontal="true"
                 android:paddingBottom="12dp"/>
@@ -409,10 +413,13 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/verifybtn_text"
                         android:text="VERIFY ON BUNGIE.NET"
-                        android:padding="8dp"
+                        android:paddingLeft="24dp"
+                        android:paddingTop="17dp"
+                        android:paddingRight="24dp"
+                        android:paddingBottom="17dp"
                         android:layout_gravity="center"
                         android:textColor="@color/trimbe_white"
-                        android:textSize="12sp"/>
+                        android:textSize="14sp"/>
                 </android.support.v7.widget.CardView>
 
                 <TextView

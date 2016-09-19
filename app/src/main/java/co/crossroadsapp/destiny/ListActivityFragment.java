@@ -780,10 +780,11 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
     private void updateUserProfileImage(String url) {
         if((url!=null) || (!url.equalsIgnoreCase("null"))) {
-
-            Util.picassoLoadIcon(this, userProfile, url, R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.profile_image);
-            Util.picassoLoadIcon(this, userProfileDrawer, url, R.dimen.player_profile_drawer_hgt, R.dimen.player_profile_drawer_width, R.drawable.profile_image);
             if(user!=null) {
+                if(user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                    Util.picassoLoadIcon(this, userProfile, url, R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.profile_image);
+                    Util.picassoLoadIcon(this, userProfileDrawer, url, R.dimen.player_profile_drawer_hgt, R.dimen.player_profile_drawer_width, R.drawable.profile_image);
+                }
                 user.setImageUrl(url);
             }
         }
@@ -855,6 +856,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                         unverifiedUserScreen.setVisibility(View.GONE);
                         checkClanSet();
                     }
+                    updateUserProfileImage(user.getImageUrl()!=null?user.getImageUrl():null);
                     unregisterUserFirebase();
                     checkIfExternalDeepLinkPresent();
                 }

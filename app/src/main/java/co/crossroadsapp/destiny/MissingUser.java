@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MissingUser extends Activity {
@@ -25,6 +26,15 @@ public class MissingUser extends Activity {
                 error = b.getString("error");
             }
         }
+
+        ImageView backBtn = (ImageView) findViewById(R.id.back);
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         TextView contactUsBtn = (TextView) findViewById(R.id.contact_us_btn);
         contactUsBtn.setOnClickListener(new View.OnClickListener() {

@@ -69,8 +69,8 @@
     <string name="playstation_hint">Enter PlayStation ID</string>
     <string name="xbox_hint">Enter Xbox One ID</string>
 
-    <string name="add_activity">ADD ACTIVITY</string>
-    <string name="add">ADD</string>
+    <string name="add_activity">FIND A TEAM</string>
+    <string name="add">FIND A TEAM</string>
     <string name="support_link"> support@crossroadsapp.co</string>
     <string name="contact_us">CONTACT US</string>
     <string name="password_hint">Enter password</string>
@@ -117,7 +117,7 @@
     <string name="signin">SIGN IN</string>
     <string name="reset_pswd">RESET PASSWORD</string>
     <string name="reset_pswd_test">Instructions on how to reset your password will be sent to your Bungie account.</string>
-    <string name="unverified_bungie_text">Check your messages on <![CDATA[<a href="http://www.bungie.net">Bungie.net</a>]]> for a verification link from Crossroads.</string>
+    <string name="unverified_bungie_text">Check your messages on <![CDATA[<a href="http://www.bungie.net">Bungie.net</a>]]> for a verification link.</string>
 
     <plurals name="minutes_time">
         <item quantity="one">%d minute ago</item>

@@ -222,7 +222,7 @@ public class BaseActivity extends FragmentActivity {
             }
             if (text != null && !text.isEmpty()) {
                 btnTextG.setAllCaps(true);
-                btnTextG.setTextSize(Util.dpToPx(16, this));
+                //btnTextG.setTextSize(Util.dpToPx(16, this));
                 btnTextG.setText(text);
                 btnTextG.setPadding(Util.dpToPx(88, this), Util.dpToPx(12, this),Util.dpToPx(88, this),Util.dpToPx(12, this));
             }

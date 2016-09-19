@@ -79,8 +79,12 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     protected void addItem(ArrayList<EventData> a, ArrayList<ActivityData> ad) {
-        this.elistLocal.addAll(a);
-        this.adList.addAll(ad);
+        if(a!=null) {
+            this.elistLocal.addAll(a);
+        }
+        if(ad!=null) {
+            this.adList.addAll(ad);
+        }
         checkFullEventPreview();
     }
 
@@ -222,7 +226,6 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     }else {
                         setCardViewLayoutParams(holder.event_card_mainLayout, 137);
                     }
-
                     if (creatorId != null) {
                         if (user != null && user.getUserId() != null) {
                             if (creatorId.equalsIgnoreCase(user.getUserId())) {
@@ -397,19 +400,17 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             holder.joinBtn.setImageResource(R.drawable.btn_j_o_i_n_public);
                         }
 
-                        setCardViewLayoutParams(holder.event_card_mainLayout, 177);
+                        setCardViewLayoutParams(holder.event_card_mainLayout, 165);
                     } else {
                         updateJoinButton(holder, status, CreatorIn, CreatorIsPlayer);
                     }
 
                     holder.eventPlayerNames.setText(allNames);
                     holder.eventPlayerNameCnt.setText(allNamesRem);
-
                     holder.eventaLight.invalidate();
                     holder.event_card_mainLayout.invalidate();
                     holder.checkpointText.invalidate();
                     holder.eventDate.invalidate();
-
                     Util.picassoLoadIcon(mContext, holder.eventIcon, url, R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.icon_ghost_default);
                 }
                 break;

@@ -61,6 +61,9 @@ public class ForgotLoginActivity extends BaseActivity implements Observer{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_login);
+
+        getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.img_background_map));
+
         //setTRansparentStatusBar();
         mManager = ControlManager.getmInstance();
         mManager.setCurrentActivity(this);
