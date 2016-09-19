@@ -212,7 +212,7 @@ public class ControlManager implements Observer{
             eventListNtwrk = new EventListNetwork(mCurrentAct);
             eventListNtwrk.addObserver(this);
             if(mainActivity !=null) {
-                eventListNtwrk.addObserver(this);
+                eventListNtwrk.addObserver(mainActivity);
             }
             eventListNtwrk.getEvents(Constants.PUBLIC_EVENT_FEED);
         } catch (JSONException e) {

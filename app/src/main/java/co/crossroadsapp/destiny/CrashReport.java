@@ -74,6 +74,7 @@ public class CrashReport extends BaseActivity implements Observer {
                 if(crash_text.getText().toString().length()>0 && !email.getText().toString().isEmpty()){
                     //send crash report
                     if(user.getUserId()!=null) {
+                        hideKeyboard();
                         showProgressBar();
                         RequestParams requestParams = new RequestParams();
                         requestParams.put("reporter", user.getUserId());
@@ -93,8 +94,8 @@ public class CrashReport extends BaseActivity implements Observer {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         hideKeyboard();
     }
 

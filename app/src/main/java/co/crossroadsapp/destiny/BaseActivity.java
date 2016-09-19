@@ -187,42 +187,46 @@ public class BaseActivity extends FragmentActivity {
         });
     }
 
-    public void showGenericError(String title, String msg, String btnText) {
-        if(deeplinkError!=null) {
-            deeplinkError.setVisibility(View.GONE);
-        }
-        deeplinkError = (RelativeLayout) findViewById(R.id.deeplink_error);
+    public void showGenericError(String header, String msg, String text) {
+        final RelativeLayout deeplinkErrorG = (RelativeLayout) findViewById(R.id.deeplink_error);
         TextView errMsgG = (TextView) findViewById(R.id.msg);
         TextView btnTextG = (TextView) findViewById(R.id.btn_text);
-        CardView btn = (CardView) findViewById(R.id.add_btn);
+        CardView btnG = (CardView) findViewById(R.id.add_btn);
         TextView titleG = (TextView) findViewById(R.id.eyesup_text);
-        deeplinkError.setVisibility(View.VISIBLE);
-        TextView noBtnG = (TextView) findViewById(R.id.no_thanks);
+        deeplinkErrorG.setVisibility(View.VISIBLE);
         ImageView closeG= (ImageView) findViewById(R.id.close);
+        TextView noBtn = (TextView) findViewById(R.id.no_thanks);
 
-        closeG.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deeplinkError.setVisibility(View.GONE);
-            }
-        });
+        noBtn.setVisibility(View.GONE);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deeplinkError.setVisibility(View.GONE);
+            deeplinkErrorG.setVisibility(View.GONE);
+            deeplinkErrorG.setVisibility(View.VISIBLE);
+            closeG.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deeplinkErrorG.setVisibility(View.GONE);
+                }
+            });
+
+            btnG.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deeplinkErrorG.setVisibility(View.GONE);
+                }
+            });
+            if (header != null && !header.isEmpty()) {
+                titleG.setText(header);
             }
-        });
-        noBtnG.setVisibility(View.GONE);
-        if(title!=null && !title.isEmpty()) {
-            titleG.setText(title);
-        }
-        if (msg!=null && !msg.isEmpty()) {
-            errMsgG.setText(msg);
-        }
-        if(btnText!=null && !btnText.isEmpty()) {
-            btnTextG.setText(btnText);
-        }
+            if (msg != null && !msg.isEmpty()) {
+                errMsgG.setText(msg);
+            }
+            if (text != null && !text.isEmpty()) {
+                btnTextG.setAllCaps(true);
+                btnTextG.setTextSize(Util.dpToPx(16, this));
+                btnTextG.setText(text);
+                btnTextG.setPadding(Util.dpToPx(88, this), Util.dpToPx(12, this),Util.dpToPx(88, this),Util.dpToPx(12, this));
+            }
+
     }
 
     public void showDeeplinkError(int eventFull, final String deepLinkEvent, String deepLinkName, final String clanId) {
@@ -500,18 +504,20 @@ public class BaseActivity extends FragmentActivity {
 
     protected void checkAndRemoveNoti(Context c, int position, SwipeStackAdapter adapter) {
         if(c!=null) {
-            if (c instanceof ListActivityFragment) {
-                if(notiList!=null && notiList.get(position)!=null) {
-                    notiList.remove(position);
-                    adapter.notifyDataSetChanged();
-                }
-            } else {
-                if(eventNotiList!=null && eventNotiList.get(position)!=null){
-                    if(eventNotiList.get(position)!=null) {
-                        notiList.remove(eventNotiList.get(position));
-                        //removeEventNotiFromNotiList(eventNotiList.get(position).geteId());
-                        eventNotiList.remove(position);
+            if(position>=0) {
+                if (c instanceof ListActivityFragment) {
+                    if (notiList != null && notiList.get(position) != null) {
+                        notiList.remove(position);
                         adapter.notifyDataSetChanged();
+                    }
+                } else {
+                    if (eventNotiList != null && eventNotiList.get(position) != null) {
+                        if (eventNotiList.get(position) != null) {
+                            notiList.remove(eventNotiList.get(position));
+                            //removeEventNotiFromNotiList(eventNotiList.get(position).geteId());
+                            eventNotiList.remove(position);
+                            adapter.notifyDataSetChanged();
+                        }
                     }
                 }
             }

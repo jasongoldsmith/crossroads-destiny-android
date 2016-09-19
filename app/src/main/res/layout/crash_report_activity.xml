@@ -34,7 +34,7 @@
         android:fontFamily="sans-serif"
         android:layout_marginTop="60dp"
         android:textStyle="bold"
-        android:textColor="@android:color/white"
+        android:textColor="@color/trimbe_white"
         android:textSize="14sp"
         android:layout_alignParentBottom="true"
         android:gravity="center"/>
@@ -49,6 +49,7 @@
         android:nextFocusDown="@+id/crash_edittext"
         android:textColor="@color/trimbe_white"
         android:imeOptions="actionNext"
+        android:inputType="textEmailAddress"
         android:textSize="18sp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -72,16 +73,6 @@
         android:layout_below="@+id/crash_email"
         android:layout_marginBottom="13dp"/>
 
-    <!--<TextView-->
-        <!--android:layout_width="100dp"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:layout_below="@id/crash_edittext"-->
-        <!--android:id="@+id/send_crash"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_marginTop="15dp"-->
-        <!--android:gravity="center"-->
-        <!--android:text="SEND"-->
-        <!--android:textColor="@android:color/white"-->
-        <!--android:background="@color/app_theme_color" />-->
+    <include layout="@layout/activity_base" />
 
 </RelativeLayout>

@@ -3,6 +3,7 @@ package co.crossroadsapp.destiny.network;
 import android.content.Context;
 
 import co.crossroadsapp.destiny.ControlManager;
+import co.crossroadsapp.destiny.data.EventList;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Util;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -39,6 +40,7 @@ public class LogoutNetwork extends Observable {
                 // If the response is JSONObject instead of expected JSONArray
                 // go to logout page
                 Util.clearDefaults(mContext.getApplicationContext());
+                mManager.getEventListCurrent().clear();
                 setChanged();
                 notifyObservers();
             }

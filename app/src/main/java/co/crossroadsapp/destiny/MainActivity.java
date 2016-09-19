@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import co.crossroadsapp.destiny.data.AppVersion;
 import co.crossroadsapp.destiny.data.EventData;
+import co.crossroadsapp.destiny.data.EventList;
 import co.crossroadsapp.destiny.network.EventListNetwork;
 import co.crossroadsapp.destiny.network.GetVersion;
 import co.crossroadsapp.destiny.network.LoginNetwork;
@@ -55,6 +56,7 @@ public class MainActivity extends BaseActivity implements Observer {
     private TextView privacyTerms;
     private WebView webView;
     private String console;
+    private TextView countText;
 
     @Override
     protected void onCreate(Bundle outState) {
@@ -161,47 +163,84 @@ public class MainActivity extends BaseActivity implements Observer {
         setContentView(R.layout.activity_main);
         setTRansparentStatusBar();
 
+        mManager.getPublicEventList(MainActivity.this);
+
         privacyTerms = (TextView) findViewById(R.id.privacy_terms);
+
+        countText = (TextView) findViewById(R.id.player_count);
 
         webView = (WebView) findViewById(R.id.web);
 
         setTextViewHTML(privacyTerms, getString(R.string.terms_conditions));
 
-        if(mManager!=null && mManager.getEventListCurrent()!=null && !mManager.getEventListCurrent().isEmpty()) {
-            horizontal_recycler_view = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
-            horizontalList=new ArrayList<EventData>();
+        horizontal_recycler_view = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
+        horizontalList=new ArrayList<EventData>();
+        if(mManager.getEventListCurrent()!=null) {
             horizontalList = mManager.getEventListCurrent();
-            horizontalAdapter=new EventCardAdapter(horizontalList, null, MainActivity.this, mManager, Constants.PUBLIC_EVENT_FEED);
-            LinearLayoutManager horizontalLayoutManagaer
-                    = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
-            horizontal_recycler_view.setLayoutManager(horizontalLayoutManagaer);
-            horizontal_recycler_view.setAdapter(horizontalAdapter);
-
-            if(horizontalAdapter.elistLocal.size()>1) {
-                final int speedScroll = 2000;
-                final Handler handler = new Handler();
-                final Runnable runnable = new Runnable() {
-                    int count = 0;
-
-                    @Override
-                    public void run() {
-                        if (count < horizontalAdapter.elistLocal.size()) {
-                            horizontal_recycler_view.smoothScrollToPosition(++count);
-                            handler.postDelayed(this, speedScroll);
-                        } else {
-                            count = 0;
-                            horizontal_recycler_view.scrollToPosition(count);
-                            handler.postDelayed(this, speedScroll);
-                        }
-                    }
-                };
-
-                handler.postDelayed(runnable, speedScroll);
-            }
-
-        } else {
-            mManager.getPublicEventList(MainActivity.this);
         }
+        horizontalAdapter=new EventCardAdapter(horizontalList, null, MainActivity.this, mManager, Constants.PUBLIC_EVENT_FEED);
+        LinearLayoutManager horizontalLayoutManagaer
+                = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        horizontal_recycler_view.setLayoutManager(horizontalLayoutManagaer);
+        horizontal_recycler_view.setAdapter(horizontalAdapter);
+
+        if(horizontalAdapter.elistLocal.size()>1) {
+            final int speedScroll = 2000;
+            final Handler handler = new Handler();
+            final Runnable runnable = new Runnable() {
+                int count = 0;
+
+                @Override
+                public void run() {
+                    if (count < horizontalAdapter.elistLocal.size()) {
+                        horizontal_recycler_view.smoothScrollToPosition(++count);
+                        handler.postDelayed(this, speedScroll);
+                    } else {
+                        count = 0;
+                        horizontal_recycler_view.scrollToPosition(count);
+                        handler.postDelayed(this, speedScroll);
+                    }
+                }
+            };
+
+            handler.postDelayed(runnable, speedScroll);
+        }
+
+//        if(mManager!=null && mManager.getEventListCurrent()!=null && !mManager.getEventListCurrent().isEmpty()) {
+//            horizontal_recycler_view = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
+//            horizontalList=new ArrayList<EventData>();
+//            horizontalList = mManager.getEventListCurrent();
+//            horizontalAdapter=new EventCardAdapter(horizontalList, null, MainActivity.this, mManager, Constants.PUBLIC_EVENT_FEED);
+//            LinearLayoutManager horizontalLayoutManagaer
+//                    = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+//            horizontal_recycler_view.setLayoutManager(horizontalLayoutManagaer);
+//            horizontal_recycler_view.setAdapter(horizontalAdapter);
+//
+//            if(horizontalAdapter.elistLocal.size()>1) {
+//                final int speedScroll = 2000;
+//                final Handler handler = new Handler();
+//                final Runnable runnable = new Runnable() {
+//                    int count = 0;
+//
+//                    @Override
+//                    public void run() {
+//                        if (count < horizontalAdapter.elistLocal.size()) {
+//                            horizontal_recycler_view.smoothScrollToPosition(++count);
+//                            handler.postDelayed(this, speedScroll);
+//                        } else {
+//                            count = 0;
+//                            horizontal_recycler_view.scrollToPosition(count);
+//                            handler.postDelayed(this, speedScroll);
+//                        }
+//                    }
+//                };
+//
+//                handler.postDelayed(runnable, speedScroll);
+//            }
+//
+//        } else {
+//            mManager.getPublicEventList(MainActivity.this);
+//        }
         //register_layout = findViewById(R.id.register);
         signin_layout = (TextView) findViewById(R.id.signin);
 //            register_layout.setOnClickListener(new View.OnClickListener() {
@@ -224,6 +263,7 @@ public class MainActivity extends BaseActivity implements Observer {
                 TravellerLog.w(this, "Launch login page activity");
 
                 launchLogin();
+                finish();
             }
         });
     }
@@ -235,6 +275,7 @@ public class MainActivity extends BaseActivity implements Observer {
         if(contentIntent!=null) {
             signinIntent.putExtra("eventIntent", contentIntent);
         }
+        mManager.getEventListCurrent().clear();
         startActivity(signinIntent);
         finish();
     }
@@ -377,6 +418,13 @@ public class MainActivity extends BaseActivity implements Observer {
                 horizontalAdapter.addItem(mManager.getEventListCurrent(), null);
                 horizontalAdapter.notifyDataSetChanged();
             }
+        }
+    }
+
+    public void setUserCount(String userCount) {
+        if(countText!=null) {
+            countText.setVisibility(View.VISIBLE);
+            countText.setText(userCount);
         }
     }
 }

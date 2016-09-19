@@ -163,7 +163,10 @@
             android:name=".MissingUser"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
-        <activity android:name=".MessageSent"></activity>
+        <activity
+            android:name=".MessageSent"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar"/>
     </application>
 
 </manifest>

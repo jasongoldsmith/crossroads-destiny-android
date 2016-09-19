@@ -3,6 +3,7 @@ package co.crossroadsapp.destiny.network;
 import android.content.Context;
 
 import co.crossroadsapp.destiny.ControlManager;
+import co.crossroadsapp.destiny.MainActivity;
 import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.ActivityList;
 import co.crossroadsapp.destiny.utils.Constants;
@@ -112,6 +113,15 @@ public class EventListNetwork extends Observable{
             if (adActivitiesArray != null) {
                 try {
                     parseAddActList(adActivitiesArray);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        if (response.has("totalUsers") && !response.isNull("totalUsers")) {
+            if(mContext instanceof MainActivity) {
+                try {
+                    ((MainActivity)mContext).setUserCount(response.get("totalUsers").toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

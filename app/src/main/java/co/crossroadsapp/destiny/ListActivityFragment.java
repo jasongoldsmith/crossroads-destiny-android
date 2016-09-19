@@ -172,6 +172,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         showUnverifiedMsg = Util.getDefaults("showUnverifiedMsg", getApplicationContext());
         if(showUnverifiedMsg==null) {
             showUnverifiedUserMsg();
+            Util.setDefaults("showUnverifiedMsg", "true", mManager.getCurrentActivity());
         }
         //checkEventIntent();
 //        if(b.containsKey("eventIntent")){
@@ -198,6 +199,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         }else {
             mManager.getGroupList(this);
         }
+
 
         Firebase.setAndroidContext(this);
 
@@ -778,6 +780,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
     private void updateUserProfileImage(String url) {
         if((url!=null) || (!url.equalsIgnoreCase("null"))) {
+
             Util.picassoLoadIcon(this, userProfile, url, R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.profile_image);
             Util.picassoLoadIcon(this, userProfileDrawer, url, R.dimen.player_profile_drawer_hgt, R.dimen.player_profile_drawer_width, R.drawable.profile_image);
             if(user!=null) {
@@ -876,11 +879,13 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     }
 
     private void checkToChangeConsoleGrp(String console, String clanId) {
-        if(mManager!=null) {
+        if(mManager!=null && user!=null) {
             //check and change if current active console is different
             if (console != null) {
-                if (!console.equalsIgnoreCase(user.getConsoleType()) && checkIfConsolePresent(console)) {
-                    changeToOtherConsole(console);
+                if(user.getConsoleType()!=null) {
+                    if (!console.equalsIgnoreCase(user.getConsoleType()) && checkIfConsolePresent(console)) {
+                        changeToOtherConsole(console);
+                    }
                 }
             }
             //check and change if current active group is different

@@ -104,4 +104,6 @@
         android:visibility="gone">
     </WebView>
 
+    <include layout="@layout/activity_base" />
+
 </RelativeLayout>

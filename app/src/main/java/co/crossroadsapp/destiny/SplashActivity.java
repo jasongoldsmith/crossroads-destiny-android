@@ -190,7 +190,7 @@ public class SplashActivity extends BaseActivity implements Observer {
     public void onStart() {
         super.onStart();
         if(Util.getDefaults("user", getApplicationContext())==null) {
-            cManager.getPublicEventList(null);
+            //cManager.getPublicEventList(null);
             cManager.setShowFullEvent(mixpanel.booleanTweak("showFullCards", false).get());
         }
     }
