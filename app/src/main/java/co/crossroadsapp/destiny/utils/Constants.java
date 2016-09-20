@@ -106,6 +106,7 @@ public class Constants {
     public static final String APP_EVENTSHARING = "eventSharing";
     public static final String APP_CURRENTTAB = "currentTabInit";
     public static final String APP_UPCOMINGTAB = "upcomingTabInit";
+    public static String APP_SHOWPASSWORD = "showPassword";
 
     //urls
     public static String DEEP_LINK_IMAGE = "http://w3.crossroadsapp.co/bungie/share/branch/v1/";

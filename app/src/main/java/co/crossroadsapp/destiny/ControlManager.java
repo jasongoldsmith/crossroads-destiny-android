@@ -311,11 +311,11 @@ public class ControlManager implements Observer{
         try {
             if(c instanceof AddNewActivity) {
                 activityListNetwork = new ActivityListNetwork((AddNewActivity)c);
-                activityListNetwork.addObserver(this);
+                //activityListNetwork.addObserver(this);
                 activityListNetwork.addObserver((AddNewActivity)c);
             } else if (c instanceof ListActivityFragment) {
                 activityListNetwork = new ActivityListNetwork((ListActivityFragment)c);
-                activityListNetwork.addObserver(this);
+                //activityListNetwork.addObserver(this);
                 activityListNetwork.addObserver((ListActivityFragment)c);
             }
             if(activityList!=null) {
@@ -624,9 +624,7 @@ public class ControlManager implements Observer{
                 eData.add(ed);
             }
         } else if (observable instanceof ActivityListNetwork) {
-            activityList = new ArrayList<ActivityData>();
-            ActivityList al = (ActivityList) data;
-            activityList = al.getActivityList();
+            updateActivityList(data!=null?data:null);
         } else if(observable instanceof GetVersion) {
             AppVersion ver = (AppVersion) data;
             if (this.mCurrentAct!=null) {
@@ -674,6 +672,14 @@ public class ControlManager implements Observer{
                 getEventList();
                 getGroupList(null);
             }
+        }
+    }
+
+    public void updateActivityList(Object data) {
+        if(data!=null) {
+            activityList = new ArrayList<ActivityData>();
+            ActivityList al = (ActivityList) data;
+            activityList = al.getActivityList();
         }
     }
 

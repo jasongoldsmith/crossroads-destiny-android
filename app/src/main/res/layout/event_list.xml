@@ -18,13 +18,9 @@
         android:layout_height="match_parent"
         android:clipChildren="false"
         android:clipToPadding="false"
-        tools:context=".ListActivity">
+        tools:context=".ListActivity"
+        android:background="@drawable/img_background_map">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/img_background_map"
-            android:scaleType="fitXY"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -32,6 +28,13 @@
             android:id="@+id/event_top_layout"
             android:background="@drawable/img_header_bg"
             android:layout_alignParentTop="true">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/img_header_bg"
+                android:layout_alignParentTop="true"
+                android:adjustViewBounds="true"/>
 
             <ImageView
                 android:layout_width="32dp"

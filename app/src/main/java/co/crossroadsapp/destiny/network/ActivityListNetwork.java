@@ -93,6 +93,7 @@ public class ActivityListNetwork extends Observable {
                 e.printStackTrace();
             }
         }
+        mManager.updateActivityList(this.activityList);
         setChanged();
         notifyObservers(this.activityList);
     }

@@ -67,7 +67,7 @@
     <string name="username_text">CROSSROADS USERNAME</string>
     <string name="username_hint">Enter Id</string>
     <string name="playstation_hint">Enter PlayStation ID</string>
-    <string name="xbox_hint">Enter Xbox One ID</string>
+    <string name="xbox_hint">Enter Xbox Gamertag</string>
 
     <string name="add_activity">FIND A TEAM</string>
     <string name="add">FIND A TEAM</string>
@@ -108,12 +108,12 @@
     <string name="facebook_app_id">855221411276321</string>
 
     <string name="mix_panel_token_old">23f27698695b0137adfef97f173b9f91</string>
-    <string name="mix_panel_token">bb632ab8cea71f50d51a013d97a673ef</string>
+    <string name="mix_panel_token"> 36578d79d8accf79418b0b42b410aa17</string> <!--bb632ab8cea71f50d51a013d97a673ef</string>-->
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="comment_hint">Type your comment</string>
-    <string name="gaurdian_for_help">Guardians searching for fireteams:</string>
+    <string name="gaurdian_for_help">Guardians searching for Fireteams:</string>
     <string name="signin">SIGN IN</string>
     <string name="reset_pswd">RESET PASSWORD</string>
     <string name="reset_pswd_test">Instructions on how to reset your password will be sent to your Bungie account.</string>

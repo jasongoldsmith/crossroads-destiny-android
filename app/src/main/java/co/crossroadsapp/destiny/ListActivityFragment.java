@@ -369,7 +369,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                         AddNewActivity.class);
                 //regIntent.putExtra("userdata", user);
                 startActivity(regIntent);
-                //finish();
+                finish();
             }
         });
 

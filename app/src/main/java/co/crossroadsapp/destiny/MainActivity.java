@@ -62,6 +62,7 @@ public class MainActivity extends BaseActivity implements Observer {
     protected void onCreate(Bundle outState) {
         super.onCreate(outState);
         setContentView(R.layout.splash_loading);
+        setTRansparentStatusBar();
         TravellerLog.w(this, "MainActivity.onCreate starts...");
         u= Util.getDefaults("user", getApplicationContext());
         p = Util.getDefaults("password", getApplicationContext());
@@ -161,7 +162,6 @@ public class MainActivity extends BaseActivity implements Observer {
     private void launchMainLayout() {
         TravellerLog.w(this, "Show main activity layout as user data not available");
         setContentView(R.layout.activity_main);
-        setTRansparentStatusBar();
 
         mManager.getPublicEventList(MainActivity.this);
 
@@ -281,7 +281,9 @@ public class MainActivity extends BaseActivity implements Observer {
         if(contentIntent!=null) {
             signinIntent.putExtra("eventIntent", contentIntent);
         }
-        mManager.getEventListCurrent().clear();
+        if(mManager!=null && mManager.getEventListCurrent()!=null) {
+            mManager.getEventListCurrent().clear();
+        }
         startActivity(signinIntent);
         finish();
     }

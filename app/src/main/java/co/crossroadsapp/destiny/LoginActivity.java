@@ -107,6 +107,9 @@ public class LoginActivity extends BaseActivity implements Observer {
         showPswd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //tracking showPassword click
+                Map<String, String> json = new HashMap<String, String>();
+                Util.postTracking(json, LoginActivity.this, mManager, Constants.APP_SHOWPASSWORD);
                 if(pswd_login!=null && !pswd_login.getText().toString().isEmpty()) {
                     if(!showPswdState[0]) {
                         pswd_login.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
@@ -317,7 +320,7 @@ public class LoginActivity extends BaseActivity implements Observer {
     }
 
     private void hideKeyboard() {
-        name_login.setText("");
+//        name_login.setText("");
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(LoginActivity.this.getCurrentFocus().getWindowToken(),0);
     }
@@ -325,8 +328,8 @@ public class LoginActivity extends BaseActivity implements Observer {
     public void showError(String err, String errorType) {
         dialog.dismiss();
         login_btn.setEnabled(true);
-        name_login.setText("");
-        pswd_login.setText("");
+//        name_login.setText("");
+//        pswd_login.setText("");
         if(errorType!=null && !errorType.isEmpty()) {
             if(errorType.equalsIgnoreCase(Constants.BUNGIE_ERROR)) {
                 Intent intent = new Intent(getApplicationContext(),
