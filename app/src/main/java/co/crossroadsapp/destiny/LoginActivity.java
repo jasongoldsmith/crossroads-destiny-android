@@ -82,7 +82,7 @@ public class LoginActivity extends BaseActivity implements Observer {
 
         name_login = (EditText) findViewById(R.id.login_name);
         pswd_login = (EditText) findViewById(R.id.login_pswrd);
-//        pswd_login.setTypeface(Typeface.DEFAULT);
+        pswd_login.setTypeface(Typeface.DEFAULT);
 //        pswd_login.setTransformationMethod(new PasswordTransformationMethod());
         login_btn = (TextView) findViewById(R.id.signin);
 
@@ -157,7 +157,6 @@ public class LoginActivity extends BaseActivity implements Observer {
             public void onClick(View v) {
                 name_login.setText("");
                 pswd_login.setText("");
-                hideKeyboard();
                 Intent intent = new Intent(getApplicationContext(),
                         ForgotLoginActivity.class);
                 startActivity(intent);

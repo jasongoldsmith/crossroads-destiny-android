@@ -118,6 +118,7 @@
     <string name="reset_pswd">RESET PASSWORD</string>
     <string name="reset_pswd_test">Instructions on how to reset your password will be sent to your Bungie account.</string>
     <string name="unverified_bungie_text">Check your messages on <![CDATA[<a href="http://www.bungie.net">Bungie.net</a>]]> for a verification link.</string>
+    <string name="user_missing_text">If you are still having login issues, email us at <![CDATA[<a href="mailto:support@crossroadsapp.co">support@crossroadsapp.co</a>]]> or contact us directly.</string>
 
     <plurals name="minutes_time">
         <item quantity="one">%d minute ago</item>

@@ -72,21 +72,12 @@ public class ForgotLoginActivity extends BaseActivity implements Observer{
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        dialog = new ProgressDialog(this);
-
-        back = (ImageView) findViewById(R.id.back);
-
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 hideKeyboard();
                 finish();
             }
         });
+
+        dialog = new ProgressDialog(this);
 
         resetPassword = (TextView) findViewById(R.id.reset_pswd);
 
@@ -174,7 +165,7 @@ public class ForgotLoginActivity extends BaseActivity implements Observer{
                 else {
                     // keyboard is closed
                     heroImg.setVisibility(View.VISIBLE);
-                    finish();
+                    //finish();
                 }
             }
         });

@@ -3,6 +3,8 @@ package co.crossroadsapp.destiny;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -49,6 +51,10 @@ public class MissingUser extends Activity {
 
         TextView id = (TextView) findViewById(R.id.id_text);
         TextView id_text = (TextView) findViewById(R.id.errorid_text);
+        TextView contactUsMsg = (TextView) findViewById(R.id.user_missing_email);
+
+        contactUsMsg.setText(Html.fromHtml(getString(R.string.user_missing_text)));
+        contactUsMsg.setMovementMethod(LinkMovementMethod.getInstance());
 
         if(userId!=null) {
             id.setText(userId);
