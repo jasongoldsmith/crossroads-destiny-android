@@ -83,6 +83,7 @@ public class ForgotLoginActivity extends BaseActivity implements Observer{
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideKeyboard();
                 finish();
             }
         });
@@ -147,7 +148,7 @@ public class ForgotLoginActivity extends BaseActivity implements Observer{
                         params.add("consoleType", console);
                         mManager.postResetPassword(ForgotLoginActivity.this, params);
                     } else {
-                        showError("Please enter ID");
+                        showError(getResources().getString(R.string.username_missing));
                     }
                 }
             }
@@ -173,6 +174,7 @@ public class ForgotLoginActivity extends BaseActivity implements Observer{
                 else {
                     // keyboard is closed
                     heroImg.setVisibility(View.VISIBLE);
+                    finish();
                 }
             }
         });
@@ -181,14 +183,14 @@ public class ForgotLoginActivity extends BaseActivity implements Observer{
     @Override
     public void onResume() {
         super.onResume();
-        Handler mHandler = new Handler();
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showKeyboard();
-            }
-
-        }, 1000);
+//        Handler mHandler = new Handler();
+//        mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                showKeyboard();
+//            }
+//
+//        }, 1000);
     }
 
     @Override

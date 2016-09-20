@@ -32,7 +32,7 @@
 
     <!-- error message strings -->
     <string name="username_short">Your username must have at least 3 characters.</string>
-    <string name="username_missing">Please enter a username.</string>
+    <string name="username_missing">Please enter your gamertag.</string>
     <string name="password_short">Your password must have at least 5 characters.</string>
     <string name="password_missing">Please enter a password.</string>
     <string name="login_fails">The username and password do not match. Please try again.</string>

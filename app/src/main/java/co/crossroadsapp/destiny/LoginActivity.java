@@ -14,6 +14,7 @@ import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.View;
@@ -61,6 +62,7 @@ public class LoginActivity extends BaseActivity implements Observer {
     private String consoleType = "PS4";
     private ImageView back;
     private ImageView heroImg;
+    private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +82,8 @@ public class LoginActivity extends BaseActivity implements Observer {
 
         name_login = (EditText) findViewById(R.id.login_name);
         pswd_login = (EditText) findViewById(R.id.login_pswrd);
-        pswd_login.setTypeface(Typeface.DEFAULT);
-        pswd_login.setTransformationMethod(new PasswordTransformationMethod());
+//        pswd_login.setTypeface(Typeface.DEFAULT);
+//        pswd_login.setTransformationMethod(new PasswordTransformationMethod());
         login_btn = (TextView) findViewById(R.id.signin);
 
         playstationBtn = (CardView) findViewById(R.id.playstation_btn);
@@ -102,7 +104,7 @@ public class LoginActivity extends BaseActivity implements Observer {
             }
         });
 
-        final boolean[] showPswdState = new boolean[1];
+        final boolean[] showPswdState = {false};
 
         showPswd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,10 +114,12 @@ public class LoginActivity extends BaseActivity implements Observer {
                 Util.postTracking(json, LoginActivity.this, mManager, Constants.APP_SHOWPASSWORD);
                 if(pswd_login!=null && !pswd_login.getText().toString().isEmpty()) {
                     if(!showPswdState[0]) {
-                        pswd_login.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        pswd_login.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                        pswd_login.setSelection(pswd_login.getText().length());
                         showPswdState[0] = true;
                     } else {
-                        pswd_login.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        pswd_login.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        pswd_login.setSelection(pswd_login.getText().length());
                         showPswdState[0] = false;
                     }
                 }
@@ -159,6 +163,8 @@ public class LoginActivity extends BaseActivity implements Observer {
                 startActivity(intent);
             }
         });
+
+        mHandler = new Handler();
 
 //        close_err.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -281,7 +287,6 @@ public class LoginActivity extends BaseActivity implements Observer {
                 }
             }
         });
-
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -297,20 +302,20 @@ public class LoginActivity extends BaseActivity implements Observer {
     @Override
     public void onResume() {
         super.onResume();
-        Handler mHandler = new Handler();
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showKeyboard();
-            }
-
-        }, 1000);
+//        mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                showKeyboard();
+//            }
+//
+//        }, 1000);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         hideKeyboard();
+        //mHandler.removeCallbacksAndMessages(null);
     }
 
     private void showKeyboard() {

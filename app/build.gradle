@@ -1,5 +1,21 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        // The Fabric Gradle plugin uses an open ended version to react
+        // quickly to Android tooling updates
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
 
 def debugsuffix = System.
         getProperty('debugsuffix', project.getProperties().get('debugsuffix', null))
@@ -14,7 +30,7 @@ android {
         applicationId = theApplicationId
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 79
+        versionCode 80
         versionName "1.1.0"
         multiDexEnabled true
     }
@@ -63,7 +79,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile('com.crashlytics.sdk.android:answers:1.3.8@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.3@aar') {
         transitive = true;
     }
     compile 'com.loopj.android:android-async-http:1.4.9'

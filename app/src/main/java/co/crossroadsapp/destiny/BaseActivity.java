@@ -55,6 +55,12 @@ public class BaseActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         registerReceiver(ReceivefromService, new IntentFilter("subtype_flag"));
+        // todo handle uncaught exceptions
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
+                Log.e("Error"+Thread.currentThread().getStackTrace()[2],paramThrowable.getLocalizedMessage());
+            }
+        });
     }
 
     @Override

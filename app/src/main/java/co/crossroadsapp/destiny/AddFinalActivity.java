@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.support.v7.widget.CardView;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -375,7 +376,9 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         modifiersLayout3.setVisibility(View.GONE);
         Random rnd = new Random();
         int prevTextViewId = 0;
-        int pad = Util.dpToPx(5, AddFinalActivity.this);
+        int pad = Util.dpToPx(4, AddFinalActivity.this);
+        int pad8 = Util.dpToPx(8, AddFinalActivity.this);
+        int pad6 = Util.dpToPx(6, AddFinalActivity.this);
         ArrayList<String> completList = new ArrayList<String>();
         completList.addAll(modi);
         completList.addAll(bonus);
@@ -384,42 +387,76 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                 completList.add(check);
             }
         }
+
         if (!completList.isEmpty()) {
+            final TextView[] tv = new TextView[completList.size()];
             if (completList.size() < 11) {
                 for (int i = 0; i < completList.size(); i++) {
-                    final TextView textView = new TextView(this);
-                    textView.setText(completList.get(i));
-                    textView.setTextColor(getResources().getColor(R.color.trimbe_white));
-                    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,10);
-                    textView.setAllCaps(true);
-                    textView.setPadding(pad, pad, pad, pad);
+                    tv[i] = new TextView(this);
+                    tv[i].setText(completList.get(i));
+                    tv[i].setTextColor(getResources().getColor(R.color.trimbe_white));
+                    tv[i].setTextSize(TypedValue.COMPLEX_UNIT_SP,10);
+                    tv[i].setAllCaps(true);
+                    tv[i].setPadding(pad8, pad, pad8, pad);
                     GradientDrawable gd = new GradientDrawable();
                     gd.setCornerRadius(5);
                     gd.setStroke(2, 0xFFFFFFFF);
-                    textView.setBackgroundDrawable(gd);
+                    tv[i].setBackgroundDrawable(gd);
 
                     int curTextViewId = prevTextViewId + 1;
-                    textView.setId(curTextViewId);
+                    tv[i].setId(curTextViewId);
                     final RelativeLayout.LayoutParams params =
                             new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                                     RelativeLayout.LayoutParams.WRAP_CONTENT);
 
                     params.addRule(RelativeLayout.RIGHT_OF, prevTextViewId);
-                    params.leftMargin = pad;
-                    textView.setLayoutParams(params);
+                    params.leftMargin = pad6;
+                    tv[i].setLayoutParams(params);
 
                     prevTextViewId = curTextViewId;
-                    if (i < 2) {
-                        modifiersLayout3.setVisibility(View.VISIBLE);
-                        modifiersLayout3.addView(textView, params);
-                    } else if (i < 5) {
-                        modifiersLayout2.setVisibility(View.VISIBLE);
-                        modifiersLayout2.addView(textView, params);
-                    } else {
-                        modifiersLayout.setVisibility(View.VISIBLE);
-                        modifiersLayout.addView(textView, params);
-                    }
+                    modifiersLayout3.setVisibility(View.VISIBLE);
+                    modifiersLayout3.addView(tv[i], params);
+
+//                    DisplayMetrics metrics = getResources().getDisplayMetrics();
+//                    int width = metrics.widthPixels;
+//                    int textwidth = textView.getWidth();
+//                    int modiWidth = modifiersLayout3.getWidth();
+//                    int padding = Util.dpToPx(70, this);
+//                    int w = textView.getWidth()+modifiersLayout3.getWidth()+Util.dpToPx(70, this);
+                    //if (textView.getWidth()+modifiersLayout3.getWidth()+Util.dpToPx(70, this) < metrics.widthPixels) {
+//                    if (i < 2) {
+//                        modifiersLayout3.setVisibility(View.VISIBLE);
+//                        modifiersLayout3.addView(textView, params);
+//                    } else if (textView.getWidth()+modifiersLayout2.getWidth()+Util.dpToPx(70, this) < metrics.widthPixels) {
+//                        int n = modifiersLayout3.getWidth();
+//                        modifiersLayout2.setVisibility(View.VISIBLE);
+//                        modifiersLayout2.addView(textView, params);
+//                    } else {
+//                        modifiersLayout.setVisibility(View.VISIBLE);
+//                        modifiersLayout.addView(textView, params);
+//                    }
                 }
+
+                modifiersLayout3.post(new Runnable() {	//post a Runnable that call reLayout to layout object
+                    @Override
+                    public void run() {
+                        int tvWidth = 0;
+                        DisplayMetrics metrics = getResources().getDisplayMetrics();
+                        int width = metrics.widthPixels-Util.dpToPx(90,AddFinalActivity.this);
+                        modifiersLayout3.removeAllViews();
+                        for (int i=0; i< tv.length; i++) {
+                            int n = tv[i].getWidth();
+                            tvWidth = tvWidth + tv[i].getWidth();
+                            if(tvWidth<width) {
+                                modifiersLayout3.setVisibility(View.VISIBLE);
+                                modifiersLayout3.addView(tv[i]);
+                            } else {
+                                modifiersLayout2.setVisibility(View.VISIBLE);
+                                modifiersLayout2.addView(tv[i]);
+                            }
+                        }
+                    }
+                });
         }
         }
 

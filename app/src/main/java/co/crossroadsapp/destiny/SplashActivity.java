@@ -43,6 +43,7 @@ import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
 import io.branch.referral.util.LinkProperties;
+import com.crashlytics.android.Crashlytics;
 
 
 /**
@@ -62,6 +63,8 @@ public class SplashActivity extends BaseActivity implements Observer {
         super.onCreate(savedInstanceState);
         //fabric
         Fabric.with(this, new Answers());
+        //crashlytics
+        Fabric.with(this, new Crashlytics());
         //facebood sdk
         FacebookSdk.sdkInitialize(SplashActivity.this);
         AppEventsLogger.activateApp(SplashActivity.this);
