@@ -248,7 +248,8 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#cc000000"/>
+                android:background="#cc000000"
+                android:clickable="true"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -413,6 +414,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/verifybtn_text"
                         android:text="VERIFY ON BUNGIE.NET"
+                        android:fontFamily="sans-serif"
+                        android:textStyle="bold"
                         android:paddingLeft="24dp"
                         android:paddingTop="17dp"
                         android:paddingRight="24dp"

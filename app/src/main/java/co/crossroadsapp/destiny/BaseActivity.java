@@ -159,7 +159,7 @@ public class BaseActivity extends FragmentActivity {
         if(userData!=null) {
             if(userData.getPsnId()!=null) {
                 if(userData.getClanTag()!=null && !userData.getClanTag().isEmpty()) {
-                    username.setText(userData.getPsnId() + "[" + userData.getClanTag() + "]");
+                    username.setText(userData.getPsnId() + " [" + userData.getClanTag() + "]");
                 } else {
                     username.setText(userData.getPsnId());
                 }

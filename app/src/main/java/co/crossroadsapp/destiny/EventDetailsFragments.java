@@ -23,6 +23,7 @@ import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.PlayerData;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.CircularImageView;
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 
 /**
@@ -205,14 +206,21 @@ public class EventDetailsFragments extends Fragment {
                     if (playerLocal.get(position).getPlayerId() != null) {
                         currPlayerId = playerLocal.get(position).getPlayerId();
                     }
-                    if (playerLocal.get(position).getPlayerImageUrl() != null) {
-                        Util.picassoLoadIcon(((EventDetailActivity)getActivity()), holder.playerProfile, playerLocal.get(position).getPlayerImageUrl(),
-                                R.dimen.eventdetail_player_profile_hgt, R.dimen.eventdetail_player_profile_width, R.drawable.profile_image);
-                    }
+
                     if (playerLocal.get(position).getPsnId() != null) {
                         String name = playerLocal.get(position).getPsnId();
-                        if (playerLocal.get(position).getClanTag()!=null && !playerLocal.get(position).getClanTag().isEmpty()) {
-                            name = name + " [" + playerLocal.get(position).getClanTag() + "]";
+                        if(!ifPlayerisUserAndVerified(name)) {
+                            if (playerLocal.get(position).getClanTag() != null && !playerLocal.get(position).getClanTag().isEmpty()) {
+                                name = name + " [" + playerLocal.get(position).getClanTag() + "]";
+                            }
+                            if (playerLocal.get(position).getPlayerImageUrl() != null) {
+                                Util.picassoLoadIcon(((EventDetailActivity)getActivity()), holder.playerProfile, playerLocal.get(position).getPlayerImageUrl(),
+                                        R.dimen.eventdetail_player_profile_hgt, R.dimen.eventdetail_player_profile_width, R.drawable.profile_image);
+                            }
+                        } else {
+                            Util.picassoLoadIcon(((EventDetailActivity)getActivity()), holder.playerProfile, null,
+                                    R.dimen.eventdetail_player_profile_hgt, R.dimen.eventdetail_player_profile_width, R.drawable.profile_image);
+
                         }
                         holder.playerName.setText(name);
                         holder.playerName.setTextColor(getResources().getColor(R.color.activity_light_color));
@@ -288,6 +296,15 @@ public class EventDetailsFragments extends Fragment {
         return false;
     }
 
+    private boolean ifPlayerisUserAndVerified(String pId) {
+        if(user!=null && user.getPsnId()!=null && user.getPsnId().equalsIgnoreCase(pId)) {
+            if(user.getPsnVerify()!=null && !user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean checkUserIsPlayer(){
         if(this.currentEvent.getPlayerData()!=null) {
             for (int i = 0; i < currentEvent.getPlayerData().size(); i++) {
@@ -323,17 +340,23 @@ public class EventDetailsFragments extends Fragment {
                         String text = commentsLocal.get(position).getComment();
                         holder.playerCommentText.setText(text);
                     }
-                    if(commentsLocal.get(position).getPlayerImageUrl()!=null && !commentsLocal.get(position).getPlayerImageUrl().isEmpty()) {
-                        String playerImg = commentsLocal.get(position).getPlayerImageUrl();
-                        Util.picassoLoadImageWithoutMeasurement(getActivity(), holder.playerProfileComment, playerImg, R.drawable.profile_image);
-                    }
+
                     if(commentsLocal.get(position).getPsnId()!=null) {
                         String name=commentsLocal.get(position).getPsnId();
-                        if(commentsLocal.get(position).getClanTag()!=null) {
-                            name = name + " [" + commentsLocal.get(position).getClanTag() + "]";
+                        if(!ifPlayerisUserAndVerified(name)) {
+                            if (commentsLocal.get(position).getClanTag() != null) {
+                                name = name + " [" + commentsLocal.get(position).getClanTag() + "]";
+                            }
+                            if(commentsLocal.get(position).getPlayerImageUrl()!=null && !commentsLocal.get(position).getPlayerImageUrl().isEmpty()) {
+                                String playerImg = commentsLocal.get(position).getPlayerImageUrl();
+                                Util.picassoLoadImageWithoutMeasurement(getActivity(), holder.playerProfileComment, playerImg, R.drawable.profile_image);
+                            }
+                        } else {
+                            Util.picassoLoadImageWithoutMeasurement(getActivity(), holder.playerProfileComment, null, R.drawable.profile_image);
                         }
                         holder.playerNameComment.setText(name);
                     }
+
                     if(commentsLocal.get(position).getCreated()!=null) {
                         String time = Util.updateLastReceivedDate(commentsLocal.get(position).getCreated(), getActivity().getResources());
                         if(time!=null) {

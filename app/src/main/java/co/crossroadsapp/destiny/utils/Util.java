@@ -486,21 +486,25 @@ public class Util {
     }
 
     public static void picassoLoadIcon(Context c, ImageView eventIcon, String url, int height, int width, int avatar) {
-        if (c!=null && url != null && eventIcon!=null) {
-            Picasso.with(c).load(url)
-                    .resizeDimen(width, height)
-                    .centerCrop().placeholder(avatar)
-                    .into(eventIcon, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            TravellerLog.w(TAG, "success");
-                        }
+        if (c!=null && eventIcon!=null) {
+            if(url != null) {
+                Picasso.with(c).load(url)
+                        .resizeDimen(width, height)
+                        .centerCrop().placeholder(avatar)
+                        .into(eventIcon, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                TravellerLog.w(TAG, "success");
+                            }
 
-                        @Override
-                        public void onError() {
-                            TravellerLog.w(TAG, "error");
-                        }
-                    });
+                            @Override
+                            public void onError() {
+                                TravellerLog.w(TAG, "error");
+                            }
+                        });
+            } else {
+                eventIcon.setImageDrawable(c.getResources().getDrawable(avatar));
+            }
         }
     }
 

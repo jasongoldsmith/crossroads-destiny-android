@@ -200,6 +200,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     String allNamesRem = "";
                     String checkpoint = "";
                     String tag = "";
+                    String clanT = null;
                     final EventData currEvent = elistLocal.get(position);
                     final String eId = this.elistLocal.get(position).getEventId();
                     String s = this.elistLocal.get(position).getActivityData().getActivitySubtype();
@@ -278,30 +279,41 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     }
 
                     for (int y = 0; y < i; y++) {
+                        boolean thisIsUnverifiedUser = false;
                         String n = this.elistLocal.get(position).getPlayerData().get(y).getPsnId();
                         String profileUrl = this.elistLocal.get(position).getPlayerData().get(y).getPlayerImageUrl();
                         String pId = this.elistLocal.get(position).getPlayerData().get(y).getPlayerId();
                         if (user != null && user.getUserId() != null) {
                             if (user.getUserId().equalsIgnoreCase(pId)) {
                                 CreatorIn = true;
+                                if(user.getPsnVerify()!=null && !user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                                    thisIsUnverifiedUser = true;
+                                }
                             }
                         }
 
-//                    if (i>1 && y<i-1) {
-//                        allNames = allNames + n + ", ";
-//                    } else {
-//                        allNames = allNames + n;
-//                   }
-
-                        if (y < 4)
-                            uploadPlayerImg(holder, profileUrl, y, i);
+                        if(y < 4) {
+                            if(thisIsUnverifiedUser) {
+                                uploadPlayerImg(holder, null, y, i);
+                            } else {
+                                uploadPlayerImg(holder, profileUrl, y, i);
+                            }
+                        }
                     }
 
                     allNames = this.elistLocal.get(position).getCreatorData().getPsnId();
-                    if(this.elistLocal.get(position).getCreatorData().getClanTag()!=null) {
-                        String clanT = this.elistLocal.get(position).getCreatorData().getClanTag();
-                        if(!clanT.isEmpty()) {
-                            allNames = allNames + " [" +clanT + "]";
+
+                    if(CreatorIsPlayer) {
+                        if(user!=null && user.getPsnVerify()!=null && user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                            clanT = this.elistLocal.get(position).getCreatorData().getClanTag();
+                        }
+                    } else {
+                        clanT = this.elistLocal.get(position).getCreatorData().getClanTag();
+                    }
+
+                    if (this.elistLocal.get(position).getCreatorData().getClanTag() != null) {
+                        if (clanT!=null && !clanT.isEmpty()) {
+                            allNames = allNames + " [" + clanT + "]";
                         }
                     }
                     if (!status.equalsIgnoreCase("full")) {

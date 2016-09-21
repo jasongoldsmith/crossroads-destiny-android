@@ -943,6 +943,16 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         return null;
     }
 
+    private boolean ifPlayerisUserAndVerified(String pId) {
+        if(user!=null && user.getPsnId()!=null && user.getPsnId().equalsIgnoreCase(pId)) {
+            if(user.getPsnVerify()!=null && !user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     private class CurrentEventsViewAdapter extends RecyclerView.Adapter<CurrentEventsViewAdapter.CurrentEventsViewHolder> {
 
         private ArrayList<PlayerData> playerLocal;
@@ -995,12 +1005,18 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                         if (playerLocal.get(position).getPlayerId() != null) {
                             currPlayerId = playerLocal.get(position).getPlayerId();
                         }
-                        if (playerLocal.get(position).getPlayerImageUrl() != null) {
-                            Util.picassoLoadIcon(EventDetailActivity.this, holder.playerProfile, playerLocal.get(position).getPlayerImageUrl(),
-                                    R.dimen.eventdetail_player_profile_hgt, R.dimen.eventdetail_player_profile_width, R.drawable.img_profile_blank);
-                        }
                         if (playerLocal.get(position).getPsnId() != null) {
                             holder.playerName.setText(playerLocal.get(position).getPsnId());
+
+                            if(ifPlayerisUserAndVerified(playerLocal.get(position).getPsnId())) {
+                                Util.picassoLoadIcon(EventDetailActivity.this, holder.playerProfile, null,
+                                        R.dimen.eventdetail_player_profile_hgt, R.dimen.eventdetail_player_profile_width, R.drawable.profile_image);
+                            } else {
+                                if (playerLocal.get(position).getPlayerImageUrl() != null) {
+                                    Util.picassoLoadIcon(EventDetailActivity.this, holder.playerProfile, playerLocal.get(position).getPlayerImageUrl(),
+                                            R.dimen.eventdetail_player_profile_hgt, R.dimen.eventdetail_player_profile_width, R.drawable.profile_image);
+                                }
+                            }
                         }
 
                         holder.message.setVisibility(View.GONE);
@@ -1013,6 +1029,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                         }
 
                         final String finalCurrPlayerId = currPlayerId;
+
                         holder.message.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
