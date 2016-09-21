@@ -116,10 +116,12 @@ public class LoginActivity extends BaseActivity implements Observer {
                     if(!showPswdState[0]) {
                         pswd_login.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                         pswd_login.setSelection(pswd_login.getText().length());
+                        pswd_login.setTypeface(Typeface.DEFAULT);
                         showPswdState[0] = true;
                     } else {
                         pswd_login.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                         pswd_login.setSelection(pswd_login.getText().length());
+                        pswd_login.setTypeface(Typeface.DEFAULT);
                         showPswdState[0] = false;
                     }
                 }
