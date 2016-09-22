@@ -6,54 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="60dp"-->
-        <!--android:id="@+id/error_layout"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:background="@android:color/black"-->
-        <!--android:visibility="gone">-->
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/error"-->
-            <!--android:src="@drawable/icon_error"-->
-            <!--android:layout_alignParentLeft="true"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--android:layout_marginLeft="22dp"/>-->
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/error_text"-->
-            <!--android:text="MISADVENTURE"-->
-            <!--android:textSize="12sp"-->
-            <!--android:textColor="#ff0000"-->
-            <!--android:layout_toRightOf="@+id/error"-->
-            <!--android:layout_marginTop="15dp"-->
-            <!--android:layout_marginLeft="13dp"/>-->
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/error_sub"-->
-            <!--android:text="Your Username or Password do not match"-->
-            <!--android:textSize="12sp"-->
-            <!--android:textColor="@color/trimbe_white"-->
-            <!--android:layout_toRightOf="@+id/error"-->
-            <!--android:layout_below="@+id/error_text"-->
-            <!--android:layout_marginBottom="14dp"-->
-            <!--android:layout_marginLeft="13dp"-->
-            <!--android:layout_marginRight="30dp"/>-->
-
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/err_close"-->
-            <!--android:src="@drawable/icon_close_sm"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_marginTop="9dp"-->
-            <!--android:layout_marginEnd="7dp"/>-->
-    <!--</RelativeLayout>-->
-
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -128,75 +80,6 @@
             swipedeck:rotation_degrees="0"
             />
     </co.crossroadsapp.destiny.SwipeFrameLayout>
-
-    <!--<include-->
-        <!--layout="@layout/base_notification"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:id="@+id/notification_bar_layout"-->
-        <!--android:layout_below="@+id/eventdetail_top_layout"-->
-        <!--/>-->
-
-    <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="80dp"-->
-        <!--android:id="@+id/notification_bar"-->
-        <!--android:background="@color/app_theme_color"-->
-        <!--android:layout_below="@+id/eventdetail_top_layout"-->
-        <!--android:visibility="gone">-->
-        <!--<ImageView-->
-            <!--android:layout_width="30dp"-->
-            <!--android:layout_height="30dp"-->
-            <!--android:id="@+id/noti_icon"-->
-            <!--android:src="@drawable/icon_alert"-->
-            <!--android:layout_marginLeft="25dp"-->
-            <!--android:layout_marginTop="15dp"/>-->
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/noti_toptext"-->
-            <!--android:layout_toRightOf="@+id/noti_icon"-->
-            <!--android:fontFamily="sans-serif"-->
-            <!--android:textStyle="bold"-->
-            <!--android:layout_marginLeft="15dp"-->
-            <!--android:layout_marginTop="12dp"-->
-            <!--android:text="YOUR FIRETEAM IS READY"-->
-            <!--android:textColor="#ffc600"-->
-            <!--android:textSize="12sp"/>-->
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/noti_text"-->
-            <!--android:layout_toRightOf="@+id/noti_icon"-->
-            <!--android:text="missing event type"-->
-            <!--android:fontFamily="sans-serif"-->
-            <!--android:textColor="@color/trimbe_white"-->
-            <!--android:layout_marginLeft="15dp"-->
-            <!--android:layout_marginTop="30dp"-->
-            <!--android:textSize="12sp"/>-->
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/noti_subtext"-->
-            <!--android:layout_toRightOf="@+id/noti_icon"-->
-            <!--android:fontFamily="sans-serif"-->
-            <!--android:textColor="@color/trimbe_white"-->
-            <!--android:layout_marginLeft="15dp"-->
-            <!--android:maxLines = "10"-->
-            <!--android:scrollbars = "vertical"-->
-            <!--android:layout_marginTop="47dp"-->
-            <!--android:textSize="12sp"/>-->
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/noti_close"-->
-            <!--android:src="@drawable/icon_close_sm"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:paddingRight="17dp"-->
-            <!--android:paddingTop="9dp"/>-->
-
-    <!--</RelativeLayout>-->
-
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -273,40 +156,7 @@
                 android:gravity="center"
                 android:padding="6dp"/>
         </RelativeLayout>
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text=""-->
-            <!--android:id="@+id/activity_aLight_detail"-->
-            <!--android:textSize="20sp"-->
-            <!--android:textColor="@color/activity_light_color"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_marginRight="14dp">-->
-        <!--</TextView>-->
-
     </RelativeLayout>
-
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Currently Going"-->
-        <!--android:id="@+id/currentgoing"-->
-        <!--android:textColor="@android:color/white"-->
-        <!--android:textSize="14sp"-->
-        <!--android:layout_marginLeft="16dp"-->
-        <!--android:layout_marginTop="30dp"-->
-        <!--android:layout_below="@+id/event_detail_top_frag"/>-->
-
-    <!--<ProgressBar-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1dp"-->
-        <!--android:id="@+id/bar"-->
-        <!--android:layout_marginLeft="16dp"-->
-        <!--android:layout_marginTop="6dp"-->
-        <!--android:layout_marginRight="15dp"-->
-        <!--android:background="#979797"-->
-        <!--android:layout_below="@+id/currentgoing"/>-->
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -379,6 +229,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/send_msg_btn"
+                android:src="@drawable/icon_s_e_n_d"
                 android:padding="3dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"/>
@@ -412,16 +263,6 @@
                 <!--android:padding="3dp"/>-->
         <!--</RelativeLayout>-->
     </RelativeLayout>
-
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/event_player"-->
-        <!--android:layout_below="@+id/bar"-->
-        <!--android:layout_above="@+id/detail_bottom_btn"-->
-        <!--android:background="@android:color/transparent"-->
-        <!--android:layout_marginLeft="17dp"-->
-        <!--android:layout_marginRight="9dp"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"/>-->
 
     <!--view pager for tabs-->
     <RelativeLayout
