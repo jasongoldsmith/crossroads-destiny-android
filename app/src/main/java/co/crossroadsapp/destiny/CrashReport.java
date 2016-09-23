@@ -47,6 +47,8 @@ public class CrashReport extends BaseActivity implements Observer {
         //user = b.getParcelable("userdata");
         user = controlManager.getUserData();
 
+        controlManager.setCurrentActivity(CrashReport.this);
+
         crash_text = (EditText) findViewById(R.id.crash_edittext);
         email = (EditText) findViewById(R.id.crash_email);
         send_crash = (TextView) findViewById(R.id.send_crash);
@@ -75,15 +77,15 @@ public class CrashReport extends BaseActivity implements Observer {
             public void onClick(View v) {
                 if(crash_text.getText().toString().length()>0 && !email.getText().toString().isEmpty()){
                     //send crash report
-                    if(user.getUserId()!=null) {
-                        hideKeyboard();
-                        showProgressBar();
-                        RequestParams requestParams = new RequestParams();
+                    hideKeyboard();
+                    showProgressBar();
+                    RequestParams requestParams = new RequestParams();
+                    if(user!=null && user.getUserId()!=null) {
                         requestParams.put("reporter", user.getUserId());
-                        requestParams.put("reporterEmail", email.getText().toString());
-                        requestParams.put("reportDetails", crash_text.getText().toString());
-                        controlManager.postCrash(CrashReport.this, requestParams);
                     }
+                    requestParams.put("reporterEmail", email.getText().toString());
+                    requestParams.put("reportDetails", crash_text.getText().toString());
+                    controlManager.postCrash(CrashReport.this, requestParams);
                     //showToastAndClose();
                 }
             }

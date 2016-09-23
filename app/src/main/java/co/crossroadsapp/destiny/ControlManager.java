@@ -521,6 +521,8 @@ public class ControlManager implements Observer{
                     ((UpdateConsoleActivity) mCurrentAct).showError(err);
                 } else if (mCurrentAct instanceof AddFinalActivity) {
                     ((AddFinalActivity) mCurrentAct).showError(err);
+                } else if (mCurrentAct instanceof CrashReport) {
+                    ((CrashReport) mCurrentAct).showError(err);
                 }
             }
         //}

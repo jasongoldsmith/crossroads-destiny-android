@@ -2,6 +2,7 @@ package co.crossroadsapp.destiny.network;
 
 import android.content.Context;
 
+import co.crossroadsapp.destiny.ControlManager;
 import co.crossroadsapp.destiny.CrashReport;
 import co.crossroadsapp.destiny.utils.Util;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -21,18 +22,25 @@ import cz.msebera.android.httpclient.Header;
  */
 public class ReportCrashNetwork extends Observable {
 
+    private final ControlManager mManager;
     private NetworkEngine ntwrk;
     private String url = "api/v1/a/report/create";
+    private String urlUnsigned = "api/v2/report/create";
     private Context mContext;
 
     public ReportCrashNetwork(Context c) {
         mContext = c;
+        mManager = ControlManager.getmInstance();
         ntwrk = NetworkEngine.getmInstance(c);
     }
 
     public void doCrashReport(RequestParams params) throws JSONException {
         if (Util.isNetworkAvailable(mContext)) {
-            ntwrk.post(url, params, new JsonHttpResponseHandler() {
+            String localUrl = urlUnsigned;
+            if(mManager!=null && mManager.getUserData()!=null && mManager.getUserData().getUserId()!=null) {
+                localUrl = url;
+            }
+            ntwrk.post(localUrl, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     setChanged();
@@ -55,9 +63,7 @@ public class ReportCrashNetwork extends Observable {
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    if(mContext!=null) {
-                        ((CrashReport)mContext).showError(Util.getErrorMessage(errorResponse));
-                    }
+                    mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
                 }
             });
         }else {

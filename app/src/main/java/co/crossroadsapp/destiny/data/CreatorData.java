@@ -28,11 +28,11 @@ public class CreatorData extends PlayerData {
                             JSONObject conData = (JSONObject) conArray.get(i);
                             if (conData.has("isPrimary")) {
                                 if (conData.getBoolean("isPrimary")) {
-                                    if (conData.has("consoleId")) {
+                                    if (conData.has("consoleId") && !conData.isNull("consoleId")) {
                                         String id = conData.getString("consoleId");
                                         setPsnId(id);
                                     }
-                                    if (conData.has("clanTag")) {
+                                    if (conData.has("clanTag") && !conData.isNull("clanTag")) {
                                         String clanTag = conData.getString("clanTag");
                                         setClanTag(clanTag);
                                     }

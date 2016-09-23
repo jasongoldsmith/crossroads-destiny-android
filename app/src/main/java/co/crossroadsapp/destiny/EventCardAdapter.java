@@ -200,7 +200,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     String allNamesRem = "";
                     String checkpoint = "";
                     String tag = "";
-                    String clanT = null;
+                    String clanT = "";
                     final EventData currEvent = elistLocal.get(position);
                     final String eId = this.elistLocal.get(position).getEventId();
                     String s = this.elistLocal.get(position).getActivityData().getActivitySubtype();
@@ -305,10 +305,10 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                     if(CreatorIsPlayer) {
                         if(user!=null && user.getPsnVerify()!=null && user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
-                            clanT = this.elistLocal.get(position).getCreatorData().getClanTag();
+                            clanT = this.elistLocal.get(position).getCreatorData().getClanTag()!=null?this.elistLocal.get(position).getCreatorData().getClanTag():"";
                         }
                     } else {
-                        clanT = this.elistLocal.get(position).getCreatorData().getClanTag();
+                        clanT = this.elistLocal.get(position).getCreatorData().getClanTag()!=null?this.elistLocal.get(position).getCreatorData().getClanTag():"";
                     }
 
                     if (this.elistLocal.get(position).getCreatorData().getClanTag() != null) {
