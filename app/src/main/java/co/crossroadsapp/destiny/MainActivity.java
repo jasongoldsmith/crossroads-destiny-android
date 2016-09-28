@@ -57,6 +57,9 @@ public class MainActivity extends BaseActivity implements Observer {
     private WebView webView;
     private String console;
     private TextView countText;
+    private Runnable runnable;
+    private Handler handler;
+    private LinearLayoutManager horizontalLayoutManagaer;
 
     @Override
     protected void onCreate(Bundle outState) {
@@ -179,7 +182,7 @@ public class MainActivity extends BaseActivity implements Observer {
             horizontalList = mManager.getEventListCurrent();
         }
         horizontalAdapter=new EventCardAdapter(horizontalList, null, MainActivity.this, mManager, Constants.PUBLIC_EVENT_FEED);
-        LinearLayoutManager horizontalLayoutManagaer
+        horizontalLayoutManagaer
                 = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
         horizontal_recycler_view.setLayoutManager(horizontalLayoutManagaer);
         horizontal_recycler_view.setAdapter(horizontalAdapter);
@@ -248,18 +251,41 @@ public class MainActivity extends BaseActivity implements Observer {
         });
     }
 
+    private void smoothScroll(final int position) {
+
+        horizontal_recycler_view.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == 0) {
+                    horizontal_recycler_view.setOnScrollListener(null);
+
+                    // Fix for scrolling bug
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            horizontalLayoutManagaer.scrollToPositionWithOffset(position, 0);
+                        }
+                    });
+                }
+            }
+        });
+
+        horizontal_recycler_view.smoothScrollToPosition(position);
+    }
+
     private void startSpinner() {
         if(horizontalAdapter!=null && horizontal_recycler_view!=null) {
             if (horizontalAdapter.elistLocal!=null && horizontalAdapter.elistLocal.size() > 1) {
                 final int speedScroll = 2000;
-                final Handler handler = new Handler();
-                final Runnable runnable = new Runnable() {
+                handler = new Handler();
+                runnable = new Runnable() {
                     int count = 0;
 
                     @Override
                     public void run() {
                         if (count < horizontalAdapter.elistLocal.size()) {
-                            horizontal_recycler_view.smoothScrollToPosition(++count);
+                            //horizontal_recycler_view.smoothScrollToPosition(++count);
+                            smoothScroll(++count);
                             handler.postDelayed(this, speedScroll);
                         } else {
                             count = 0;
@@ -273,6 +299,13 @@ public class MainActivity extends BaseActivity implements Observer {
             }
         }
     }
+
+    private void stopSpinner() {
+        if(handler!=null && runnable!=null) {
+            handler.removeCallbacks(runnable);
+        }
+    }
+
 
     private void launchLogin() {
         Intent signinIntent = new Intent(getApplicationContext(),
@@ -327,6 +360,7 @@ public class MainActivity extends BaseActivity implements Observer {
         super.onStart();
         TravellerLog.w(this, "Registering ReceivefromBackpressService ");
         registerReceiver(ReceivefromBackpressService, new IntentFilter("backpress_flag"));
+        startSpinner();
     }
 
     private BroadcastReceiver ReceivefromBackpressService = new BroadcastReceiver() {
@@ -338,9 +372,10 @@ public class MainActivity extends BaseActivity implements Observer {
 
     @Override
     public void onStop() {
-        super.onStop();
+        stopSpinner();
         TravellerLog.w(this, "Unregistering ReceivefromBackpressService ");
         unregisterReceiver(ReceivefromBackpressService);
+        super.onStop();
     }
 
     @Override
