@@ -33,6 +33,8 @@ public class CrashReport extends BaseActivity implements Observer {
     private ControlManager controlManager;
     private ImageView backBtn;
     private EditText email;
+    private boolean reportIssue=false;
+    private RequestParams requestParams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +45,13 @@ public class CrashReport extends BaseActivity implements Observer {
 
         controlManager = ControlManager.getmInstance();
 
+        requestParams = new RequestParams();
+
         Bundle b = getIntent().getExtras();
-        //user = b.getParcelable("userdata");
+        if(b.containsKey("reportIssue")) {
+            reportIssue = true;
+            requestParams = (RequestParams) b.get("requestParams");
+        }
         user = controlManager.getUserData();
 
         controlManager.setCurrentActivity(CrashReport.this);
@@ -59,6 +66,13 @@ public class CrashReport extends BaseActivity implements Observer {
                 onBackPressed();
             }
         });
+        TextView crash_text_header = (TextView) findViewById(R.id.crash_text);
+
+        if(reportIssue) {
+            send_crash.setText("SUBMIT");
+            crash_text_header.setText(getResources().getString(R.string.report_issue_header));
+            crash_text.setHint("  Description (required)");
+        }
 
         crash_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -79,7 +93,6 @@ public class CrashReport extends BaseActivity implements Observer {
                     //send crash report
                     hideKeyboard();
                     showProgressBar();
-                    RequestParams requestParams = new RequestParams();
                     if(user!=null && user.getUserId()!=null) {
                         requestParams.put("reporter", user.getUserId());
                     }

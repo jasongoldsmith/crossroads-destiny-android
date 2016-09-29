@@ -11,6 +11,7 @@ public class CommentData extends PlayerData {
     private String comment=null;
     private String id=null;
     private String created=null;
+    private boolean isReported=false;
 
     public CommentData() {
         super();
@@ -22,6 +23,14 @@ public class CommentData extends PlayerData {
 
     public String getComment() {
         return comment;
+    }
+
+    private void setReported(boolean reported) {
+        this.isReported = reported;
+    }
+
+    public boolean getReported() {
+        return isReported;
     }
 
     private void setId(String _id) {
@@ -76,6 +85,10 @@ public class CommentData extends PlayerData {
             }
             if(data.has("text") && !data.isNull("text")) {
                 setComment(data.getString("text"));
+            }
+
+            if(data.has("isReported") && !data.isNull("isReported")) {
+                setReported(data.getBoolean("isReported"));
             }
 
             if(data.has("_id") && !data.isNull("_id")) {

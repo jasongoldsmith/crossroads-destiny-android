@@ -119,6 +119,11 @@
     <string name="reset_pswd_test">Instructions on how to reset your password will be sent to your Bungie account.</string>
     <string name="unverified_bungie_text">Check your messages on <![CDATA[<a href="http://www.bungie.net">Bungie.net</a>]]> for a verification link.</string>
     <string name="user_missing_text">If you are still having login issues, email us at <![CDATA[<a href="mailto:support@crossroadsapp.com">support@crossroadsapp.com</a>]]> or contact us directly.</string>
+    <string name="report_issue_header">REPORT ISSUE</string>
+    <string name="report_issue">Is this comment problematic? Reporting it will hide it from everyone. Let us know more at support@crossroadsapp.co</string>
+    <string name="report_submitted_header">REPORT SUBMITTED</string>
+    <string name="report_submitted">We are on the case and will work to address your issue as soon as possible.</string>
+    <string name="report_issue_next">Looks like you’ve sent several reports recently. This probably needs our attention! Please tell us more about the issue.</string>
 
     <plurals name="minutes_time">
         <item quantity="one">%d minute ago</item>

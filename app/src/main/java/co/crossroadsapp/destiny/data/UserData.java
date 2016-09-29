@@ -28,6 +28,8 @@ public class UserData {
     private int authenticationId;
     private ArrayList<ConsoleData> consoles;
     private String clanTag=null;
+    private boolean maxReported = false;
+    private int commentsReported;
 
     public UserData() {
         consoles = new ArrayList<ConsoleData>();
@@ -126,6 +128,22 @@ public class UserData {
         return this.clanTag;
     }
 
+    public void setCommentsReported(int num) {
+        commentsReported = num;
+    }
+
+    public int getCommentsReported() {
+        return  this.commentsReported;
+    }
+
+    public void setMaxReported(boolean maxReport) {
+        maxReported = maxReport;
+    }
+
+    public boolean getMaxReported() {
+        return this.maxReported;
+    }
+
     public void setAuthenticationId(int id) {
         authenticationId = id;
     }
@@ -151,6 +169,16 @@ public class UserData {
                     String memid = jsonData.getString("bungieMemberShipId");
                     setMembershipId(memid);
                 }
+
+                    if (jsonData.has("commentsReported") && !jsonData.isNull("commentsReported")) {
+                        int num = jsonData.getInt("commentsReported");
+                        setCommentsReported(num);
+                    }
+
+                    if (jsonData.has("hasReachedMaxReportedComments") && !jsonData.isNull("hasReachedMaxReportedComments")) {
+                        boolean maxRepo = jsonData.getBoolean("hasReachedMaxReportedComments");
+                        setMaxReported(maxRepo);
+                    }
 
                 if (jsonData.has("clanId") && !jsonData.isNull("clanId")) {
                     String clanId = jsonData.getString("clanId");

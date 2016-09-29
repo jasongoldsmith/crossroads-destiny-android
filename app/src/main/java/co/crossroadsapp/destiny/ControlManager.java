@@ -7,23 +7,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcManager;
 import android.os.Build;
-import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
-import android.view.Display;
-import android.view.WindowManager;
 
 import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.ActivityList;
 import co.crossroadsapp.destiny.data.AppVersion;
-import co.crossroadsapp.destiny.data.ConsoleData;
 import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.EventList;
 import co.crossroadsapp.destiny.data.GroupData;
@@ -43,6 +38,7 @@ import co.crossroadsapp.destiny.network.GroupListNetwork;
 import co.crossroadsapp.destiny.network.HelmetUpdateNetwork;
 import co.crossroadsapp.destiny.network.LogoutNetwork;
 import co.crossroadsapp.destiny.network.PrivacyLegalUpdateNetwork;
+import co.crossroadsapp.destiny.network.ReportCommentNetwork;
 import co.crossroadsapp.destiny.network.ReportCrashNetwork;
 import co.crossroadsapp.destiny.network.ResendBungieVerification;
 import co.crossroadsapp.destiny.network.TrackingNetwork;
@@ -62,7 +58,6 @@ import com.loopj.android.http.RequestParams;
 import com.mixpanel.android.mpmetrics.MPConfig;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -116,6 +111,7 @@ public class ControlManager implements Observer{
     private TrackingNetwork trackingNetwork;
     private AsyncHttpClient client;
     private Boolean showFullEvent;
+    private ReportCommentNetwork reportCommentNetwork;
 
     public ControlManager() {
     }
@@ -930,28 +926,6 @@ public class ControlManager implements Observer{
 
         TelephonyManager manager = (TelephonyManager)c.getSystemService(Context.TELEPHONY_SERVICE);
         client.addHeader("$carrier", manager.getNetworkOperator()!=null?manager.getNetworkOperator():"UNKNOWN");
-
-//            client.addHeader("x-osversion", String.valueOf(android.os.Build.VERSION.SDK_INT));
-//            client.addHeader("x-devicetype", android.os.Build.MANUFACTURER);
-//            client.addHeader("x-devicemodel", android.os.Build.MODEL);
-//            try {
-//                if (c != null && c.getPackageManager() != null) {
-//                    if (c.getPackageName() != null) {
-//                        PackageInfo pInfo = c.getPackageManager().getPackageInfo(c.getPackageName(), 0);
-//                        String version = pInfo.versionName;
-//                        if (version != null) {
-//                            client.addHeader("x-appversion", version);
-//                        }
-//                    }
-//                }
-//            } catch (PackageManager.NameNotFoundException e) {
-//                e.printStackTrace();
-//            }
-//            client.addHeader("x-fbooksdk", "facebook-android-sdk:[4,5)");
-//            client.addHeader("x-fbasesdk", "firebase-9.2.0");
-//            client.addHeader("x-mpsdk", "mixpanel-android:4.+");
-//            client.addHeader("x-branchsdk", "branch-library:1.+");
-//            client.addHeader("x-fabricsdk", "answers:1.3.8@aar");
     }
 
     public void addClientHeader(String headerKey, String headerValue) {
@@ -973,5 +947,15 @@ public class ControlManager implements Observer{
             return showFullEvent;
         }
         return false;
+    }
+
+    public void postCommentReporting(RequestParams requestParams) {
+        try {
+            reportCommentNetwork = new ReportCommentNetwork(mCurrentAct);
+            reportCommentNetwork.addObserver((EventDetailActivity)mCurrentAct);
+            reportCommentNetwork.doCommentReporting(requestParams);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

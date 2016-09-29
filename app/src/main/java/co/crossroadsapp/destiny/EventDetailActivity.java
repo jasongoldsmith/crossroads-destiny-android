@@ -45,6 +45,7 @@ import co.crossroadsapp.destiny.network.AddCommentNetwork;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
 import co.crossroadsapp.destiny.network.EventRelationshipHandlerNetwork;
 import co.crossroadsapp.destiny.network.EventSendMessageNetwork;
+import co.crossroadsapp.destiny.network.ReportCommentNetwork;
 import co.crossroadsapp.destiny.utils.CircularImageView;
 import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.TravellerLog;
@@ -854,7 +855,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     public void update(Observable observable, Object data) {
         hideProgress();
         hideProgressBar();
-            if (observable instanceof EventRelationshipHandlerNetwork || observable instanceof EventByIdNetwork || observable instanceof AddCommentNetwork) {
+            if (observable instanceof EventRelationshipHandlerNetwork || observable instanceof EventByIdNetwork || observable instanceof AddCommentNetwork || observable instanceof ReportCommentNetwork) {
                 this.currEvent = (EventData) data;
                 if (currEvent != null) {
                     if ((currEvent.getPlayerData() != null) && (currEvent.getPlayerData().size()>0)) {
@@ -871,10 +872,26 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                         launchListActivityAndFinish();
                     }
                 }
+                if (observable instanceof ReportCommentNetwork) {
+                    showGenericError(getString(R.string.report_submitted_header), getString(R.string.report_submitted), "OK", Constants.GENERAL_ERROR, null);
+                    updateUserMaxReport();
+                }
             } else if (observable instanceof EventSendMessageNetwork) {
                 editText.setText("");
                 hideSendMsgBckground();
             }
+    }
+
+    private void updateUserMaxReport() {
+        if(currEvent!=null) {
+            if (this.currEvent.getPlayerData() != null) {
+                for (int i = 0; i < currEvent.getPlayerData().size(); i++) {
+                    if (user.getUserId().equalsIgnoreCase(currEvent.getPlayerData().get(i).getPlayerId())) {
+                        user.setMaxReported(currEvent.getPlayerData().get(i).getMaxReported());
+                    }
+                }
+            }
+        }
     }
 
     private void hideSendMsgBckground() {

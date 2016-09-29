@@ -116,4 +116,9 @@ public class Constants {
     public static String LEGACY_ERROR_TITLE = "Legacy Consoles";
     public static String LEGACY_ERROR_MSG = "In line with Rise of Iron, we now only support next-gen consoles. When you’ve upgraded your console, please come\n" +
             "back and join us!";
+
+    //error types
+    public static int GENERAL_ERROR = 1;
+    public static int REPORT_COMMENT = 2;
+    public static int REPORT_COMMENT_NEXT = 3;
 }

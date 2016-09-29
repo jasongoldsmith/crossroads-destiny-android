@@ -1,23 +1,18 @@
 package co.crossroadsapp.destiny;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -193,7 +189,7 @@ public class BaseActivity extends FragmentActivity {
         });
     }
 
-    public void showGenericError(String header, String msg, String text) {
+    public void showGenericError(String header, String msg, String text, final int errorType, final RequestParams rp) {
         final RelativeLayout deeplinkErrorG = (RelativeLayout) findViewById(R.id.deeplink_error);
         TextView errMsgG = (TextView) findViewById(R.id.msg);
         TextView btnTextG = (TextView) findViewById(R.id.btn_text);
@@ -203,36 +199,61 @@ public class BaseActivity extends FragmentActivity {
         ImageView closeG= (ImageView) findViewById(R.id.close);
         TextView noBtn = (TextView) findViewById(R.id.no_thanks);
 
-        noBtn.setVisibility(View.GONE);
-
-            deeplinkErrorG.setVisibility(View.GONE);
-            deeplinkErrorG.setVisibility(View.VISIBLE);
-            closeG.setOnClickListener(new View.OnClickListener() {
+        if(errorType == Constants.GENERAL_ERROR) {
+            noBtn.setVisibility(View.GONE);
+        } else {
+            noBtn.setVisibility(View.VISIBLE);
+            noBtn.setText("Cancel");
+            noBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     deeplinkErrorG.setVisibility(View.GONE);
                 }
             });
+        }
 
-            btnG.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        deeplinkErrorG.setVisibility(View.GONE);
+        deeplinkErrorG.setVisibility(View.VISIBLE);
+        closeG.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deeplinkErrorG.setVisibility(View.GONE);
+            }
+        });
+
+        btnG.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(errorType==Constants.REPORT_COMMENT) {
+                    if(mManager!=null && mManager.getCurrentActivity()!=null && mManager.getCurrentActivity() instanceof EventDetailActivity) {
+                        showProgressBar();
+                        mManager.postCommentReporting(rp!=null?rp:null);
+                    }
+                } else if(errorType==Constants.REPORT_COMMENT_NEXT){
+                    // go to create new event page
+                    Intent regIntent = new Intent(getApplicationContext(),
+                            CrashReport.class);
+                    regIntent.putExtra("reportIssue", true);
+                    regIntent.putExtra("requestParams", rp);
+                    startActivity(regIntent);
+                    deeplinkErrorG.setVisibility(View.GONE);
+                } else {
                     deeplinkErrorG.setVisibility(View.GONE);
                 }
-            });
-            if (header != null && !header.isEmpty()) {
-                titleG.setText(header);
             }
-            if (msg != null && !msg.isEmpty()) {
-                errMsgG.setText(msg);
-            }
-            if (text != null && !text.isEmpty()) {
-                btnTextG.setAllCaps(true);
-                //btnTextG.setTextSize(Util.dpToPx(16, this));
-                btnTextG.setText(text);
-                btnTextG.setPadding(Util.dpToPx(88, this), Util.dpToPx(12, this),Util.dpToPx(88, this),Util.dpToPx(12, this));
-            }
-
+        });
+        if (header != null && !header.isEmpty()) {
+            titleG.setText(header);
+        }
+        if (msg != null && !msg.isEmpty()) {
+            errMsgG.setText(msg);
+        }
+        if (text != null && !text.isEmpty()) {
+            btnTextG.setAllCaps(true);
+            //btnTextG.setTextSize(Util.dpToPx(16, this));
+            btnTextG.setText(text);
+            btnTextG.setPadding(Util.dpToPx(88, this), Util.dpToPx(12, this),Util.dpToPx(88, this),Util.dpToPx(12, this));
+        }
     }
 
     public void showDeeplinkError(int eventFull, final String deepLinkEvent, String deepLinkName, final String clanId) {

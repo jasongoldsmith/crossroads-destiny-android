@@ -6,17 +6,19 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import co.crossroadsapp.destiny.data.CommentData;
 import co.crossroadsapp.destiny.data.EventData;
@@ -333,33 +335,66 @@ public class EventDetailsFragments extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(CurrentEventsCommentsViewHolder holder, int position) {
+        public void onBindViewHolder(CurrentEventsCommentsViewHolder holder, final int position) {
             if(commentsLocal!=null && !commentsLocal.isEmpty()) {
                 if(commentsLocal.get(position)!=null) {
-                    if(commentsLocal.get(position).getComment()!=null && !commentsLocal.get(position).getComment().isEmpty()) {
-                        String text = commentsLocal.get(position).getComment();
-                        holder.playerCommentText.setText(text);
-                    }
+                    boolean reported = commentsLocal.get(position).getReported();
+                    if(reported) {
+                        holder.playerNameComment.setVisibility(View.GONE);
+                        holder.playerProfileComment.setImageDrawable(getResources().getDrawable(R.drawable.img_profile_blank));
+                    } else {
+                        holder.commentCard.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (checkUserIsPlayer()) {
+                                    RequestParams rp = new RequestParams();
+                                    if (currentEvent != null && currentEvent.getEventId() != null && !currentEvent.getEventId().isEmpty()) {
+                                        Map<String, String> json = new HashMap<String, String>();
+                                        json.put("eId", currentEvent.getEventId());
+                                        if (commentsLocal.get(position).getId() != null && !commentsLocal.get(position).getId().isEmpty()) {
+                                            json.put("commentId", commentsLocal.get(position).getId());
+                                        }
+                                        rp.put("reportAdditionalInfo", json);
+                                        if (user != null && user.getMaxReported()) {
+                                            ((EventDetailActivity) getActivity()).showGenericError(getString(R.string.report_issue_header), getString(R.string.report_issue_next), "NEXT", Constants.REPORT_COMMENT_NEXT, rp);
+                                        } else {
+                                            ((EventDetailActivity) getActivity()).showGenericError(getString(R.string.report_issue_header), getString(R.string.report_issue), "REPORT", Constants.REPORT_COMMENT, rp);
+                                        }
+                                    }
 
-                    if(commentsLocal.get(position).getPsnId()!=null) {
-                        String name=commentsLocal.get(position).getPsnId();
-                        if(!ifPlayerisUserAndVerified(name)) {
-                            if (commentsLocal.get(position).getClanTag() != null) {
-                                name = name + " [" + commentsLocal.get(position).getClanTag() + "]";
+                                }
                             }
-                            if(commentsLocal.get(position).getPlayerImageUrl()!=null && !commentsLocal.get(position).getPlayerImageUrl().isEmpty()) {
-                                String playerImg = commentsLocal.get(position).getPlayerImageUrl();
-                                Util.picassoLoadImageWithoutMeasurement(getActivity(), holder.playerProfileComment, playerImg, R.drawable.profile_image);
+                        });
+                        if (commentsLocal.get(position).getPsnId() != null) {
+                            String name = commentsLocal.get(position).getPsnId();
+                            if (!ifPlayerisUserAndVerified(name)) {
+                                if (commentsLocal.get(position).getClanTag() != null) {
+                                    name = name + " [" + commentsLocal.get(position).getClanTag() + "]";
+                                }
+                                if (commentsLocal.get(position).getPlayerImageUrl() != null && !commentsLocal.get(position).getPlayerImageUrl().isEmpty()) {
+                                    String playerImg = commentsLocal.get(position).getPlayerImageUrl();
+                                    Util.picassoLoadImageWithoutMeasurement(getActivity(), holder.playerProfileComment, playerImg, R.drawable.profile_image);
+                                }
+                            } else {
+                                Util.picassoLoadImageWithoutMeasurement(getActivity(), holder.playerProfileComment, null, R.drawable.profile_image);
                             }
-                        } else {
-                            Util.picassoLoadImageWithoutMeasurement(getActivity(), holder.playerProfileComment, null, R.drawable.profile_image);
+                            holder.playerNameComment.setVisibility(View.VISIBLE);
+                            holder.playerNameComment.setText(name);
                         }
-                        holder.playerNameComment.setText(name);
                     }
 
-                    if(commentsLocal.get(position).getCreated()!=null) {
+                    if (commentsLocal.get(position).getComment() != null && !commentsLocal.get(position).getComment().isEmpty()) {
+                        String text = commentsLocal.get(position).getComment();
+                        if(reported) {
+                            text  = "[comment removed]";
+                        }
+                        holder.playerCommentText.setText(text);
+                        holder.playerCommentText.setGravity(Gravity.CENTER_VERTICAL);
+                    }
+
+                    if (commentsLocal.get(position).getCreated() != null) {
                         String time = Util.updateLastReceivedDate(commentsLocal.get(position).getCreated(), getActivity().getResources());
-                        if(time!=null) {
+                        if (time != null) {
                             holder.time.setText(time);
                         }
                     }
@@ -375,13 +410,14 @@ public class EventDetailsFragments extends Fragment {
 
         public class CurrentEventsCommentsViewHolder extends RecyclerView.ViewHolder {
             private CircularImageView playerProfileComment;
+            private CardView commentCard;
             private TextView playerNameComment;
             private TextView playerCommentText;
             private TextView time;
             public CurrentEventsCommentsViewHolder(View itemView) {
                 super(itemView);
                 view = itemView;
-
+                commentCard = (CardView) itemView.findViewById(R.id.eventdetail_commentcard);
                 playerProfileComment = (CircularImageView) itemView.findViewById(R.id.event_detail_comment_player_profile);
                 playerNameComment = (TextView) itemView.findViewById(R.id.player_name_comment);
                 playerCommentText = (TextView) itemView.findViewById(R.id.comment_text);

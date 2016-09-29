@@ -14,6 +14,8 @@ public class PlayerData {
     private String psnId;
     private String playerImageUrl;
     private String playerClanTag;
+    private boolean maxReported = false;
+    private int commentsReported;
 
     public void setPlayerId(String id) {
         playerId = id;
@@ -53,6 +55,22 @@ public class PlayerData {
 
     public String getClanTag() {
         return this.playerClanTag;
+    }
+
+    public void setCommentsReported(int num) {
+        commentsReported = num;
+    }
+
+    public int getCommentsReported() {
+        return  this.commentsReported;
+    }
+
+    public void setMaxReported(boolean maxReport) {
+        maxReported = maxReport;
+    }
+
+    public boolean getMaxReported() {
+        return this.maxReported;
     }
 
     public void toJson(JSONObject jsonobject) {
@@ -98,6 +116,15 @@ public class PlayerData {
                 }
                 if(jsonobject.has("imageUrl") && !jsonobject.isNull("imageUrl")) {
                     setPlayerImageUrl(jsonobject.getString("imageUrl"));
+                }
+                if (jsonobject.has("commentsReported") && !jsonobject.isNull("commentsReported")) {
+                    int num = jsonobject.getInt("commentsReported");
+                    setCommentsReported(num);
+                }
+
+                if (jsonobject.has("hasReachedMaxReportedComments") && !jsonobject.isNull("hasReachedMaxReportedComments")) {
+                    boolean maxRepo = jsonobject.getBoolean("hasReachedMaxReportedComments");
+                    setMaxReported(maxRepo);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
