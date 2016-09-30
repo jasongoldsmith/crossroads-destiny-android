@@ -943,6 +943,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
     public void showError(String err) {
         hideProgress();
+        hideProgressBar();
 //        errLayout.setVisibility(View.VISIBLE);
 //        errText.setText(err);
         setErrText(err);

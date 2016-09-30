@@ -48,7 +48,7 @@ public class CrashReport extends BaseActivity implements Observer {
         requestParams = new RequestParams();
 
         Bundle b = getIntent().getExtras();
-        if(b.containsKey("reportIssue")) {
+        if(b!=null && b.containsKey("reportIssue")) {
             reportIssue = true;
             requestParams = (RequestParams) b.get("requestParams");
         }

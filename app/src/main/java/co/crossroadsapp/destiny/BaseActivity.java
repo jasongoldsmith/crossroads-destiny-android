@@ -34,6 +34,7 @@ import co.crossroadsapp.destiny.data.PushNotification;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.CircularImageView;
 import co.crossroadsapp.destiny.utils.Constants;
+import co.crossroadsapp.destiny.utils.TravellerLog;
 import co.crossroadsapp.destiny.utils.Util;
 
 public class BaseActivity extends FragmentActivity {
@@ -54,7 +55,7 @@ public class BaseActivity extends FragmentActivity {
         // todo handle uncaught exceptions
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
-                Log.e("Error"+Thread.currentThread().getStackTrace()[2],paramThrowable.getLocalizedMessage());
+                TravellerLog.e("Error"+Thread.currentThread().getStackTrace()[2],paramThrowable.getLocalizedMessage());
             }
         });
     }

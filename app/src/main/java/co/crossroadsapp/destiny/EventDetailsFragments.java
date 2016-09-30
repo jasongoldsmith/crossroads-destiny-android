@@ -349,15 +349,19 @@ public class EventDetailsFragments extends Fragment {
                                 if (checkUserIsPlayer()) {
                                     RequestParams rp = new RequestParams();
                                     if (currentEvent != null && currentEvent.getEventId() != null && !currentEvent.getEventId().isEmpty()) {
-                                        Map<String, String> json = new HashMap<String, String>();
-                                        json.put("eId", currentEvent.getEventId());
-                                        if (commentsLocal.get(position).getId() != null && !commentsLocal.get(position).getId().isEmpty()) {
-                                            json.put("commentId", commentsLocal.get(position).getId());
-                                        }
-                                        rp.put("reportAdditionalInfo", json);
                                         if (user != null && user.getMaxReported()) {
+                                            Map<String, String> json = new HashMap<String, String>();
+                                            json.put("eId", currentEvent.getEventId());
+                                            if (commentsLocal.get(position).getId() != null && !commentsLocal.get(position).getId().isEmpty()) {
+                                                json.put("commentId", commentsLocal.get(position).getId());
+                                            }
+                                            rp.put("reportAdditionalInfo", json);
                                             ((EventDetailActivity) getActivity()).showGenericError(getString(R.string.report_issue_header), getString(R.string.report_issue_next), "NEXT", Constants.REPORT_COMMENT_NEXT, rp);
                                         } else {
+                                            rp.put("eId", currentEvent.getEventId());
+                                            if (commentsLocal.get(position).getId() != null && !commentsLocal.get(position).getId().isEmpty()) {
+                                                rp.put("commentId", commentsLocal.get(position).getId());
+                                            }
                                             ((EventDetailActivity) getActivity()).showGenericError(getString(R.string.report_issue_header), getString(R.string.report_issue), "REPORT", Constants.REPORT_COMMENT, rp);
                                         }
                                     }

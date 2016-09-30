@@ -40,7 +40,9 @@ public class LogoutNetwork extends Observable {
                 // If the response is JSONObject instead of expected JSONArray
                 // go to logout page
                 Util.clearDefaults(mContext.getApplicationContext());
-                mManager.getEventListCurrent().clear();
+                if(mManager!=null && mManager.getEventListCurrent()!=null) {
+                    mManager.getEventListCurrent().clear();
+                }
                 setChanged();
                 notifyObservers();
             }
