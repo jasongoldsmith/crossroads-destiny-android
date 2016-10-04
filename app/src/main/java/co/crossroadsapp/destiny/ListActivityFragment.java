@@ -146,6 +146,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     private String showUnverifiedMsg;
     private ImageView down_arw_img;
     private TextView consoleText;
+    private Bundle b;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +159,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         mManager = ControlManager.getmInstance();
         mManager.setCurrentActivity(this);
 
-        Bundle b=null;
+        b=null;
         if(getIntent()!=null && getIntent().getExtras()!=null) {
             b = getIntent().getExtras();
         }
@@ -1195,6 +1196,14 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
                 //register user listener
                 registerUserFirebase();
+            }
+        }
+
+        if(getIntent()!=null && getIntent().getExtras()!=null) {
+            b = getIntent().getExtras();
+            if(b!=null && b.containsKey("reportIssue")) {
+                //pagerAdapter.
+                showGenericError(getString(R.string.report_submitted_header), getString(R.string.report_submitted), "OK", Constants.GENERAL_ERROR, null);
             }
         }
     }

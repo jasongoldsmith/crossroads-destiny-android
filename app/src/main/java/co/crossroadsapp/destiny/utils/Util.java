@@ -82,15 +82,19 @@ public class Util {
         } else {
             url = Constants.FIREBASE_DEV_URL;
         }
-        if (channel==1) {
-            if (clanId != null && (!clanId.equalsIgnoreCase("null"))) {
+        if (channel==Constants.EVENT_CHANNEL || channel==Constants.EVENT_COMMENT_CHANNEL) {
                 if (eventId!=null && (!eventId.equalsIgnoreCase("null"))) {
-                    url = url + "events/" + clanId +"/" +eventId;
+                    if(channel==Constants.EVENT_COMMENT_CHANNEL) {
+                        url = url + "comments/" + eventId;
+                    } else {
+                        if (clanId != null && (!clanId.equalsIgnoreCase("null"))) {
+                            url = url + "events/" + clanId + "/" + eventId;
+                        }
+                    }
                 } else {
                     url = url + "events/" + clanId;
                 }
-            }
-        } else if(channel==2) {
+        } else if(channel==Constants.USER_CHANNEL) {
             if (clanId != null && (!clanId.equalsIgnoreCase("null"))) {
                 url = url + "users/" + clanId;
             }

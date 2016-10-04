@@ -753,11 +753,11 @@ public class ControlManager implements Observer{
 
     }
 
-    public void postCrash(CrashReport c, RequestParams requestParams) {
+    public void postCrash(CrashReport c, RequestParams requestParams, int report_type) {
         try {
             crashReportNetwork = new ReportCrashNetwork(c);
             crashReportNetwork.addObserver(c);
-            crashReportNetwork.doCrashReport(requestParams);
+            crashReportNetwork.doCrashReport(requestParams, report_type);
         } catch (JSONException e) {
             e.printStackTrace();
         }

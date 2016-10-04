@@ -116,7 +116,6 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private TextView mCharacter;
     private RelativeLayout bottomBtnLayout;
     private ValueEventListener listener;
-    private Firebase refFirebase;
     private ImageView share;
 
     private int reqPlayer;
@@ -131,6 +130,11 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private EditText sendMsg;
     private ImageView sendMsgBtn;
     private TabLayout tabLayout;
+    private ValueEventListener userListener;
+    private Firebase refUFirebase;
+    private Firebase refFirebase;
+    private Firebase refCFirebase;
+    private ValueEventListener listenerC;
 //    private TextView errText;
 //    private ImageView close_err;
 
@@ -651,12 +655,14 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     public void onResume() {
         super.onResume();
         registerFirbase();
+        registerUserFirebase();
     }
 
     @Override
     public void onPause() {
         super.onPause();
         unregisterFirebase();
+        unregisterUserFirebase();
     }
 
     @Override
@@ -667,6 +673,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
     private void registerFirbase() {
         setupEventListener();
+//        setupEventChannelListener();
         if(controlManager!=null) {
             if(controlManager.getUserData()!=null) {
                 this.user = controlManager.getUserData();
@@ -675,8 +682,10 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         if(user!=null && user.getClanId()!=null) {
             if(currEvent!=null && currEvent.getEventId()!=null && currEvent.getClanId()!=null) {
                 refFirebase = new Firebase(Util.getFirebaseUrl(currEvent.getClanId(), currEvent.getEventId(), Constants.EVENT_CHANNEL));
+                refCFirebase = new Firebase(Util.getFirebaseUrl(currEvent.getClanId(), currEvent.getEventId(), Constants.EVENT_COMMENT_CHANNEL));
                 if (listener != null) {
                     refFirebase.addValueEventListener(listener);
+                    refCFirebase.addValueEventListener(listener);
                 }
             }
         }
@@ -717,9 +726,38 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         };
     }
 
+//    private void setupEventChannelListener() {
+//        listenerC = new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot snapshot) {
+//                if(currEvent!=null && currEvent.getEventId()!=null) {
+//                    String id = currEvent.getEventId();
+//                    RequestParams param = new RequestParams();
+//                    param.add("id", id);
+//                    controlManager.postEventById(EventDetailActivity.this, param);
+//                }
+////                if(snapshot.exists()) {
+////                            if(currEvent!=null && currEvent.getEventId()!=null) {
+////                                String id = currEvent.getEventId();
+////                                RequestParams param = new RequestParams();
+////                                param.add("id", id);
+////                                controlManager.postEventById(EventDetailActivity.this, param);
+////                            }
+////                } else {
+////                    launchListActivityAndFinish();
+////                }
+//            }
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//                System.out.println("The read failed: " + firebaseError.getMessage());
+//            }
+//        };
+//    }
+
     private void unregisterFirebase() {
         if(listener!=null) {
             refFirebase.removeEventListener(listener);
+            refCFirebase.removeEventListener(listener);
         }
     }
 
@@ -873,8 +911,8 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                     }
                 }
                 if (observable instanceof ReportCommentNetwork) {
-                    showGenericError(getString(R.string.report_submitted_header), getString(R.string.report_submitted), "OK", Constants.GENERAL_ERROR, null);
-                    updateUserMaxReport();
+//                    showGenericError(getString(R.string.report_submitted_header), getString(R.string.report_submitted), "OK", Constants.GENERAL_ERROR, null);
+//                    updateUserMaxReport();
                 }
             } else if (observable instanceof EventSendMessageNetwork) {
                 editText.setText("");
@@ -947,6 +985,62 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 //        errLayout.setVisibility(View.VISIBLE);
 //        errText.setText(err);
         setErrText(err);
+    }
+
+    private void registerUserFirebase() {
+        if(user.getUserId()!=null) {
+            setupUserListener();
+            refUFirebase = new Firebase(Util.getFirebaseUrl(this.user.getUserId(), null, Constants.USER_CHANNEL));
+            if (userListener != null) {
+                refUFirebase.addValueEventListener(userListener);
+            }
+        }
+    }
+
+    private void unregisterUserFirebase() {
+        if(userListener!=null) {
+            if(refUFirebase!=null) {
+                refUFirebase.removeEventListener(userListener);
+            }
+        }
+    }
+
+    private void setupUserListener() {
+        userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if(snapshot!=null) {
+                    UserData ud = new UserData();
+                    if (snapshot.hasChild("value")) {
+                        JSONObject userObj = new JSONObject ((HashMap)snapshot.getValue());
+                        ud.toJson(userObj);
+                        if(ud.getUserId()!=null){
+                            user = ud;
+                            controlManager.setUserdata(user);
+                        }
+//                        if(ud.getPsnVerify()!=null) {
+//                            psnV = ud.getPsnVerify();
+//                        }
+//                        if (psnV != null) {
+//                            if (psnV.equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+//                                if (mManager != null && mManager.getUserData() != null) {
+//                                    UserData u = mManager.getUserData();
+//                                    u.setPsnVerify(psnV);
+//                                }
+//                                checkUserPSNVerification();
+//                            } else if(psnV.equalsIgnoreCase(Constants.PSN_DELETED)){
+//                                Util.clearDefaults(ListActivityFragment.this.getApplicationContext());
+//                                afterLogout();
+//                            }
+//                        }
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        };
     }
 
     public String getGroupName() {

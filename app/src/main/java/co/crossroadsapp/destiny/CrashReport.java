@@ -16,11 +16,15 @@ import android.widget.Toast;
 
 import com.loopj.android.http.RequestParams;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.R;
+import co.crossroadsapp.destiny.utils.Constants;
+import co.crossroadsapp.destiny.utils.Util;
 
 /**
  * Created by sharmha on 3/31/16.
@@ -93,13 +97,24 @@ public class CrashReport extends BaseActivity implements Observer {
                     //send crash report
                     hideKeyboard();
                     showProgressBar();
-                    if(user!=null && user.getUserId()!=null) {
-                        requestParams.put("reporter", user.getUserId());
+                    if(Util.isValidEmail(email.getText().toString())) {
+                        if(reportIssue) {
+                            Map<String, String> json = new HashMap<String, String>();
+                            json.put("reporterEmail", email.getText().toString());
+                            json.put("reportDetails", crash_text.getText().toString());
+                            requestParams.put("formDetails", json);
+                        } else {
+                            if (user != null && user.getUserId() != null) {
+                                requestParams.put("reporter", user.getUserId());
+                            }
+                            requestParams.put("reporterEmail", email.getText().toString());
+                            requestParams.put("reportDetails", crash_text.getText().toString());
+                        }
+                        controlManager.postCrash(CrashReport.this, requestParams, reportIssue?Constants.REPORT_COMMENT_NEXT:Constants.GENERAL_ERROR);
+                        //showToastAndClose();
+                    } else {
+                        showError(getString(R.string.invalid_email));
                     }
-                    requestParams.put("reporterEmail", email.getText().toString());
-                    requestParams.put("reportDetails", crash_text.getText().toString());
-                    controlManager.postCrash(CrashReport.this, requestParams);
-                    //showToastAndClose();
                 }
             }
         });
@@ -107,7 +122,7 @@ public class CrashReport extends BaseActivity implements Observer {
 
     public void showError(String err) {
         hideProgressBar();
-        showError(err);
+        setErrText(err);
     }
 
     @Override
@@ -143,9 +158,13 @@ public class CrashReport extends BaseActivity implements Observer {
     @Override
     public void update(Observable observable, Object data) {
         hideProgressBar();
-        Intent intent = new Intent(getApplicationContext(),
-                MessageSent.class);
-        startActivity(intent);
-        finish();
+        if(reportIssue) {
+            showGenericError(getString(R.string.report_submitted_header), getString(R.string.report_submitted), "OK", Constants.GENERAL_ERROR, null);
+        } else {
+            Intent intent = new Intent(getApplicationContext(),
+                    MessageSent.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }

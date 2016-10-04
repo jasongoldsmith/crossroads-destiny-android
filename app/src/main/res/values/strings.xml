@@ -124,6 +124,7 @@
     <string name="report_submitted_header">REPORT SUBMITTED</string>
     <string name="report_submitted">We are on the case and will work to address your issue as soon as possible.</string>
     <string name="report_issue_next">Looks like you’ve sent several reports recently. This probably needs our attention! Please tell us more about the issue.</string>
+    <string name="invalid_email">Please enter a valid email address.</string>
 
     <plurals name="minutes_time">
         <item quantity="one">%d minute ago</item>

@@ -219,6 +219,9 @@ public class BaseActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 deeplinkErrorG.setVisibility(View.GONE);
+                if(mManager!=null && mManager.getCurrentActivity()!=null && mManager.getCurrentActivity() instanceof CrashReport) {
+                    ((CrashReport) mManager.getCurrentActivity()).finish();
+                }
             }
         });
 
@@ -229,6 +232,7 @@ public class BaseActivity extends FragmentActivity {
                     if(mManager!=null && mManager.getCurrentActivity()!=null && mManager.getCurrentActivity() instanceof EventDetailActivity) {
                         showProgressBar();
                         mManager.postCommentReporting(rp!=null?rp:null);
+                        deeplinkErrorG.setVisibility(View.GONE);
                     }
                 } else if(errorType==Constants.REPORT_COMMENT_NEXT){
                     // go to create new event page
@@ -240,6 +244,9 @@ public class BaseActivity extends FragmentActivity {
                     deeplinkErrorG.setVisibility(View.GONE);
                 } else {
                     deeplinkErrorG.setVisibility(View.GONE);
+                    if(mManager!=null && mManager.getCurrentActivity()!=null && mManager.getCurrentActivity() instanceof CrashReport) {
+                        ((CrashReport) mManager.getCurrentActivity()).finish();
+                    }
                 }
             }
         });

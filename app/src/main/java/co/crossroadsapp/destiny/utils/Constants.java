@@ -74,6 +74,7 @@ public class Constants {
 
     public static int USER_CHANNEL = 2;
     public static int EVENT_CHANNEL = 1;
+    public static int EVENT_COMMENT_CHANNEL = 3;
 
     public static int PUBLIC_EVENT_FEED = 1;
     public static int EVENT_FEED = 2;
@@ -121,4 +122,7 @@ public class Constants {
     public static int GENERAL_ERROR = 1;
     public static int REPORT_COMMENT = 2;
     public static int REPORT_COMMENT_NEXT = 3;
+
+    //api url
+    public static String REPORT_COMMENT_URL = "api/v1/a/event/reportComment";
 }

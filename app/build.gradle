@@ -30,7 +30,7 @@ android {
         applicationId = theApplicationId
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 92
+        versionCode 93
         versionName "1.1.1"
         multiDexEnabled true
     }
