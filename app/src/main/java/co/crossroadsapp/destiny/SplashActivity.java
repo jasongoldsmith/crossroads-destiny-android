@@ -49,7 +49,6 @@ import com.crashlytics.android.Crashlytics;
 /**
  * Created by sharmha on 2/19/16.
  */
-//public class SplashActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener {
 public class SplashActivity extends BaseActivity implements Observer {
     private static final int SPLASH_DELAY = 1000;
     private Handler mHandler;
@@ -77,9 +76,6 @@ public class SplashActivity extends BaseActivity implements Observer {
         String projectToken =  getResources().getString(R.string.mix_panel_token);
         mixpanel = MixpanelAPI.getInstance(SplashActivity.this, projectToken);
         cManager.addClientHeader("x-mixpanelid", mixpanel.getDistinctId()!=null?mixpanel.getDistinctId():"");
-
-        // Automatic session tracking
-        //Branch.getAutoInstance(this);
         mLayout = (RelativeLayout) findViewById(R.id.splash_layout);
         if(mLayout!=null) {
             mLayout.setVisibility(View.VISIBLE);
@@ -126,50 +122,42 @@ public class SplashActivity extends BaseActivity implements Observer {
 
     private void branchInitializationAndInit() {
         Branch branch = Branch.getInstance(getApplicationContext());
-
-        Map<String, String> json = new HashMap<String, String>();
-
-        //todo find better solution to find out if getting start from universal link click
-        Intent s = getIntent();
-        if (s!=null && s.getData()!=null) {
-            if (s.getData().toString().toLowerCase().contains("dlcsrd")) {
-                //tracking
-                json.put("source", Constants.BRANCH_SOURCE);
-                branch.initSession(new Branch.BranchUniversalReferralInitListener() {
+        final Map<String, String> json = new HashMap<String, String>();
+        branch.initSession(new Branch.BranchReferralInitListener() {
                     @Override
-                    public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError error) {
+                    public void onInitFinished(JSONObject referringParams, BranchError error) {
+                        // params are the deep linked params associated with the link that the user clicked -> was re-directed to this app
+                        // params will be empty if no data found
                         if (error == null) {
-                            //todo need to reset user session as it's not getting automatically updated and looks like a bug with branch
-                            Branch.getInstance().resetUserSession();
-                            // params are the deep linked params associated with the link that the user clicked before showing up
-                            if (branchUniversalObject != null) {
-                                Map<String, String> jsonBranch = new HashMap<String, String>();
-                                jsonBranch.put("ads", Constants.BRANCH_SOURCE);
-//                                Util.postTracking(jsonBranch, SplashActivity.this, cManager, "appInstall");
-//                                Util.setDefaults("appInstall", "branch", SplashActivity.this);
-                                checkAppInstall(jsonBranch);
-                                if (branchUniversalObject.getMetadata().containsKey("eventId") && branchUniversalObject.getMetadata().containsKey("activityName")) {
-                                    String eId = branchUniversalObject.getMetadata().get("eventId");
-                                    String aName = branchUniversalObject.getMetadata().get("activityName");
-                                    if (eId != null) {
-                                        if (cManager != null) {
-                                            cManager.setDeepLinkEvent(eId, aName);
+                            try {
+                                if(referringParams.has("+clicked_branch_link") && referringParams.getBoolean("+clicked_branch_link")) {
+                                    //tracking appinit
+                                    json.put("source", Constants.BRANCH_SOURCE);
+                                    Map<String, String> jsonBranch = new HashMap<String, String>();
+                                    jsonBranch.put("ads", Constants.BRANCH_SOURCE);
+                                    checkAppInstall(jsonBranch);
+                                    if (referringParams.has("eventId") && referringParams.has("activityName")) {
+                                        String eId = referringParams.getString("eventId");
+                                        String aName = referringParams.getString("activityName");
+                                        if (eId != null) {
+                                            if (cManager != null) {
+                                                cManager.setDeepLinkEvent(eId, aName);
+                                            }
                                         }
                                     }
+                                } else {
+                                    //tracking appinit
+                                    json.put("source", Constants.UNKNOWN_SOURCE);
                                 }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
+                        } else {
+                            //tracking appinit
+                            json.put("source", Constants.BRANCH_SOURCE);
                         }
                     }
                 }, this.getIntent().getData(), this);
-            } else {
-                //tracking
-                json.put("source", Constants.UNKNOWN_SOURCE);
-            }
-        } else {
-            //tracking
-            json.put("source", Constants.UNKNOWN_SOURCE);
-        }
-
         Util.postTracking(json, SplashActivity.this, cManager, Constants.APP_INIT);
     }
 
