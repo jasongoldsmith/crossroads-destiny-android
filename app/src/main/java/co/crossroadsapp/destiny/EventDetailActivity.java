@@ -685,7 +685,9 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                 refCFirebase = new Firebase(Util.getFirebaseUrl(currEvent.getClanId(), currEvent.getEventId(), Constants.EVENT_COMMENT_CHANNEL));
                 if (listener != null) {
                     refFirebase.addValueEventListener(listener);
-                    refCFirebase.addValueEventListener(listener);
+                }
+                if(listenerC!=null) {
+                    refCFirebase.addValueEventListener(listenerC);
                 }
             }
         }
@@ -702,22 +704,38 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         listener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+//                if(currEvent!=null && currEvent.getEventId()!=null) {
+//                    String id = currEvent.getEventId();
+//                    RequestParams param = new RequestParams();
+//                    param.add("id", id);
+//                    controlManager.postEventById(EventDetailActivity.this, param);
+//                }
+                if(snapshot.exists()) {
+                            if(currEvent!=null && currEvent.getEventId()!=null) {
+                                String id = currEvent.getEventId();
+                                RequestParams param = new RequestParams();
+                                param.add("id", id);
+                                controlManager.postEventById(EventDetailActivity.this, param);
+                            }
+                } else {
+                    finish();
+                }
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        };
+
+        listenerC = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
                 if(currEvent!=null && currEvent.getEventId()!=null) {
                     String id = currEvent.getEventId();
                     RequestParams param = new RequestParams();
                     param.add("id", id);
                     controlManager.postEventById(EventDetailActivity.this, param);
                 }
-//                if(snapshot.exists()) {
-//                            if(currEvent!=null && currEvent.getEventId()!=null) {
-//                                String id = currEvent.getEventId();
-//                                RequestParams param = new RequestParams();
-//                                param.add("id", id);
-//                                controlManager.postEventById(EventDetailActivity.this, param);
-//                            }
-//                } else {
-//                    launchListActivityAndFinish();
-//                }
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
@@ -726,38 +744,16 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         };
     }
 
-//    private void setupEventChannelListener() {
-//        listenerC = new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot snapshot) {
-//                if(currEvent!=null && currEvent.getEventId()!=null) {
-//                    String id = currEvent.getEventId();
-//                    RequestParams param = new RequestParams();
-//                    param.add("id", id);
-//                    controlManager.postEventById(EventDetailActivity.this, param);
-//                }
-////                if(snapshot.exists()) {
-////                            if(currEvent!=null && currEvent.getEventId()!=null) {
-////                                String id = currEvent.getEventId();
-////                                RequestParams param = new RequestParams();
-////                                param.add("id", id);
-////                                controlManager.postEventById(EventDetailActivity.this, param);
-////                            }
-////                } else {
-////                    launchListActivityAndFinish();
-////                }
-//            }
-//            @Override
-//            public void onCancelled(FirebaseError firebaseError) {
-//                System.out.println("The read failed: " + firebaseError.getMessage());
-//            }
-//        };
-//    }
-
     private void unregisterFirebase() {
         if(listener!=null) {
-            refFirebase.removeEventListener(listener);
-            refCFirebase.removeEventListener(listener);
+            if(refFirebase!=null) {
+                refFirebase.removeEventListener(listener);
+            }
+        }
+        if(listenerC!=null) {
+            if(refCFirebase!=null) {
+                refCFirebase.removeEventListener(listenerC);
+            }
         }
     }
 
