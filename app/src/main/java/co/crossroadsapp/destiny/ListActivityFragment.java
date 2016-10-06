@@ -545,6 +545,9 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 startActivity(i);
             }
         }
+
+        //check if app is opening from external deeplink
+        checkIfExternalDeepLinkPresent();
     }
 
     private void checkPrivacyDialoge() {
@@ -859,7 +862,6 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                     }
                     updateUserProfileImage(user.getImageUrl()!=null?user.getImageUrl():null);
                     unregisterUserFirebase();
-                    checkIfExternalDeepLinkPresent();
                 }
             }
         }
