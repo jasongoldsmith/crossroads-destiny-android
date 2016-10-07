@@ -77,6 +77,8 @@
     <string name="create_crossroads_accnt">CREATE NEW CROSSROADS ACCOUNT</string>
     <string name="animation_speed">400</string>
 
+    <string name="fireteam_ready">YOUR FIRETEAM IS READY</string>
+
     <!--<plurals name="grp_member">-->
     <!--<item quantity="one"> &#160;Member</item>-->
     <!--<item quantity="other"> &#160;Members</item>-->

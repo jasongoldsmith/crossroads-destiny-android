@@ -260,7 +260,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         sendBtn = (ImageView) findViewById(R.id.send_btn);
 
-        cardStackLayout = (SwipeFrameLayout) findViewById(R.id.notification_bar_layout);
+        //cardStackLayout = (SwipeFrameLayout) findViewById(R.id.notification_bar_layout);
 
 //        notiBar = (RelativeLayout) findViewById(R.id.notification_bar);
 //        notiEventText = (TextView) findViewById(R.id.noti_text);
