@@ -272,7 +272,9 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                 }
                 dropdownSubtype.setSelection(actSubTypeList.indexOf(subtypeDiff));
                 if(!ad.getActivityCheckpoint().isEmpty()) {
-                    dropdownCheckpoint.setSelection(checkpointItems.indexOf(ad.getActivityCheckpoint()));
+                    if(!checkpointItems.isEmpty()) {
+                        dropdownCheckpoint.setSelection(checkpointItems.indexOf(ad.getActivityCheckpoint()));
+                    }
                 }
                 if(!ad.getTag().isEmpty()) {
                     dropdownDetails.setSelection(tagList.indexOf(ad.getTag()));

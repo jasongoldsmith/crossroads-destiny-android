@@ -189,13 +189,17 @@ public class ActivityData {
                 if (!actData.isNull("aCheckpoint")) {
                     setActivityCheckpoint(actData.getString("aCheckpoint"));
                 }
-                setActivityDifficulty(actData.getString("aDifficulty"));
+                if(actData.has("aDifficulty") && !actData.isNull("aDifficulty")) {
+                    setActivityDifficulty(actData.getString("aDifficulty"));
+                }
                 if (!actData.isNull("aIconUrl")) {
                     setActivityIconUrl(actData.getString("aIconUrl"));
                 } else {
                     setActivityIconUrl(null);
                 }
-                setActivityLight(actData.getInt("aLight"));
+                if(actData.has("aLight") && !actData.isNull("aLight")) {
+                    setActivityLight(actData.getInt("aLight"));
+                }
                 if (!actData.isNull("aLevel")) {
                     setActivityLevel(actData.getInt("aLevel"));
                 }
