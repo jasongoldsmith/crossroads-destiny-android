@@ -32,6 +32,14 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="17dp"/>
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/leader_comment_ear"
+                android:visibility="gone"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/img_dog_ear"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -49,7 +57,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/comment_text"
-                android:text="nkjnfkenf2"
                 android:textSize="14sp"
                 android:textColor="@color/trimbe_white"
                 android:layout_toRightOf="@+id/event_detail_comment_player_profile"

@@ -143,4 +143,7 @@
         <item quantity="other">%d days ago</item>
     </plurals>
 
+    <string name="banner_member_msg">Send a friend request or message for a party invite.</string>
+    <string name="banner_leader_msg">Expect friend requests or messages from your Fireteam. You can start a party and invite everyone.</string>
+
 </resources>

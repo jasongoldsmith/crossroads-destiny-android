@@ -47,6 +47,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/banner_msg"
             android:layout_toRightOf="@+id/banner_ghost_icon"
             android:layout_below="@+id/banner_header"
             android:layout_marginTop="7dp"
@@ -55,7 +56,7 @@
             android:layout_marginBottom="9dp"
             android:textSize="14sp"
             android:textColor="@color/trimbe_white"
-            android:text="Expect friend requests or messages from your Fireteam. You can start a party and invite everyone."/>
+            android:text="@string/banner_member_msg"/>
     </RelativeLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout

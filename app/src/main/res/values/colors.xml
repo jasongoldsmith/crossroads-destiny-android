@@ -73,4 +73,6 @@
     <color name="eventdetail_clan">#1d3137</color>
     <color name="comment_text_color">#819ea8</color>
     <color name="comment_typing_text">#353f4e</color>
+
+    <color name="player_left_comment">#bfbfbf</color>
 </resources>

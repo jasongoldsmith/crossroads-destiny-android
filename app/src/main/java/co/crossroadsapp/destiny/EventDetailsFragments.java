@@ -1,5 +1,6 @@
 package co.crossroadsapp.destiny;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,6 +11,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -44,6 +48,10 @@ public class EventDetailsFragments extends Fragment {
     private CurrentEventsCommentsViewAdapter mAdapterComment;
     private RelativeLayout commentLayout;
     private RecyclerView rv;
+    private RelativeLayout fireteamBanner;
+    private Animation anim;
+    private TextView clanTag;
+    private TextView fireteamBannerMsg;
 
     // newInstance constructor for creating fragment with arguments
     public static EventDetailsFragments newInstance(int page, EventDetailActivity c, EventData data) {
@@ -62,6 +70,47 @@ public class EventDetailsFragments extends Fragment {
         mManager = ControlManager.getmInstance();
         user = mManager.getUserData();
         currentEvent = ((EventDetailActivity)getActivity()).getCurrentEventData();
+        if(getActivity()!=null) {
+            final View contentView = ((EventDetailActivity) getActivity()).findViewById(android.R.id.content);
+            contentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+
+                    Rect r = new Rect();
+                    contentView.getWindowVisibleDisplayFrame(r);
+                    int screenHeight = contentView.getRootView().getHeight();
+
+                    // r.bottom is the position above soft keypad or device button.
+                    // if keypad is shown, the r.bottom is smaller than that before.
+                    int keypadHeight = screenHeight - r.bottom;
+
+                    if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
+                        // keyboard is opened
+//                        fireteamBanner.setVisibility(View.VISIBLE);
+//                        anim = AnimationUtils.loadAnimation(getActivity(),
+//                                R.anim.slide_out_to_top);
+//                        fireteamBanner.startAnimation(anim);
+                        if(currentEvent!=null && currentEvent.getEventStatus()!=null && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)) {
+                            if(fireteamBanner!=null) {
+                                fireteamBanner.setVisibility(View.GONE);
+                            }
+                        }
+
+                    } else {
+                        // keyboard is closed
+//                        fireteamBanner.setVisibility(View.VISIBLE);
+//                        anim = AnimationUtils.loadAnimation(getActivity(),
+//                                R.anim.slide_in_from_top);
+//                        fireteamBanner.startAnimation(anim);
+                        if(currentEvent.getEventStatus()!=null && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)) {
+                            if(fireteamBanner!=null) {
+                                fireteamBanner.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+                }
+            });
+        }
     }
 
     // Inflate the view for the fragment based on layout XML
@@ -75,7 +124,10 @@ public class EventDetailsFragments extends Fragment {
         mSwipeRefreshLayout.setVisibility(View.VISIBLE);
         mSwipeRefreshLayoutOther.setVisibility(View.GONE);
 
-        TextView clanTag = (TextView) view.findViewById(R.id.clan_tag_text);
+        fireteamBanner = (RelativeLayout) view.findViewById(R.id.fireteam_banner);
+        fireteamBannerMsg = (TextView) view.findViewById(R.id.banner_msg);
+
+        clanTag = (TextView) view.findViewById(R.id.clan_tag_text);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -93,11 +145,11 @@ public class EventDetailsFragments extends Fragment {
         if(page==0) {
             // fireteam fragment
             if(currentEvent!=null && currentEvent.getPlayerData()!=null) {
-                    if(currentEvent.getClanName()!=null) {
-                        clanTag.setVisibility(View.VISIBLE);
-                        clanTag.setText(currentEvent.getClanName());
-                        clanTag.setBackgroundColor(getResources().getColor(R.color.eventdetail_clan));
-                    }
+                if(currentEvent.getClanName()!=null) {
+                    clanTag.setVisibility(View.VISIBLE);
+                    clanTag.setText(currentEvent.getClanName());
+                    clanTag.setBackgroundColor(getResources().getColor(R.color.eventdetail_clan));
+                }
                 mAdapter = new CurrentEventsViewAdapter(currentEvent.getPlayerData());
                 rv.setAdapter(mAdapter);
             }
@@ -112,7 +164,27 @@ public class EventDetailsFragments extends Fragment {
                 scrollToEnd();
             }
         }
+
+        setBanners();
         return view;
+    }
+
+    private void setBanners() {
+        if(currentEvent.getEventStatus()!=null && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)) {
+            if (clanTag != null) {
+                clanTag.setVisibility(View.GONE);
+            }
+            if (checkUserIsPlayer()) {
+                fireteamBannerMsg.setText(getString(R.string.banner_member_msg));
+            } else if (checkUserIsCreator()) {
+                fireteamBannerMsg.setText(getString(R.string.banner_leader_msg));
+            }
+            if (fireteamBanner != null) {
+                fireteamBanner.setVisibility(View.VISIBLE);
+            }
+        } else {
+            fireteamBanner.setVisibility(View.GONE);
+        }
     }
 
     private void refreshItems() {
@@ -173,6 +245,7 @@ public class EventDetailsFragments extends Fragment {
         private TextView playerName;
         private CardView playerCard;
         private ImageView message;
+        private ImageView leader_tag;
 
 
         public CurrentEventsViewHolder(View itemView) {
@@ -183,6 +256,7 @@ public class EventDetailsFragments extends Fragment {
             playerName = (TextView) itemView.findViewById(R.id.player_name);
             playerCard = (CardView) itemView.findViewById(R.id.activity_card);
             message = (ImageView) itemView.findViewById(R.id.event_detail_message);
+            leader_tag = (ImageView) itemView.findViewById(R.id.leader_ear);
         }
     }
 
@@ -198,6 +272,14 @@ public class EventDetailsFragments extends Fragment {
     public void onBindViewHolder(CurrentEventsViewHolder holder, final int position) {
         String currPlayerId = null;
         if(playerLocal!=null) {
+            boolean c=true;
+            if(c){
+                if(clanTag!=null) {
+                    clanTag.setVisibility(View.VISIBLE);
+                }
+                setBanners();
+                c=false;
+            }
             if (position >= playerLocal.size() && getMaxPlayer() > playerLocal.size() ) {
                 holder.playerName.setText("searching...");
                 holder.playerName.setTextColor(getResources().getColor(R.color.trimbe_white));
@@ -230,12 +312,20 @@ public class EventDetailsFragments extends Fragment {
 
                     holder.message.setVisibility(View.GONE);
 
-                    if (checkUserIsCreator() && (!playerLocal.get(position).getPlayerId().equalsIgnoreCase(currentEvent.getCreatorData().getPlayerId()))) {
-                        //holder.message.setVisibility(View.VISIBLE);
+                    holder.leader_tag.setVisibility(View.GONE);
+
+                    if(currentEvent!=null && currentEvent.getEventStatus()!=null && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)) {
+                        if(position==0) {
+                            holder.leader_tag.setVisibility(View.VISIBLE);
+                        }
                     }
-                    if ((checkUserIsPlayer() && !checkUserIsCreator()) && (playerLocal.get(position).getPlayerId().equalsIgnoreCase(currentEvent.getCreatorData().getPlayerId()))) {
-                        //holder.message.setVisibility(View.VISIBLE);
-                    }
+
+//                    if (checkUserIsCreator() && (!playerLocal.get(position).getPlayerId().equalsIgnoreCase(currentEvent.getCreatorData().getPlayerId()))) {
+//                        //holder.message.setVisibility(View.VISIBLE);
+//                    }
+//                    if ((checkUserIsPlayer() && !checkUserIsCreator()) && (playerLocal.get(position).getPlayerId().equalsIgnoreCase(currentEvent.getCreatorData().getPlayerId()))) {
+//                        //holder.message.setVisibility(View.VISIBLE);
+//                    }
 
                     final String finalCurrPlayerId = currPlayerId;
 //                    holder.message.setOnClickListener(new View.OnClickListener() {
@@ -289,6 +379,19 @@ public class EventDetailsFragments extends Fragment {
         return 0;
     }
 
+    private boolean checkPlayerIsAvailable(String id) {
+        if(id!=null) {
+            if(currentEvent!=null && currentEvent.getPlayerData()!=null) {
+                for(int i=0; i<currentEvent.getPlayerData().size();i++) {
+                    if (id.equalsIgnoreCase(currentEvent.getPlayerData().get(i).getPlayerId())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     private boolean checkUserIsCreator() {
         if(this.currentEvent.getPlayerData()!=null) {
             if (user.getUserId().equalsIgnoreCase(currentEvent.getCreatorData().getPlayerId())) {
@@ -338,6 +441,14 @@ public class EventDetailsFragments extends Fragment {
         public void onBindViewHolder(CurrentEventsCommentsViewHolder holder, final int position) {
             if(commentsLocal!=null && !commentsLocal.isEmpty()) {
                 if(commentsLocal.get(position)!=null) {
+                    boolean c=true;
+                    if(c){
+                        if(clanTag!=null) {
+                            clanTag.setVisibility(View.GONE);
+                        }
+                        setBanners();
+                        c=false;
+                    }
                     boolean reported = commentsLocal.get(position).getReported();
                     if(reported) {
                         holder.playerNameComment.setVisibility(View.GONE);
@@ -377,6 +488,17 @@ public class EventDetailsFragments extends Fragment {
                             }
                             holder.playerNameComment.setVisibility(View.VISIBLE);
                             holder.playerNameComment.setText(name);
+                            holder.playerNameComment.setTextColor(getResources().getColor(R.color.activity_light_color));
+                        }
+                    }
+
+                    holder.leader_comment_tag.setVisibility(View.GONE);
+
+                    if(currentEvent!=null && currentEvent.getEventStatus()!=null && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)) {
+                        if(commentsLocal.get(position).getPlayerId()!=null) {
+                            if(currentEvent.getCreatorData()!=null && currentEvent.getCreatorData().getPlayerId()!=null && currentEvent.getCreatorData().getPlayerId().equalsIgnoreCase(commentsLocal.get(position).getPlayerId())) {
+                                holder.leader_comment_tag.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
 
@@ -387,6 +509,15 @@ public class EventDetailsFragments extends Fragment {
                         }
                         holder.playerCommentText.setText(text);
                         holder.playerCommentText.setGravity(Gravity.CENTER_VERTICAL);
+                        holder.playerCommentText.setTextColor(getResources().getColor(R.color.trimbe_white));
+                    }
+
+                    if(commentsLocal.get(position).getPlayerId()!=null) {
+                        if (!checkPlayerIsAvailable(commentsLocal.get(position).getPlayerId())) {
+                            holder.playerNameComment.setTextColor(getResources().getColor(R.color.player_left_comment));
+                            holder.playerProfileComment.setImageDrawable(getResources().getDrawable(R.drawable.img_profile_blank));
+                            holder.playerCommentText.setTextColor(getResources().getColor(R.color.player_left_comment));
+                        }
                     }
 
                     if (commentsLocal.get(position).getCreated() != null) {
@@ -398,6 +529,8 @@ public class EventDetailsFragments extends Fragment {
                 }
             }
             holder.playerProfileComment.invalidate();
+            holder.playerCommentText.invalidate();
+            holder.playerNameComment.invalidate();
         }
 
         @Override
@@ -411,6 +544,7 @@ public class EventDetailsFragments extends Fragment {
             private TextView playerNameComment;
             private TextView playerCommentText;
             private TextView time;
+            private ImageView leader_comment_tag;
             public CurrentEventsCommentsViewHolder(View itemView) {
                 super(itemView);
                 view = itemView;
@@ -419,6 +553,7 @@ public class EventDetailsFragments extends Fragment {
                 playerNameComment = (TextView) itemView.findViewById(R.id.player_name_comment);
                 playerCommentText = (TextView) itemView.findViewById(R.id.comment_text);
                 time = (TextView) itemView.findViewById(R.id.comment_time);
+                leader_comment_tag = (ImageView) itemView.findViewById(R.id.leader_comment_ear);
             }
         }
     }

@@ -31,6 +31,14 @@
                 android:layout_marginTop="9dp"
                 android:layout_marginLeft="17dp"/>
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/leader_ear"
+                android:visibility="gone"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/img_dog_ear"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
