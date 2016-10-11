@@ -446,7 +446,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     }
 
     private void changeBottomButtomForComments() {
-        if(userIsPlayer) {
+        if(checkUserIsPlayer()) {
             bottomBtnLayout.setVisibility(View.VISIBLE);
             joinBtn.setVisibility(View.GONE);
             leaveBtn.setVisibility(View.GONE);

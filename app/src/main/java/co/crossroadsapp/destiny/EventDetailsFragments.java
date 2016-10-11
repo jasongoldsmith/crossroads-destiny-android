@@ -450,6 +450,7 @@ public class EventDetailsFragments extends Fragment {
                         c=false;
                     }
                     boolean reported = commentsLocal.get(position).getReported();
+                    holder.leader_comment_tag.setVisibility(View.GONE);
                     if(reported) {
                         holder.playerNameComment.setVisibility(View.GONE);
                         holder.playerProfileComment.setImageDrawable(getResources().getDrawable(R.drawable.img_profile_blank));
@@ -490,14 +491,11 @@ public class EventDetailsFragments extends Fragment {
                             holder.playerNameComment.setText(name);
                             holder.playerNameComment.setTextColor(getResources().getColor(R.color.activity_light_color));
                         }
-                    }
-
-                    holder.leader_comment_tag.setVisibility(View.GONE);
-
-                    if(currentEvent!=null && currentEvent.getEventStatus()!=null && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)) {
-                        if(commentsLocal.get(position).getPlayerId()!=null) {
-                            if(currentEvent.getCreatorData()!=null && currentEvent.getCreatorData().getPlayerId()!=null && currentEvent.getCreatorData().getPlayerId().equalsIgnoreCase(commentsLocal.get(position).getPlayerId())) {
-                                holder.leader_comment_tag.setVisibility(View.VISIBLE);
+                        if(currentEvent!=null && currentEvent.getEventStatus()!=null && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)) {
+                            if(commentsLocal.get(position).getPlayerId()!=null) {
+                                if(currentEvent.getCreatorData()!=null && currentEvent.getCreatorData().getPlayerId()!=null && currentEvent.getCreatorData().getPlayerId().equalsIgnoreCase(commentsLocal.get(position).getPlayerId())) {
+                                    holder.leader_comment_tag.setVisibility(View.VISIBLE);
+                                }
                             }
                         }
                     }
