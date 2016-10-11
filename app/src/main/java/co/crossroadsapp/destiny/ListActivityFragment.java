@@ -1596,7 +1596,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             closeAllDrawers();
         }else {
             super.onBackPressed();
-            finish();
+            finishAffinity();
         }
     }
 

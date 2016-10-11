@@ -59,6 +59,16 @@
                 android:layout_centerVertical="true"
                 android:visibility="gone"/>
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/invite_icon"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icon_invite"
+                android:paddingRight="12dp"
+                android:visibility="gone"/>
+
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

@@ -246,6 +246,7 @@ public class EventDetailsFragments extends Fragment {
         private CardView playerCard;
         private ImageView message;
         private ImageView leader_tag;
+        private ImageView inviteIcon;
 
 
         public CurrentEventsViewHolder(View itemView) {
@@ -257,6 +258,7 @@ public class EventDetailsFragments extends Fragment {
             playerCard = (CardView) itemView.findViewById(R.id.activity_card);
             message = (ImageView) itemView.findViewById(R.id.event_detail_message);
             leader_tag = (ImageView) itemView.findViewById(R.id.leader_ear);
+            inviteIcon = (ImageView) itemView.findViewById(R.id.invite_icon);
         }
     }
 
@@ -272,19 +274,22 @@ public class EventDetailsFragments extends Fragment {
     public void onBindViewHolder(CurrentEventsViewHolder holder, final int position) {
         String currPlayerId = null;
         if(playerLocal!=null) {
-            boolean c=true;
-            if(c){
-                if(clanTag!=null) {
-                    clanTag.setVisibility(View.VISIBLE);
-                }
-                setBanners();
-                c=false;
+            if(clanTag!=null) {
+                clanTag.setVisibility(View.VISIBLE);
             }
+            setBanners();
+
+            holder.inviteIcon.setVisibility(View.GONE);
             if (position >= playerLocal.size() && getMaxPlayer() > playerLocal.size() ) {
                 holder.playerName.setText("searching...");
                 holder.playerName.setTextColor(getResources().getColor(R.color.trimbe_white));
                 holder.message.setVisibility(View.GONE);
                 holder.playerProfile.setImageResource(R.drawable.img_profile_blank);
+                if(position==playerLocal.size()) {
+                    if (checkUserIsPlayer()) {
+                        holder.inviteIcon.setVisibility(View.VISIBLE);
+                    }
+                }
             } else {
                 if (playerLocal.get(position) != null) {
                     if (playerLocal.get(position).getPlayerId() != null) {
