@@ -28,6 +28,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -135,6 +137,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private Firebase refFirebase;
     private Firebase refCFirebase;
     private ValueEventListener listenerC;
+    private RelativeLayout inviteLayout;
 //    private TextView errText;
 //    private ImageView close_err;
 
@@ -187,6 +190,9 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         back = (ImageView) findViewById(R.id.eventdetail_backbtn);
         share = (ImageView) findViewById(R.id.eventdetail_sharebtn);
         eventDetailDate = (TextView) findViewById(R.id.eventDetailDate);
+
+        //invite view
+        inviteLayout = (RelativeLayout) findViewById(R.id.invite_view);
 
         commentLayout = (RelativeLayout) findViewById(R.id.send_comment_layout);
 
@@ -464,6 +470,23 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                 TabLayout.Tab tab = tabLayout.getTabAt(i);
                 tab.setCustomView(pagerAdapter.getTabView(i));
             }
+        }
+    }
+
+    protected void showAnimatedInviteView() {
+        if(inviteLayout!=null) {
+            inviteLayout.setVisibility(View.VISIBLE);
+            Animation anim = AnimationUtils.loadAnimation(this, R.anim.slide_out_to_top);
+            inviteLayout.startAnimation(anim);
+            showKeyboard();
+        }
+    }
+
+    protected void hideAnimatedInviteView() {
+        if(inviteLayout!=null) {
+            Animation anim = AnimationUtils.loadAnimation(this, R.anim.slide_out_to_bottom);
+            inviteLayout.startAnimation(anim);
+            inviteLayout.setVisibility(View.GONE);
         }
     }
 
@@ -829,6 +852,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         if (sendmsg_bckgrnd != null) {
             sendmsg_bckgrnd.setVisibility(View.VISIBLE);
             editMsgPlayer.setText("All Players");
+            editText.requestFocus();
             showKeyboard();
         }
 
@@ -1144,6 +1168,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                                 if (sendmsg_bckgrnd != null) {
                                     sendmsg_bckgrnd.setVisibility(View.VISIBLE);
                                     editMsgPlayer.setText(playerLocal.get(position).getPsnId());
+                                    editText.requestFocus();
                                     showKeyboard();
                                 }
 
@@ -1279,7 +1304,9 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         if(sendmsg_bckgrnd.getVisibility()==View.VISIBLE){
             sendmsg_bckgrnd.setVisibility(View.GONE);
             hideKeyboard();
-        } else {
+        } else if(inviteLayout.getVisibility()==View.VISIBLE) {
+            hideAnimatedInviteView();
+        } else{
             currEvent = null;
             finish();
             //launchListActivityAndFinish();

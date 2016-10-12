@@ -288,6 +288,12 @@ public class EventDetailsFragments extends Fragment {
                 if(position==playerLocal.size()) {
                     if (checkUserIsPlayer()) {
                         holder.inviteIcon.setVisibility(View.VISIBLE);
+                        holder.inviteIcon.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ((EventDetailActivity) getActivity()).showAnimatedInviteView();
+                            }
+                        });
                     }
                 }
             } else {

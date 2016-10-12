@@ -385,6 +385,42 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/invite_view"
+        android:visibility="gone"
+        android:layout_marginTop="-30dp"
+        android:layout_below="@+id/event_detail_top_frag"
+        android:background="@color/invite_background">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:background="@color/tag_background">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="21dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginRight="87dp"
+                android:hint="Type a Gamertag"
+                android:textColorHint="@color/invite_edittext_hint"
+                android:textColor="@color/trimbe_white"
+                android:textCursorDrawable="@drawable/cursor_draw"
+                android:background="@null"
+                android:textSize="14sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:layout_alignParentRight="true"
+                android:paddingRight="14dp"
+                android:layout_centerVertical="true"
+                android:textColor="@color/trimbe_white"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@drawable/sample_background"
         android:id="@+id/progress_bar_eventdetail_layout"
         android:clickable="true"

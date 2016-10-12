@@ -75,4 +75,6 @@
     <color name="comment_typing_text">#353f4e</color>
 
     <color name="player_left_comment">#bfbfbf</color>
+    <color name="invite_background">#314b51</color>
+    <color name="invite_edittext_hint">#9a9a9a</color>
 </resources>
