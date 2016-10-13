@@ -107,6 +107,7 @@ public class EventDetailsFragments extends Fragment {
                                 fireteamBanner.setVisibility(View.VISIBLE);
                             }
                         }
+                        //((EventDetailActivity) getActivity()).showKeyboard();
                     }
                 }
             });

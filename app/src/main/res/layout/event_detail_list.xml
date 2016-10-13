@@ -394,22 +394,42 @@
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:background="@color/tag_background">
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="21dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
-                android:layout_marginRight="87dp"
-                android:hint="Type a Gamertag"
-                android:textColorHint="@color/invite_edittext_hint"
-                android:textColor="@color/trimbe_white"
-                android:textCursorDrawable="@drawable/cursor_draw"
-                android:background="@null"
-                android:textSize="14sp"/>
+                <co.crossroadsapp.destiny.ContactsCompletionView
+                    android:id="@+id/searchView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="21dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginRight="87dp"
+                    android:hint="Type a Gamertag"
+                    android:textColorHint="@color/invite_edittext_hint"
+                    android:imeOptions="actionDone"
+                    android:textColor="@android:color/white"
+                    android:textCursorDrawable="@drawable/cursor_draw"
+                    android:textSize="14sp"
+                    android:nextFocusDown="@+id/searchView"
+                    android:background="@null"
+                    android:inputType="text|textNoSuggestions|textMultiLine"
+                    android:focusableInTouchMode="true" />
+            <!--<EditText-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginStart="21dp"-->
+                <!--android:layout_marginTop="12dp"-->
+                <!--android:layout_marginBottom="12dp"-->
+                <!--android:layout_marginRight="87dp"-->
+                <!--android:visibility="gone"-->
+                <!--android:hint="Type a Gamertag"-->
+                <!--android:textColorHint="@color/invite_edittext_hint"-->
+                <!--android:textColor="@color/trimbe_white"-->
+                <!--android:textCursorDrawable="@drawable/cursor_draw"-->
+                <!--android:background="@null"-->
+                <!--android:textSize="14sp"/>-->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/invite_cancel"
                 android:text="Cancel"
                 android:layout_alignParentRight="true"
                 android:paddingRight="14dp"

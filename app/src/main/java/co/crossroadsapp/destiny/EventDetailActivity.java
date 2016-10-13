@@ -1,6 +1,7 @@
 package co.crossroadsapp.destiny;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +32,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -63,6 +65,8 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.loopj.android.http.RequestParams;
+import com.tokenautocomplete.FilteredArrayAdapter;
+import com.tokenautocomplete.TokenCompleteTextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -76,7 +80,7 @@ import java.util.Observer;
 /**
  * Created by sharmha on 3/29/16.
  */
-public class EventDetailActivity extends BaseActivity implements Observer {
+public class EventDetailActivity extends BaseActivity implements Observer, TokenCompleteTextView.TokenListener<Person>{
 
     EventData currEvent;
     private TextView eventName;
@@ -138,6 +142,10 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private Firebase refCFirebase;
     private ValueEventListener listenerC;
     private RelativeLayout inviteLayout;
+    private ContactsCompletionView completionView;
+    private Person[] people;
+    ArrayAdapter<Person> adapterP;
+    private ContactsCompletionView editTextInvite;
 //    private TextView errText;
 //    private ImageView close_err;
 
@@ -150,6 +158,48 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 //        user = b.getParcelable("userdata");
 
         setTRansparentStatusBar();
+
+        //token auto complete
+        people = new Person[]{
+                new Person("hardik", "sharma"),
+                new Person("manohar", "pandya")
+        };
+
+        adapterP = new FilteredArrayAdapter<Person>(this, R.layout.person_layout, people) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                if (convertView == null) {
+
+                    LayoutInflater l = (LayoutInflater)getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+                    convertView = l.inflate(R.layout.person_layout, parent, false);
+                }
+
+                Person p = getItem(position);
+                ((TextView)convertView.findViewById(R.id.name)).setText(p.getName());
+                ((TextView)convertView.findViewById(R.id.email)).setText(p.getEmail());
+
+                return convertView;
+            }
+
+            @Override
+            protected boolean keepObject(Person person, String mask) {
+                mask = mask.toLowerCase();
+                return person.getName().toLowerCase().startsWith(mask) || person.getEmail().toLowerCase().startsWith(mask);
+            }
+        };
+
+        completionView = (ContactsCompletionView)findViewById(R.id.searchView);
+        completionView.setAdapter(adapterP);
+        completionView.setTokenListener(EventDetailActivity.this);
+        completionView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select);
+
+        editTextInvite = (ContactsCompletionView) findViewById(R.id.searchView);
+//        if (savedInstanceState == null) {
+//            completionView.setPrefix("To: ");
+//            completionView.addObject(people[0]);
+//            completionView.addObject(people[1]);
+//        }
+// token auto complete
 
         joinBtn = (TextView) findViewById(R.id.join_btn);
         leaveBtn = (TextView) findViewById(R.id.leave_btn);
@@ -193,6 +243,16 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         //invite view
         inviteLayout = (RelativeLayout) findViewById(R.id.invite_view);
+        TextView inviteCancel = (TextView) findViewById(R.id.invite_cancel);
+        inviteCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapterP.clear();
+                adapterP.notifyDataSetChanged();
+                hideAnimatedInviteView();
+                hideKeyboard();
+            }
+        });
 
         commentLayout = (RelativeLayout) findViewById(R.id.send_comment_layout);
 
@@ -478,6 +538,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             inviteLayout.setVisibility(View.VISIBLE);
             Animation anim = AnimationUtils.loadAnimation(this, R.anim.slide_out_to_top);
             inviteLayout.startAnimation(anim);
+            editTextInvite.requestFocus();
             showKeyboard();
         }
     }
@@ -488,6 +549,29 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             inviteLayout.startAnimation(anim);
             inviteLayout.setVisibility(View.GONE);
         }
+    }
+
+    private void updateTokenConfirmation() {
+        StringBuilder sb = new StringBuilder("Current tokens:\n");
+        for (Object token: completionView.getObjects()) {
+            sb.append(token.toString());
+            sb.append("\n");
+        }
+
+        //((TextView)findViewById(R.id.tokens)).setText(sb);
+    }
+
+
+    @Override
+    public void onTokenAdded(Person token) {
+        //((TextView)findViewById(R.id.lastEvent)).setText("Added: " + token);
+        updateTokenConfirmation();
+    }
+
+    @Override
+    public void onTokenRemoved(Person token) {
+        //((TextView)findViewById(R.id.lastEvent)).setText("Removed: " + token);
+        updateTokenConfirmation();
     }
 
     class PagerAdapter extends FragmentPagerAdapter {
@@ -1214,16 +1298,20 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         return 0;
     }
 
-    private void showKeyboard() {
-        editText.requestFocus();
+    protected void showKeyboard() {
+        //editText.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
     }
 
     private void hideKeyboard() {
-        editText.setText("");
+        if(editText!=null) {
+            editText.setText("");
+        } else if(editTextInvite!=null) {
+            editTextInvite.setText("");
+        }
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+        imm.hideSoftInputFromWindow(back.getWindowToken(),0);
     }
 
     private String getEditText() {
