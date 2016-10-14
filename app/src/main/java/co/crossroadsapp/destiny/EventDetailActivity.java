@@ -585,6 +585,14 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
         //((TextView)findViewById(R.id.tokens)).setText(sb);
     }
 
+    private boolean checkPlayerInvitedLesserThenPlayerNeeded() {
+        if(invitedList!=null) {
+            if(reqPlayer>0){
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     public void onTokenAdded(Person token) {
