@@ -6,10 +6,9 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.tokenautocomplete.TokenCompleteTextView;
+import co.crossroadsapp.destiny.token.TokenCompleteTextView;
+import co.crossroadsapp.destiny.token.TokenTextView;
 
 /**
  * Created by sharmha on 10/12/16.

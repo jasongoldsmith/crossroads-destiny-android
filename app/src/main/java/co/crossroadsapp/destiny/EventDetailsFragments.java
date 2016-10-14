@@ -90,8 +90,12 @@ public class EventDetailsFragments extends Fragment {
 //                        anim = AnimationUtils.loadAnimation(getActivity(),
 //                                R.anim.slide_out_to_top);
 //                        fireteamBanner.startAnimation(anim);
-                        if(currentEvent!=null && currentEvent.getEventStatus()!=null && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)) {
-                            if(fireteamBanner!=null) {
+                        if(currentEvent!=null && currentEvent.getEventStatus()!=null && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL) && checkUserIsPlayer()) {
+                            if(fireteamBanner!=null && fireteamBanner.getVisibility()==View.VISIBLE) {
+                                fireteamBanner.setVisibility(View.VISIBLE);
+                                anim = AnimationUtils.loadAnimation(getActivity(),
+                                        R.anim.slide_out_to_top);
+                                fireteamBanner.startAnimation(anim);
                                 fireteamBanner.setVisibility(View.GONE);
                             }
                         }
@@ -102,9 +106,12 @@ public class EventDetailsFragments extends Fragment {
 //                        anim = AnimationUtils.loadAnimation(getActivity(),
 //                                R.anim.slide_in_from_top);
 //                        fireteamBanner.startAnimation(anim);
-                        if(currentEvent.getEventStatus()!=null && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)) {
-                            if(fireteamBanner!=null) {
+                        if(currentEvent.getEventStatus()!=null && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL) && checkUserIsPlayer()) {
+                            if(fireteamBanner!=null && fireteamBanner.getVisibility()!=View.VISIBLE) {
                                 fireteamBanner.setVisibility(View.VISIBLE);
+                                anim = AnimationUtils.loadAnimation(getActivity(),
+                                        R.anim.slide_in_from_top);
+                                fireteamBanner.startAnimation(anim);
                             }
                         }
                         //((EventDetailActivity) getActivity()).showKeyboard();
@@ -177,12 +184,14 @@ public class EventDetailsFragments extends Fragment {
             }
             if (checkUserIsPlayer()) {
                 fireteamBannerMsg.setText(getString(R.string.banner_member_msg));
-            } else if (checkUserIsCreator()) {
-                fireteamBannerMsg.setText(getString(R.string.banner_leader_msg));
-            }
-            if (fireteamBanner != null) {
                 fireteamBanner.setVisibility(View.VISIBLE);
             }
+            if (checkUserIsCreator()) {
+                fireteamBannerMsg.setText(getString(R.string.banner_leader_msg));
+            }
+//            if (fireteamBanner != null && ) {
+//                fireteamBanner.setVisibility(View.VISIBLE);
+//            }
         } else {
             fireteamBanner.setVisibility(View.GONE);
         }

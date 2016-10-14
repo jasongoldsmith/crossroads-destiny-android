@@ -412,20 +412,6 @@
                     android:background="@null"
                     android:inputType="text|textNoSuggestions|textMultiLine"
                     android:focusableInTouchMode="true" />
-            <!--<EditText-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginStart="21dp"-->
-                <!--android:layout_marginTop="12dp"-->
-                <!--android:layout_marginBottom="12dp"-->
-                <!--android:layout_marginRight="87dp"-->
-                <!--android:visibility="gone"-->
-                <!--android:hint="Type a Gamertag"-->
-                <!--android:textColorHint="@color/invite_edittext_hint"-->
-                <!--android:textColor="@color/trimbe_white"-->
-                <!--android:textCursorDrawable="@drawable/cursor_draw"-->
-                <!--android:background="@null"-->
-                <!--android:textSize="14sp"/>-->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -436,6 +422,19 @@
                 android:layout_centerVertical="true"
                 android:textColor="@color/trimbe_white"/>
         </RelativeLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/invite_btn"
+            android:background="#0086d0"
+            android:text="@string/invite"
+            android:fontFamily="sans-serif"
+            android:layout_marginTop="42dp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"/>
     </RelativeLayout>
 
     <RelativeLayout

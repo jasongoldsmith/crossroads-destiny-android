@@ -29,6 +29,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -50,6 +51,8 @@ import co.crossroadsapp.destiny.network.EventByIdNetwork;
 import co.crossroadsapp.destiny.network.EventRelationshipHandlerNetwork;
 import co.crossroadsapp.destiny.network.EventSendMessageNetwork;
 import co.crossroadsapp.destiny.network.ReportCommentNetwork;
+import co.crossroadsapp.destiny.token.FilteredArrayAdapter;
+import co.crossroadsapp.destiny.token.TokenCompleteTextView;
 import co.crossroadsapp.destiny.utils.CircularImageView;
 import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.TravellerLog;
@@ -65,8 +68,6 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.loopj.android.http.RequestParams;
-import com.tokenautocomplete.FilteredArrayAdapter;
-import com.tokenautocomplete.TokenCompleteTextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -1300,6 +1301,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
 
     protected void showKeyboard() {
         //editText.requestFocus();
+        editTextInvite.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
     }

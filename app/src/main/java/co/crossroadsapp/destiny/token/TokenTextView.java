@@ -1,4 +1,4 @@
-package co.crossroadsapp.destiny;
+package co.crossroadsapp.destiny.token;
 
 /**
  * Created by sharmha on 10/12/16.
@@ -9,6 +9,8 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import co.crossroadsapp.destiny.R;
 
 public class TokenTextView extends TextView {
 
