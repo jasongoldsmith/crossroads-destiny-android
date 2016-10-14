@@ -50,6 +50,7 @@ import co.crossroadsapp.destiny.network.AddCommentNetwork;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
 import co.crossroadsapp.destiny.network.EventRelationshipHandlerNetwork;
 import co.crossroadsapp.destiny.network.EventSendMessageNetwork;
+import co.crossroadsapp.destiny.network.InvitePlayerNetwork;
 import co.crossroadsapp.destiny.network.ReportCommentNetwork;
 import co.crossroadsapp.destiny.token.FilteredArrayAdapter;
 import co.crossroadsapp.destiny.token.TokenCompleteTextView;
@@ -147,6 +148,8 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
     private Person[] people;
     ArrayAdapter<Person> adapterP;
     private ContactsCompletionView editTextInvite;
+    private ArrayList<String> invitedList;
+    private String deepLinkUrl;
 //    private TextView errText;
 //    private ImageView close_err;
 
@@ -195,6 +198,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
         completionView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select);
 
         editTextInvite = (ContactsCompletionView) findViewById(R.id.searchView);
+
 //        if (savedInstanceState == null) {
 //            completionView.setPrefix("To: ");
 //            completionView.addObject(people[0]);
@@ -316,6 +320,14 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
                     json.put("eventId", currEvent.getEventId().toString());
                     Util.postTracking(json, EventDetailActivity.this, controlManager, Constants.APP_EVENTSHARING);
                 }
+            }
+        });
+
+        TextView inviteBtn = (TextView) findViewById(R.id.invite_btn);
+        inviteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDeeplinkUrl();
             }
         });
 
@@ -552,12 +564,23 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
         }
     }
 
-    private void updateTokenConfirmation() {
-        StringBuilder sb = new StringBuilder("Current tokens:\n");
-        for (Object token: completionView.getObjects()) {
-            sb.append(token.toString());
-            sb.append("\n");
+    private void updateTokenConfirmation(String token, int hint) {
+        if(token!=null && !token.isEmpty()) {
+            if (invitedList == null) {
+                invitedList = new ArrayList<>();
+            }
+            if(hint==1) {
+                invitedList.add(token);
+            } else if(hint==2) {
+                invitedList.remove(token);
+            }
         }
+
+//        StringBuilder sb = new StringBuilder("Current tokens:\n");
+//        for (Object token: completionView.getObjects()) {
+//            sb.append(token.toString());
+//            sb.append("\n");
+//        }
 
         //((TextView)findViewById(R.id.tokens)).setText(sb);
     }
@@ -566,13 +589,13 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
     @Override
     public void onTokenAdded(Person token) {
         //((TextView)findViewById(R.id.lastEvent)).setText("Added: " + token);
-        updateTokenConfirmation();
+        updateTokenConfirmation(token.toString(), 1);
     }
 
     @Override
     public void onTokenRemoved(Person token) {
         //((TextView)findViewById(R.id.lastEvent)).setText("Removed: " + token);
-        updateTokenConfirmation();
+        updateTokenConfirmation(token.toString(), 2);
     }
 
     class PagerAdapter extends FragmentPagerAdapter {
@@ -729,6 +752,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
             @Override
             public void onLinkCreate(String url, BranchError error) {
                 if (error == null) {
+                    deepLinkUrl = url;
                     final Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                     sharingIntent.setType("text/plain");
                     if(url!=null) {
@@ -738,6 +762,39 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
                 }
             }
         });
+    }
+
+    private void getDeeplinkUrl() {
+//        //deeplink creation
+
+        LinkProperties linkProperties = new LinkProperties();
+
+        generateBranchObject();
+
+        branchUniversalObject.generateShortUrl(this, linkProperties, new Branch.BranchLinkCreateListener() {
+            @Override
+            public void onLinkCreate(String url, BranchError error) {
+                if (error == null) {
+                    deepLinkUrl = url;
+                    invitePlayers(url);
+                }
+            }
+        });
+    }
+
+    private void invitePlayers(String url) {
+        if(url!=null && !url.isEmpty()) {
+            if(currEvent!=null && currEvent.getEventId()!=null) {
+                if(!invitedList.isEmpty()) {
+                    RequestParams rp = new RequestParams();
+                    rp.put("eId", currEvent.getEventId());
+                    rp.put("invitees", invitedList);
+                    rp.put("invitationLink", url);
+                    showProgressBar();
+                    controlManager.invitePlayers(EventDetailActivity.this, rp);
+                }
+            }
+        }
     }
 
     private final TextWatcher mTextEditorWatcher = new TextWatcher() {
@@ -1022,6 +1079,9 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
             } else if (observable instanceof EventSendMessageNetwork) {
                 editText.setText("");
                 hideSendMsgBckground();
+            } else if (observable instanceof InvitePlayerNetwork) {
+                hideAnimatedInviteView();
+                hideKeyboard();
             }
     }
 

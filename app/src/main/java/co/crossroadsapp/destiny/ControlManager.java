@@ -36,6 +36,7 @@ import co.crossroadsapp.destiny.network.ForgotPasswordNetwork;
 import co.crossroadsapp.destiny.network.GetVersion;
 import co.crossroadsapp.destiny.network.GroupListNetwork;
 import co.crossroadsapp.destiny.network.HelmetUpdateNetwork;
+import co.crossroadsapp.destiny.network.InvitePlayerNetwork;
 import co.crossroadsapp.destiny.network.LogoutNetwork;
 import co.crossroadsapp.destiny.network.PrivacyLegalUpdateNetwork;
 import co.crossroadsapp.destiny.network.ReportCommentNetwork;
@@ -112,6 +113,7 @@ public class ControlManager implements Observer{
     private AsyncHttpClient client;
     private Boolean showFullEvent;
     private ReportCommentNetwork reportCommentNetwork;
+    private InvitePlayerNetwork invitePlayersNetwork;
 
     public ControlManager() {
     }
@@ -829,6 +831,16 @@ public class ControlManager implements Observer{
             changeCurrentConsoleNetwork = new ChangeCurrentConsoleNetwork(activity);
             changeCurrentConsoleNetwork.addObserver(activity);
             changeCurrentConsoleNetwork.doChangeConsole(rp_console);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void invitePlayers(EventDetailActivity activity, RequestParams rp) {
+        try {
+            invitePlayersNetwork = new InvitePlayerNetwork(activity);
+            invitePlayersNetwork.addObserver(activity);
+            invitePlayersNetwork.postInvitedList(rp);
         } catch (JSONException e) {
             e.printStackTrace();
         }
