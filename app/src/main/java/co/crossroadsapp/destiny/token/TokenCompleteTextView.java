@@ -1306,29 +1306,32 @@ public abstract class TokenCompleteTextView<T> extends MultiAutoCompleteTextView
 
         @Override
         public void afterTextChanged(Editable text) {
-            ArrayList<TokenImageSpan> spansCopy = new ArrayList<>(spansToRemove);
-            spansToRemove.clear();
-            for (TokenImageSpan token : spansCopy) {
-                int spanStart = text.getSpanStart(token);
-                int spanEnd = text.getSpanEnd(token);
+            boolean a=false;
+            if(a) {
+                ArrayList<TokenImageSpan> spansCopy = new ArrayList<>(spansToRemove);
+                spansToRemove.clear();
+                for (TokenImageSpan token : spansCopy) {
+                    int spanStart = text.getSpanStart(token);
+                    int spanEnd = text.getSpanEnd(token);
 
-                removeToken(token, text);
+                    removeToken(token, text);
 
-                //The end of the span is the character index after it
-                spanEnd--;
+                    //The end of the span is the character index after it
+                    spanEnd--;
 
-                //Delete any extra split chars
-                if (spanEnd >= 0 && isSplitChar(text.charAt(spanEnd))) {
-                    text.delete(spanEnd, spanEnd + 1);
+                    //Delete any extra split chars
+                    if (spanEnd >= 0 && isSplitChar(text.charAt(spanEnd))) {
+                        text.delete(spanEnd, spanEnd + 1);
+                    }
+
+                    if (spanStart >= 0 && isSplitChar(text.charAt(spanStart))) {
+                        text.delete(spanStart, spanStart + 1);
+                    }
                 }
 
-                if (spanStart >= 0 && isSplitChar(text.charAt(spanStart))) {
-                    text.delete(spanStart, spanStart + 1);
-                }
             }
-
-            clearSelections();
-            updateHint();
+                clearSelections();
+                updateHint();
         }
 
         @Override

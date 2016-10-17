@@ -86,10 +86,6 @@ public class EventDetailsFragments extends Fragment {
 
                     if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
                         // keyboard is opened
-//                        fireteamBanner.setVisibility(View.VISIBLE);
-//                        anim = AnimationUtils.loadAnimation(getActivity(),
-//                                R.anim.slide_out_to_top);
-//                        fireteamBanner.startAnimation(anim);
                         if(currentEvent!=null && currentEvent.getEventStatus()!=null && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL) && checkUserIsPlayer()) {
                             if(fireteamBanner!=null && fireteamBanner.getVisibility()==View.VISIBLE) {
                                 fireteamBanner.setVisibility(View.VISIBLE);
@@ -102,10 +98,6 @@ public class EventDetailsFragments extends Fragment {
 
                     } else {
                         // keyboard is closed
-//                        fireteamBanner.setVisibility(View.VISIBLE);
-//                        anim = AnimationUtils.loadAnimation(getActivity(),
-//                                R.anim.slide_in_from_top);
-//                        fireteamBanner.startAnimation(anim);
                         if(currentEvent.getEventStatus()!=null && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL) && checkUserIsPlayer()) {
                             if(fireteamBanner!=null && fireteamBanner.getVisibility()!=View.VISIBLE) {
                                 fireteamBanner.setVisibility(View.VISIBLE);
@@ -114,7 +106,6 @@ public class EventDetailsFragments extends Fragment {
                                 fireteamBanner.startAnimation(anim);
                             }
                         }
-                        //((EventDetailActivity) getActivity()).showKeyboard();
                     }
                 }
             });

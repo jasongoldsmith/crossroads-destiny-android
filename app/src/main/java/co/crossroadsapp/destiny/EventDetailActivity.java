@@ -197,6 +197,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
         completionView.setTokenListener(EventDetailActivity.this);
         completionView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select);
 
+
         editTextInvite = (ContactsCompletionView) findViewById(R.id.searchView);
 
 //        if (savedInstanceState == null) {
@@ -521,6 +522,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
 //                .addContentMetadata("eventId", currEvent.getEventId());
 
         showNotifications();
+        completionView.setTokenLimit(reqPlayer);
 
     }
 
@@ -571,6 +573,9 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
             }
             if(hint==1) {
                 invitedList.add(token);
+                if(!checkPlayerInvitedLesserThenPlayerNeeded()) {
+                    hideKeyboard();
+                }
             } else if(hint==2) {
                 invitedList.remove(token);
             }
@@ -587,8 +592,11 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
 
     private boolean checkPlayerInvitedLesserThenPlayerNeeded() {
         if(invitedList!=null) {
-            if(reqPlayer>0){
-                return true;
+            if(currEvent!=null && currEvent.getPlayerData()!=null) {
+                //reqPlayer = currEvent.getActivityData().getMaxPlayer() - currEvent.getPlayerData().size();
+                if (invitedList.size() < reqPlayer) {
+                    return true;
+                }
             }
         }
         return false;
@@ -1374,7 +1382,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
     }
 
-    private void hideKeyboard() {
+    protected void hideKeyboard() {
         if(editText!=null) {
             editText.setText("");
         } else if(editTextInvite!=null) {

@@ -23,7 +23,7 @@ public class CountSpan extends ViewSpan {
     }
 
     public void setCount(int c) {
-        text = "+" + c;
+        text = "";
         ((TextView)view).setText(text);
     }
 }
