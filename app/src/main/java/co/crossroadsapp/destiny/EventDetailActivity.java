@@ -36,6 +36,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,13 +69,16 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
@@ -150,6 +154,8 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
     private ContactsCompletionView editTextInvite;
     private ArrayList<String> invitedList;
     private String deepLinkUrl;
+    private TextView inviteBtn;
+    private TextView fullInviteeMsg;
 //    private TextView errText;
 //    private ImageView close_err;
 
@@ -199,6 +205,8 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
 
 
         editTextInvite = (ContactsCompletionView) findViewById(R.id.searchView);
+
+        fullInviteeMsg = (TextView) findViewById(R.id.full_invitee_list_msg);
 
 //        if (savedInstanceState == null) {
 //            completionView.setPrefix("To: ");
@@ -324,7 +332,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
             }
         });
 
-        TextView inviteBtn = (TextView) findViewById(R.id.invite_btn);
+        inviteBtn = (TextView) findViewById(R.id.invite_btn);
         inviteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -573,11 +581,28 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
             }
             if(hint==1) {
                 invitedList.add(token);
+                if(invitedList.size()>=1) {
+                    inviteBtn.setVisibility(View.VISIBLE);
+                } else {
+                    inviteBtn.setVisibility(View.GONE);
+                }
                 if(!checkPlayerInvitedLesserThenPlayerNeeded()) {
-                    hideKeyboard();
+                    fullInviteeMsg.setVisibility(View.VISIBLE);
+                    //hideKeyboard();
+                    //setInviteBtnMarginZero();
                 }
             } else if(hint==2) {
                 invitedList.remove(token);
+                if(invitedList.size()>=1) {
+                    inviteBtn.setVisibility(View.VISIBLE);
+                }else {
+                    inviteBtn.setVisibility(View.GONE);
+                }
+                if(checkPlayerInvitedLesserThenPlayerNeeded()) {
+                    fullInviteeMsg.setVisibility(View.GONE);
+                    //hideKeyboard();
+                    //setInviteBtnMarginZero();
+                }
             }
         }
 
@@ -602,16 +627,71 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
         return false;
     }
 
+    private boolean validatePlaystationGamertag(String gamertag) {
+        if(gamertag!=null) {
+            if(gamertag.matches(".*[^a-z^0-9^A-Z\\_\\-].*") || gamertag.length()<3 || gamertag.length()>16) {
+                showGenericError("INVALID GAMERTAG", "Please enter a valid gamertag.","OK", Constants.GENERAL_ERROR, null, true);
+                //showError("Invalid gamertag");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean validateXboxGamertag(String gamertag) {
+        if(gamertag!=null) {
+            if(!gamertag.matches("^[A-Za-z][A-Za-z0-9]++(?: [a-zA-Z0-9]++)?$") || gamertag.length()>16 || gamertag.length()<1 || gamertag.startsWith(" ") || gamertag.endsWith(" ") || Character.isDigit(gamertag.charAt(0))){
+                showGenericError("INVALID GAMERTAG", "Please enter a valid gamertag.","OK", Constants.GENERAL_ERROR, null, true);
+                //showError("Invalid gamertag");
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void onTokenAdded(Person token) {
         //((TextView)findViewById(R.id.lastEvent)).setText("Added: " + token);
-        updateTokenConfirmation(token.toString(), 1);
+        String console = Util.getDefaults("consoleType", EventDetailActivity.this);
+        if(console.equalsIgnoreCase(Constants.CONSOLEXBOXONE)) {
+            if(!validateXboxGamertag(token.toString())) {
+                updateTokenConfirmation(token.toString(), 1);
+            } else {
+                completionView.removeObject(token);
+            }
+        } else if(console.equalsIgnoreCase(Constants.CONSOLEPS4)) {
+            if(!validatePlaystationGamertag(token.toString())) {
+                updateTokenConfirmation(token.toString(), 1);
+            } else {
+                completionView.removeObject(token);
+            }
+        } else {
+            updateTokenConfirmation(token.toString(), 1);
+        }
+
     }
 
     @Override
     public void onTokenRemoved(Person token) {
         //((TextView)findViewById(R.id.lastEvent)).setText("Removed: " + token);
         updateTokenConfirmation(token.toString(), 2);
+    }
+
+    protected void setInviteBtnMargin(int inviteBtnBottom) {
+        if(inviteBtn!=null && inviteLayout!=null) {
+            if (inviteLayout.getVisibility() == View.VISIBLE) {
+                ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) inviteBtn
+                        .getLayoutParams();
+            mlp.setMargins(0, 0, 0, inviteBtnBottom);
+        }
+        }
+    }
+
+    protected void setInviteBtnMarginZero() {
+        if(inviteBtn!=null && inviteLayout!=null && inviteLayout.getVisibility()==View.VISIBLE) {
+            //hideAnimatedInviteView();
+            //completionView.clear();
+        }
     }
 
     class PagerAdapter extends FragmentPagerAdapter {
@@ -726,7 +806,17 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
                 }
             }
 
-            // Create a BranchUniversal object for the content referred on this activity instance
+            String invitee="";
+            if(inviteLayout.getVisibility()==View.VISIBLE && !invitedList.isEmpty()) {
+//                invitee = invitedList.toString();
+                StringBuilder sb = new StringBuilder();
+                for (String n : invitedList) {
+                    if (sb.length() > 0) sb.append(',');
+                    sb.append(n);
+                }
+                invitee =  sb.toString();
+            }
+            // Create a BranchUniversal object for the content referred on this activity instance as invite
             branchUniversalObject = new BranchUniversalObject()
                     .setCanonicalIdentifier("item/12345")
                     .setCanonicalUrl("https://branch.io/deepviews")
@@ -735,6 +825,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
                     .setContentImageUrl(Constants.DEEP_LINK_IMAGE + currEvent.getEventId() + ".png")
                     //.setContentExpiration(new Date(1476566432000L)) // set contents expiration time if applicable
                     .addContentMetadata("activityName", currEvent.getActivityData().getActivitySubtype())
+                    .addContentMetadata("invitees", invitee)
                     .addContentMetadata("eventId", currEvent.getEventId());
         }
     }

@@ -393,6 +393,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/customedittext"
             android:background="@color/tag_background">
                 <co.crossroadsapp.destiny.ContactsCompletionView
                     android:id="@+id/searchView"
@@ -403,6 +404,7 @@
                     android:layout_marginBottom="14dp"
                     android:layout_marginRight="87dp"
                     android:hint="Type a Gamertag"
+                    android:digits="0,1,2,3,4,5,6,7,8,9,*,qwertzuiopasdfghjklyxcvbnm,_,-"
                     android:textColorHint="@color/invite_edittext_hint"
                     android:imeOptions="actionDone"
                     android:textColor="@android:color/white"
@@ -424,12 +426,26 @@
         </RelativeLayout>
         <TextView
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/full_invitee_list_msg"
+            android:gravity="center"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="14dp"
+            android:layout_marginRight="21dp"
+            android:layout_marginLeft="21dp"
+            android:layout_below="@+id/customedittext"
+            android:text="@string/full_invitee"
+            android:textColor="@color/trimbe_white"
+            android:textSize="14sp"
+            android:visibility="gone"/>
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="50dp"
             android:id="@+id/invite_btn"
             android:background="#0086d0"
+            android:visibility="gone"
             android:text="@string/invite"
             android:fontFamily="sans-serif"
-            android:layout_marginTop="42dp"
             android:textStyle="bold"
             android:textColor="@android:color/white"
             android:textSize="14sp"

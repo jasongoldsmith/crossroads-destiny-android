@@ -24,6 +24,8 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.mixpanel.android.mpmetrics.MPConfig;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
+import co.crossroadsapp.destiny.data.InvitationLoginData;
+import co.crossroadsapp.destiny.network.InvitePlayerNetwork;
 import co.crossroadsapp.destiny.network.TrackingNetwork;
 import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
@@ -32,7 +34,10 @@ import io.fabric.sdk.android.Fabric;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
@@ -56,6 +61,7 @@ public class SplashActivity extends BaseActivity implements Observer {
     private ControlManager cManager;
     private boolean appInstallSuccess=false;
     MixpanelAPI mixpanel;
+    InvitationLoginData inviData = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +118,9 @@ public class SplashActivity extends BaseActivity implements Observer {
             public void run() {
                 Intent homeIntent = new Intent(getApplicationContext(),
                         MainActivity.class);
+                if(inviData!=null) {
+                    homeIntent.putExtra("invitation", inviData);
+                }
                 startActivity(homeIntent);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 finish();
@@ -139,6 +148,13 @@ public class SplashActivity extends BaseActivity implements Observer {
                                     if (referringParams.has("eventId") && referringParams.has("activityName")) {
                                         String eId = referringParams.getString("eventId");
                                         String aName = referringParams.getString("activityName");
+                                        if(referringParams.has("invitees")) {
+                                            //Map<String, Object> invitation = new HashMap<String, Object>();
+                                            String invitee = referringParams.getString("invitees");
+                                            if(referringParams.has("~referring_link") && !referringParams.isNull("~referring_link")) {
+                                                inviData = new InvitationLoginData(invitee, eId, referringParams.getString("~referring_link"));
+                                            }
+                                        }
                                         if (eId != null) {
                                             if (cManager != null) {
                                                 cManager.setDeepLinkEvent(eId, aName);

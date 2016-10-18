@@ -190,7 +190,7 @@ public class BaseActivity extends FragmentActivity {
         });
     }
 
-    public void showGenericError(String header, String msg, String text, final int errorType, final RequestParams rp) {
+    public void showGenericError(String header, String msg, String text, final int errorType, final RequestParams rp, final boolean keyboardOpen) {
         final RelativeLayout deeplinkErrorG = (RelativeLayout) findViewById(R.id.deeplink_error);
         TextView errMsgG = (TextView) findViewById(R.id.msg);
         TextView btnTextG = (TextView) findViewById(R.id.btn_text);
@@ -199,6 +199,11 @@ public class BaseActivity extends FragmentActivity {
         deeplinkErrorG.setVisibility(View.VISIBLE);
         ImageView closeG= (ImageView) findViewById(R.id.close);
         TextView noBtn = (TextView) findViewById(R.id.no_thanks);
+
+        if(keyboardOpen) {
+            if(mManager!=null && mManager.getCurrentActivity()!=null)
+            ((EventDetailActivity)mManager.getCurrentActivity()).hideKeyboard();
+        }
 
         if(errorType == Constants.GENERAL_ERROR) {
             noBtn.setVisibility(View.GONE);
@@ -221,6 +226,10 @@ public class BaseActivity extends FragmentActivity {
                 deeplinkErrorG.setVisibility(View.GONE);
                 if(mManager!=null && mManager.getCurrentActivity()!=null && mManager.getCurrentActivity() instanceof CrashReport) {
                     ((CrashReport) mManager.getCurrentActivity()).finish();
+                }
+                if(keyboardOpen) {
+                    if(mManager!=null && mManager.getCurrentActivity()!=null)
+                        ((EventDetailActivity)mManager.getCurrentActivity()).showKeyboard();
                 }
             }
         });
@@ -246,6 +255,10 @@ public class BaseActivity extends FragmentActivity {
                     deeplinkErrorG.setVisibility(View.GONE);
                     if(mManager!=null && mManager.getCurrentActivity()!=null && mManager.getCurrentActivity() instanceof CrashReport) {
                         ((CrashReport) mManager.getCurrentActivity()).finish();
+                    }
+                    if(keyboardOpen) {
+                        if(mManager!=null && mManager.getCurrentActivity()!=null)
+                            ((EventDetailActivity)mManager.getCurrentActivity()).showKeyboard();
                     }
                 }
             }

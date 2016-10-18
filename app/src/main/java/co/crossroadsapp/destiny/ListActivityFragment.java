@@ -1,7 +1,6 @@
 package co.crossroadsapp.destiny;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -47,7 +46,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -1205,7 +1203,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             b = getIntent().getExtras();
             if(b!=null && b.containsKey("reportIssue")) {
                 //pagerAdapter.
-                showGenericError(getString(R.string.report_submitted_header), getString(R.string.report_submitted), "OK", Constants.GENERAL_ERROR, null);
+                showGenericError(getString(R.string.report_submitted_header), getString(R.string.report_submitted), "OK", Constants.GENERAL_ERROR, null, false);
             }
         }
     }

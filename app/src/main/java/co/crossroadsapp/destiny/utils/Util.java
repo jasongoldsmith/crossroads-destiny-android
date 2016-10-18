@@ -16,6 +16,7 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -73,6 +74,28 @@ public class Util {
             return Constants.NETWORK_DEV_BASE_STAGING_URL;
         }
         return Constants.NETWORK_DEV_BASE_URL;
+    }
+
+    public static int softNavigationPresent(Activity c) {
+        int hasSoftwareKeys=0;
+        if(c!=null) {
+            Display d = c.getWindowManager().getDefaultDisplay();
+
+            DisplayMetrics realDisplayMetrics = new DisplayMetrics();
+            d.getRealMetrics(realDisplayMetrics);
+
+            int realHeight = realDisplayMetrics.heightPixels;
+            int realWidth = realDisplayMetrics.widthPixels;
+
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            d.getMetrics(displayMetrics);
+
+            int displayHeight = displayMetrics.heightPixels;
+            int displayWidth = displayMetrics.widthPixels;
+
+            hasSoftwareKeys = realHeight - displayHeight;
+        }
+        return hasSoftwareKeys;
     }
 
     public static String getFirebaseUrl(String clanId, String eventId, int channel) {

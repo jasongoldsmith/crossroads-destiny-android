@@ -23,6 +23,7 @@ import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.EventList;
 import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.GroupList;
+import co.crossroadsapp.destiny.data.InvitationLoginData;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.network.ActivityListNetwork;
 import co.crossroadsapp.destiny.network.AddCommentNetwork;

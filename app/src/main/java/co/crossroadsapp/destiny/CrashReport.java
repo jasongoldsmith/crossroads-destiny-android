@@ -1,10 +1,8 @@
 package co.crossroadsapp.destiny;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.widget.CardView;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -22,7 +20,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import co.crossroadsapp.destiny.data.UserData;
-import co.crossroadsapp.destiny.R;
 import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 
@@ -159,7 +156,7 @@ public class CrashReport extends BaseActivity implements Observer {
     public void update(Observable observable, Object data) {
         hideProgressBar();
         if(reportIssue) {
-            showGenericError(getString(R.string.report_submitted_header), getString(R.string.report_submitted), "OK", Constants.GENERAL_ERROR, null);
+            showGenericError(getString(R.string.report_submitted_header), getString(R.string.report_submitted), "OK", Constants.GENERAL_ERROR, null, false);
         } else {
             Intent intent = new Intent(getApplicationContext(),
                     MessageSent.class);

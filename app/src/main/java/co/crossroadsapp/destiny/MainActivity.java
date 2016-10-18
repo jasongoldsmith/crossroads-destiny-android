@@ -23,7 +23,6 @@ import android.widget.TextView;
 
 import co.crossroadsapp.destiny.data.AppVersion;
 import co.crossroadsapp.destiny.data.EventData;
-import co.crossroadsapp.destiny.data.EventList;
 import co.crossroadsapp.destiny.network.EventListNetwork;
 import co.crossroadsapp.destiny.network.GetVersion;
 import co.crossroadsapp.destiny.network.LoginNetwork;
@@ -35,6 +34,7 @@ import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
 import com.loopj.android.http.RequestParams;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,6 +60,7 @@ public class MainActivity extends BaseActivity implements Observer {
     private Runnable runnable;
     private Handler handler;
     private LinearLayoutManager horizontalLayoutManagaer;
+    private Serializable invitationRp;
 
     @Override
     protected void onCreate(Bundle outState) {
@@ -70,6 +71,11 @@ public class MainActivity extends BaseActivity implements Observer {
         u= Util.getDefaults("user", getApplicationContext());
         p = Util.getDefaults("password", getApplicationContext());
         console = Util.getDefaults("consoleType", getApplicationContext());
+
+        Bundle b = getIntent().getExtras();
+        if(b!=null && b.containsKey("invitation")) {
+            invitationRp = b.getSerializable("invitation");
+        }
 
         userData = new UserData();
 
@@ -317,6 +323,9 @@ public class MainActivity extends BaseActivity implements Observer {
         if(mManager!=null && mManager.getEventListCurrent()!=null) {
             mManager.getEventListCurrent().clear();
         }
+        if(invitationRp!=null) {
+            signinIntent.putExtra("invitation", invitationRp);
+        }
         startActivity(signinIntent);
         finish();
     }
@@ -454,7 +463,7 @@ public class MainActivity extends BaseActivity implements Observer {
         }else if(observable instanceof LogoutNetwork) {
             launchMainLayout();
             showGenericError("CHANGES TO SIGN IN", "Your gamertag now replaces your Crossroads username when logging in.\n" +
-                    "(your password is still the same)", "OK", Constants.GENERAL_ERROR, null);
+                    "(your password is still the same)", "OK", Constants.GENERAL_ERROR, null, false);
         } else if(observable instanceof EventListNetwork) {
             if(data!=null) {
                 horizontalAdapter.elistLocal.clear();

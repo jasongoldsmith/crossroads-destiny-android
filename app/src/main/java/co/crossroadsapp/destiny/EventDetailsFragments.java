@@ -21,8 +21,6 @@ import android.widget.TextView;
 import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import co.crossroadsapp.destiny.data.CommentData;
 import co.crossroadsapp.destiny.data.EventData;
@@ -86,6 +84,7 @@ public class EventDetailsFragments extends Fragment {
 
                     if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
                         // keyboard is opened
+                        ((EventDetailActivity) getActivity()).setInviteBtnMargin(keypadHeight-Util.softNavigationPresent(getActivity()!=null?getActivity():null));
                         if(currentEvent!=null && currentEvent.getEventStatus()!=null && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL) && checkUserIsPlayer()) {
                             if(fireteamBanner!=null && fireteamBanner.getVisibility()==View.VISIBLE) {
                                 fireteamBanner.setVisibility(View.VISIBLE);
@@ -98,6 +97,7 @@ public class EventDetailsFragments extends Fragment {
 
                     } else {
                         // keyboard is closed
+                        ((EventDetailActivity) getActivity()).setInviteBtnMarginZero();
                         if(currentEvent.getEventStatus()!=null && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL) && checkUserIsPlayer()) {
                             if(fireteamBanner!=null && fireteamBanner.getVisibility()!=View.VISIBLE) {
                                 fireteamBanner.setVisibility(View.VISIBLE);
@@ -174,7 +174,7 @@ public class EventDetailsFragments extends Fragment {
                 clanTag.setVisibility(View.GONE);
             }
             if (checkUserIsPlayer()) {
-                fireteamBannerMsg.setText(getString(R.string.banner_member_msg));
+                fireteamBannerMsg.setText("Send " + currentEvent.getPlayerData().get(0).getPsnId() + getString(R.string.banner_member_msg));
                 fireteamBanner.setVisibility(View.VISIBLE);
             }
             if (checkUserIsCreator()) {
@@ -478,9 +478,9 @@ public class EventDetailsFragments extends Fragment {
                                         rp.put("commentId", commentsLocal.get(position).getId());
                                     }
                                     if (mManager!=null && mManager.getUserData()!=null && mManager.getUserData().getMaxReported()) {
-                                        ((EventDetailActivity) getActivity()).showGenericError(getString(R.string.report_issue_header), getString(R.string.report_issue_next), "NEXT", Constants.REPORT_COMMENT_NEXT, rp);
+                                        ((EventDetailActivity) getActivity()).showGenericError(getString(R.string.report_issue_header), getString(R.string.report_issue_next), "NEXT", Constants.REPORT_COMMENT_NEXT, rp, false);
                                     } else {
-                                        ((EventDetailActivity) getActivity()).showGenericError(getString(R.string.report_issue_header), getString(R.string.report_issue), "REPORT", Constants.REPORT_COMMENT, rp);
+                                        ((EventDetailActivity) getActivity()).showGenericError(getString(R.string.report_issue_header), getString(R.string.report_issue), "REPORT", Constants.REPORT_COMMENT, rp, false);
                                     }
                                 }
                             }
