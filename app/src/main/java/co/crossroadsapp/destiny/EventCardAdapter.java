@@ -293,7 +293,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         }
 
                         if(y < 4) {
-                            if(thisIsUnverifiedUser) {
+                            if(n!=null && !n.equalsIgnoreCase(Constants.PSN_VERIFIED)) {
                                 uploadPlayerImg(holder, null, y, i);
                             } else {
                                 uploadPlayerImg(holder, profileUrl, y, i);
@@ -303,15 +303,16 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                     allNames = this.elistLocal.get(position).getCreatorData().getPsnId();
 
-                    if(CreatorIsPlayer) {
-                        if(user!=null && user.getPsnVerify()!=null && user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
-                            clanT = this.elistLocal.get(position).getCreatorData().getClanTag()!=null?this.elistLocal.get(position).getCreatorData().getClanTag():"";
-                        }
-                    } else {
-                        clanT = this.elistLocal.get(position).getCreatorData().getClanTag()!=null?this.elistLocal.get(position).getCreatorData().getClanTag():"";
-                    }
+//                    if(CreatorIsPlayer) {
+//                        if(user!=null && user.getPsnVerify()!=null && user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+//                            clanT = this.elistLocal.get(position).getCreatorData().getClanTag()!=null?this.elistLocal.get(position).getCreatorData().getClanTag():"";
+//                        }
+//                    } else {
+//                        clanT = this.elistLocal.get(position).getCreatorData().getClanTag()!=null?this.elistLocal.get(position).getCreatorData().getClanTag():"";
+//                    }
 
                     if (this.elistLocal.get(position).getCreatorData().getClanTag() != null) {
+                        clanT = this.elistLocal.get(position).getCreatorData().getClanTag();
                         if (clanT!=null && !clanT.isEmpty()) {
                             allNames = allNames + " [" + clanT + "]";
                         }

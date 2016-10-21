@@ -194,6 +194,12 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
             @Override
             protected boolean keepObject(Person person, String mask) {
                 mask = mask.toLowerCase();
+                String console = Util.getDefaults("consoleType", EventDetailActivity.this);
+                if(console.equalsIgnoreCase(Constants.CONSOLEXBOXONE)) {
+                    validateXboxGamertag(mask);
+                } else if(console.equalsIgnoreCase(Constants.CONSOLEPS4)) {
+                    validatePlaystationGamertag(mask);
+                }
                 return person.getName().toLowerCase().startsWith(mask) || person.getEmail().toLowerCase().startsWith(mask);
             }
         };
@@ -203,8 +209,8 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
         completionView.setTokenListener(EventDetailActivity.this);
         completionView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select);
 
-
         editTextInvite = (ContactsCompletionView) findViewById(R.id.searchView);
+        editTextInvite.setTypeface(Typeface.DEFAULT);
 
         fullInviteeMsg = (TextView) findViewById(R.id.full_invitee_list_msg);
 
@@ -261,10 +267,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
         inviteCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapterP.clear();
-                adapterP.notifyDataSetChanged();
-                hideAnimatedInviteView();
-                hideKeyboard();
+                closeInviteAndKeyboard();
             }
         });
 
@@ -336,6 +339,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
         inviteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                inviteBtn.setClickable(false);
                 getDeeplinkUrl();
             }
         });
@@ -488,47 +492,6 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
 
         generateBranchObject();
 
-//        String actName = currEvent.getActivityData().getActivitySubtype();
-//        String grpName = controlManager.getGroupObj(currEvent.getClanId()).getGroupName();
-//        String deepLinkTitle=" ";
-//        String deepLinkMsg=" ";
-//        if(userIsPlayer){
-//            deepLinkTitle = "Join My Fireteam";
-//            if(reqPlayer==0) {
-//                deepLinkTitle = currEvent.getActivityData().getActivitySubtype();
-//            }
-//            deepLinkMsg = getDeepLinkConsoleType()+": I need "+reqPlayer+ " more for "+ actName + " in the " +grpName+ " group";
-//        }else {
-//            deepLinkTitle = "Searching for Guardians";
-//            if(reqPlayer==0) {
-//                deepLinkTitle = currEvent.getActivityData().getActivitySubtype();
-//            }
-//            deepLinkMsg = getDeepLinkConsoleType() +": This fireteam needs " + reqPlayer + " more for " + actName+" in the " + grpName + " group";
-//
-//            if(currEvent.getEventStatus().equalsIgnoreCase("Upcoming")) {
-//                deepLinkMsg = getDeeplinkContent(upcomingDate);
-//            }
-//        }
-//
-//        if(reqPlayer==0){
-//            if(currEvent.getEventStatus().equalsIgnoreCase("Upcoming")) {
-//                deepLinkMsg = getDeepLinkConsoleType() +": Check out this " + actName + " on " + upcomingDate + " in the " + grpName + " group";
-//            }else {
-//                deepLinkMsg = getDeepLinkConsoleType() +": Check out this " + actName + " in the " + grpName + " group";
-//            }
-//        }
-//
-//        // Create a BranchUniversal object for the content referred on this activity instance
-//        branchUniversalObject = new BranchUniversalObject()
-//                .setCanonicalIdentifier("item/12345")
-//                .setCanonicalUrl("https://branch.io/deepviews")
-//                .setTitle(deepLinkTitle)
-//                .setContentDescription(deepLinkMsg)
-//                .setContentImageUrl(Constants.DEEP_LINK_IMAGE + currEvent.getEventId()+".png")
-//                //.setContentExpiration(new Date(1476566432000L)) // set contents expiration time if applicable
-//                .addContentMetadata("activityName", currEvent.getActivityData().getActivitySubtype())
-//                .addContentMetadata("eventId", currEvent.getEventId());
-
         showNotifications();
         completionView.setTokenLimit(reqPlayer);
 
@@ -562,6 +525,9 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
             Animation anim = AnimationUtils.loadAnimation(this, R.anim.slide_out_to_top);
             inviteLayout.startAnimation(anim);
             editTextInvite.requestFocus();
+            if(invitedList!=null) {
+                invitedList.clear();
+            }
             showKeyboard();
         }
     }
@@ -571,6 +537,9 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
             Animation anim = AnimationUtils.loadAnimation(this, R.anim.slide_out_to_bottom);
             inviteLayout.startAnimation(anim);
             inviteLayout.setVisibility(View.GONE);
+            if(completionView!=null) {
+                completionView.clear();
+            }
         }
     }
 
@@ -583,11 +552,12 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
                 invitedList.add(token);
                 if(invitedList.size()>=1) {
                     inviteBtn.setVisibility(View.VISIBLE);
+                    inviteBtn.setClickable(true);
                 } else {
                     inviteBtn.setVisibility(View.GONE);
                 }
                 if(!checkPlayerInvitedLesserThenPlayerNeeded()) {
-                    fullInviteeMsg.setVisibility(View.VISIBLE);
+                    fullInviteeMsg.setText(getString(R.string.full_invitee));
                     //hideKeyboard();
                     //setInviteBtnMarginZero();
                 }
@@ -595,24 +565,35 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
                 invitedList.remove(token);
                 if(invitedList.size()>=1) {
                     inviteBtn.setVisibility(View.VISIBLE);
+                    inviteBtn.setClickable(true);
                 }else {
                     inviteBtn.setVisibility(View.GONE);
                 }
                 if(checkPlayerInvitedLesserThenPlayerNeeded()) {
-                    fullInviteeMsg.setVisibility(View.GONE);
+                    fullInviteeMsg.setText(getString(R.string.incomplete_invite));
                     //hideKeyboard();
                     //setInviteBtnMarginZero();
                 }
             }
         }
+    }
 
-//        StringBuilder sb = new StringBuilder("Current tokens:\n");
-//        for (Object token: completionView.getObjects()) {
-//            sb.append(token.toString());
-//            sb.append("\n");
-//        }
-
-        //((TextView)findViewById(R.id.tokens)).setText(sb);
+    private boolean checkPlayerAlreadyExist(String id) {
+        if(invitedList!=null) {
+            if(currEvent!=null && currEvent.getPlayerData()!=null) {
+                for (String psn:invitedList) {
+                    if(id.equalsIgnoreCase(psn)) {
+                        return true;
+                    }
+                }
+                for(int i=0; i<currEvent.getPlayerData().size(); i++) {
+                    if(id.equalsIgnoreCase(currEvent.getPlayerData().get(i).getPsnId())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private boolean checkPlayerInvitedLesserThenPlayerNeeded() {
@@ -627,48 +608,37 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
         return false;
     }
 
-    private boolean validatePlaystationGamertag(String gamertag) {
+    private void validatePlaystationGamertag(String gamertag) {
         if(gamertag!=null) {
-            if(gamertag.matches(".*[^a-z^0-9^A-Z\\_\\-].*") || gamertag.length()<3 || gamertag.length()>16) {
-                showGenericError("INVALID GAMERTAG", "Please enter a valid gamertag.","OK", Constants.GENERAL_ERROR, null, true);
-                //showError("Invalid gamertag");
-                return true;
+            if(gamertag.matches(".*[^a-z^0-9^A-Z\\_\\-].*") || gamertag.length()>16) {
+                Runnable myRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        showGenericError("INVALID GAMERTAG", "Please enter a valid gamertag.","OK", Constants.GENERAL_ERROR, null, true);
+                    }
+                };
+                _handler.post(myRunnable);
             }
         }
-        return false;
     }
 
-    private boolean validateXboxGamertag(String gamertag) {
+    private void validateXboxGamertag(String gamertag) {
         if(gamertag!=null) {
             if(!gamertag.matches("^[A-Za-z][A-Za-z0-9]++(?: [a-zA-Z0-9]++)?$") || gamertag.length()>16 || gamertag.length()<1 || gamertag.startsWith(" ") || gamertag.endsWith(" ") || Character.isDigit(gamertag.charAt(0))){
                 showGenericError("INVALID GAMERTAG", "Please enter a valid gamertag.","OK", Constants.GENERAL_ERROR, null, true);
                 //showError("Invalid gamertag");
-                return true;
             }
         }
-        return false;
     }
 
     @Override
     public void onTokenAdded(Person token) {
         //((TextView)findViewById(R.id.lastEvent)).setText("Added: " + token);
-        String console = Util.getDefaults("consoleType", EventDetailActivity.this);
-        if(console.equalsIgnoreCase(Constants.CONSOLEXBOXONE)) {
-            if(!validateXboxGamertag(token.toString())) {
-                updateTokenConfirmation(token.toString(), 1);
-            } else {
-                completionView.removeObject(token);
-            }
-        } else if(console.equalsIgnoreCase(Constants.CONSOLEPS4)) {
-            if(!validatePlaystationGamertag(token.toString())) {
-                updateTokenConfirmation(token.toString(), 1);
-            } else {
-                completionView.removeObject(token);
-            }
-        } else {
+        if(!checkPlayerAlreadyExist(token.toString())) {
             updateTokenConfirmation(token.toString(), 1);
+        } else {
+            completionView.removeObject(token);
         }
-
     }
 
     @Override
@@ -688,8 +658,27 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
     }
 
     protected void setInviteBtnMarginZero() {
-        if(inviteBtn!=null && inviteLayout!=null && inviteLayout.getVisibility()==View.VISIBLE) {
-            //hideAnimatedInviteView();
+        if(inviteBtn!=null && inviteLayout!=null && inviteLayout.getVisibility()==View.VISIBLE && invitedList!=null && invitedList.size()>0) {
+//            if(inviteBtn!=null && inviteLayout!=null) {
+//                if (inviteLayout.getVisibility() == View.VISIBLE) {
+//                    inviteLayout.removeView(inviteBtn);
+//                    ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) inviteBtn
+//                            .getLayoutParams();
+//                    mlp.setMargins(0, 0, 0, 0);
+//                    inviteLayout.addView(inviteBtn);
+//                }
+//            }
+//            // Create your custom layout
+//            RelativeLayout relativeLayout = new RelativeLayout(this);
+//            // Create LayoutParams for it // Note 200 200 is width, height in pixels
+//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+//            // Align bottom-right, and add bottom-margin
+//            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//            inviteLayout.removeView(inviteBtn);
+//            relativeLayout.addView(inviteBtn, params);
+//            inviteLayout.addView(relativeLayout, new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+
+            hideAnimatedInviteView();
             //completionView.clear();
         }
     }
@@ -1254,6 +1243,10 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
     public void showError(String err) {
         hideProgress();
         hideProgressBar();
+        if(inviteLayout!=null && inviteLayout.getVisibility()==View.VISIBLE) {
+            hideAnimatedInviteView();
+            hideKeyboard();
+        }
 //        errLayout.setVisibility(View.VISIBLE);
 //        errText.setText(err);
         setErrText(err);
@@ -1479,8 +1472,9 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
         } else if(editTextInvite!=null) {
             editTextInvite.setText("");
         }
+        View view = this.getCurrentFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(back.getWindowToken(),0);
+        imm.hideSoftInputFromWindow(view.getWindowToken(),0);
     }
 
     private String getEditText() {
@@ -1556,13 +1550,23 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
         finish();
     }
 
+    private void closeInviteAndKeyboard() {
+        hideKeyboard();
+        _handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hideAnimatedInviteView();
+            }
+        }, 100);
+    }
+
     @Override
     public void onBackPressed() {
         if(sendmsg_bckgrnd.getVisibility()==View.VISIBLE){
             sendmsg_bckgrnd.setVisibility(View.GONE);
             hideKeyboard();
         } else if(inviteLayout.getVisibility()==View.VISIBLE) {
-            hideAnimatedInviteView();
+            closeInviteAndKeyboard();
         } else{
             currEvent = null;
             finish();

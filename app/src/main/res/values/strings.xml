@@ -147,5 +147,5 @@
     <string name="banner_leader_msg">Expect friend requests or messages from your Fireteam. You can start a party and invite everyone.</string>
     <string name="invite">INVITE</string>
     <string name="full_invitee">The maximum number of players for your Fireteam has been reached. Each invited player will have a reserved spot on your Fireteam.</string>
-
+    <string name="incomplete_invite">Inviting players will send them a message on Bungie.net.</string>
 </resources>

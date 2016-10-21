@@ -32,6 +32,7 @@ public class NetworkEngine {
     private NetworkEngine(Context c) {
         mManager = ControlManager.getmInstance();
         client = new AsyncHttpClient();
+        client.setTimeout(30000);
         if(mManager.getClient()!=null) {
             client = mManager.getClient();
         } else {
@@ -48,13 +49,8 @@ public class NetworkEngine {
     }
 
     public static NetworkEngine getmInstance(Context context) {
-        if (mInstance==null) {
-            mInstance = new NetworkEngine(context);
-            return mInstance;
-        } else {
-            mInstance = new NetworkEngine(context);
-            return mInstance;
-        }
+        mInstance = new NetworkEngine(context);
+        return mInstance;
     }
 
     public PersistentCookieStore getCookie() {

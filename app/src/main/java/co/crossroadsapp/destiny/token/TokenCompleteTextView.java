@@ -614,7 +614,7 @@ public abstract class TokenCompleteTextView<T> extends MultiAutoCompleteTextView
         return handled || super.onKeyDown(keyCode, event);
     }
 
-    private boolean deleteSelectedObject(boolean handled) {
+    public boolean deleteSelectedObject(boolean handled) {
         if (tokenClickStyle != null && tokenClickStyle.isSelectable()) {
             Editable text = getText();
             if (text == null) return handled;

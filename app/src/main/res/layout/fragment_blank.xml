@@ -55,8 +55,7 @@
             android:layout_marginRight="20dp"
             android:layout_marginBottom="9dp"
             android:textSize="14sp"
-            android:textColor="@color/trimbe_white"
-            android:text="@string/banner_member_msg"/>
+            android:textColor="@color/trimbe_white"/>
     </RelativeLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout

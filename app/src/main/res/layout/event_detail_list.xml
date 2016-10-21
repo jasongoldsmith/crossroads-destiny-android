@@ -434,10 +434,9 @@
             android:layout_marginRight="21dp"
             android:layout_marginLeft="21dp"
             android:layout_below="@+id/customedittext"
-            android:text="@string/full_invitee"
+            android:text="@string/incomplete_invite"
             android:textColor="@color/trimbe_white"
-            android:textSize="14sp"
-            android:visibility="gone"/>
+            android:textSize="14sp"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="50dp"

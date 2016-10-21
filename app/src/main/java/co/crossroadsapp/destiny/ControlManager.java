@@ -868,6 +868,7 @@ public class ControlManager implements Observer{
 
     public void setClient(Context c) {
         client = new AsyncHttpClient();
+        client.setTimeout(30000);
         ConnectivityManager connManager = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         DisplayMetrics metrics = c.getResources().getDisplayMetrics();

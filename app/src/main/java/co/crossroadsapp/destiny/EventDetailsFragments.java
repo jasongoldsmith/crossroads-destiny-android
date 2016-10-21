@@ -174,15 +174,12 @@ public class EventDetailsFragments extends Fragment {
                 clanTag.setVisibility(View.GONE);
             }
             if (checkUserIsPlayer()) {
-                fireteamBannerMsg.setText("Send " + currentEvent.getPlayerData().get(0).getPsnId() + getString(R.string.banner_member_msg));
+                fireteamBannerMsg.setText("Send " + currentEvent.getCreatorData().getPsnId() + " " +getString(R.string.banner_member_msg));
                 fireteamBanner.setVisibility(View.VISIBLE);
             }
             if (checkUserIsCreator()) {
                 fireteamBannerMsg.setText(getString(R.string.banner_leader_msg));
             }
-//            if (fireteamBanner != null && ) {
-//                fireteamBanner.setVisibility(View.VISIBLE);
-//            }
         } else {
             fireteamBanner.setVisibility(View.GONE);
         }
@@ -303,9 +300,13 @@ public class EventDetailsFragments extends Fragment {
                         currPlayerId = playerLocal.get(position).getPlayerId();
                     }
 
+                    holder.message.setVisibility(View.GONE);
+
+                    holder.leader_tag.setVisibility(View.GONE);
+
                     if (playerLocal.get(position).getPsnId() != null) {
                         String name = playerLocal.get(position).getPsnId();
-                        if(!ifPlayerisUserAndVerified(name)) {
+                        if(ifPlayerisUserAndVerified(name)) {
                             if (playerLocal.get(position).getClanTag() != null && !playerLocal.get(position).getClanTag().isEmpty()) {
                                 name = name + " [" + playerLocal.get(position).getClanTag() + "]";
                             }
@@ -320,16 +321,10 @@ public class EventDetailsFragments extends Fragment {
                         }
                         holder.playerName.setText(name);
                         holder.playerName.setTextColor(getResources().getColor(R.color.activity_light_color));
-                    }
 
-                    holder.message.setVisibility(View.GONE);
-
-                    holder.leader_tag.setVisibility(View.GONE);
-
-                    if(currentEvent!=null && currentEvent.getEventStatus()!=null && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)) {
-                        if(position==0) {
-                            holder.leader_tag.setVisibility(View.VISIBLE);
-                        }
+                       if(decideLeaderTag(position, playerLocal.get(position).getPsnId())) {
+                           holder.leader_tag.setVisibility(View.VISIBLE);
+                       }
                     }
 
 //                    if (checkUserIsCreator() && (!playerLocal.get(position).getPlayerId().equalsIgnoreCase(currentEvent.getCreatorData().getPlayerId()))) {
@@ -414,9 +409,29 @@ public class EventDetailsFragments extends Fragment {
     }
 
     private boolean ifPlayerisUserAndVerified(String pId) {
-        if(user!=null && user.getPsnId()!=null && user.getPsnId().equalsIgnoreCase(pId)) {
-            if(user.getPsnVerify()!=null && !user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
-                return true;
+//        if(user!=null && user.getPsnId()!=null) {
+//            if(user.getPsnVerify()!=null && !user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+//                return true;
+//            }
+//        }
+        if(pId!=null && currentEvent!=null && this.currentEvent.getPlayerData()!=null) {
+            for (int i = 0; i < currentEvent.getPlayerData().size(); i++) {
+                if (pId.equalsIgnoreCase(currentEvent.getPlayerData().get(i).getPsnId())) {
+                    if(currentEvent.getPlayerData().get(i).getPsnVerify()!=null && currentEvent.getPlayerData().get(i).getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean decideLeaderTag(int position, String playerId) {
+        if(currentEvent!=null && currentEvent.getEventStatus()!=null && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)) {
+            if(playerId!=null) {
+                if(currentEvent.getCreatorData()!=null && currentEvent.getCreatorData().getPsnId()!=null && currentEvent.getCreatorData().getPsnId().equalsIgnoreCase(playerId)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -451,6 +466,7 @@ public class EventDetailsFragments extends Fragment {
 
         @Override
         public void onBindViewHolder(CurrentEventsCommentsViewHolder holder, final int position) {
+            setBanners();
             if(commentsLocal!=null && !commentsLocal.isEmpty()) {
                 if(commentsLocal.get(position)!=null) {
                     boolean c=true;
@@ -458,7 +474,6 @@ public class EventDetailsFragments extends Fragment {
                         if(clanTag!=null) {
                             clanTag.setVisibility(View.GONE);
                         }
-                        setBanners();
                         c=false;
                     }
                     boolean reported = commentsLocal.get(position).getReported();
@@ -488,7 +503,7 @@ public class EventDetailsFragments extends Fragment {
                         });
                         if (commentsLocal.get(position).getPsnId() != null) {
                             String name = commentsLocal.get(position).getPsnId();
-                            if (!ifPlayerisUserAndVerified(name)) {
+                            if (ifPlayerisUserAndVerified(name)) {
                                 if (commentsLocal.get(position).getClanTag() != null) {
                                     name = name + " [" + commentsLocal.get(position).getClanTag() + "]";
                                 }
@@ -502,12 +517,9 @@ public class EventDetailsFragments extends Fragment {
                             holder.playerNameComment.setVisibility(View.VISIBLE);
                             holder.playerNameComment.setText(name);
                             holder.playerNameComment.setTextColor(getResources().getColor(R.color.activity_light_color));
-                        }
-                        if(currentEvent!=null && currentEvent.getEventStatus()!=null && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)) {
-                            if(commentsLocal.get(position).getPlayerId()!=null) {
-                                if(currentEvent.getCreatorData()!=null && currentEvent.getCreatorData().getPlayerId()!=null && currentEvent.getCreatorData().getPlayerId().equalsIgnoreCase(commentsLocal.get(position).getPlayerId())) {
-                                    holder.leader_comment_tag.setVisibility(View.VISIBLE);
-                                }
+
+                            if(decideLeaderTag(position, commentsLocal.get(position).getPsnId())){
+                                holder.leader_comment_tag.setVisibility(View.VISIBLE);
                             }
                         }
                     }

@@ -46,6 +46,10 @@ public class CreatorData extends PlayerData {
                 if (creator.has("imageUrl") && !creator.isNull("imageUrl")) {
                     setPlayerImageUrl(creator.getString("imageUrl"));
                 }
+                if (creator.has("verifyStatus") && !creator.isNull("verifyStatus")) {
+                    String verifyS = creator.getString("verifyStatus");
+                    setPsnVerify(verifyS);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
