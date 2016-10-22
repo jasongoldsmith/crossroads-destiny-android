@@ -503,7 +503,7 @@ public class EventDetailsFragments extends Fragment {
                         });
                         if (commentsLocal.get(position).getPsnId() != null) {
                             String name = commentsLocal.get(position).getPsnId();
-                            if (ifPlayerisUserAndVerified(name)) {
+                            if (commentsLocal.get(position).getPsnVerify()!=null && commentsLocal.get(position).getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
                                 if (commentsLocal.get(position).getClanTag() != null) {
                                     name = name + " [" + commentsLocal.get(position).getClanTag() + "]";
                                 }

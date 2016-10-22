@@ -281,6 +281,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     for (int y = 0; y < i; y++) {
                         boolean thisIsUnverifiedUser = false;
                         String n = this.elistLocal.get(position).getPlayerData().get(y).getPsnId();
+                        String verifyStatus = this.elistLocal.get(position).getPlayerData().get(y).getPsnVerify();
                         String profileUrl = this.elistLocal.get(position).getPlayerData().get(y).getPlayerImageUrl();
                         String pId = this.elistLocal.get(position).getPlayerData().get(y).getPlayerId();
                         if (user != null && user.getUserId() != null) {
@@ -293,7 +294,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         }
 
                         if(y < 4) {
-                            if(n!=null && !n.equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                            if(verifyStatus!=null && !verifyStatus.equalsIgnoreCase(Constants.PSN_VERIFIED)) {
                                 uploadPlayerImg(holder, null, y, i);
                             } else {
                                 uploadPlayerImg(holder, profileUrl, y, i);
