@@ -213,6 +213,7 @@ public class EventDetailsFragments extends Fragment {
                     scrollToEnd();
                 }
             }
+            setBanners();
         }
     }
 
@@ -272,10 +273,10 @@ public class EventDetailsFragments extends Fragment {
     public void onBindViewHolder(CurrentEventsViewHolder holder, final int position) {
         String currPlayerId = null;
         if(playerLocal!=null) {
-            if(clanTag!=null) {
+            if(clanTag!=null && currentEvent!=null && currentEvent.getEventStatus()!=null && !currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)) {
                 clanTag.setVisibility(View.VISIBLE);
             }
-            setBanners();
+            //setBanners();
 
             holder.inviteIcon.setVisibility(View.GONE);
             if (position >= playerLocal.size() && getMaxPlayer() > playerLocal.size() ) {
@@ -466,7 +467,7 @@ public class EventDetailsFragments extends Fragment {
 
         @Override
         public void onBindViewHolder(CurrentEventsCommentsViewHolder holder, final int position) {
-            setBanners();
+            //setBanners();
             if(commentsLocal!=null && !commentsLocal.isEmpty()) {
                 if(commentsLocal.get(position)!=null) {
                     boolean c=true;
