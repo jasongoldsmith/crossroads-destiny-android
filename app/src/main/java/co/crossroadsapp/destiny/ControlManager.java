@@ -15,6 +15,7 @@ import android.nfc.NfcManager;
 import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
+import android.view.View;
 
 import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.ActivityList;
@@ -28,6 +29,7 @@ import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.network.ActivityListNetwork;
 import co.crossroadsapp.destiny.network.AddCommentNetwork;
 import co.crossroadsapp.destiny.network.AddNewConsoleNetwork;
+import co.crossroadsapp.destiny.network.BungieUserNetwork;
 import co.crossroadsapp.destiny.network.ChangeCurrentConsoleNetwork;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
 import co.crossroadsapp.destiny.network.EventListNetwork;
@@ -52,16 +54,27 @@ import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.ErrorShowDialog;
 import co.crossroadsapp.destiny.utils.TravellerDialogueHelper;
 import co.crossroadsapp.destiny.utils.Version;
+import cz.msebera.android.httpclient.entity.StringEntity;
+import cz.msebera.android.httpclient.message.BasicHeader;
+import cz.msebera.android.httpclient.protocol.HTTP;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.mixpanel.android.mpmetrics.MPConfig;
+import com.shaded.fasterxml.jackson.core.JsonGenerationException;
+import com.shaded.fasterxml.jackson.core.type.TypeReference;
+import com.shaded.fasterxml.jackson.databind.JsonMappingException;
+import com.shaded.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -115,6 +128,7 @@ public class ControlManager implements Observer{
     private Boolean showFullEvent;
     private ReportCommentNetwork reportCommentNetwork;
     private InvitePlayerNetwork invitePlayersNetwork;
+    private BungieUserNetwork bugieGetUser;
 
     public ControlManager() {
     }
@@ -673,6 +687,48 @@ public class ControlManager implements Observer{
                 getEventList();
                 getGroupList(null);
             }
+        } else if(observable instanceof BungieUserNetwork) {
+            if(data!=null) {
+                try {
+                    String platform = getCurrentPlatform();
+                    if(platform!=null) {
+//                        HashMap m = new HashMap();
+//                        m.put("response", data);
+                        try {
+
+//                            ObjectMapper mapper = new ObjectMapper();
+//                            String json = data.toString();
+//
+//                            Map<String, Object> map = new HashMap<String, Object>();
+//
+//                            // convert JSON string to Map
+//                            map = mapper.readValue(json, new TypeReference<Map<String, String>>(){});
+
+                            HashMap<String,Object> map =
+                                    new ObjectMapper().readValue(data.toString(), HashMap.class);
+
+                            RequestParams rp = new RequestParams();
+                            rp.put("bungieResponse", map);
+                            rp.put("consoleType", platform);
+                            rp.put("bungieURL", Constants.BUGIE_CURRENT_USER);
+                            loginNetwork = new LoginNetwork(mCurrentAct);
+                            loginNetwork.addObserver(this);
+                            loginNetwork.addObserver(((MainActivity)mCurrentAct));
+                            loginNetwork.doSignup(rp);
+
+
+                        } catch (JsonGenerationException e) {
+                            e.printStackTrace();
+                        } catch (JsonMappingException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -866,6 +922,19 @@ public class ControlManager implements Observer{
         }
     }
 
+    public AsyncHttpClient getBungieClient(String csrf, String cookies) {
+            client = new AsyncHttpClient();
+            client.setTimeout(30000);
+            if(csrf!=null) {
+                client.addHeader("x-csrf", csrf);
+            }
+            if(cookies!=null) {
+                client.addHeader("Cookie", cookies);
+            }
+            client.addHeader("x-api-key", "f091c8d36c3c4a17b559c21cd489bec0");
+        return client;
+    }
+
     public void setClient(Context c) {
         client = new AsyncHttpClient();
         client.setTimeout(30000);
@@ -971,5 +1040,29 @@ public class ControlManager implements Observer{
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void getBungieCurrentUser(String csrf, String cookies, MainActivity act) {
+        try {
+            bugieGetUser = new BungieUserNetwork(csrf, cookies, act);
+            bugieGetUser.addObserver(this);
+            bugieGetUser.getBungieCurrentUser();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getCurrentPlatform() {
+        String c = Util.getDefaults("cookie", mCurrentAct);
+        String[] pair = c.split(";");
+        for(int i=0; i<pair.length;i++) {
+            String temp = pair[i].substring(0, pair[i].indexOf('=')).trim();
+            if(temp.equalsIgnoreCase("bunglesony")) {
+                return Constants.CONSOLEPS4;
+            } else if(temp.equalsIgnoreCase("bunglemsa")) {
+                return Constants.CONSOLEXBOXONE;
+            }
+        }
+        return null;
     }
 }

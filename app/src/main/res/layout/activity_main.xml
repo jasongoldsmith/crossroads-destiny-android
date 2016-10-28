@@ -19,18 +19,51 @@
         android:layout_marginTop="129dp"
         android:layout_centerHorizontal="true"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+    <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/signin"
-        android:background="#0086d0"
-        android:text="@string/signin"
-        android:fontFamily="sans-serif"
-        android:textStyle="bold"
-        android:textColor="@android:color/white"
-        android:textSize="14sp"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"/>
+        android:weightSum="2"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="180dp"
+            android:layout_weight="1"
+            android:id="@+id/playstation"
+            android:src="@drawable/p_s_n_logo"
+            android:background="#0086d0"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:gravity="center"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="180dp"
+            android:layout_weight="1"
+            android:id="@+id/xbox"
+            android:src="@drawable/xbox_live_logo"
+            android:background="@color/user_profile_border_xbox"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:gravity="center"/>
+    </LinearLayout>
+
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:id="@+id/signin"-->
+        <!--android:background="#0086d0"-->
+        <!--android:text="@string/signin"-->
+        <!--android:fontFamily="sans-serif"-->
+        <!--android:textStyle="bold"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:textSize="14sp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:gravity="center"/>-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/horizontal_recycler_view"

@@ -33,6 +33,9 @@ public class Constants {
     public static final String TERMS_OF_SERVICE = "https://www.crossroadsapp.co/terms";
     public static final String PRIVACY_POLICY = "https://www.crossroadsapp.co/privacy";
     public static final String NONE = "(none)";
+    public static final String PLAYSTATION = "PlayStation";
+    public static final String XBOX = "Xbox";
+
 
     public static String NOTIFICATION_INTENT_CHANNEL = "com.example.sharmha.notificationintent";
     public static int INTENT_ID = 9999;
@@ -125,4 +128,10 @@ public class Constants {
 
     //api url
     public static String REPORT_COMMENT_URL = "api/v1/a/event/reportComment";
+
+    //getCurrentUser bungie
+    public static String BUGIE_CURRENT_USER = "https://www.bungie.net/Platform/User/GetBungieNetUser";
+
+    public static String BUNGIE_PSN_LOGIN = "https://www.bungie.net/en/User/SignIn/Psnid";
+    public static String BUNGIE_XBOX_LOGIN = "https://www.bungie.net/en/User/SignIn/Xuid";
 }

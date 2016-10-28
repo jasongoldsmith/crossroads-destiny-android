@@ -17,8 +17,10 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import co.crossroadsapp.destiny.data.AppVersion;
@@ -44,7 +46,7 @@ import java.util.Observer;
 public class MainActivity extends BaseActivity implements Observer {
 
     //private View register_layout;
-    private TextView signin_layout;
+    private ImageView signin_playstation;
     public UserData userData;
     Intent contentIntent;
     private String p;
@@ -61,6 +63,7 @@ public class MainActivity extends BaseActivity implements Observer {
     private Handler handler;
     private LinearLayoutManager horizontalLayoutManagaer;
     private Serializable invitationRp;
+    private ImageView signin_xbox;
 
     @Override
     protected void onCreate(Bundle outState) {
@@ -109,8 +112,9 @@ public class MainActivity extends BaseActivity implements Observer {
         if (err != null){
             if(!err.isEmpty()) {
                 //Util.clearDefaults(this);
-                launchLogin();
-                finish();
+                //launchLogin();
+                //finish();
+                ;
             } else {
                 forwardAfterVersionCheck();
             }
@@ -231,7 +235,8 @@ public class MainActivity extends BaseActivity implements Observer {
 //            mManager.getPublicEventList(MainActivity.this);
 //        }
         //register_layout = findViewById(R.id.register);
-        signin_layout = (TextView) findViewById(R.id.signin);
+        signin_playstation = (ImageView) findViewById(R.id.playstation);
+        signin_xbox = (ImageView) findViewById(R.id.xbox);
 //            register_layout.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
@@ -246,13 +251,22 @@ public class MainActivity extends BaseActivity implements Observer {
 //                    finish();
 //                }
 //            });
-        signin_layout.setOnClickListener(new View.OnClickListener() {
+        signin_playstation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TravellerLog.w(this, "Launch login page activity");
 
-                launchLogin();
-                finish();
+                launchLogin(Constants.BUNGIE_PSN_LOGIN);
+                //finish();
+            }
+        });
+        signin_xbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TravellerLog.w(this, "Launch login page activity");
+
+                launchLogin(Constants.BUNGIE_XBOX_LOGIN);
+                //finish();
             }
         });
     }
@@ -313,21 +327,51 @@ public class MainActivity extends BaseActivity implements Observer {
     }
 
 
-    private void launchLogin() {
-        Intent signinIntent = new Intent(getApplicationContext(),
-                LoginActivity.class);
-        //signinIntent.putExtra("userdata", userData);
-        if(contentIntent!=null) {
-            signinIntent.putExtra("eventIntent", contentIntent);
+    private void launchLogin(String url) {
+        //webView = new WebView(this);
+        if(webView!=null && url!=null) {
+            webView.removeAllViews();
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setUseWideViewPort(true);
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url){
+                String cookies = CookieManager.getInstance().getCookie(url);
+                String csrf;
+                String[] pair = cookies.split(";");
+                for(int i=0; i<pair.length;i++) {
+                    String temp = pair[i].substring(0, pair[i].indexOf('=')).trim();
+                    if(temp.equalsIgnoreCase("bungled")) {
+                        webView.setVisibility(View.GONE);
+                        csrf = pair[i].substring(pair[i].indexOf('=') + 1, pair[i].length());
+                        Util.setDefaults("csrf", csrf, MainActivity.this);
+                        Util.setDefaults("cookie", cookies, MainActivity.this);
+                        //network call to get current user
+                        mManager.getBungieCurrentUser(csrf, cookies, MainActivity.this);
+                        return;
+                    }
+                }
+            }
+        });
+
+            webView.loadUrl(url);
+            webView.setVisibility(View.VISIBLE);
+//        Intent signinIntent = new Intent(getApplicationContext(),
+//                LoginActivity.class);
+//        //signinIntent.putExtra("userdata", userData);
+//        if(contentIntent!=null) {
+//            signinIntent.putExtra("eventIntent", contentIntent);
+//        }
+//        if(mManager!=null && mManager.getEventListCurrent()!=null) {
+//            mManager.getEventListCurrent().clear();
+//        }
+//        if(invitationRp!=null) {
+//            signinIntent.putExtra("invitation", invitationRp);
+//        }
+//        startActivity(signinIntent);
+//        finish();
         }
-        if(mManager!=null && mManager.getEventListCurrent()!=null) {
-            mManager.getEventListCurrent().clear();
-        }
-        if(invitationRp!=null) {
-            signinIntent.putExtra("invitation", invitationRp);
-        }
-        startActivity(signinIntent);
-        finish();
     }
 
     protected void setTextViewHTML(TextView text, String html)
