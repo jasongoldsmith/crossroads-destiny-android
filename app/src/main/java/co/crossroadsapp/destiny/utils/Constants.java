@@ -114,7 +114,8 @@ public class Constants {
 
     //urls
     public static String DEEP_LINK_IMAGE = "http://w3.crossroadsapp.co/bungie/share/branch/v1/";
-    public static String BUNGIE_ERROR = "BungieError";
+    public static String BUNGIE_ERROR = "BungieLoginError";
+    public static String BUNGIE_CONNECT_ERROR = "BungieConnectError";
     public static String BUNGIE_LEGACY_ERROR = "BungieLegacyConsoleError";
 
     public static String LEGACY_ERROR_TITLE = "Legacy Consoles";

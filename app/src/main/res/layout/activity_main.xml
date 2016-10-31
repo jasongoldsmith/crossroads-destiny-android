@@ -20,36 +20,38 @@
         android:layout_centerHorizontal="true"/>
 
     <LinearLayout android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:id="@+id/signin"
         android:weightSum="2"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true">
 
-        <ImageView
+        <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="180dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:id="@+id/playstation"
-            android:src="@drawable/p_s_n_logo"
-            android:background="#0086d0"
-            android:fontFamily="sans-serif"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            android:gravity="center"/>
-        <ImageView
+            android:background="#0086d0">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/p_s_n_logo"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="180dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:id="@+id/xbox"
-            android:src="@drawable/xbox_live_logo"
-            android:background="@color/user_profile_border_xbox"
-            android:fontFamily="sans-serif"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            android:gravity="center"/>
+            android:background="@color/user_profile_border_xbox">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/xbox_live_logo"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+
     </LinearLayout>
 
     <!--<TextView-->
@@ -107,12 +109,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/signin"
-        android:layout_marginBottom="19dp"
-        android:textColor="@color/copyright_text"
-        android:textSize="12sp"
+        android:layout_marginBottom="11dp"
+        android:textColor="@color/trimbe_white"
+        android:textSize="14sp"
         android:id="@+id/catalyst_text"
         android:layout_centerHorizontal="true"
-        android:text="@string/copyright_string"/>
+        android:text="Sign in with PlayStation or Xbox:"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -123,9 +125,9 @@
         android:layout_above="@+id/catalyst_text"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
         android:textColor="@color/trimbe_white"
         android:textSize="12sp"
         android:text="@string/terms_conditions"/>
@@ -134,6 +136,20 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/web"
+        android:visibility="gone">
+    </WebView>
+
+    <WebView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/web_ps"
+        android:visibility="gone">
+    </WebView>
+
+    <WebView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/web_xbox"
         android:visibility="gone">
     </WebView>
 

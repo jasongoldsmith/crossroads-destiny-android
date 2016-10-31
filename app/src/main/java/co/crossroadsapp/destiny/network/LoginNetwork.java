@@ -4,6 +4,7 @@ import android.content.Context;
 
 import co.crossroadsapp.destiny.ControlManager;
 import co.crossroadsapp.destiny.LoginActivity;
+import co.crossroadsapp.destiny.MainActivity;
 import co.crossroadsapp.destiny.utils.Util;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
@@ -51,7 +52,7 @@ public class LoginNetwork extends Observable {
 //                            Toast.LENGTH_LONG).show();
                     if(errorResponse.has("errorType")) {
                         try {
-                            ((LoginActivity)mContext).showError(Util.getErrorMessage(errorResponse), errorResponse.getString("errorType"));
+                            ((MainActivity)mContext).showError(Util.getErrorMessage(errorResponse), errorResponse.getString("errorType"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

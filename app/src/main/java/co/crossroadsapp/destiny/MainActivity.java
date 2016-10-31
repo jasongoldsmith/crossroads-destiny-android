@@ -21,6 +21,7 @@ import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import co.crossroadsapp.destiny.data.AppVersion;
@@ -46,7 +47,7 @@ import java.util.Observer;
 public class MainActivity extends BaseActivity implements Observer {
 
     //private View register_layout;
-    private ImageView signin_playstation;
+    private RelativeLayout signin_playstation;
     public UserData userData;
     Intent contentIntent;
     private String p;
@@ -63,7 +64,10 @@ public class MainActivity extends BaseActivity implements Observer {
     private Handler handler;
     private LinearLayoutManager horizontalLayoutManagaer;
     private Serializable invitationRp;
-    private ImageView signin_xbox;
+    private RelativeLayout signin_xbox;
+    private String cookies;
+    private WebView webViewPS;
+    private WebView webViewXBOX;
 
     @Override
     protected void onCreate(Bundle outState) {
@@ -73,6 +77,7 @@ public class MainActivity extends BaseActivity implements Observer {
         TravellerLog.w(this, "MainActivity.onCreate starts...");
         u= Util.getDefaults("user", getApplicationContext());
         p = Util.getDefaults("password", getApplicationContext());
+        cookies = Util.getDefaults("cookie", getApplicationContext());
         console = Util.getDefaults("consoleType", getApplicationContext());
 
         Bundle b = getIntent().getExtras();
@@ -81,6 +86,10 @@ public class MainActivity extends BaseActivity implements Observer {
         }
 
         userData = new UserData();
+
+        if(userData!=null && userData.getPsnId()!=null) {
+            u = userData.getPsnId();
+        }
 
         mManager = ControlManager.getmInstance();
         mManager.setCurrentActivity(this);
@@ -108,16 +117,44 @@ public class MainActivity extends BaseActivity implements Observer {
         TravellerLog.w(this, "MainActivity.onCreate ends...");
     }
 
-    public void showError(String err) {
+    public void showError(String err, String errorType) {
         if (err != null){
-            if(!err.isEmpty()) {
-                //Util.clearDefaults(this);
-                //launchLogin();
-                //finish();
-                ;
+            if(errorType!=null && !errorType.isEmpty()) {
+                if(errorType.equalsIgnoreCase(Constants.BUNGIE_ERROR)) {
+                    Intent intent = new Intent(getApplicationContext(),
+                            MissingUser.class);
+                    //intent.putExtra("id", username);
+                    String errT = "We were unable to connect to your Bungie.net account via " + console + ". Please try again.";
+                    intent.putExtra("error", errT);
+                    startActivity(intent);
+                } else if(errorType.equalsIgnoreCase(Constants.BUNGIE_LEGACY_ERROR)) {
+                    showGenericError("LEGACY CONSOLES", "In line with Rise of Iron, we now only support next-gen consoles. When you’ve upgraded your console, please come\n" +
+                            "back and join us!", "OK", Constants.GENERAL_ERROR, null, false);
+                } else if(errorType.equalsIgnoreCase(Constants.BUNGIE_CONNECT_ERROR)) {
+                    // continue with delete
+                    RequestParams rp = new RequestParams();
+                    rp.put("userName", u);
+                    mManager.postLogout(MainActivity.this, rp);
+                }
             } else {
-                forwardAfterVersionCheck();
+                setErrText(err);
             }
+
+
+//            if(!err.isEmpty()) {
+//                Intent intent = new Intent(getApplicationContext(),
+//                        MissingUser.class);
+//                //intent.putExtra("id", username);
+//                String errT = "We were unable to connect to your Bungie.net account via " + console + ". Please try again.";
+//                intent.putExtra("error", errT);
+//                startActivity(intent);
+//            } else {
+//                // continue with delete
+//                RequestParams rp = new RequestParams();
+//                rp.put("userName", u);
+//                mManager.postLogout(MainActivity.this, rp);
+//                //forwardAfterVersionCheck();
+//            }
         }
     }
 
@@ -132,7 +169,8 @@ public class MainActivity extends BaseActivity implements Observer {
     }
 
     private void forwardAfterVersionCheck() {
-        if (u != null && p!= null && console!=null && !u.isEmpty() && !p.isEmpty() && !console.isEmpty()) {
+        //if (u != null && p!= null && console!=null && !u.isEmpty() && !p.isEmpty() && !console.isEmpty()) {
+        if(cookies!=null && !cookies.isEmpty()) {
             //todo check how to minimize api calls to get full event list in future from multiple locations
             TravellerLog.w(this, "Logging user in the background as user data available");
             //check if existing user with version below 1.1.0
@@ -143,31 +181,48 @@ public class MainActivity extends BaseActivity implements Observer {
                 rp.put("userName", u);
                 mManager.postLogout(MainActivity.this, rp);
             } else {
-                mManager.getEventList();
-                if (mManager.getEventListCurrent() != null) {
-                    if (mManager.getEventListCurrent().isEmpty()) {
-                        mManager.getEventList();
+//                mManager.getEventList();
+//                if (mManager.getEventListCurrent() != null) {
+//                    if (mManager.getEventListCurrent().isEmpty()) {
+//                        mManager.getEventList();
+//                    }
+//                } else {
+//                    mManager.getEventList();
+//                }
+//                if (mManager.getCurrentGroupList() != null) {
+//                    if (mManager.getCurrentGroupList().isEmpty()) {
+//                        mManager.getGroupList(null);
+//                    }
+//                } else {
+//                    mManager.getGroupList(null);
+//                }
+//                Util.storeUserData(userData, u, p);
+//                RequestParams params = new RequestParams();
+//                HashMap<String, String> consoles = new HashMap<String, String>();
+//                consoles.put("consoleType", console);
+//                consoles.put("consoleId", u);
+//                params.put("consoles", consoles);
+//                params.put("passWord", p);
+//                mManager.postLogin(MainActivity.this, params, Constants.LOGIN);
+
+                String csrf;
+                String[] pair = cookies.split(";");
+                for(int i=0; i<pair.length;i++) {
+                    String temp = pair[i].substring(0, pair[i].indexOf('=')).trim();
+                    if(temp.equalsIgnoreCase("bungled")) {
+                        csrf = pair[i].substring(pair[i].indexOf('=') + 1, pair[i].length());
+                        Util.setDefaults("csrf", csrf, MainActivity.this);
+                        Util.setDefaults("cookie", cookies, MainActivity.this);
+                        //network call to get current user
+                        mManager.getBungieCurrentUser(csrf, cookies, MainActivity.this);
+                        return;
                     }
-                } else {
-                    mManager.getEventList();
                 }
-                if (mManager.getCurrentGroupList() != null) {
-                    if (mManager.getCurrentGroupList().isEmpty()) {
-                        mManager.getGroupList(null);
-                    }
-                } else {
-                    mManager.getGroupList(null);
-                }
-                Util.storeUserData(userData, u, p);
-                RequestParams params = new RequestParams();
-                HashMap<String, String> consoles = new HashMap<String, String>();
-                consoles.put("consoleType", console);
-                consoles.put("consoleId", u);
-                params.put("consoles", consoles);
-                params.put("passWord", p);
-                mManager.postLogin(MainActivity.this, params, Constants.LOGIN);
             }
         }else {
+            if(cookies==null && p!=null) {
+                showGenericError("CHANGES TO SIGN IN", "Good news! You can now sign in using your Xbox or PlayStation account (the same one you use for Bungie.net)", "OK", Constants.GENERAL_ERROR, null, false);
+            }
             launchMainLayout();
         }
     }
@@ -183,6 +238,11 @@ public class MainActivity extends BaseActivity implements Observer {
         countText = (TextView) findViewById(R.id.player_count);
 
         webView = (WebView) findViewById(R.id.web);
+        webViewPS = (WebView) findViewById(R.id.web_ps);
+        webViewXBOX = (WebView) findViewById(R.id.web_xbox);
+
+        intializeWebViews(webViewPS, Constants.BUNGIE_PSN_LOGIN);
+        intializeWebViews(webViewXBOX, Constants.BUNGIE_XBOX_LOGIN);
 
         setTextViewHTML(privacyTerms, getString(R.string.terms_conditions));
 
@@ -235,8 +295,8 @@ public class MainActivity extends BaseActivity implements Observer {
 //            mManager.getPublicEventList(MainActivity.this);
 //        }
         //register_layout = findViewById(R.id.register);
-        signin_playstation = (ImageView) findViewById(R.id.playstation);
-        signin_xbox = (ImageView) findViewById(R.id.xbox);
+        signin_playstation = (RelativeLayout) findViewById(R.id.playstation);
+        signin_xbox = (RelativeLayout) findViewById(R.id.xbox);
 //            register_layout.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
@@ -256,7 +316,9 @@ public class MainActivity extends BaseActivity implements Observer {
             public void onClick(View v) {
                 TravellerLog.w(this, "Launch login page activity");
 
-                launchLogin(Constants.BUNGIE_PSN_LOGIN);
+                console = Constants.PLAYSTATION;
+
+                launchLogin();
                 //finish();
             }
         });
@@ -264,11 +326,43 @@ public class MainActivity extends BaseActivity implements Observer {
             @Override
             public void onClick(View v) {
                 TravellerLog.w(this, "Launch login page activity");
-
-                launchLogin(Constants.BUNGIE_XBOX_LOGIN);
+                console = Constants.XBOX;
+                launchLogin();
                 //finish();
             }
         });
+    }
+
+    private void intializeWebViews(WebView wb, String url) {
+        if(wb!=null) {
+            wb.removeAllViews();
+            wb.getSettings().setJavaScriptEnabled(true);
+            wb.getSettings().setLoadWithOverviewMode(true);
+            wb.getSettings().setUseWideViewPort(true);
+            wb.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    cookies = CookieManager.getInstance().getCookie(url);
+                    String csrf;
+                    String[] pair = cookies.split(";");
+                    for (int i = 0; i < pair.length; i++) {
+                        String temp = pair[i].substring(0, pair[i].indexOf('=')).trim();
+                        if (temp.equalsIgnoreCase("bungled")) {
+                            showProgressBar();
+//                        webView.setVisibility(View.GONE);
+                            csrf = pair[i].substring(pair[i].indexOf('=') + 1, pair[i].length());
+                            Util.setDefaults("csrf", csrf, MainActivity.this);
+                            Util.setDefaults("cookie", cookies, MainActivity.this);
+                            //network call to get current user
+                            mManager.getBungieCurrentUser(csrf, cookies, MainActivity.this);
+                            return;
+                        }
+                    }
+                }
+            });
+
+            wb.loadUrl(url);
+        }
     }
 
     private void smoothScroll(final int position) {
@@ -327,51 +421,64 @@ public class MainActivity extends BaseActivity implements Observer {
     }
 
 
-    private void launchLogin(String url) {
-        //webView = new WebView(this);
-        if(webView!=null && url!=null) {
-            webView.removeAllViews();
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setLoadWithOverviewMode(true);
-        webView.getSettings().setUseWideViewPort(true);
-        webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageFinished(WebView view, String url){
-                String cookies = CookieManager.getInstance().getCookie(url);
-                String csrf;
-                String[] pair = cookies.split(";");
-                for(int i=0; i<pair.length;i++) {
-                    String temp = pair[i].substring(0, pair[i].indexOf('=')).trim();
-                    if(temp.equalsIgnoreCase("bungled")) {
-                        webView.setVisibility(View.GONE);
-                        csrf = pair[i].substring(pair[i].indexOf('=') + 1, pair[i].length());
-                        Util.setDefaults("csrf", csrf, MainActivity.this);
-                        Util.setDefaults("cookie", cookies, MainActivity.this);
-                        //network call to get current user
-                        mManager.getBungieCurrentUser(csrf, cookies, MainActivity.this);
-                        return;
-                    }
+    private void launchLogin() {
+        if(console!=null){
+            if(console.equalsIgnoreCase(Constants.PLAYSTATION)) {
+                if(webViewPS!=null) {
+                    webViewPS.setVisibility(View.VISIBLE);
+                }
+            } else if(console.equalsIgnoreCase(Constants.XBOX)) {
+                if(webViewXBOX!=null) {
+                    webViewXBOX.setVisibility(View.VISIBLE);
                 }
             }
-        });
-
-            webView.loadUrl(url);
-            webView.setVisibility(View.VISIBLE);
-//        Intent signinIntent = new Intent(getApplicationContext(),
-//                LoginActivity.class);
-//        //signinIntent.putExtra("userdata", userData);
-//        if(contentIntent!=null) {
-//            signinIntent.putExtra("eventIntent", contentIntent);
-//        }
-//        if(mManager!=null && mManager.getEventListCurrent()!=null) {
-//            mManager.getEventListCurrent().clear();
-//        }
-//        if(invitationRp!=null) {
-//            signinIntent.putExtra("invitation", invitationRp);
-//        }
-//        startActivity(signinIntent);
-//        finish();
         }
+
+        //webView = new WebView(this);
+//        if(webView!=null && url!=null) {
+//            webView.removeAllViews();
+//        webView.getSettings().setJavaScriptEnabled(true);
+//        webView.getSettings().setLoadWithOverviewMode(true);
+//        webView.getSettings().setUseWideViewPort(true);
+//        webView.setWebViewClient(new WebViewClient() {
+//            @Override
+//            public void onPageFinished(WebView view, String url){
+//                cookies = CookieManager.getInstance().getCookie(url);
+//                String csrf;
+//                String[] pair = cookies.split(";");
+//                for(int i=0; i<pair.length;i++) {
+//                    String temp = pair[i].substring(0, pair[i].indexOf('=')).trim();
+//                    if(temp.equalsIgnoreCase("bungled")) {
+//                        showProgressBar();
+////                        webView.setVisibility(View.GONE);
+//                        csrf = pair[i].substring(pair[i].indexOf('=') + 1, pair[i].length());
+//                        Util.setDefaults("csrf", csrf, MainActivity.this);
+//                        Util.setDefaults("cookie", cookies, MainActivity.this);
+//                        //network call to get current user
+//                        mManager.getBungieCurrentUser(csrf, cookies, MainActivity.this);
+//                        return;
+//                    }
+//                }
+//            }
+//        });
+//
+//            webView.loadUrl(url);
+//            webView.setVisibility(View.VISIBLE);
+////        Intent signinIntent = new Intent(getApplicationContext(),
+////                LoginActivity.class);
+////        //signinIntent.putExtra("userdata", userData);
+////        if(contentIntent!=null) {
+////            signinIntent.putExtra("eventIntent", contentIntent);
+////        }
+////        if(mManager!=null && mManager.getEventListCurrent()!=null) {
+////            mManager.getEventListCurrent().clear();
+////        }
+////        if(invitationRp!=null) {
+////            signinIntent.putExtra("invitation", invitationRp);
+////        }
+////        startActivity(signinIntent);
+////        finish();
+//        }
     }
 
     protected void setTextViewHTML(TextView text, String html)
@@ -394,9 +501,9 @@ public class MainActivity extends BaseActivity implements Observer {
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
                 // Do something with span.getURL() to handle the link click...
-                webView.setVisibility(View.VISIBLE);
                 webView.setWebViewClient(new WebViewClient());
                 webView.loadUrl(span.getURL());
+                webView.setVisibility(View.VISIBLE);
             }
         };
         strBuilder.setSpan(clickable, start, end, flags);
@@ -450,6 +557,10 @@ public class MainActivity extends BaseActivity implements Observer {
     public void onBackPressed() {
         if(webView!=null && webView.getVisibility()==View.VISIBLE) {
             webView.setVisibility(View.GONE);
+        } else if(webViewPS!=null && webViewPS.getVisibility()==View.VISIBLE) {
+            webViewPS.setVisibility(View.GONE);
+        } else if (webViewXBOX!=null && webViewXBOX.getVisibility()==View.VISIBLE){
+            webViewXBOX.setVisibility(View.GONE);
         } else {
             super.onBackPressed();
             finish();

@@ -18,6 +18,7 @@ import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -234,6 +235,9 @@ public class Util {
         editor.remove("password");
         editor.remove("csrf");
         editor.remove("cookie");
+        CookieManager.getInstance().removeAllCookie();
+//        CookieManager.getInstance().setCookie("https://www.bungie.net/", " ");
+//        CookieManager.getInstance().setCookie("https://www.bungie.net/", " ");
         //editor.clear();
         editor.commit();
     }

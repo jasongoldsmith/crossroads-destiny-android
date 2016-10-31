@@ -123,7 +123,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     protected ImageView appIcon;
 
     private GroupDrawerAdapter gpAct;
-    private TextView changePassword;
+    private TextView inviteFrnds;
     private ValueEventListener userListener;
     private Firebase refUFirebase;
     private ImageView grpIcon;
@@ -372,7 +372,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             }
         });
 
-        changePassword = (TextView) findViewById(R.id.reset);
+        inviteFrnds = (TextView) findViewById(R.id.invite);
         imgConsole = (ImageView) findViewById(R.id.console_icon);
         down_arw_img = (ImageView) findViewById(R.id.down_arw_img);
         consoleText = (TextView) findViewById(R.id.consoletype_text);
@@ -417,13 +417,15 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 //        dropdown.setAdapter(adapterConsole);
 //        adapterConsole.notifyDataSetChanged();
 
-        changePassword.setOnClickListener(new View.OnClickListener() {
+        inviteFrnds.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                BranchLinkGeneration bl = new BranchLinkGeneration();
+                bl.branchGenerate(ListActivityFragment.this, "", "I'm on Crossroads for Destiny, Fireteam Finder. Install the app to join me and help fight The Darkness! ", null, null,null);
                 // go to create new event page
-                Intent regIntent = new Intent(getApplicationContext(),
-                        ChangePassword.class);
-                startActivity(regIntent);
+//                Intent regIntent = new Intent(getApplicationContext(),
+//                        ChangePassword.class);
+//                startActivity(regIntent);
             }
         });
         crash_report = (TextView) findViewById(R.id.crash_btn);

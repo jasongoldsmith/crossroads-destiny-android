@@ -529,7 +529,7 @@ public class ControlManager implements Observer{
                 } else if (mCurrentAct instanceof ChangePassword) {
                     ((ChangePassword) mCurrentAct).showError(err);
                 } else if (mCurrentAct instanceof MainActivity) {
-                    ((MainActivity) mCurrentAct).showError(err);
+                    ((MainActivity) mCurrentAct).showError(err, null);
                 } else if (mCurrentAct instanceof UpdateConsoleActivity) {
                     ((UpdateConsoleActivity) mCurrentAct).showError(err);
                 } else if (mCurrentAct instanceof AddFinalActivity) {
@@ -692,21 +692,9 @@ public class ControlManager implements Observer{
                 try {
                     String platform = getCurrentPlatform();
                     if(platform!=null) {
-//                        HashMap m = new HashMap();
-//                        m.put("response", data);
                         try {
-
-//                            ObjectMapper mapper = new ObjectMapper();
-//                            String json = data.toString();
-//
-//                            Map<String, Object> map = new HashMap<String, Object>();
-//
-//                            // convert JSON string to Map
-//                            map = mapper.readValue(json, new TypeReference<Map<String, String>>(){});
-
                             HashMap<String,Object> map =
                                     new ObjectMapper().readValue(data.toString(), HashMap.class);
-
                             RequestParams rp = new RequestParams();
                             rp.put("bungieResponse", map);
                             rp.put("consoleType", platform);
@@ -715,8 +703,6 @@ public class ControlManager implements Observer{
                             loginNetwork.addObserver(this);
                             loginNetwork.addObserver(((MainActivity)mCurrentAct));
                             loginNetwork.doSignup(rp);
-
-
                         } catch (JsonGenerationException e) {
                             e.printStackTrace();
                         } catch (JsonMappingException e) {
@@ -923,16 +909,16 @@ public class ControlManager implements Observer{
     }
 
     public AsyncHttpClient getBungieClient(String csrf, String cookies) {
-            client = new AsyncHttpClient();
-            client.setTimeout(30000);
+            AsyncHttpClient clientT = new AsyncHttpClient();
+            clientT.setTimeout(30000);
             if(csrf!=null) {
-                client.addHeader("x-csrf", csrf);
+                clientT.addHeader("x-csrf", csrf);
             }
             if(cookies!=null) {
-                client.addHeader("Cookie", cookies);
+                clientT.addHeader("Cookie", cookies);
             }
-            client.addHeader("x-api-key", "f091c8d36c3c4a17b559c21cd489bec0");
-        return client;
+            clientT.addHeader("x-api-key", "f091c8d36c3c4a17b559c21cd489bec0");
+        return clientT;
     }
 
     public void setClient(Context c) {
