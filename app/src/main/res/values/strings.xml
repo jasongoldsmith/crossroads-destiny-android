@@ -150,4 +150,5 @@
     <string name="full_invitee">The maximum number of players for your Fireteam has been reached. Each invited player will have a reserved spot on your Fireteam.</string>
     <string name="incomplete_invite">Inviting players will send them a message on Bungie.net.</string>
     <string name="invite_frnd">Invite Friends</string>
+    <string name="legacy_error">In line with Rise of Iron, we now only support next-gen consoles. When you’ve upgraded your console, please come back and join us!</string>
 </resources>
