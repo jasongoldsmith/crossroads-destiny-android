@@ -420,12 +420,13 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         inviteFrnds.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BranchLinkGeneration bl = new BranchLinkGeneration();
-                bl.branchGenerate(ListActivityFragment.this, "", "I'm on Crossroads for Destiny, Fireteam Finder. Install the app to join me and help fight The Darkness! ", null, null,null);
-                // go to create new event page
-//                Intent regIntent = new Intent(getApplicationContext(),
-//                        ChangePassword.class);
-//                startActivity(regIntent);
+                String url = "https://crossrd.app.link/share";
+                final Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                if(url!=null) {
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, url);
+                    startActivity(Intent.createChooser(sharingIntent, "Share"));
+                }
             }
         });
         crash_report = (TextView) findViewById(R.id.crash_btn);
@@ -1455,6 +1456,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                     //mManager.getEventList(ListActivityFragment.this);
                 }
             } else if(observable instanceof GroupListNetwork) {
+                hideProgress();
                 if (data != null) {
                     if (data instanceof UserData) {
                         unregisterFirebase();

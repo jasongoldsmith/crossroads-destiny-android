@@ -127,11 +127,13 @@ public class Constants {
     public static int REPORT_COMMENT = 2;
     public static int REPORT_COMMENT_NEXT = 3;
 
+    public static String CONFIG_TOKEN = "780bc576-9d37-40f6-a922-befe877b2c56";
+
     //api url
     public static String REPORT_COMMENT_URL = "api/v1/a/event/reportComment";
 
     //getCurrentUser bungie
-    public static String BUGIE_CURRENT_USER = "https://www.bungie.net/Platform/User/GetBungieNetUser";
+    public static String BUGIE_CURRENT_USER = "https://www.bungie.net/Platform/User/GetCurrentBungieAccount";
 
     public static String BUNGIE_PSN_LOGIN = "https://www.bungie.net/en/User/SignIn/Psnid";
     public static String BUNGIE_XBOX_LOGIN = "https://www.bungie.net/en/User/SignIn/Xuid";

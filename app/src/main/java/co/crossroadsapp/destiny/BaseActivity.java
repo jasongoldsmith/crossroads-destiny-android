@@ -620,6 +620,23 @@ public class BaseActivity extends FragmentActivity {
         }
     }
 
+    protected void showBungieProgressBar() {
+        if(progress == null) {
+            progress = (RelativeLayout) findViewById(R.id.progress_base_layout);
+        }
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            progress.setBackgroundDrawable( getResources().getDrawable(R.drawable.bungie_error_background) );
+        } else {
+            progress.setBackground( getResources().getDrawable(R.drawable.bungie_error_background));
+        }
+
+        if(progress!=null) {
+            hideProgressBar();
+            progress.setVisibility(View.VISIBLE);
+        }
+    }
+
     protected void hideProgressBar() {
         if(progress!=null) {
             progress.setVisibility(View.GONE);

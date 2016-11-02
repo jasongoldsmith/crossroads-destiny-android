@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import co.crossroadsapp.destiny.data.AppVersion;
 import co.crossroadsapp.destiny.data.EventData;
+import co.crossroadsapp.destiny.network.ConfigNetwork;
 import co.crossroadsapp.destiny.network.EventListNetwork;
 import co.crossroadsapp.destiny.network.GetVersion;
 import co.crossroadsapp.destiny.network.LoginNetwork;
@@ -36,6 +37,8 @@ import co.crossroadsapp.destiny.utils.Version;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
 import com.loopj.android.http.RequestParams;
+
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -68,6 +71,8 @@ public class MainActivity extends BaseActivity implements Observer {
     private String cookies;
     private WebView webViewPS;
     private WebView webViewXBOX;
+    private RelativeLayout topBar;
+    private ImageView topBarBack;
 
     @Override
     protected void onCreate(Bundle outState) {
@@ -94,6 +99,8 @@ public class MainActivity extends BaseActivity implements Observer {
         mManager = ControlManager.getmInstance();
         mManager.setCurrentActivity(this);
 
+        userData = mManager.getUserData();
+
         // getting contentIntent from push notification click
         if (this.getIntent().hasExtra(Constants.TRAVELER_NOTIFICATION_INTENT)) {
             //tracking OS pushnotification initiation
@@ -113,11 +120,13 @@ public class MainActivity extends BaseActivity implements Observer {
 
         //check android version for dev builds
         mManager.getAndroidVersion(this);
-        forwardAfterVersionCheck();
+        mManager.getConfig(MainActivity.this);
         TravellerLog.w(this, "MainActivity.onCreate ends...");
     }
 
     public void showError(String err, String errorType) {
+        hideWebviews();
+        hideProgressBar();
         if (err != null){
             if(errorType!=null && !errorType.isEmpty()) {
                 if(errorType.equalsIgnoreCase(Constants.BUNGIE_ERROR)) {
@@ -128,6 +137,8 @@ public class MainActivity extends BaseActivity implements Observer {
                     intent.putExtra("error", errT);
                     startActivity(intent);
                 } else if(errorType.equalsIgnoreCase(Constants.BUNGIE_LEGACY_ERROR)) {
+                    // continue with delete
+                    Util.clearDefaults(getApplicationContext());
                     showGenericError("LEGACY CONSOLES", "In line with Rise of Iron, we now only support next-gen consoles. When you’ve upgraded your console, please come\n" +
                             "back and join us!", "OK", Constants.GENERAL_ERROR, null, false);
                 } else if(errorType.equalsIgnoreCase(Constants.BUNGIE_CONNECT_ERROR)) {
@@ -138,6 +149,7 @@ public class MainActivity extends BaseActivity implements Observer {
                 }
             } else {
                 setErrText(err);
+                //hideWebviews();
             }
 
 
@@ -155,7 +167,25 @@ public class MainActivity extends BaseActivity implements Observer {
 //                mManager.postLogout(MainActivity.this, rp);
 //                //forwardAfterVersionCheck();
 //            }
+        } else {
+            setErrText(getString(R.string.server_error_tryagain));
         }
+    }
+
+    private boolean hideWebviews() {
+        if(webView!=null && webView.getVisibility()==View.VISIBLE) {
+            webView.setVisibility(View.GONE);
+            return false;
+        } else if(webViewPS!=null && webViewPS.getVisibility()==View.VISIBLE && topBar!=null) {
+            webViewPS.setVisibility(View.GONE);
+            topBar.setVisibility(View.GONE);
+            return false;
+        } else if (webViewXBOX!=null && webViewXBOX.getVisibility()==View.VISIBLE && topBar!=null){
+            webViewXBOX.setVisibility(View.GONE);
+            topBar.setVisibility(View.GONE);
+            return false;
+        }
+        return true;
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -175,12 +205,12 @@ public class MainActivity extends BaseActivity implements Observer {
             TravellerLog.w(this, "Logging user in the background as user data available");
             //check if existing user with version below 1.1.0
             String newUser = Util.getDefaults("showUnverifiedMsg", getApplicationContext());
-            if(newUser==null) {
-                // continue with delete
-                RequestParams rp = new RequestParams();
-                rp.put("userName", u);
-                mManager.postLogout(MainActivity.this, rp);
-            } else {
+//            if(newUser==null) {
+//                // continue with delete
+//                RequestParams rp = new RequestParams();
+//                rp.put("userName", u);
+//                mManager.postLogout(MainActivity.this, rp);
+//            } else {
 //                mManager.getEventList();
 //                if (mManager.getEventListCurrent() != null) {
 //                    if (mManager.getEventListCurrent().isEmpty()) {
@@ -204,25 +234,33 @@ public class MainActivity extends BaseActivity implements Observer {
 //                params.put("consoles", consoles);
 //                params.put("passWord", p);
 //                mManager.postLogin(MainActivity.this, params, Constants.LOGIN);
+            //let user move on to app
+            Intent regIntent;
 
-                String csrf;
-                String[] pair = cookies.split(";");
-                for(int i=0; i<pair.length;i++) {
-                    String temp = pair[i].substring(0, pair[i].indexOf('=')).trim();
-                    if(temp.equalsIgnoreCase("bungled")) {
-                        csrf = pair[i].substring(pair[i].indexOf('=') + 1, pair[i].length());
-                        Util.setDefaults("csrf", csrf, MainActivity.this);
-                        Util.setDefaults("cookie", cookies, MainActivity.this);
-                        //network call to get current user
-                        mManager.getBungieCurrentUser(csrf, cookies, MainActivity.this);
-                        return;
-                    }
-                }
-            }
+            //decide for activity
+            regIntent = mManager.decideToOpenActivity(contentIntent);
+            startActivity(regIntent);
+            finish();
+
+//                String csrf;
+//                String[] pair = cookies.split(";");
+//                for(int i=0; i<pair.length;i++) {
+//                    String temp = pair[i].substring(0, pair[i].indexOf('=')).trim();
+//                    if(temp.equalsIgnoreCase("bungled")) {
+//                        csrf = pair[i].substring(pair[i].indexOf('=') + 1, pair[i].length());
+//                        Util.setDefaults("csrf", csrf, MainActivity.this);
+//                        Util.setDefaults("cookie", cookies, MainActivity.this);
+//                        //network call to get current user
+//                        mManager.getBungieCurrentUser(csrf, cookies, MainActivity.this);
+//                        return;
+//                    }
+//                }
+//            }
         }else {
             if(cookies==null && p!=null) {
                 showGenericError("CHANGES TO SIGN IN", "Good news! You can now sign in using your Xbox or PlayStation account (the same one you use for Bungie.net)", "OK", Constants.GENERAL_ERROR, null, false);
             }
+            Util.clearDefaults(getApplicationContext());
             launchMainLayout();
         }
     }
@@ -241,10 +279,20 @@ public class MainActivity extends BaseActivity implements Observer {
         webViewPS = (WebView) findViewById(R.id.web_ps);
         webViewXBOX = (WebView) findViewById(R.id.web_xbox);
 
-        intializeWebViews(webViewPS, Constants.BUNGIE_PSN_LOGIN);
-        intializeWebViews(webViewXBOX, Constants.BUNGIE_XBOX_LOGIN);
+        intializeLoginWebViews();
 
         setTextViewHTML(privacyTerms, getString(R.string.terms_conditions));
+
+        topBar = (RelativeLayout) findViewById(R.id.top_header);
+        topBarBack = (ImageView) findViewById(R.id.main_backbtn);
+
+        topBarBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+                intializeLoginWebViews();
+            }
+        });
 
         horizontal_recycler_view = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
         horizontalList=new ArrayList<EventData>();
@@ -315,9 +363,7 @@ public class MainActivity extends BaseActivity implements Observer {
             @Override
             public void onClick(View v) {
                 TravellerLog.w(this, "Launch login page activity");
-
                 console = Constants.PLAYSTATION;
-
                 launchLogin();
                 //finish();
             }
@@ -331,6 +377,11 @@ public class MainActivity extends BaseActivity implements Observer {
                 //finish();
             }
         });
+    }
+
+    private void intializeLoginWebViews() {
+        intializeWebViews(webViewPS, mManager.getPSNLoginUrl()!=null?mManager.getPSNLoginUrl():Constants.BUNGIE_PSN_LOGIN);
+        intializeWebViews(webViewXBOX, mManager.getXboxLoginUrl()!=null?mManager.getXboxLoginUrl():Constants.BUNGIE_XBOX_LOGIN);
     }
 
     private void intializeWebViews(WebView wb, String url) {
@@ -348,7 +399,7 @@ public class MainActivity extends BaseActivity implements Observer {
                     for (int i = 0; i < pair.length; i++) {
                         String temp = pair[i].substring(0, pair[i].indexOf('=')).trim();
                         if (temp.equalsIgnoreCase("bungled")) {
-                            showProgressBar();
+                            showBungieProgressBar();
 //                        webView.setVisibility(View.GONE);
                             csrf = pair[i].substring(pair[i].indexOf('=') + 1, pair[i].length());
                             Util.setDefaults("csrf", csrf, MainActivity.this);
@@ -360,13 +411,13 @@ public class MainActivity extends BaseActivity implements Observer {
                     }
                 }
             });
-
-            wb.loadUrl(url);
+            if(url!=null) {
+                wb.loadUrl(url);
+            }
         }
     }
 
     private void smoothScroll(final int position) {
-
         horizontal_recycler_view.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -425,10 +476,12 @@ public class MainActivity extends BaseActivity implements Observer {
         if(console!=null){
             if(console.equalsIgnoreCase(Constants.PLAYSTATION)) {
                 if(webViewPS!=null) {
+                    topBar.setVisibility(View.VISIBLE);
                     webViewPS.setVisibility(View.VISIBLE);
                 }
             } else if(console.equalsIgnoreCase(Constants.XBOX)) {
                 if(webViewXBOX!=null) {
+                    topBar.setVisibility(View.VISIBLE);
                     webViewXBOX.setVisibility(View.VISIBLE);
                 }
             }
@@ -535,6 +588,8 @@ public class MainActivity extends BaseActivity implements Observer {
         stopSpinner();
         TravellerLog.w(this, "Unregistering ReceivefromBackpressService ");
         unregisterReceiver(ReceivefromBackpressService);
+        hideProgressBar();
+        hideWebviews();
         super.onStop();
     }
 
@@ -555,13 +610,7 @@ public class MainActivity extends BaseActivity implements Observer {
 
     @Override
     public void onBackPressed() {
-        if(webView!=null && webView.getVisibility()==View.VISIBLE) {
-            webView.setVisibility(View.GONE);
-        } else if(webViewPS!=null && webViewPS.getVisibility()==View.VISIBLE) {
-            webViewPS.setVisibility(View.GONE);
-        } else if (webViewXBOX!=null && webViewXBOX.getVisibility()==View.VISIBLE){
-            webViewXBOX.setVisibility(View.GONE);
-        } else {
+        if(hideWebviews()) {
             super.onBackPressed();
             finish();
         }
@@ -592,7 +641,13 @@ public class MainActivity extends BaseActivity implements Observer {
                     Intent regIntent;
 
                     //decide for activity
-                    regIntent = mManager.decideToOpenActivity(contentIntent);
+                    //regIntent = mManager.decideToOpenActivity(contentIntent);
+
+                        regIntent = new Intent(getApplicationContext(),
+                                ListActivityFragment.class);
+                        if (contentIntent != null ) {
+                            regIntent.putExtra("eventIntent", contentIntent);
+                        }
 
 //                if (contentIntent != null) {
 //                    regIntent = new Intent(getApplicationContext(),
@@ -625,6 +680,13 @@ public class MainActivity extends BaseActivity implements Observer {
                 horizontalAdapter.addItem(mManager.getEventListCurrent(), null);
                 horizontalAdapter.notifyDataSetChanged();
                 startSpinner();
+            }
+        } else if(observable instanceof ConfigNetwork) {
+            if(data!=null) {
+                if(mManager!=null) {
+                    mManager.parseAndSaveConfigUrls((JSONObject) data);
+                }
+                forwardAfterVersionCheck();
             }
         }
     }

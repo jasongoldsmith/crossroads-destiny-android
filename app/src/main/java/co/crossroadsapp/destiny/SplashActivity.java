@@ -90,6 +90,10 @@ public class SplashActivity extends BaseActivity implements Observer {
             mLayout.startAnimation(anim);
         }
 
+        intializeTrackingandForward();
+    }
+
+    private void intializeTrackingandForward() {
         //Starting service for listening ad callbacks
         String s = Util.getDefaults("appInstall", SplashActivity.this);
         if (s==null) {

@@ -31,6 +31,7 @@ import co.crossroadsapp.destiny.network.AddCommentNetwork;
 import co.crossroadsapp.destiny.network.AddNewConsoleNetwork;
 import co.crossroadsapp.destiny.network.BungieUserNetwork;
 import co.crossroadsapp.destiny.network.ChangeCurrentConsoleNetwork;
+import co.crossroadsapp.destiny.network.ConfigNetwork;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
 import co.crossroadsapp.destiny.network.EventListNetwork;
 import co.crossroadsapp.destiny.network.EventRelationshipHandlerNetwork;
@@ -129,6 +130,10 @@ public class ControlManager implements Observer{
     private ReportCommentNetwork reportCommentNetwork;
     private InvitePlayerNetwork invitePlayersNetwork;
     private BungieUserNetwork bugieGetUser;
+    private ConfigNetwork getConfigNetwork;
+    private String bungieCurrentUserUrl;
+    private String psnURL;
+    private String xboxURL;
 
     public ControlManager() {
     }
@@ -927,6 +932,7 @@ public class ControlManager implements Observer{
         ConnectivityManager connManager = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         DisplayMetrics metrics = c.getResources().getDisplayMetrics();
+        client.addHeader("config_token", Constants.CONFIG_TOKEN);
         client.addHeader("$wifi", String.valueOf(mWifi.isConnected()));
         client.addHeader("$screen_dpi", String.valueOf(metrics.densityDpi));
         client.addHeader("$screen_height", String.valueOf(metrics.heightPixels));
@@ -1050,5 +1056,62 @@ public class ControlManager implements Observer{
             }
         }
         return null;
+    }
+
+    public void getConfig(MainActivity c) {
+        try {
+        getConfigNetwork = new ConfigNetwork(c);
+        getConfigNetwork.addObserver(c);
+        getConfigNetwork.getConfig();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getBungieCurrentUserUrl() {
+        if (bungieCurrentUserUrl!=null && !bungieCurrentUserUrl.isEmpty()) {
+            return bungieCurrentUserUrl;
+        }
+        return Util.getDefaults("playerDetailsURL", mCurrentAct);
+    }
+
+    protected String getPSNLoginUrl() {
+        if (psnURL!=null && !psnURL.isEmpty()) {
+            return psnURL;
+        }
+        return Util.getDefaults("psnLoginURL", mCurrentAct);
+    }
+
+    protected String getXboxLoginUrl() {
+        if (xboxURL!=null && !xboxURL.isEmpty()) {
+            return xboxURL;
+        }
+        return Util.getDefaults("xboxLoginURL", mCurrentAct);
+    }
+
+    public void parseAndSaveConfigUrls(JSONObject data) {
+        try {
+            if(data.has("playerDetailsURL") && !data.isNull("playerDetailsURL")) {
+                if(!data.getString("playerDetailsURL").isEmpty()) {
+                    bungieCurrentUserUrl = data.getString("playerDetailsURL");
+                    Util.setDefaults("playerDetailsURL", bungieCurrentUserUrl, mCurrentAct);
+                }
+            }
+            if(data.has("psnLoginURL") && !data.isNull("psnLoginURL")) {
+                if(!data.getString("psnLoginURL").isEmpty()) {
+                    psnURL = data.getString("psnLoginURL");
+                    Util.setDefaults("psnLoginURL", psnURL, mCurrentAct);
+                }
+            }
+            if(data.has("xboxLoginURL") && !data.isNull("xboxLoginURL")) {
+                if(!data.getString("xboxLoginURL").isEmpty()) {
+                    xboxURL = data.getString("xboxLoginURL");
+                    Util.setDefaults("xboxLoginURL", xboxURL, mCurrentAct);
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

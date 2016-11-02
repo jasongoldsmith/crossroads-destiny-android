@@ -84,9 +84,9 @@ public class NetworkEngine {
     }
 
     public void updateBugnieBaseUrlAndHeader(String csrf, String cookies) {
-        BASE_URL = Constants.BUGIE_CURRENT_USER;
         if(mManager!=null){
             client = mManager.getBungieClient(csrf, cookies);
+            BASE_URL = mManager.getBungieCurrentUserUrl()!=null?mManager.getBungieCurrentUserUrl():Constants.BUGIE_CURRENT_USER;
         }
     }
 

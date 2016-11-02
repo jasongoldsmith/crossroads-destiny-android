@@ -307,24 +307,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:layout_below="@+id/multi_console_layout"
-            android:id="@+id/invite"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:background="@color/logout_btn_background"
-            android:text="@string/invite_frnd"
-            android:textSize="14sp"
-            android:textColor="@android:color/white"
-            android:layout_marginRight="37dp"
-            android:layout_marginLeft="37dp"
-            android:gravity="center"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
             android:id="@+id/crash_btn"
-            android:layout_below="@+id/invite"
-            android:layout_marginTop="10dp"
+            android:layout_below="@+id/multi_console_layout"
+            android:layout_marginTop="20dp"
             android:layout_centerHorizontal="true"
             android:text="@string/report_crash"
             android:textSize="14sp"
@@ -337,8 +322,23 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:id="@+id/logout_btn"
             android:layout_below="@+id/crash_btn"
+            android:id="@+id/invite"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@color/logout_btn_background"
+            android:text="@string/invite_frnd"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:layout_marginRight="37dp"
+            android:layout_marginLeft="37dp"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:id="@+id/logout_btn"
+            android:layout_below="@+id/invite"
             android:background="@color/logout_btn_background"
             android:text="@string/logout"
             android:textSize="14sp"

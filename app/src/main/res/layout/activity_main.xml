@@ -124,7 +124,7 @@
         android:textColorLink="@color/app_theme_color"
         android:layout_above="@+id/catalyst_text"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="6dp"
         android:layout_marginBottom="20dp"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
@@ -139,9 +139,34 @@
         android:visibility="gone">
     </WebView>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#1c2b33"
+        android:id="@+id/top_header"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="39dp"
+            android:text="CROSSROADS"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/trimbe_white"
+            android:textSize="16dp"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/main_backbtn"
+            android:src="@drawable/icon_back_arrow"
+            android:paddingTop="34dp"
+            android:paddingRight="10dp"
+            android:layout_alignParentLeft="true"/>
+    </RelativeLayout>
+
     <WebView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_below="@+id/top_header"
         android:id="@+id/web_ps"
         android:visibility="gone">
     </WebView>
@@ -149,6 +174,7 @@
     <WebView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_below="@+id/top_header"
         android:id="@+id/web_xbox"
         android:visibility="gone">
     </WebView>
