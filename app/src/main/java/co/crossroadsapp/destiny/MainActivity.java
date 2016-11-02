@@ -173,8 +173,9 @@ public class MainActivity extends BaseActivity implements Observer {
     }
 
     private boolean hideWebviews() {
-        if(webView!=null && webView.getVisibility()==View.VISIBLE) {
+        if(webView!=null && webView.getVisibility()==View.VISIBLE && topBar!=null) {
             webView.setVisibility(View.GONE);
+            topBar.setVisibility(View.GONE);
             return false;
         } else if(webViewPS!=null && webViewPS.getVisibility()==View.VISIBLE && topBar!=null) {
             webViewPS.setVisibility(View.GONE);
@@ -564,6 +565,7 @@ public class MainActivity extends BaseActivity implements Observer {
                 // Do something with span.getURL() to handle the link click...
                 webView.setWebViewClient(new WebViewClient());
                 webView.loadUrl(span.getURL());
+                topBar.setVisibility(View.VISIBLE);
                 webView.setVisibility(View.VISIBLE);
             }
         };
