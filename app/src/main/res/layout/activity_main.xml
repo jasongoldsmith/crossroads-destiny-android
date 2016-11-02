@@ -122,22 +122,14 @@
         android:gravity="center"
         android:id="@+id/privacy_terms"
         android:textColorLink="@color/app_theme_color"
-        android:layout_above="@+id/catalyst_text"
+        android:layout_below="@+id/horizontal_recycler_view"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="6dp"
-        android:layout_marginBottom="20dp"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
         android:textColor="@color/trimbe_white"
         android:textSize="12sp"
         android:text="@string/terms_conditions"/>
-
-    <WebView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/web"
-        android:visibility="gone">
-    </WebView>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -168,6 +160,14 @@
         android:layout_height="fill_parent"
         android:layout_below="@+id/top_header"
         android:id="@+id/web_ps"
+        android:visibility="gone">
+    </WebView>
+
+    <WebView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/top_header"
+        android:id="@+id/web"
         android:visibility="gone">
     </WebView>
 

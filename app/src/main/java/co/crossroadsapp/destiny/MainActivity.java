@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -179,10 +180,12 @@ public class MainActivity extends BaseActivity implements Observer {
         } else if(webViewPS!=null && webViewPS.getVisibility()==View.VISIBLE && topBar!=null) {
             webViewPS.setVisibility(View.GONE);
             topBar.setVisibility(View.GONE);
+            intializeLoginWebViews();
             return false;
         } else if (webViewXBOX!=null && webViewXBOX.getVisibility()==View.VISIBLE && topBar!=null){
             webViewXBOX.setVisibility(View.GONE);
             topBar.setVisibility(View.GONE);
+            intializeLoginWebViews();
             return false;
         }
         return true;
@@ -290,7 +293,7 @@ public class MainActivity extends BaseActivity implements Observer {
             @Override
             public void onClick(View v) {
                 onBackPressed();
-                intializeLoginWebViews();
+//                intializeLoginWebViews();
             }
         });
 
@@ -392,6 +395,13 @@ public class MainActivity extends BaseActivity implements Observer {
             wb.getSettings().setUseWideViewPort(true);
             wb.setWebViewClient(new WebViewClient() {
                 @Override
+                public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                    if(url.equalsIgnoreCase("https://www.bungie.net/")){
+                        showBungieProgressBar();
+                        //hideWebviews();
+                    }
+                }
+                @Override
                 public void onPageFinished(WebView view, String url) {
                     cookies = CookieManager.getInstance().getCookie(url);
                     String csrf;
@@ -399,7 +409,6 @@ public class MainActivity extends BaseActivity implements Observer {
                     for (int i = 0; i < pair.length; i++) {
                         String temp = pair[i].substring(0, pair[i].indexOf('=')).trim();
                         if (temp.equalsIgnoreCase("bungled")) {
-                            showBungieProgressBar();
 //                        webView.setVisibility(View.GONE);
                             csrf = pair[i].substring(pair[i].indexOf('=') + 1, pair[i].length());
                             Util.setDefaults("csrf", csrf, MainActivity.this);

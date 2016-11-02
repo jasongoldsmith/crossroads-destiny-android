@@ -286,13 +286,14 @@ public class EventDetailsFragments extends Fragment {
                 holder.playerProfile.setImageResource(R.drawable.img_profile_blank);
                 if(position==playerLocal.size()) {
                     if (checkUserIsPlayer()) {
-                        holder.inviteIcon.setVisibility(View.VISIBLE);
-                        holder.inviteIcon.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ((EventDetailActivity) getActivity()).showAnimatedInviteView();
-                            }
-                        });
+                        //todo hiding invite icon for web login and will enable with invite flow implementation
+//                        holder.inviteIcon.setVisibility(View.VISIBLE);
+//                        holder.inviteIcon.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                ((EventDetailActivity) getActivity()).showAnimatedInviteView();
+//                            }
+//                        });
                     }
                 }
             } else {
