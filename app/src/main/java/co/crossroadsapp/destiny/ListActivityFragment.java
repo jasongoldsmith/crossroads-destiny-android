@@ -1473,9 +1473,12 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                         setGroupImageUrl();
                     } else {
                         //setGroupImageUrl();
-                        if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+                        if(gpAct!=null) {
                             gpAct.update(data);
                         }
+//                        if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+//                            gpAct.update(data);
+//                        }
                     }
                 }
             } else if(observable instanceof ResendBungieVerification) {
