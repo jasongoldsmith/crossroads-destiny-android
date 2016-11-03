@@ -1034,9 +1034,9 @@ public class ControlManager implements Observer{
         }
     }
 
-    public void getBungieCurrentUser(String csrf, String cookies, MainActivity act) {
+    public void getBungieCurrentUser(String csrf, String cookies, Context applicationContext) {
         try {
-            bugieGetUser = new BungieUserNetwork(csrf, cookies, act);
+            bugieGetUser = new BungieUserNetwork(csrf, cookies, applicationContext);
             bugieGetUser.addObserver(this);
             bugieGetUser.getBungieCurrentUser();
         } catch (JSONException e) {

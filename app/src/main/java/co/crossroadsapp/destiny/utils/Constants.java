@@ -35,6 +35,7 @@ public class Constants {
     public static final String NONE = "(none)";
     public static final String PLAYSTATION = "PlayStation";
     public static final String XBOX = "Xbox";
+    public static final String COOKIE_VALID_KEY = "isCookieValid";
 
 
     public static String NOTIFICATION_INTENT_CHANNEL = "com.example.sharmha.notificationintent";

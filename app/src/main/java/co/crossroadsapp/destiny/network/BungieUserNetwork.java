@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import java.util.Observable;
 
 import co.crossroadsapp.destiny.ControlManager;
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import cz.msebera.android.httpclient.Header;
 
@@ -37,6 +38,8 @@ public class BungieUserNetwork extends Observable {
             ntwrk.get(new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    //set cookie validation
+                    Util.setDefaults(Constants.COOKIE_VALID_KEY, "true", mContext);
                     setChanged();
                     notifyObservers(response);
                 }
@@ -48,15 +51,13 @@ public class BungieUserNetwork extends Observable {
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    try {
-                        mManager.showErrorDialogue(Util.getErrorMessage(errorResponse.getJSONObject(0)));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    //set cookie validation
+                    Util.setDefaults(Constants.COOKIE_VALID_KEY, "false", mContext);
                     mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
                 }
             });

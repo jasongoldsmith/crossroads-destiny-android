@@ -203,9 +203,14 @@ public class MainActivity extends BaseActivity implements Observer {
 
     private void forwardAfterVersionCheck() {
         //if (u != null && p!= null && console!=null && !u.isEmpty() && !p.isEmpty() && !console.isEmpty()) {
-        if(cookies!=null && !cookies.isEmpty()) {
+        String isCookieValid = Util.getDefaults(Constants.COOKIE_VALID_KEY, getApplicationContext());
+        if(cookies!=null && !cookies.isEmpty() && isCookieValid!=null && isCookieValid.equalsIgnoreCase("true")) {
             //todo check how to minimize api calls to get full event list in future from multiple locations
             TravellerLog.w(this, "Logging user in the background as user data available");
+            //start service for validating cookie
+            Intent intent = new Intent(MainActivity.this, BungieUserService.class);
+            startService(intent);
+
             //check if existing user with version below 1.1.0
             String newUser = Util.getDefaults("showUnverifiedMsg", getApplicationContext());
 //            if(newUser==null) {
@@ -263,7 +268,14 @@ public class MainActivity extends BaseActivity implements Observer {
             if(cookies==null && p!=null) {
                 showGenericError("CHANGES TO SIGN IN", "Good news! You can now sign in using your Xbox or PlayStation account (the same one you use for Bungie.net)", "OK", Constants.GENERAL_ERROR, null, false);
             }
-            Util.clearDefaults(getApplicationContext());
+            if(u!=null && !u.isEmpty()) {
+                // continue with delete
+                RequestParams rp = new RequestParams();
+                rp.put("userName", u);
+                mManager.postLogout(MainActivity.this, rp);
+            } else {
+                Util.clearDefaults(getApplicationContext());
+            }
             launchMainLayout();
         }
     }
@@ -414,7 +426,7 @@ public class MainActivity extends BaseActivity implements Observer {
                             Util.setDefaults("csrf", csrf, MainActivity.this);
                             Util.setDefaults("cookie", cookies, MainActivity.this);
                             //network call to get current user
-                            mManager.getBungieCurrentUser(csrf, cookies, MainActivity.this);
+                            mManager.getBungieCurrentUser(csrf, cookies, getApplicationContext());
                             return;
                         }
                     }
