@@ -549,6 +549,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
         //check if app is opening from external deeplink
         checkIfExternalDeepLinkPresent();
+
+        setGroupImageUrl();
     }
 
     private void checkPrivacyDialoge() {
@@ -1447,17 +1449,18 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                                 }
                                 createUpcomingCurrentList(eData);
                                 updateCurrentFrag();
-                                hideProgress();
                                 break;
                             }
                         }
                     }
+                    hideProgress();
                     //to update all lists in the background
                     //mManager.getEventList(ListActivityFragment.this);
                 }
             } else if(observable instanceof GroupListNetwork) {
                 hideProgress();
                 if (data != null) {
+                    setGroupImageUrl();
                     if (data instanceof UserData) {
                         unregisterFirebase();
                         registerFirbase();
@@ -1470,7 +1473,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                         if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
                             gpAct.updateGrpData(data);
                         }
-                        setGroupImageUrl();
+                        //setGroupImageUrl();
                     } else {
                         //setGroupImageUrl();
                         if(gpAct!=null) {

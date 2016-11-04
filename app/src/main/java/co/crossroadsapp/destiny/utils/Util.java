@@ -50,7 +50,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
@@ -62,7 +61,7 @@ public class Util {
 
     //To switch between production and development server links
     //where 1 points to development, 2 points to production and 3 points to Dev staging
-    private static final int network_connection = 3;
+    private static final int network_connection = 2;
 
     private static final String TAG = Util.class.getName();
     public static final String trimbleDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";

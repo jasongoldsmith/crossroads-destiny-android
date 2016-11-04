@@ -629,9 +629,11 @@ public class ControlManager implements Observer{
             //mCurrentAct.finish();
         } else if (observable instanceof EventRelationshipHandlerNetwork) {
             EventData ed = (EventData) data;
+            boolean eventExist=true;
             if (eData!= null) {
                 for (int i=0; i<eData.size();i++) {
                     if (ed.getEventId().equalsIgnoreCase(eData.get(i).getEventId())) {
+                        eventExist = false;
                         if (ed.getMaxPlayer()>0) {
                             eData.remove(i);
                             eData.add(i, ed);
@@ -641,7 +643,9 @@ public class ControlManager implements Observer{
                         break;
                     }
                 }
-                eData.add(ed);
+                if(eventExist) {
+                    eData.add(ed);
+                }
             }
         } else if (observable instanceof ActivityListNetwork) {
             updateActivityList(data!=null?data:null);
@@ -704,10 +708,12 @@ public class ControlManager implements Observer{
                             rp.put("bungieResponse", map);
                             rp.put("consoleType", platform);
                             rp.put("bungieURL", Constants.BUGIE_CURRENT_USER);
-                            loginNetwork = new LoginNetwork(mCurrentAct);
-                            loginNetwork.addObserver(this);
-                            loginNetwork.addObserver(((MainActivity)mCurrentAct));
-                            loginNetwork.doSignup(rp);
+                            if(mCurrentAct instanceof MainActivity) {
+                                loginNetwork = new LoginNetwork(mCurrentAct);
+                                loginNetwork.addObserver(this);
+                                loginNetwork.addObserver(((MainActivity) mCurrentAct));
+                                loginNetwork.doSignup(rp);
+                            }
                         } catch (JsonGenerationException e) {
                             e.printStackTrace();
                         } catch (JsonMappingException e) {
@@ -1110,6 +1116,17 @@ public class ControlManager implements Observer{
                 }
             }
 
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getUserFromNetwork(MainActivity mainActivity, RequestParams rp) {
+        try {
+        LoginNetwork getUserNtwrk = new LoginNetwork(mainActivity);
+        getUserNtwrk.addObserver(this);
+        getUserNtwrk.addObserver(mainActivity);
+        getUserNtwrk.getUser(rp);
         } catch (JSONException e) {
             e.printStackTrace();
         }

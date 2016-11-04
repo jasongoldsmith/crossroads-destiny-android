@@ -93,9 +93,9 @@ public class MainActivity extends BaseActivity implements Observer {
 
         userData = new UserData();
 
-        if(userData!=null && userData.getPsnId()!=null) {
-            u = userData.getPsnId();
-        }
+//        if(userData!=null && userData.getPsnId()!=null) {
+//            u = userData.getPsnId();
+//        }
 
         mManager = ControlManager.getmInstance();
         mManager.setCurrentActivity(this);
@@ -131,6 +131,7 @@ public class MainActivity extends BaseActivity implements Observer {
         if (err != null){
             if(errorType!=null && !errorType.isEmpty()) {
                 if(errorType.equalsIgnoreCase(Constants.BUNGIE_ERROR)) {
+                    Util.clearDefaults(getApplicationContext());
                     Intent intent = new Intent(getApplicationContext(),
                             MissingUser.class);
                     //intent.putExtra("id", username);
@@ -144,8 +145,11 @@ public class MainActivity extends BaseActivity implements Observer {
                 } else if(errorType.equalsIgnoreCase(Constants.BUNGIE_CONNECT_ERROR)) {
                     // continue with delete
                     RequestParams rp = new RequestParams();
-                    rp.put("userName", u);
+                    if(u!=null && !u.isEmpty()) {
+                        rp.put("userName", u);
+                    }
                     mManager.postLogout(MainActivity.this, rp);
+                    Util.clearDefaults(getApplicationContext());
                 }
             } else {
                 setErrText(err);
@@ -207,9 +211,21 @@ public class MainActivity extends BaseActivity implements Observer {
         if(cookies!=null && !cookies.isEmpty() && isCookieValid!=null && isCookieValid.equalsIgnoreCase("true")) {
             //todo check how to minimize api calls to get full event list in future from multiple locations
             TravellerLog.w(this, "Logging user in the background as user data available");
-            //start service for validating cookie
-            Intent intent = new Intent(MainActivity.this, BungieUserService.class);
-            startService(intent);
+
+            if(u!=null && !u.isEmpty()) {
+                RequestParams rp = new RequestParams();
+                rp.put("id", u);
+                mManager.getUserFromNetwork(MainActivity.this, rp);
+            }
+
+            Thread t = new Thread(){
+                public void run(){
+                    //start service for validating cookie
+                    Intent intent = new Intent(MainActivity.this, BungieUserService.class);
+                    startService(intent);
+                }
+            };
+            t.start();
 
             //check if existing user with version below 1.1.0
             String newUser = Util.getDefaults("showUnverifiedMsg", getApplicationContext());
@@ -243,12 +259,12 @@ public class MainActivity extends BaseActivity implements Observer {
 //                params.put("passWord", p);
 //                mManager.postLogin(MainActivity.this, params, Constants.LOGIN);
             //let user move on to app
-            Intent regIntent;
-
-            //decide for activity
-            regIntent = mManager.decideToOpenActivity(contentIntent);
-            startActivity(regIntent);
-            finish();
+//            Intent regIntent;
+//
+//            //decide for activity
+//            regIntent = mManager.decideToOpenActivity(contentIntent);
+//            startActivity(regIntent);
+//            finish();
 
 //                String csrf;
 //                String[] pair = cookies.split(";");
@@ -658,6 +674,10 @@ public class MainActivity extends BaseActivity implements Observer {
                 UserData ud = (UserData) data;
                 if (ud!=null && ud.getUserId()!=null) {
                     if((ud.getAuthenticationId() == Constants.LOGIN)) {
+                        //save in preferrence
+                        Util.setDefaults("user", ud.getUserId(), getApplicationContext());
+//                        Util.setDefaults("password", password, getApplicationContext());
+//                        Util.setDefaults("consoleType", console, getApplicationContext());
                     ud.setPassword(p);
                     mManager.setUserdata(ud);
                     Intent regIntent;

@@ -25,7 +25,6 @@ public class BungieUserService extends Service {
     @Override
     public int onStartCommand(Intent i, int flags, int startId) {
         final ControlManager cManager = ControlManager.getmInstance();
-        final Handler mHandler = new Handler();
 
         String csrf = Util.getDefaults("csrf", getApplicationContext());
         String cookies = Util.getDefaults("cookie", getApplicationContext());

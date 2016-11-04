@@ -27,6 +27,7 @@ public class LoginNetwork extends Observable {
     private NetworkEngine ntwrk;
     private String url = "api/v1/auth/validateUserLogin";//"api/v1/auth/login";
     private String url_reg = "api/v1/auth/register";
+    private String urlUser = "api/v1/a/user/listById";
     private UserData user;
     private ControlManager mManager;
 
@@ -59,6 +60,24 @@ public class LoginNetwork extends Observable {
                     } else {
                         mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
                     }
+                }
+            });
+        }else {
+            Util.createNoNetworkDialogue(mContext);
+        }
+    }
+
+    public void getUser(RequestParams params) throws JSONException {
+        if (Util.isNetworkAvailable(mContext)) {
+            ntwrk.post(urlUser, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    parseSignInUser(response);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
                 }
             });
         }else {
