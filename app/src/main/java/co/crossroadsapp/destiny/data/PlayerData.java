@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import co.crossroadsapp.destiny.utils.Constants;
+
 /**
  * Created by sharmha on 2/28/16.
  */
@@ -16,6 +18,7 @@ public class PlayerData {
     private String playerClanTag;
     private boolean maxReported = false;
     private int commentsReported;
+    private String psnVerify=null;
 
     public void setPlayerId(String id) {
         playerId = id;
@@ -54,7 +57,10 @@ public class PlayerData {
     }
 
     public String getClanTag() {
-        return this.playerClanTag;
+        if(psnVerify!=null && psnVerify.equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+            return playerClanTag;
+        }
+        return null;
     }
 
     public void setCommentsReported(int num) {
@@ -71,6 +77,14 @@ public class PlayerData {
 
     public boolean getMaxReported() {
         return this.maxReported;
+    }
+
+    public void setPsnVerify(String psnVeri) {
+        this.psnVerify = psnVeri;
+    }
+
+    public String getPsnVerify() {
+        return psnVerify;
     }
 
     public void toJson(JSONObject jsonobject) {
@@ -121,7 +135,10 @@ public class PlayerData {
                     int num = jsonobject.getInt("commentsReported");
                     setCommentsReported(num);
                 }
-
+                if (jsonobject.has("verifyStatus") && !jsonobject.isNull("verifyStatus")) {
+                    String verifyS = jsonobject.getString("verifyStatus");
+                    setPsnVerify(verifyS);
+                }
                 if (jsonobject.has("hasReachedMaxReportedComments") && !jsonobject.isNull("hasReachedMaxReportedComments")) {
                     boolean maxRepo = jsonobject.getBoolean("hasReachedMaxReportedComments");
                     setMaxReported(maxRepo);

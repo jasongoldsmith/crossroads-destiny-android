@@ -1,6 +1,7 @@
 package co.crossroadsapp.destiny;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,9 +29,14 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +51,10 @@ import co.crossroadsapp.destiny.network.AddCommentNetwork;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
 import co.crossroadsapp.destiny.network.EventRelationshipHandlerNetwork;
 import co.crossroadsapp.destiny.network.EventSendMessageNetwork;
+import co.crossroadsapp.destiny.network.InvitePlayerNetwork;
 import co.crossroadsapp.destiny.network.ReportCommentNetwork;
+import co.crossroadsapp.destiny.token.FilteredArrayAdapter;
+import co.crossroadsapp.destiny.token.TokenCompleteTextView;
 import co.crossroadsapp.destiny.utils.CircularImageView;
 import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.TravellerLog;
@@ -60,13 +69,16 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
@@ -74,7 +86,7 @@ import java.util.Observer;
 /**
  * Created by sharmha on 3/29/16.
  */
-public class EventDetailActivity extends BaseActivity implements Observer {
+public class EventDetailActivity extends BaseActivity implements Observer, TokenCompleteTextView.TokenListener<Person>{
 
     EventData currEvent;
     private TextView eventName;
@@ -135,6 +147,15 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     private Firebase refFirebase;
     private Firebase refCFirebase;
     private ValueEventListener listenerC;
+    private RelativeLayout inviteLayout;
+    private ContactsCompletionView completionView;
+    private Person[] people;
+    ArrayAdapter<Person> adapterP;
+    private ContactsCompletionView editTextInvite;
+    private ArrayList<String> invitedList;
+    private String deepLinkUrl;
+    private TextView inviteBtn;
+    private TextView fullInviteeMsg;
 //    private TextView errText;
 //    private ImageView close_err;
 
@@ -147,6 +168,58 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 //        user = b.getParcelable("userdata");
 
         setTRansparentStatusBar();
+
+        //token auto complete
+        people = new Person[]{
+                new Person("hardik", "sharma"),
+                new Person("manohar", "pandya")
+        };
+
+        adapterP = new FilteredArrayAdapter<Person>(this, R.layout.person_layout, people) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                if (convertView == null) {
+
+                    LayoutInflater l = (LayoutInflater)getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+                    convertView = l.inflate(R.layout.person_layout, parent, false);
+                }
+
+                Person p = getItem(position);
+                ((TextView)convertView.findViewById(R.id.name)).setText(p.getName());
+                ((TextView)convertView.findViewById(R.id.email)).setText(p.getEmail());
+
+                return convertView;
+            }
+
+            @Override
+            protected boolean keepObject(Person person, String mask) {
+                mask = mask.toLowerCase();
+                String console = Util.getDefaults("consoleType", EventDetailActivity.this);
+                if(console.equalsIgnoreCase(Constants.CONSOLEXBOXONE)) {
+                    validateXboxGamertag(mask);
+                } else if(console.equalsIgnoreCase(Constants.CONSOLEPS4)) {
+                    validatePlaystationGamertag(mask);
+                }
+                return person.getName().toLowerCase().startsWith(mask) || person.getEmail().toLowerCase().startsWith(mask);
+            }
+        };
+
+        completionView = (ContactsCompletionView)findViewById(R.id.searchView);
+        completionView.setAdapter(adapterP);
+        completionView.setTokenListener(EventDetailActivity.this);
+        completionView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select);
+
+        editTextInvite = (ContactsCompletionView) findViewById(R.id.searchView);
+        editTextInvite.setTypeface(Typeface.DEFAULT);
+
+        fullInviteeMsg = (TextView) findViewById(R.id.full_invitee_list_msg);
+
+//        if (savedInstanceState == null) {
+//            completionView.setPrefix("To: ");
+//            completionView.addObject(people[0]);
+//            completionView.addObject(people[1]);
+//        }
+// token auto complete
 
         joinBtn = (TextView) findViewById(R.id.join_btn);
         leaveBtn = (TextView) findViewById(R.id.leave_btn);
@@ -187,6 +260,16 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         back = (ImageView) findViewById(R.id.eventdetail_backbtn);
         share = (ImageView) findViewById(R.id.eventdetail_sharebtn);
         eventDetailDate = (TextView) findViewById(R.id.eventDetailDate);
+
+        //invite view
+        inviteLayout = (RelativeLayout) findViewById(R.id.invite_view);
+        TextView inviteCancel = (TextView) findViewById(R.id.invite_cancel);
+        inviteCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeInviteAndKeyboard();
+            }
+        });
 
         commentLayout = (RelativeLayout) findViewById(R.id.send_comment_layout);
 
@@ -252,6 +335,15 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             }
         });
 
+        inviteBtn = (TextView) findViewById(R.id.invite_btn);
+        inviteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                inviteBtn.setClickable(false);
+                getDeeplinkUrl();
+            }
+        });
+
         editText = (EditText) findViewById(R.id.edittext);
 
         editText.addTextChangedListener(mTextEditorWatcher);
@@ -260,7 +352,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         sendBtn = (ImageView) findViewById(R.id.send_btn);
 
-        cardStackLayout = (SwipeFrameLayout) findViewById(R.id.notification_bar_layout);
+        //cardStackLayout = (SwipeFrameLayout) findViewById(R.id.notification_bar_layout);
 
 //        notiBar = (RelativeLayout) findViewById(R.id.notification_bar);
 //        notiEventText = (TextView) findViewById(R.id.noti_text);
@@ -400,53 +492,13 @@ public class EventDetailActivity extends BaseActivity implements Observer {
 
         generateBranchObject();
 
-//        String actName = currEvent.getActivityData().getActivitySubtype();
-//        String grpName = controlManager.getGroupObj(currEvent.getClanId()).getGroupName();
-//        String deepLinkTitle=" ";
-//        String deepLinkMsg=" ";
-//        if(userIsPlayer){
-//            deepLinkTitle = "Join My Fireteam";
-//            if(reqPlayer==0) {
-//                deepLinkTitle = currEvent.getActivityData().getActivitySubtype();
-//            }
-//            deepLinkMsg = getDeepLinkConsoleType()+": I need "+reqPlayer+ " more for "+ actName + " in the " +grpName+ " group";
-//        }else {
-//            deepLinkTitle = "Searching for Guardians";
-//            if(reqPlayer==0) {
-//                deepLinkTitle = currEvent.getActivityData().getActivitySubtype();
-//            }
-//            deepLinkMsg = getDeepLinkConsoleType() +": This fireteam needs " + reqPlayer + " more for " + actName+" in the " + grpName + " group";
-//
-//            if(currEvent.getEventStatus().equalsIgnoreCase("Upcoming")) {
-//                deepLinkMsg = getDeeplinkContent(upcomingDate);
-//            }
-//        }
-//
-//        if(reqPlayer==0){
-//            if(currEvent.getEventStatus().equalsIgnoreCase("Upcoming")) {
-//                deepLinkMsg = getDeepLinkConsoleType() +": Check out this " + actName + " on " + upcomingDate + " in the " + grpName + " group";
-//            }else {
-//                deepLinkMsg = getDeepLinkConsoleType() +": Check out this " + actName + " in the " + grpName + " group";
-//            }
-//        }
-//
-//        // Create a BranchUniversal object for the content referred on this activity instance
-//        branchUniversalObject = new BranchUniversalObject()
-//                .setCanonicalIdentifier("item/12345")
-//                .setCanonicalUrl("https://branch.io/deepviews")
-//                .setTitle(deepLinkTitle)
-//                .setContentDescription(deepLinkMsg)
-//                .setContentImageUrl(Constants.DEEP_LINK_IMAGE + currEvent.getEventId()+".png")
-//                //.setContentExpiration(new Date(1476566432000L)) // set contents expiration time if applicable
-//                .addContentMetadata("activityName", currEvent.getActivityData().getActivitySubtype())
-//                .addContentMetadata("eventId", currEvent.getEventId());
-
         showNotifications();
+        completionView.setTokenLimit(reqPlayer);
 
     }
 
     private void changeBottomButtomForComments() {
-        if(userIsPlayer) {
+        if(checkUserIsPlayer()) {
             bottomBtnLayout.setVisibility(View.VISIBLE);
             joinBtn.setVisibility(View.GONE);
             leaveBtn.setVisibility(View.GONE);
@@ -464,6 +516,170 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                 TabLayout.Tab tab = tabLayout.getTabAt(i);
                 tab.setCustomView(pagerAdapter.getTabView(i));
             }
+        }
+    }
+
+    protected void showAnimatedInviteView() {
+        if(inviteLayout!=null) {
+            inviteLayout.setVisibility(View.VISIBLE);
+            Animation anim = AnimationUtils.loadAnimation(this, R.anim.slide_out_to_top);
+            inviteLayout.startAnimation(anim);
+            editTextInvite.requestFocus();
+            if(invitedList!=null) {
+                invitedList.clear();
+            }
+            showKeyboard();
+        }
+    }
+
+    protected void hideAnimatedInviteView() {
+        if(inviteLayout!=null) {
+            Animation anim = AnimationUtils.loadAnimation(this, R.anim.slide_out_to_bottom);
+            inviteLayout.startAnimation(anim);
+            inviteLayout.setVisibility(View.GONE);
+            if(completionView!=null) {
+                completionView.clear();
+            }
+        }
+    }
+
+    private void updateTokenConfirmation(String token, int hint) {
+        if(token!=null && !token.isEmpty()) {
+            if (invitedList == null) {
+                invitedList = new ArrayList<>();
+            }
+            if(hint==1) {
+                invitedList.add(token);
+                if(invitedList.size()>=1) {
+                    inviteBtn.setVisibility(View.VISIBLE);
+                    inviteBtn.setClickable(true);
+                } else {
+                    inviteBtn.setVisibility(View.GONE);
+                }
+                if(!checkPlayerInvitedLesserThenPlayerNeeded()) {
+                    fullInviteeMsg.setText(getString(R.string.full_invitee));
+                    //hideKeyboard();
+                    //setInviteBtnMarginZero();
+                }
+            } else if(hint==2) {
+                invitedList.remove(token);
+                if(invitedList.size()>=1) {
+                    inviteBtn.setVisibility(View.VISIBLE);
+                    inviteBtn.setClickable(true);
+                }else {
+                    inviteBtn.setVisibility(View.GONE);
+                }
+                if(checkPlayerInvitedLesserThenPlayerNeeded()) {
+                    fullInviteeMsg.setText(getString(R.string.incomplete_invite));
+                    //hideKeyboard();
+                    //setInviteBtnMarginZero();
+                }
+            }
+        }
+    }
+
+    private boolean checkPlayerAlreadyExist(String id) {
+        if(invitedList!=null) {
+            if(currEvent!=null && currEvent.getPlayerData()!=null) {
+                for (String psn:invitedList) {
+                    if(id.equalsIgnoreCase(psn)) {
+                        return true;
+                    }
+                }
+                for(int i=0; i<currEvent.getPlayerData().size(); i++) {
+                    if(id.equalsIgnoreCase(currEvent.getPlayerData().get(i).getPsnId())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean checkPlayerInvitedLesserThenPlayerNeeded() {
+        if(invitedList!=null) {
+            if(currEvent!=null && currEvent.getPlayerData()!=null) {
+                //reqPlayer = currEvent.getActivityData().getMaxPlayer() - currEvent.getPlayerData().size();
+                if (invitedList.size() < reqPlayer) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void validatePlaystationGamertag(String gamertag) {
+        if(gamertag!=null) {
+            if(gamertag.matches(".*[^a-z^0-9^A-Z\\_\\-].*") || gamertag.length()>16) {
+                Runnable myRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        showGenericError("INVALID GAMERTAG", "Please enter a valid gamertag.","OK", Constants.GENERAL_ERROR, null, true);
+                    }
+                };
+                _handler.post(myRunnable);
+            }
+        }
+    }
+
+    private void validateXboxGamertag(String gamertag) {
+        if(gamertag!=null) {
+            if(!gamertag.matches("^[A-Za-z][A-Za-z0-9]++(?: [a-zA-Z0-9]++)?$") || gamertag.length()>16 || gamertag.length()<1 || gamertag.startsWith(" ") || gamertag.endsWith(" ") || Character.isDigit(gamertag.charAt(0))){
+                showGenericError("INVALID GAMERTAG", "Please enter a valid gamertag.","OK", Constants.GENERAL_ERROR, null, true);
+                //showError("Invalid gamertag");
+            }
+        }
+    }
+
+    @Override
+    public void onTokenAdded(Person token) {
+        //((TextView)findViewById(R.id.lastEvent)).setText("Added: " + token);
+        if(!checkPlayerAlreadyExist(token.toString())) {
+            updateTokenConfirmation(token.toString(), 1);
+        } else {
+            completionView.removeObject(token);
+        }
+    }
+
+    @Override
+    public void onTokenRemoved(Person token) {
+        //((TextView)findViewById(R.id.lastEvent)).setText("Removed: " + token);
+        updateTokenConfirmation(token.toString(), 2);
+    }
+
+    protected void setInviteBtnMargin(int inviteBtnBottom) {
+        if(inviteBtn!=null && inviteLayout!=null) {
+            if (inviteLayout.getVisibility() == View.VISIBLE) {
+                ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) inviteBtn
+                        .getLayoutParams();
+            mlp.setMargins(0, 0, 0, inviteBtnBottom);
+        }
+        }
+    }
+
+    protected void setInviteBtnMarginZero() {
+        if(inviteBtn!=null && inviteLayout!=null && inviteLayout.getVisibility()==View.VISIBLE && invitedList!=null && invitedList.size()>0) {
+//            if(inviteBtn!=null && inviteLayout!=null) {
+//                if (inviteLayout.getVisibility() == View.VISIBLE) {
+//                    inviteLayout.removeView(inviteBtn);
+//                    ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) inviteBtn
+//                            .getLayoutParams();
+//                    mlp.setMargins(0, 0, 0, 0);
+//                    inviteLayout.addView(inviteBtn);
+//                }
+//            }
+//            // Create your custom layout
+//            RelativeLayout relativeLayout = new RelativeLayout(this);
+//            // Create LayoutParams for it // Note 200 200 is width, height in pixels
+//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+//            // Align bottom-right, and add bottom-margin
+//            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//            inviteLayout.removeView(inviteBtn);
+//            relativeLayout.addView(inviteBtn, params);
+//            inviteLayout.addView(relativeLayout, new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+
+            hideAnimatedInviteView();
+            //completionView.clear();
         }
     }
 
@@ -579,7 +795,17 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                 }
             }
 
-            // Create a BranchUniversal object for the content referred on this activity instance
+            String invitee="";
+            if(inviteLayout.getVisibility()==View.VISIBLE && !invitedList.isEmpty()) {
+//                invitee = invitedList.toString();
+                StringBuilder sb = new StringBuilder();
+                for (String n : invitedList) {
+                    if (sb.length() > 0) sb.append(',');
+                    sb.append(n);
+                }
+                invitee =  sb.toString();
+            }
+            // Create a BranchUniversal object for the content referred on this activity instance as invite
             branchUniversalObject = new BranchUniversalObject()
                     .setCanonicalIdentifier("item/12345")
                     .setCanonicalUrl("https://branch.io/deepviews")
@@ -588,6 +814,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                     .setContentImageUrl(Constants.DEEP_LINK_IMAGE + currEvent.getEventId() + ".png")
                     //.setContentExpiration(new Date(1476566432000L)) // set contents expiration time if applicable
                     .addContentMetadata("activityName", currEvent.getActivityData().getActivitySubtype())
+                    .addContentMetadata("invitees", invitee)
                     .addContentMetadata("eventId", currEvent.getEventId());
         }
     }
@@ -621,6 +848,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             @Override
             public void onLinkCreate(String url, BranchError error) {
                 if (error == null) {
+                    deepLinkUrl = url;
                     final Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                     sharingIntent.setType("text/plain");
                     if(url!=null) {
@@ -630,6 +858,39 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                 }
             }
         });
+    }
+
+    private void getDeeplinkUrl() {
+//        //deeplink creation
+
+        LinkProperties linkProperties = new LinkProperties();
+
+        generateBranchObject();
+
+        branchUniversalObject.generateShortUrl(this, linkProperties, new Branch.BranchLinkCreateListener() {
+            @Override
+            public void onLinkCreate(String url, BranchError error) {
+                if (error == null) {
+                    deepLinkUrl = url;
+                    invitePlayers(url);
+                }
+            }
+        });
+    }
+
+    private void invitePlayers(String url) {
+        if(url!=null && !url.isEmpty()) {
+            if(currEvent!=null && currEvent.getEventId()!=null) {
+                if(!invitedList.isEmpty()) {
+                    RequestParams rp = new RequestParams();
+                    rp.put("eId", currEvent.getEventId());
+                    rp.put("invitees", invitedList);
+                    rp.put("invitationLink", url);
+                    showProgressBar();
+                    controlManager.invitePlayers(EventDetailActivity.this, rp);
+                }
+            }
+        }
     }
 
     private final TextWatcher mTextEditorWatcher = new TextWatcher() {
@@ -829,6 +1090,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         if (sendmsg_bckgrnd != null) {
             sendmsg_bckgrnd.setVisibility(View.VISIBLE);
             editMsgPlayer.setText("All Players");
+            editText.requestFocus();
             showKeyboard();
         }
 
@@ -913,6 +1175,9 @@ public class EventDetailActivity extends BaseActivity implements Observer {
             } else if (observable instanceof EventSendMessageNetwork) {
                 editText.setText("");
                 hideSendMsgBckground();
+            } else if (observable instanceof InvitePlayerNetwork) {
+                hideAnimatedInviteView();
+                hideKeyboard();
             }
     }
 
@@ -978,6 +1243,10 @@ public class EventDetailActivity extends BaseActivity implements Observer {
     public void showError(String err) {
         hideProgress();
         hideProgressBar();
+        if(inviteLayout!=null && inviteLayout.getVisibility()==View.VISIBLE) {
+            hideAnimatedInviteView();
+            hideKeyboard();
+        }
 //        errLayout.setVisibility(View.VISIBLE);
 //        errText.setText(err);
         setErrText(err);
@@ -1144,6 +1413,7 @@ public class EventDetailActivity extends BaseActivity implements Observer {
                                 if (sendmsg_bckgrnd != null) {
                                     sendmsg_bckgrnd.setVisibility(View.VISIBLE);
                                     editMsgPlayer.setText(playerLocal.get(position).getPsnId());
+                                    editText.requestFocus();
                                     showKeyboard();
                                 }
 
@@ -1189,14 +1459,20 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         return 0;
     }
 
-    private void showKeyboard() {
-        editText.requestFocus();
+    protected void showKeyboard() {
+        //editText.requestFocus();
+        editTextInvite.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
     }
 
-    private void hideKeyboard() {
-        editText.setText("");
+    protected void hideKeyboard() {
+        if(editText!=null) {
+            editText.setText("");
+        } else if(editTextInvite!=null) {
+            editTextInvite.setText("");
+        }
+        View view = this.getCurrentFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(),0);
     }
@@ -1274,12 +1550,24 @@ public class EventDetailActivity extends BaseActivity implements Observer {
         finish();
     }
 
+    private void closeInviteAndKeyboard() {
+        hideKeyboard();
+        _handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hideAnimatedInviteView();
+            }
+        }, 100);
+    }
+
     @Override
     public void onBackPressed() {
         if(sendmsg_bckgrnd.getVisibility()==View.VISIBLE){
             sendmsg_bckgrnd.setVisibility(View.GONE);
             hideKeyboard();
-        } else {
+        } else if(inviteLayout.getVisibility()==View.VISIBLE) {
+            closeInviteAndKeyboard();
+        } else{
             currEvent = null;
             finish();
             //launchListActivityAndFinish();

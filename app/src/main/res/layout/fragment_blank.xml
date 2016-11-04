@@ -16,6 +16,48 @@
         android:padding="15dp"
         android:id="@+id/clan_tag_text"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/signin_pressed"
+        android:layout_below ="@+id/clan_tag_text"
+        android:id="@+id/fireteam_banner"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_ghost_default"
+            android:id="@+id/banner_ghost_icon"
+            android:layout_marginTop="13dp"
+            android:layout_marginLeft="20dp"
+            android:layout_alignParentStart="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fireteam_ready"
+            android:id="@+id/banner_header"
+            android:layout_toRightOf="@+id/banner_ghost_icon"
+            android:layout_marginLeft="22dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="13dp"
+            android:textSize="14sp"
+            android:textColor="@color/trimbe_white"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/banner_msg"
+            android:layout_toRightOf="@+id/banner_ghost_icon"
+            android:layout_below="@+id/banner_header"
+            android:layout_marginTop="7dp"
+            android:layout_marginLeft="22dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="9dp"
+            android:textSize="14sp"
+            android:textColor="@color/trimbe_white"/>
+    </RelativeLayout>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
@@ -38,7 +80,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:layout_below ="@+id/clan_tag_text">
+        android:layout_below ="@+id/fireteam_banner">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/eventdetail_view"
             android:background="@android:color/transparent"

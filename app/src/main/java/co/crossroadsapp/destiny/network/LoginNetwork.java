@@ -4,6 +4,7 @@ import android.content.Context;
 
 import co.crossroadsapp.destiny.ControlManager;
 import co.crossroadsapp.destiny.LoginActivity;
+import co.crossroadsapp.destiny.MainActivity;
 import co.crossroadsapp.destiny.utils.Util;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
@@ -24,8 +25,9 @@ public class LoginNetwork extends Observable {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "api/v1/auth/login";
+    private String url = "api/v1/auth/validateUserLogin";//"api/v1/auth/login";
     private String url_reg = "api/v1/auth/register";
+    private String urlUser = "api/v1/a/user/listById";
     private UserData user;
     private ControlManager mManager;
 
@@ -51,7 +53,7 @@ public class LoginNetwork extends Observable {
 //                            Toast.LENGTH_LONG).show();
                     if(errorResponse.has("errorType")) {
                         try {
-                            ((LoginActivity)mContext).showError(Util.getErrorMessage(errorResponse), errorResponse.getString("errorType"));
+                            ((MainActivity)mContext).showError(Util.getErrorMessage(errorResponse), errorResponse.getString("errorType"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -65,15 +67,31 @@ public class LoginNetwork extends Observable {
         }
     }
 
+    public void getUser(RequestParams params) throws JSONException {
+        if (Util.isNetworkAvailable(mContext)) {
+            ntwrk.post(urlUser, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    parseSignInUser(response);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
+                }
+            });
+        }else {
+            Util.createNoNetworkDialogue(mContext);
+        }
+    }
+
     public void doRegister(RequestParams params) throws JSONException {
         if (Util.isNetworkAvailable(mContext)) {
             ntwrk.post(url_reg, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-
                     //post gcm token
                     postGcm();
-
                     parseSignUpUser(response);
                 }
 

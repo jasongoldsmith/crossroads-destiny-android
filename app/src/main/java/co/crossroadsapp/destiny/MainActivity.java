@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,13 +18,16 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import co.crossroadsapp.destiny.data.AppVersion;
 import co.crossroadsapp.destiny.data.EventData;
-import co.crossroadsapp.destiny.data.EventList;
+import co.crossroadsapp.destiny.network.ConfigNetwork;
 import co.crossroadsapp.destiny.network.EventListNetwork;
 import co.crossroadsapp.destiny.network.GetVersion;
 import co.crossroadsapp.destiny.network.LoginNetwork;
@@ -35,6 +39,9 @@ import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONObject;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +51,7 @@ import java.util.Observer;
 public class MainActivity extends BaseActivity implements Observer {
 
     //private View register_layout;
-    private TextView signin_layout;
+    private RelativeLayout signin_playstation;
     public UserData userData;
     Intent contentIntent;
     private String p;
@@ -60,6 +67,13 @@ public class MainActivity extends BaseActivity implements Observer {
     private Runnable runnable;
     private Handler handler;
     private LinearLayoutManager horizontalLayoutManagaer;
+    private Serializable invitationRp;
+    private RelativeLayout signin_xbox;
+    private String cookies;
+    private WebView webViewPS;
+    private WebView webViewXBOX;
+    private RelativeLayout topBar;
+    private ImageView topBarBack;
 
     @Override
     protected void onCreate(Bundle outState) {
@@ -69,12 +83,24 @@ public class MainActivity extends BaseActivity implements Observer {
         TravellerLog.w(this, "MainActivity.onCreate starts...");
         u= Util.getDefaults("user", getApplicationContext());
         p = Util.getDefaults("password", getApplicationContext());
+        cookies = Util.getDefaults("cookie", getApplicationContext());
         console = Util.getDefaults("consoleType", getApplicationContext());
+
+        Bundle b = getIntent().getExtras();
+        if(b!=null && b.containsKey("invitation")) {
+            invitationRp = b.getSerializable("invitation");
+        }
 
         userData = new UserData();
 
+//        if(userData!=null && userData.getPsnId()!=null) {
+//            u = userData.getPsnId();
+//        }
+
         mManager = ControlManager.getmInstance();
         mManager.setCurrentActivity(this);
+
+        userData = mManager.getUserData();
 
         // getting contentIntent from push notification click
         if (this.getIntent().hasExtra(Constants.TRAVELER_NOTIFICATION_INTENT)) {
@@ -95,20 +121,78 @@ public class MainActivity extends BaseActivity implements Observer {
 
         //check android version for dev builds
         mManager.getAndroidVersion(this);
-        forwardAfterVersionCheck();
+        mManager.getConfig(MainActivity.this);
         TravellerLog.w(this, "MainActivity.onCreate ends...");
     }
 
-    public void showError(String err) {
+    public void showError(String err, String errorType) {
+        hideWebviews();
+        hideProgressBar();
         if (err != null){
-            if(!err.isEmpty()) {
-                //Util.clearDefaults(this);
-                launchLogin();
-                finish();
+            if(errorType!=null && !errorType.isEmpty()) {
+                if(errorType.equalsIgnoreCase(Constants.BUNGIE_ERROR)) {
+                    Util.clearDefaults(getApplicationContext());
+                    Intent intent = new Intent(getApplicationContext(),
+                            MissingUser.class);
+                    //intent.putExtra("id", username);
+                    String errT = "We were unable to connect to your Bungie.net account via " + console + ". Please try again.";
+                    intent.putExtra("error", errT);
+                    startActivity(intent);
+                } else if(errorType.equalsIgnoreCase(Constants.BUNGIE_LEGACY_ERROR)) {
+                    // continue with delete
+                    Util.clearDefaults(getApplicationContext());
+                    showGenericError("LEGACY CONSOLES", getString(R.string.legacy_error), getString(R.string.ok_btn), Constants.GENERAL_ERROR, null, false);
+                } else if(errorType.equalsIgnoreCase(Constants.BUNGIE_CONNECT_ERROR)) {
+                    // continue with delete
+                    RequestParams rp = new RequestParams();
+                    if(u!=null && !u.isEmpty()) {
+                        rp.put("userName", u);
+                    }
+                    mManager.postLogout(MainActivity.this, rp);
+                    Util.clearDefaults(getApplicationContext());
+                }
             } else {
-                forwardAfterVersionCheck();
+                setErrText(err);
+                //hideWebviews();
             }
+
+
+//            if(!err.isEmpty()) {
+//                Intent intent = new Intent(getApplicationContext(),
+//                        MissingUser.class);
+//                //intent.putExtra("id", username);
+//                String errT = "We were unable to connect to your Bungie.net account via " + console + ". Please try again.";
+//                intent.putExtra("error", errT);
+//                startActivity(intent);
+//            } else {
+//                // continue with delete
+//                RequestParams rp = new RequestParams();
+//                rp.put("userName", u);
+//                mManager.postLogout(MainActivity.this, rp);
+//                //forwardAfterVersionCheck();
+//            }
+        } else {
+            setErrText(getString(R.string.server_error_tryagain));
         }
+    }
+
+    private boolean hideWebviews() {
+        if(webView!=null && webView.getVisibility()==View.VISIBLE && topBar!=null) {
+            webView.setVisibility(View.GONE);
+            topBar.setVisibility(View.GONE);
+            return false;
+        } else if(webViewPS!=null && webViewPS.getVisibility()==View.VISIBLE && topBar!=null) {
+            webViewPS.setVisibility(View.GONE);
+            topBar.setVisibility(View.GONE);
+            intializeLoginWebViews();
+            return false;
+        } else if (webViewXBOX!=null && webViewXBOX.getVisibility()==View.VISIBLE && topBar!=null){
+            webViewXBOX.setVisibility(View.GONE);
+            topBar.setVisibility(View.GONE);
+            intializeLoginWebViews();
+            return false;
+        }
+        return true;
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -122,42 +206,92 @@ public class MainActivity extends BaseActivity implements Observer {
     }
 
     private void forwardAfterVersionCheck() {
-        if (u != null && p!= null && console!=null && !u.isEmpty() && !p.isEmpty() && !console.isEmpty()) {
+        //if (u != null && p!= null && console!=null && !u.isEmpty() && !p.isEmpty() && !console.isEmpty()) {
+        String isCookieValid = Util.getDefaults(Constants.COOKIE_VALID_KEY, getApplicationContext());
+        if(cookies!=null && !cookies.isEmpty() && isCookieValid!=null && isCookieValid.equalsIgnoreCase("true")) {
             //todo check how to minimize api calls to get full event list in future from multiple locations
             TravellerLog.w(this, "Logging user in the background as user data available");
+
+            if(u!=null && !u.isEmpty()) {
+                RequestParams rp = new RequestParams();
+                rp.put("id", u);
+                mManager.getUserFromNetwork(MainActivity.this, rp);
+            }
+
+            Thread t = new Thread(){
+                public void run(){
+                    //start service for validating cookie
+                    Intent intent = new Intent(MainActivity.this, BungieUserService.class);
+                    startService(intent);
+                }
+            };
+            t.start();
+
             //check if existing user with version below 1.1.0
             String newUser = Util.getDefaults("showUnverifiedMsg", getApplicationContext());
-            if(newUser==null) {
+//            if(newUser==null) {
+//                // continue with delete
+//                RequestParams rp = new RequestParams();
+//                rp.put("userName", u);
+//                mManager.postLogout(MainActivity.this, rp);
+//            } else {
+//                mManager.getEventList();
+//                if (mManager.getEventListCurrent() != null) {
+//                    if (mManager.getEventListCurrent().isEmpty()) {
+//                        mManager.getEventList();
+//                    }
+//                } else {
+//                    mManager.getEventList();
+//                }
+//                if (mManager.getCurrentGroupList() != null) {
+//                    if (mManager.getCurrentGroupList().isEmpty()) {
+//                        mManager.getGroupList(null);
+//                    }
+//                } else {
+//                    mManager.getGroupList(null);
+//                }
+//                Util.storeUserData(userData, u, p);
+//                RequestParams params = new RequestParams();
+//                HashMap<String, String> consoles = new HashMap<String, String>();
+//                consoles.put("consoleType", console);
+//                consoles.put("consoleId", u);
+//                params.put("consoles", consoles);
+//                params.put("passWord", p);
+//                mManager.postLogin(MainActivity.this, params, Constants.LOGIN);
+            //let user move on to app
+//            Intent regIntent;
+//
+//            //decide for activity
+//            regIntent = mManager.decideToOpenActivity(contentIntent);
+//            startActivity(regIntent);
+//            finish();
+
+//                String csrf;
+//                String[] pair = cookies.split(";");
+//                for(int i=0; i<pair.length;i++) {
+//                    String temp = pair[i].substring(0, pair[i].indexOf('=')).trim();
+//                    if(temp.equalsIgnoreCase("bungled")) {
+//                        csrf = pair[i].substring(pair[i].indexOf('=') + 1, pair[i].length());
+//                        Util.setDefaults("csrf", csrf, MainActivity.this);
+//                        Util.setDefaults("cookie", cookies, MainActivity.this);
+//                        //network call to get current user
+//                        mManager.getBungieCurrentUser(csrf, cookies, MainActivity.this);
+//                        return;
+//                    }
+//                }
+//            }
+        }else {
+            if(cookies==null && p!=null) {
+                showGenericError("CHANGES TO SIGN IN", "Good news! You can now sign in using your Xbox or PlayStation account (the same one you use for Bungie.net)", "OK", Constants.GENERAL_ERROR, null, false);
+            }
+            if(u!=null && !u.isEmpty()) {
                 // continue with delete
                 RequestParams rp = new RequestParams();
                 rp.put("userName", u);
                 mManager.postLogout(MainActivity.this, rp);
             } else {
-                mManager.getEventList();
-                if (mManager.getEventListCurrent() != null) {
-                    if (mManager.getEventListCurrent().isEmpty()) {
-                        mManager.getEventList();
-                    }
-                } else {
-                    mManager.getEventList();
-                }
-                if (mManager.getCurrentGroupList() != null) {
-                    if (mManager.getCurrentGroupList().isEmpty()) {
-                        mManager.getGroupList(null);
-                    }
-                } else {
-                    mManager.getGroupList(null);
-                }
-                Util.storeUserData(userData, u, p);
-                RequestParams params = new RequestParams();
-                HashMap<String, String> consoles = new HashMap<String, String>();
-                consoles.put("consoleType", console);
-                consoles.put("consoleId", u);
-                params.put("consoles", consoles);
-                params.put("passWord", p);
-                mManager.postLogin(MainActivity.this, params, Constants.LOGIN);
+                Util.clearDefaults(getApplicationContext());
             }
-        }else {
             launchMainLayout();
         }
     }
@@ -173,8 +307,23 @@ public class MainActivity extends BaseActivity implements Observer {
         countText = (TextView) findViewById(R.id.player_count);
 
         webView = (WebView) findViewById(R.id.web);
+        webViewPS = (WebView) findViewById(R.id.web_ps);
+        webViewXBOX = (WebView) findViewById(R.id.web_xbox);
+
+        intializeLoginWebViews();
 
         setTextViewHTML(privacyTerms, getString(R.string.terms_conditions));
+
+        topBar = (RelativeLayout) findViewById(R.id.top_header);
+        topBarBack = (ImageView) findViewById(R.id.main_backbtn);
+
+        topBarBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+//                intializeLoginWebViews();
+            }
+        });
 
         horizontal_recycler_view = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
         horizontalList=new ArrayList<EventData>();
@@ -225,7 +374,8 @@ public class MainActivity extends BaseActivity implements Observer {
 //            mManager.getPublicEventList(MainActivity.this);
 //        }
         //register_layout = findViewById(R.id.register);
-        signin_layout = (TextView) findViewById(R.id.signin);
+        signin_playstation = (RelativeLayout) findViewById(R.id.playstation);
+        signin_xbox = (RelativeLayout) findViewById(R.id.xbox);
 //            register_layout.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
@@ -240,19 +390,71 @@ public class MainActivity extends BaseActivity implements Observer {
 //                    finish();
 //                }
 //            });
-        signin_layout.setOnClickListener(new View.OnClickListener() {
+        signin_playstation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TravellerLog.w(this, "Launch login page activity");
-
+                console = Constants.PLAYSTATION;
                 launchLogin();
-                finish();
+                //finish();
+            }
+        });
+        signin_xbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TravellerLog.w(this, "Launch login page activity");
+                console = Constants.XBOX;
+                launchLogin();
+                //finish();
             }
         });
     }
 
-    private void smoothScroll(final int position) {
+    private void intializeLoginWebViews() {
+        intializeWebViews(webViewPS, mManager.getPSNLoginUrl()!=null?mManager.getPSNLoginUrl():Constants.BUNGIE_PSN_LOGIN);
+        intializeWebViews(webViewXBOX, mManager.getXboxLoginUrl()!=null?mManager.getXboxLoginUrl():Constants.BUNGIE_XBOX_LOGIN);
+    }
 
+    private void intializeWebViews(WebView wb, String url) {
+        if(wb!=null) {
+            wb.removeAllViews();
+            wb.getSettings().setJavaScriptEnabled(true);
+            wb.getSettings().setLoadWithOverviewMode(true);
+            wb.getSettings().setUseWideViewPort(true);
+            wb.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                    if(url.equalsIgnoreCase("https://www.bungie.net/")){
+                        showBungieProgressBar();
+                        //hideWebviews();
+                    }
+                }
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    cookies = CookieManager.getInstance().getCookie(url);
+                    String csrf;
+                    String[] pair = cookies.split(";");
+                    for (int i = 0; i < pair.length; i++) {
+                        String temp = pair[i].substring(0, pair[i].indexOf('=')).trim();
+                        if (temp.equalsIgnoreCase("bungled")) {
+//                        webView.setVisibility(View.GONE);
+                            csrf = pair[i].substring(pair[i].indexOf('=') + 1, pair[i].length());
+                            Util.setDefaults("csrf", csrf, MainActivity.this);
+                            Util.setDefaults("cookie", cookies, MainActivity.this);
+                            //network call to get current user
+                            mManager.getBungieCurrentUser(csrf, cookies, getApplicationContext());
+                            return;
+                        }
+                    }
+                }
+            });
+            if(url!=null) {
+                wb.loadUrl(url);
+            }
+        }
+    }
+
+    private void smoothScroll(final int position) {
         horizontal_recycler_view.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -308,17 +510,65 @@ public class MainActivity extends BaseActivity implements Observer {
 
 
     private void launchLogin() {
-        Intent signinIntent = new Intent(getApplicationContext(),
-                LoginActivity.class);
-        //signinIntent.putExtra("userdata", userData);
-        if(contentIntent!=null) {
-            signinIntent.putExtra("eventIntent", contentIntent);
+        if(console!=null){
+            if(console.equalsIgnoreCase(Constants.PLAYSTATION)) {
+                if(webViewPS!=null) {
+                    topBar.setVisibility(View.VISIBLE);
+                    webViewPS.setVisibility(View.VISIBLE);
+                }
+            } else if(console.equalsIgnoreCase(Constants.XBOX)) {
+                if(webViewXBOX!=null) {
+                    topBar.setVisibility(View.VISIBLE);
+                    webViewXBOX.setVisibility(View.VISIBLE);
+                }
+            }
         }
-        if(mManager!=null && mManager.getEventListCurrent()!=null) {
-            mManager.getEventListCurrent().clear();
-        }
-        startActivity(signinIntent);
-        finish();
+
+        //webView = new WebView(this);
+//        if(webView!=null && url!=null) {
+//            webView.removeAllViews();
+//        webView.getSettings().setJavaScriptEnabled(true);
+//        webView.getSettings().setLoadWithOverviewMode(true);
+//        webView.getSettings().setUseWideViewPort(true);
+//        webView.setWebViewClient(new WebViewClient() {
+//            @Override
+//            public void onPageFinished(WebView view, String url){
+//                cookies = CookieManager.getInstance().getCookie(url);
+//                String csrf;
+//                String[] pair = cookies.split(";");
+//                for(int i=0; i<pair.length;i++) {
+//                    String temp = pair[i].substring(0, pair[i].indexOf('=')).trim();
+//                    if(temp.equalsIgnoreCase("bungled")) {
+//                        showProgressBar();
+////                        webView.setVisibility(View.GONE);
+//                        csrf = pair[i].substring(pair[i].indexOf('=') + 1, pair[i].length());
+//                        Util.setDefaults("csrf", csrf, MainActivity.this);
+//                        Util.setDefaults("cookie", cookies, MainActivity.this);
+//                        //network call to get current user
+//                        mManager.getBungieCurrentUser(csrf, cookies, MainActivity.this);
+//                        return;
+//                    }
+//                }
+//            }
+//        });
+//
+//            webView.loadUrl(url);
+//            webView.setVisibility(View.VISIBLE);
+////        Intent signinIntent = new Intent(getApplicationContext(),
+////                LoginActivity.class);
+////        //signinIntent.putExtra("userdata", userData);
+////        if(contentIntent!=null) {
+////            signinIntent.putExtra("eventIntent", contentIntent);
+////        }
+////        if(mManager!=null && mManager.getEventListCurrent()!=null) {
+////            mManager.getEventListCurrent().clear();
+////        }
+////        if(invitationRp!=null) {
+////            signinIntent.putExtra("invitation", invitationRp);
+////        }
+////        startActivity(signinIntent);
+////        finish();
+//        }
     }
 
     protected void setTextViewHTML(TextView text, String html)
@@ -341,9 +591,10 @@ public class MainActivity extends BaseActivity implements Observer {
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
                 // Do something with span.getURL() to handle the link click...
-                webView.setVisibility(View.VISIBLE);
                 webView.setWebViewClient(new WebViewClient());
                 webView.loadUrl(span.getURL());
+                topBar.setVisibility(View.VISIBLE);
+                webView.setVisibility(View.VISIBLE);
             }
         };
         strBuilder.setSpan(clickable, start, end, flags);
@@ -375,6 +626,8 @@ public class MainActivity extends BaseActivity implements Observer {
         stopSpinner();
         TravellerLog.w(this, "Unregistering ReceivefromBackpressService ");
         unregisterReceiver(ReceivefromBackpressService);
+        hideProgressBar();
+        hideWebviews();
         super.onStop();
     }
 
@@ -395,9 +648,7 @@ public class MainActivity extends BaseActivity implements Observer {
 
     @Override
     public void onBackPressed() {
-        if(webView!=null && webView.getVisibility()==View.VISIBLE) {
-            webView.setVisibility(View.GONE);
-        } else {
+        if(hideWebviews()) {
             super.onBackPressed();
             finish();
         }
@@ -423,12 +674,22 @@ public class MainActivity extends BaseActivity implements Observer {
                 UserData ud = (UserData) data;
                 if (ud!=null && ud.getUserId()!=null) {
                     if((ud.getAuthenticationId() == Constants.LOGIN)) {
+                        //save in preferrence
+                        Util.setDefaults("user", ud.getUserId(), getApplicationContext());
+//                        Util.setDefaults("password", password, getApplicationContext());
+//                        Util.setDefaults("consoleType", console, getApplicationContext());
                     ud.setPassword(p);
                     mManager.setUserdata(ud);
                     Intent regIntent;
 
                     //decide for activity
-                    regIntent = mManager.decideToOpenActivity(contentIntent);
+                    //regIntent = mManager.decideToOpenActivity(contentIntent);
+
+                        regIntent = new Intent(getApplicationContext(),
+                                ListActivityFragment.class);
+                        if (contentIntent != null ) {
+                            regIntent.putExtra("eventIntent", contentIntent);
+                        }
 
 //                if (contentIntent != null) {
 //                    regIntent = new Intent(getApplicationContext(),
@@ -454,13 +715,20 @@ public class MainActivity extends BaseActivity implements Observer {
         }else if(observable instanceof LogoutNetwork) {
             launchMainLayout();
             showGenericError("CHANGES TO SIGN IN", "Your gamertag now replaces your Crossroads username when logging in.\n" +
-                    "(your password is still the same)", "OK", Constants.GENERAL_ERROR, null);
+                    "(your password is still the same)", "OK", Constants.GENERAL_ERROR, null, false);
         } else if(observable instanceof EventListNetwork) {
             if(data!=null) {
                 horizontalAdapter.elistLocal.clear();
                 horizontalAdapter.addItem(mManager.getEventListCurrent(), null);
                 horizontalAdapter.notifyDataSetChanged();
                 startSpinner();
+            }
+        } else if(observable instanceof ConfigNetwork) {
+            if(data!=null) {
+                if(mManager!=null) {
+                    mManager.parseAndSaveConfigUrls((JSONObject) data);
+                }
+                forwardAfterVersionCheck();
             }
         }
     }

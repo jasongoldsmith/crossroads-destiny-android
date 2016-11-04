@@ -59,6 +59,9 @@ public class CommentData extends PlayerData {
                 if(creator.has("userName") && !creator.isNull("userName")) {
                     setUsername(creator.getString("userName"));
                 }
+                if(creator.has("verifyStatus") && !creator.isNull("verifyStatus")) {
+                    setPsnVerify(creator.getString("verifyStatus"));
+                }
                 if(creator.has("consoles") && !creator.isNull("consoles")) {
                     JSONArray conArray = creator.optJSONArray("consoles");
                     if (conArray != null) {

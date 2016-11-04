@@ -125,72 +125,72 @@ public class BaseActivity extends FragmentActivity {
     }
 
     public void showUnverifiedUserMsg() {
-        final RelativeLayout unverifiedMsg = (RelativeLayout) findViewById(R.id.new_user_msg);
-        CircularImageView userHeader = (CircularImageView) findViewById(R.id.unverified_player);
-        TextView username = (TextView) findViewById(R.id.username_text);
-        ImageView closeBtn = (ImageView) findViewById(R.id.close_btn);
-        CardView verifyBungieBtn = (CardView) findViewById(R.id.verify_btn);
-        TextView notNow = (TextView) findViewById(R.id.not_now);
-        TextView unverifiedBungieText = (TextView) findViewById(R.id.bungie_text);
-
-        UserData userData = mManager.getUserData();
-
-        unverifiedMsg.setVisibility(View.VISIBLE);
-
-        closeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                unverifiedMsg.setVisibility(View.GONE);
-                Util.setDefaults("showUnverifiedMsg", "true", mManager.getCurrentActivity());
-            }
-        });
-
-        notNow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                unverifiedMsg.setVisibility(View.GONE);
-                Util.setDefaults("showUnverifiedMsg", "true", mManager.getCurrentActivity());
-            }
-        });
-
-        if(userData!=null) {
-            if(userData.getPsnId()!=null) {
-                if(userData.getClanTag()!=null && !userData.getClanTag().isEmpty()) {
-                    username.setText(userData.getPsnId() + " [" + userData.getClanTag() + "]");
-                } else {
-                    username.setText(userData.getPsnId());
-                }
-            }
-
-            if(userData.getImageUrl()!=null) {
-                Util.picassoLoadIcon(mManager.getCurrentActivity(), userHeader, userData.getImageUrl(), R.dimen.activity_profile_icon_hgt, R.dimen.activity_profile_icon_width, R.drawable.profile_image);
-            }
-        }
-
-        unverifiedBungieText.setText(Html.fromHtml((getString(R.string.unverified_bungie_text))));
-        unverifiedBungieText.setMovementMethod(LinkMovementMethod.getInstance());
-
-        unverifiedBungieText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Util.setDefaults("showUnverifiedMsg", "true", mManager.getCurrentActivity());
-                unverifiedMsg.setVisibility(View.GONE);
-            }
-        });
-
-        verifyBungieBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Util.setDefaults("showUnverifiedMsg", "true", mManager.getCurrentActivity());
-                unverifiedMsg.setVisibility(View.GONE);
-                String uri = "http://www.bungie.net";
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                mManager.getCurrentActivity().startActivity(browserIntent);
-            }
-        });
+//        final RelativeLayout unverifiedMsg = (RelativeLayout) findViewById(R.id.new_user_msg);
+//        CircularImageView userHeader = (CircularImageView) findViewById(R.id.unverified_player);
+//        TextView username = (TextView) findViewById(R.id.username_text);
+//        ImageView closeBtn = (ImageView) findViewById(R.id.close_btn);
+//        CardView verifyBungieBtn = (CardView) findViewById(R.id.verify_btn);
+//        TextView notNow = (TextView) findViewById(R.id.not_now);
+//        TextView unverifiedBungieText = (TextView) findViewById(R.id.bungie_text);
+//
+//        UserData userData = mManager.getUserData();
+//
+//        unverifiedMsg.setVisibility(View.VISIBLE);
+//
+//        closeBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                unverifiedMsg.setVisibility(View.GONE);
+//                Util.setDefaults("showUnverifiedMsg", "true", mManager.getCurrentActivity());
+//            }
+//        });
+//
+//        notNow.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                unverifiedMsg.setVisibility(View.GONE);
+//                Util.setDefaults("showUnverifiedMsg", "true", mManager.getCurrentActivity());
+//            }
+//        });
+//
+//        if(userData!=null) {
+//            if(userData.getPsnId()!=null) {
+//                if(userData.getClanTag()!=null && !userData.getClanTag().isEmpty()) {
+//                    username.setText(userData.getPsnId() + " [" + userData.getClanTag() + "]");
+//                } else {
+//                    username.setText(userData.getPsnId());
+//                }
+//            }
+//
+//            if(userData.getImageUrl()!=null) {
+//                Util.picassoLoadIcon(mManager.getCurrentActivity(), userHeader, userData.getImageUrl(), R.dimen.activity_profile_icon_hgt, R.dimen.activity_profile_icon_width, R.drawable.profile_image);
+//            }
+//        }
+//
+//        unverifiedBungieText.setText(Html.fromHtml((getString(R.string.unverified_bungie_text))));
+//        unverifiedBungieText.setMovementMethod(LinkMovementMethod.getInstance());
+//
+//        unverifiedBungieText.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Util.setDefaults("showUnverifiedMsg", "true", mManager.getCurrentActivity());
+//                unverifiedMsg.setVisibility(View.GONE);
+//            }
+//        });
+//
+//        verifyBungieBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Util.setDefaults("showUnverifiedMsg", "true", mManager.getCurrentActivity());
+//                unverifiedMsg.setVisibility(View.GONE);
+//                String uri = "http://www.bungie.net";
+//                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+//                mManager.getCurrentActivity().startActivity(browserIntent);
+//            }
+//        });
     }
 
-    public void showGenericError(String header, String msg, String text, final int errorType, final RequestParams rp) {
+    public void showGenericError(String header, String msg, String text, final int errorType, final RequestParams rp, final boolean keyboardOpen) {
         final RelativeLayout deeplinkErrorG = (RelativeLayout) findViewById(R.id.deeplink_error);
         TextView errMsgG = (TextView) findViewById(R.id.msg);
         TextView btnTextG = (TextView) findViewById(R.id.btn_text);
@@ -199,6 +199,11 @@ public class BaseActivity extends FragmentActivity {
         deeplinkErrorG.setVisibility(View.VISIBLE);
         ImageView closeG= (ImageView) findViewById(R.id.close);
         TextView noBtn = (TextView) findViewById(R.id.no_thanks);
+
+        if(keyboardOpen) {
+            if(mManager!=null && mManager.getCurrentActivity()!=null)
+            ((EventDetailActivity)mManager.getCurrentActivity()).hideKeyboard();
+        }
 
         if(errorType == Constants.GENERAL_ERROR) {
             noBtn.setVisibility(View.GONE);
@@ -221,6 +226,10 @@ public class BaseActivity extends FragmentActivity {
                 deeplinkErrorG.setVisibility(View.GONE);
                 if(mManager!=null && mManager.getCurrentActivity()!=null && mManager.getCurrentActivity() instanceof CrashReport) {
                     ((CrashReport) mManager.getCurrentActivity()).finish();
+                }
+                if(keyboardOpen) {
+                    if(mManager!=null && mManager.getCurrentActivity()!=null)
+                        ((EventDetailActivity)mManager.getCurrentActivity()).showKeyboard();
                 }
             }
         });
@@ -246,6 +255,10 @@ public class BaseActivity extends FragmentActivity {
                     deeplinkErrorG.setVisibility(View.GONE);
                     if(mManager!=null && mManager.getCurrentActivity()!=null && mManager.getCurrentActivity() instanceof CrashReport) {
                         ((CrashReport) mManager.getCurrentActivity()).finish();
+                    }
+                    if(keyboardOpen) {
+                        if(mManager!=null && mManager.getCurrentActivity()!=null)
+                            ((EventDetailActivity)mManager.getCurrentActivity()).showKeyboard();
                     }
                 }
             }
@@ -599,6 +612,23 @@ public class BaseActivity extends FragmentActivity {
     protected void showProgressBar() {
         if(progress == null) {
             progress = (RelativeLayout) findViewById(R.id.progress_base_layout);
+        }
+
+        if(progress!=null) {
+            hideProgressBar();
+            progress.setVisibility(View.VISIBLE);
+        }
+    }
+
+    protected void showBungieProgressBar() {
+        if(progress == null) {
+            progress = (RelativeLayout) findViewById(R.id.progress_base_layout);
+        }
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            progress.setBackgroundDrawable( getResources().getDrawable(R.drawable.bungie_error_background) );
+        } else {
+            progress.setBackground( getResources().getDrawable(R.drawable.bungie_error_background));
         }
 
         if(progress!=null) {

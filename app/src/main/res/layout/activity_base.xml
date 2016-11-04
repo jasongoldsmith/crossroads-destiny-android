@@ -105,14 +105,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sorry, that activity is no longer available. Would you like to add one of your own?"
                 android:layout_below="@+id/divider"
                 android:textColor="@color/trimbe_white"
                 android:textSize="16sp"
                 android:id="@+id/msg"
                 android:layout_marginLeft="17dp"
                 android:layout_marginRight="17dp"
-                android:gravity="center"/>
+                android:layout_centerHorizontal="true"/>
 
             <android.support.v7.widget.CardView
                 xmlns:conversation="http://schemas.android.com/apk/res-auto"
@@ -145,8 +144,8 @@
                 android:layout_centerHorizontal="true"
                 android:paddingBottom="24dp"/>
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:src="@drawable/icon_close_x"
                 android:id="@+id/close"
                 android:layout_alignParentTop="true"
@@ -376,5 +375,12 @@
             android:layout_centerInParent="true"
             android:indeterminateDrawable="@drawable/progress" />
     </RelativeLayout>
+
+    <WebView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/web"
+        android:visibility="gone">
+    </WebView>
 
 </RelativeLayout>

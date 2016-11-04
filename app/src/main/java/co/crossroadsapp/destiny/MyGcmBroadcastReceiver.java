@@ -29,7 +29,7 @@ public class MyGcmBroadcastReceiver extends BroadcastReceiver {
     private final String TAG = this.getClass().getSimpleName();
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(final Context context, Intent intent) {
         TravellerLog.w(TAG, "received from gcm");
         if (intent.getAction().equals(GCM_RECEIVE_INTENT)) {
             String pushDataString = intent.getStringExtra("data");
@@ -43,11 +43,16 @@ public class MyGcmBroadcastReceiver extends BroadcastReceiver {
                     payload = i.getString("payload");
             }
             if (isAppRunning(context)) {
-                Intent in = new Intent(context, NotificationService.class);
-                        in.putExtra("payload", payload);
-                        in.putExtra("message", alert);
-                        in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                final Intent in = new Intent(context, NotificationService.class);
+                in.putExtra("payload", payload);
+                in.putExtra("message", alert);
+                in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Thread t = new Thread(){
+                    public void run(){
                         context.startService(in);
+                    }
+                };
+                t.start();
             } else {
 //                Intent i = new Intent(context, UpdateCacheService.class);
 //                i.putExtra("message", payload);

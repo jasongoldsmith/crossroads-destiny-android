@@ -19,18 +19,53 @@
         android:layout_marginTop="129dp"
         android:layout_centerHorizontal="true"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+    <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="70dp"
         android:id="@+id/signin"
-        android:background="#0086d0"
-        android:text="@string/signin"
-        android:fontFamily="sans-serif"
-        android:textStyle="bold"
-        android:textColor="@android:color/white"
-        android:textSize="14sp"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"/>
+        android:weightSum="2"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/playstation"
+            android:background="#0086d0">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/p_s_n_logo"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/xbox"
+            android:background="@color/user_profile_border_xbox">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/xbox_live_logo"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:id="@+id/signin"-->
+        <!--android:background="#0086d0"-->
+        <!--android:text="@string/signin"-->
+        <!--android:fontFamily="sans-serif"-->
+        <!--android:textStyle="bold"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:textSize="14sp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:gravity="center"/>-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/horizontal_recycler_view"
@@ -74,12 +109,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/signin"
-        android:layout_marginBottom="19dp"
-        android:textColor="@color/copyright_text"
-        android:textSize="12sp"
+        android:layout_marginBottom="11dp"
+        android:textColor="@color/trimbe_white"
+        android:textSize="14sp"
         android:id="@+id/catalyst_text"
         android:layout_centerHorizontal="true"
-        android:text="@string/copyright_string"/>
+        android:text="Sign in with PlayStation or Xbox:"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -87,20 +122,60 @@
         android:gravity="center"
         android:id="@+id/privacy_terms"
         android:textColorLink="@color/app_theme_color"
-        android:layout_above="@+id/catalyst_text"
+        android:layout_below="@+id/guardian_text_layout"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginTop="169dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
         android:textColor="@color/trimbe_white"
         android:textSize="12sp"
         android:text="@string/terms_conditions"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#1c2b33"
+        android:id="@+id/top_header"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="39dp"
+            android:text="CROSSROADS"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/trimbe_white"
+            android:textSize="16dp"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/main_backbtn"
+            android:src="@drawable/icon_back_arrow"
+            android:paddingTop="34dp"
+            android:paddingRight="10dp"
+            android:layout_alignParentLeft="true"/>
+    </RelativeLayout>
+
     <WebView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_below="@+id/top_header"
+        android:id="@+id/web_ps"
+        android:visibility="gone">
+    </WebView>
+
+    <WebView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/top_header"
         android:id="@+id/web"
+        android:visibility="gone">
+    </WebView>
+
+    <WebView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/top_header"
+        android:id="@+id/web_xbox"
         android:visibility="gone">
     </WebView>
 

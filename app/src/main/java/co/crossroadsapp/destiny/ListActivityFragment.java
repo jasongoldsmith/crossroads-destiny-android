@@ -1,7 +1,6 @@
 package co.crossroadsapp.destiny;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -47,7 +46,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -125,7 +123,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     protected ImageView appIcon;
 
     private GroupDrawerAdapter gpAct;
-    private TextView changePassword;
+    private TextView inviteFrnds;
     private ValueEventListener userListener;
     private Firebase refUFirebase;
     private ImageView grpIcon;
@@ -374,7 +372,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             }
         });
 
-        changePassword = (TextView) findViewById(R.id.reset);
+        inviteFrnds = (TextView) findViewById(R.id.invite);
         imgConsole = (ImageView) findViewById(R.id.console_icon);
         down_arw_img = (ImageView) findViewById(R.id.down_arw_img);
         consoleText = (TextView) findViewById(R.id.consoletype_text);
@@ -419,13 +417,16 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 //        dropdown.setAdapter(adapterConsole);
 //        adapterConsole.notifyDataSetChanged();
 
-        changePassword.setOnClickListener(new View.OnClickListener() {
+        inviteFrnds.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // go to create new event page
-                Intent regIntent = new Intent(getApplicationContext(),
-                        ChangePassword.class);
-                startActivity(regIntent);
+                String url = "https://crossrd.app.link/share";
+                final Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                if(url!=null) {
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, url);
+                    startActivity(Intent.createChooser(sharingIntent, "Share"));
+                }
             }
         });
         crash_report = (TextView) findViewById(R.id.crash_btn);
@@ -548,6 +549,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
         //check if app is opening from external deeplink
         checkIfExternalDeepLinkPresent();
+
+        setGroupImageUrl();
     }
 
     private void checkPrivacyDialoge() {
@@ -1205,7 +1208,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             b = getIntent().getExtras();
             if(b!=null && b.containsKey("reportIssue")) {
                 //pagerAdapter.
-                showGenericError(getString(R.string.report_submitted_header), getString(R.string.report_submitted), "OK", Constants.GENERAL_ERROR, null);
+                showGenericError(getString(R.string.report_submitted_header), getString(R.string.report_submitted), "OK", Constants.GENERAL_ERROR, null, false);
             }
         }
     }
@@ -1446,16 +1449,18 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                                 }
                                 createUpcomingCurrentList(eData);
                                 updateCurrentFrag();
-                                hideProgress();
                                 break;
                             }
                         }
                     }
+                    hideProgress();
                     //to update all lists in the background
                     //mManager.getEventList(ListActivityFragment.this);
                 }
             } else if(observable instanceof GroupListNetwork) {
+                hideProgress();
                 if (data != null) {
+                    setGroupImageUrl();
                     if (data instanceof UserData) {
                         unregisterFirebase();
                         registerFirbase();
@@ -1468,12 +1473,15 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                         if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
                             gpAct.updateGrpData(data);
                         }
-                        setGroupImageUrl();
+                        //setGroupImageUrl();
                     } else {
                         //setGroupImageUrl();
-                        if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+                        if(gpAct!=null) {
                             gpAct.update(data);
                         }
+//                        if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+//                            gpAct.update(data);
+//                        }
                     }
                 }
             } else if(observable instanceof ResendBungieVerification) {
@@ -1596,7 +1604,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             closeAllDrawers();
         }else {
             super.onBackPressed();
-            finish();
+            finishAffinity();
         }
     }
 

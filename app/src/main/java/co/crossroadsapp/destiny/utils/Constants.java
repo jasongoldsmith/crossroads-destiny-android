@@ -33,6 +33,10 @@ public class Constants {
     public static final String TERMS_OF_SERVICE = "https://www.crossroadsapp.co/terms";
     public static final String PRIVACY_POLICY = "https://www.crossroadsapp.co/privacy";
     public static final String NONE = "(none)";
+    public static final String PLAYSTATION = "PlayStation";
+    public static final String XBOX = "Xbox";
+    public static final String COOKIE_VALID_KEY = "isCookieValid";
+
 
     public static String NOTIFICATION_INTENT_CHANNEL = "com.example.sharmha.notificationintent";
     public static int INTENT_ID = 9999;
@@ -111,7 +115,8 @@ public class Constants {
 
     //urls
     public static String DEEP_LINK_IMAGE = "http://w3.crossroadsapp.co/bungie/share/branch/v1/";
-    public static String BUNGIE_ERROR = "BungieError";
+    public static String BUNGIE_ERROR = "BungieLoginError";
+    public static String BUNGIE_CONNECT_ERROR = "BungieConnectError";
     public static String BUNGIE_LEGACY_ERROR = "BungieLegacyConsoleError";
 
     public static String LEGACY_ERROR_TITLE = "Legacy Consoles";
@@ -123,6 +128,14 @@ public class Constants {
     public static int REPORT_COMMENT = 2;
     public static int REPORT_COMMENT_NEXT = 3;
 
+    public static String CONFIG_TOKEN = "780bc576-9d37-40f6-a922-befe877b2c56";
+
     //api url
     public static String REPORT_COMMENT_URL = "api/v1/a/event/reportComment";
+
+    //getCurrentUser bungie
+    public static String BUGIE_CURRENT_USER = "https://www.bungie.net/Platform/User/GetCurrentBungieAccount";
+
+    public static String BUNGIE_PSN_LOGIN = "https://www.bungie.net/en/User/SignIn/Psnid";
+    public static String BUNGIE_XBOX_LOGIN = "https://www.bungie.net/en/User/SignIn/Xuid";
 }

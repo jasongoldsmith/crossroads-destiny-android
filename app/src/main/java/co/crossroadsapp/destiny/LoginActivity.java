@@ -9,26 +9,21 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import co.crossroadsapp.destiny.data.InvitationLoginData;
 import co.crossroadsapp.destiny.utils.Util;
-import co.crossroadsapp.destiny.R;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
 import com.loopj.android.http.RequestParams;
@@ -63,6 +58,7 @@ public class LoginActivity extends BaseActivity implements Observer {
     private ImageView back;
     private ImageView heroImg;
     private Handler mHandler;
+    private InvitationLoginData invitationRp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +73,9 @@ public class LoginActivity extends BaseActivity implements Observer {
         if(b!=null) {
             if (b.containsKey("eventIntent")) {
                 localPushEvent = (Intent) b.get("eventIntent");
+            }
+            if(b.containsKey("invitation")) {
+                invitationRp = (InvitationLoginData)b.getSerializable("invitation");
             }
         }
 
@@ -202,6 +201,9 @@ public class LoginActivity extends BaseActivity implements Observer {
                         consoles.put("consoleId", username);
                         params.put("consoles", consoles);
                         params.put("passWord", password);
+                        if(invitationRp!=null) {
+                            params.put("invitation", invitationRp.getRp());
+                        }
                         dialog.show();
                         //login_btn.setImageDrawable(getResources().getDrawable(R.drawable.img_login_btn_tapped));
                         dialog.setCancelable(false);
@@ -345,7 +347,7 @@ public class LoginActivity extends BaseActivity implements Observer {
                 startActivity(intent);
             } else if(errorType.equalsIgnoreCase(Constants.BUNGIE_LEGACY_ERROR)) {
                 showGenericError("LEGACY CONSOLES", "In line with Rise of Iron, we now only support next-gen consoles. When you’ve upgraded your console, please come\n" +
-                        "back and join us!", "OK", Constants.GENERAL_ERROR, null);
+                        "back and join us!", "OK", Constants.GENERAL_ERROR, null, false);
             }
         } else {
             setErrText(err);
@@ -386,8 +388,8 @@ public class LoginActivity extends BaseActivity implements Observer {
                 if(ud.getAuthenticationId() == Constants.LOGIN) {
                 //mManager.getEventList();
                 //save in preferrence
-                Util.setDefaults("user", username, getApplicationContext());
-                Util.setDefaults("password", password, getApplicationContext());
+                    Util.setDefaults("user", username, getApplicationContext());
+                    Util.setDefaults("password", password, getApplicationContext());
                     Util.setDefaults("consoleType", consoleType, getApplicationContext());
 
                 ud.setPassword(password);
@@ -397,16 +399,11 @@ public class LoginActivity extends BaseActivity implements Observer {
 
                 //decide activity to open
                 regIntent = mManager.decideToOpenActivity(localPushEvent);
-//            if(localPushEvent!=null) {
-//                regIntent = new Intent(getApplicationContext(),
-//                        ListActivityFragment.class);
-//                regIntent.putExtra("eventIntent", localPushEvent);
-//            } else {
-//                regIntent = new Intent(getApplicationContext(),
-//                        CreateNewEvent.class);
-//            }
-                //regIntent.putExtra("userdata", ud);
 
+                    //clear invitation req params
+                    if(invitationRp!=null) {
+                        invitationRp.clearRp();
+                    }
                 startActivity(regIntent);
                 finish();
             }

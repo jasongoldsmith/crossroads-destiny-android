@@ -57,29 +57,29 @@
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
 
-    <co.crossroadsapp.destiny.SwipeFrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:swipedeck="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/notification_bar_layout"
-        android:visibility="gone"
-        android:layout_below="@+id/eventdetail_top_layout"
-        android:orientation="vertical">
+    <!--<co.crossroadsapp.destiny.SwipeFrameLayout-->
+        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--xmlns:swipedeck="http://schemas.android.com/apk/res-auto"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/notification_bar_layout"-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_below="@+id/eventdetail_top_layout"-->
+        <!--android:orientation="vertical">-->
 
-        <co.crossroadsapp.destiny.SwipeDeck
-            android:id="@+id/swipe_deck"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="6dp"
-            swipedeck:card_spacing="16dp"
-            swipedeck:render_above="true"
-            swipedeck:rotation_degrees="0"
-            />
-    </co.crossroadsapp.destiny.SwipeFrameLayout>
+        <!--<co.crossroadsapp.destiny.SwipeDeck-->
+            <!--android:id="@+id/swipe_deck"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:paddingTop="10dp"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:paddingRight="10dp"-->
+            <!--android:paddingBottom="6dp"-->
+            <!--swipedeck:card_spacing="16dp"-->
+            <!--swipedeck:render_above="true"-->
+            <!--swipedeck:rotation_degrees="0"-->
+            <!--/>-->
+    <!--</co.crossroadsapp.destiny.SwipeFrameLayout>-->
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -380,6 +380,76 @@
             </RelativeLayout>
 
         </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/invite_view"
+        android:visibility="gone"
+        android:layout_marginTop="160dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/invite_background">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/customedittext"
+            android:background="@color/tag_background">
+                <co.crossroadsapp.destiny.ContactsCompletionView
+                    android:id="@+id/searchView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="21dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="14dp"
+                    android:layout_marginRight="87dp"
+                    android:hint="Type a Gamertag"
+                    android:digits="0,1,2,3,4,5,6,7,8,9,*,qwertzuiopasdfghjklyxcvbnm,_,-"
+                    android:textColorHint="@color/invite_edittext_hint"
+                    android:imeOptions="actionDone"
+                    android:textColor="@android:color/white"
+                    android:textCursorDrawable="@drawable/cursor_draw"
+                    android:textSize="14sp"
+                    android:nextFocusDown="@+id/searchView"
+                    android:background="@null"
+                    android:inputType="textVisiblePassword|textNoSuggestions|textMultiLine"
+                    android:focusableInTouchMode="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/invite_cancel"
+                android:text="Cancel"
+                android:layout_alignParentRight="true"
+                android:paddingRight="14dp"
+                android:layout_centerVertical="true"
+                android:textColor="@color/trimbe_white"/>
+        </RelativeLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/full_invitee_list_msg"
+            android:gravity="center"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="14dp"
+            android:layout_marginRight="21dp"
+            android:layout_marginLeft="21dp"
+            android:layout_below="@+id/customedittext"
+            android:text="@string/incomplete_invite"
+            android:textColor="@color/trimbe_white"
+            android:textSize="14sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/invite_btn"
+            android:background="#0086d0"
+            android:visibility="gone"
+            android:text="@string/invite"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"/>
     </RelativeLayout>
 
     <RelativeLayout

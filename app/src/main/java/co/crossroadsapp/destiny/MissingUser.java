@@ -21,9 +21,9 @@ public class MissingUser extends Activity {
 
         Bundle b = getIntent().getExtras();
         if(b!=null) {
-            if (b.containsKey("id")) {
-                userId = b.getString("id");
-            }
+//            if (b.containsKey("id")) {
+//                userId = b.getString("id");
+//            }
             if (b.containsKey("error")) {
                 error = b.getString("error");
             }
@@ -49,16 +49,16 @@ public class MissingUser extends Activity {
             }
         });
 
-        TextView id = (TextView) findViewById(R.id.id_text);
-        TextView id_text = (TextView) findViewById(R.id.errorid_text);
-        TextView contactUsMsg = (TextView) findViewById(R.id.user_missing_email);
+        //TextView id = (TextView) findViewById(R.id.id_text);
+        TextView id_text = (TextView) findViewById(R.id.misadv_text);
+        //TextView contactUsMsg = (TextView) findViewById(R.id.user_missing_email);
 
-        contactUsMsg.setText(Html.fromHtml(getString(R.string.user_missing_text)));
-        contactUsMsg.setMovementMethod(LinkMovementMethod.getInstance());
+        ///contactUsMsg.setText(Html.fromHtml(getString(R.string.user_missing_text)));
+        //contactUsMsg.setMovementMethod(LinkMovementMethod.getInstance());
 
-        if(userId!=null) {
-            id.setText(userId);
-        }
+//        if(userId!=null) {
+//            id.setText(userId);
+//        }
         if(error!=null && !error.isEmpty()) {
             id_text.setText(error);
         }

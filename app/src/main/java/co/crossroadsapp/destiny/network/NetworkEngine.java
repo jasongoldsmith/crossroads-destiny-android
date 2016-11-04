@@ -5,8 +5,11 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 import co.crossroadsapp.destiny.ControlManager;
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.TravellerLog;
 import co.crossroadsapp.destiny.utils.Util;
+import cz.msebera.android.httpclient.cookie.Cookie;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.PersistentCookieStore;
@@ -24,7 +27,7 @@ public class NetworkEngine {
     //Switch development or production server
     //development server
     //private final String BASE_URL = "https://travelerbackend.herokuapp.com/api/v1/";
-    private final String BASE_URL = Util.getNetworkUrl();
+    private String BASE_URL = Util.getNetworkUrl();
     private AsyncHttpClient client;
     //production server
     //private final static String BASE_URL = "https://travelerbackendproduction.herokuapp.com/api/v1/";
@@ -32,6 +35,7 @@ public class NetworkEngine {
     private NetworkEngine(Context c) {
         mManager = ControlManager.getmInstance();
         client = new AsyncHttpClient();
+        client.setTimeout(30000);
         if(mManager.getClient()!=null) {
             client = mManager.getClient();
         } else {
@@ -41,20 +45,14 @@ public class NetworkEngine {
         if(c!=null) {
             myCookieStore = new PersistentCookieStore(c);
         }
-        //myCookieStore.clear();
         if(myCookieStore!=null) {
             client.setCookieStore(myCookieStore);
         }
     }
 
     public static NetworkEngine getmInstance(Context context) {
-        if (mInstance==null) {
-            mInstance = new NetworkEngine(context);
-            return mInstance;
-        } else {
-            mInstance = new NetworkEngine(context);
-            return mInstance;
-        }
+        mInstance = new NetworkEngine(context);
+        return mInstance;
     }
 
     public PersistentCookieStore getCookie() {
@@ -69,6 +67,10 @@ public class NetworkEngine {
         client.post(getAbsoluteUrl(url), params, responseHandler);
     }
 
+    public void get(AsyncHttpResponseHandler responseHandler) {
+        client.get(BASE_URL, responseHandler);
+    }
+
     private String getAbsoluteUrl(String relativeUrl) {
         return BASE_URL + relativeUrl;
     }
@@ -79,6 +81,13 @@ public class NetworkEngine {
 
     public void get(String url, AsyncHttpResponseHandler responseHandler) {
         client.get(getAbsoluteUrl(url), responseHandler);
+    }
+
+    public void updateBugnieBaseUrlAndHeader(String csrf, String cookies) {
+        if(mManager!=null){
+            client = mManager.getBungieClient(csrf, cookies);
+            BASE_URL = mManager.getBungieCurrentUserUrl()!=null?mManager.getBungieCurrentUserUrl():Constants.BUGIE_CURRENT_USER;
+        }
     }
 
 //    public String  performPostCall(String requestURL,

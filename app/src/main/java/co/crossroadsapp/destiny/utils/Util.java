@@ -16,7 +16,9 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -48,7 +50,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
@@ -60,7 +61,7 @@ public class Util {
 
     //To switch between production and development server links
     //where 1 points to development, 2 points to production and 3 points to Dev staging
-    private static final int network_connection = 3;
+    private static final int network_connection = 1;
 
     private static final String TAG = Util.class.getName();
     public static final String trimbleDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -73,6 +74,28 @@ public class Util {
             return Constants.NETWORK_DEV_BASE_STAGING_URL;
         }
         return Constants.NETWORK_DEV_BASE_URL;
+    }
+
+    public static int softNavigationPresent(Activity c) {
+        int hasSoftwareKeys=0;
+        if(c!=null) {
+            Display d = c.getWindowManager().getDefaultDisplay();
+
+            DisplayMetrics realDisplayMetrics = new DisplayMetrics();
+            d.getRealMetrics(realDisplayMetrics);
+
+            int realHeight = realDisplayMetrics.heightPixels;
+            int realWidth = realDisplayMetrics.widthPixels;
+
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            d.getMetrics(displayMetrics);
+
+            int displayHeight = displayMetrics.heightPixels;
+            int displayWidth = displayMetrics.widthPixels;
+
+            hasSoftwareKeys = realHeight - displayHeight;
+        }
+        return hasSoftwareKeys;
     }
 
     public static String getFirebaseUrl(String clanId, String eventId, int channel) {
@@ -209,6 +232,11 @@ public class Util {
         SharedPreferences.Editor editor = prefs.edit();
         editor.remove("user");
         editor.remove("password");
+        editor.remove("csrf");
+        editor.remove("cookie");
+        CookieManager.getInstance().removeAllCookie();
+//        CookieManager.getInstance().setCookie("https://www.bungie.net/", " ");
+//        CookieManager.getInstance().setCookie("https://www.bungie.net/", " ");
         //editor.clear();
         editor.commit();
     }
