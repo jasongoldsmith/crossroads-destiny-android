@@ -127,15 +127,22 @@ public class Constants {
     public static int GENERAL_ERROR = 1;
     public static int REPORT_COMMENT = 2;
     public static int REPORT_COMMENT_NEXT = 3;
+    public static int GENERAL_LEAVE =5;
+    public static int GENERAL_KICK =4;
 
     public static String CONFIG_TOKEN = "780bc576-9d37-40f6-a922-befe877b2c56";
-
-    //api url
-    public static String REPORT_COMMENT_URL = "api/v1/a/event/reportComment";
 
     //getCurrentUser bungie
     public static String BUGIE_CURRENT_USER = "https://www.bungie.net/Platform/User/GetCurrentBungieAccount";
 
     public static String BUNGIE_PSN_LOGIN = "https://www.bungie.net/en/User/SignIn/Psnid";
     public static String BUNGIE_XBOX_LOGIN = "https://www.bungie.net/en/User/SignIn/Xuid";
+
+    //api url
+    public static String REPORT_COMMENT_URL = "api/v1/a/event/reportComment";
+    public static String BUNGIE_RESPONSE_URL = "api/v1/gatewayResponse";
+    public static String KICK_PLAYER_URL = "api/v1/a/event/kick";
+    public static String CANCEL_PLAYER_URL = "api/v1/a/event/invite/cancel";
+    public static String ACCEPT_EVENT_URL = "api/v1/a/event/invite/accept";
+
 }

@@ -28,6 +28,7 @@ public class EventRelationshipHandlerNetwork extends Observable{
     private String url = "api/v1/a/event/join";
     private String leaveUrl = "api/v1/a/event/leave";
     private String createEventUrl = "api/v1/a/event/create";
+    private String acceptUrl = "api/v1/a/event/invite/accept";
 
     public EventRelationshipHandlerNetwork(Context c) {
         this.mContext = c;
@@ -144,5 +145,35 @@ public class EventRelationshipHandlerNetwork extends Observable{
         eData.toJson(obj);
         setChanged();
         notifyObservers(eData);
+    }
+
+    public void postEventPlayerRelation(RequestParams rp, String url) {
+        if (Util.isNetworkAvailable(mContext)) {
+            ntwrk.post(url, rp, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    // If the response is JSONObject instead of expected JSONArray
+                    parseEventObject(response);
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                    // If the response is JSONObject instead of expected JSONArray
+
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                    mManager.showErrorDialogue(statusCode + " - server failed for create event");
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
+                }
+            });
+        }else {
+            Util.createNoNetworkDialogue(mContext);
+        }
     }
 }

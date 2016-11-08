@@ -246,7 +246,8 @@ public class EventDetailsFragments extends Fragment {
         private ImageView message;
         private ImageView leader_tag;
         private ImageView inviteIcon;
-
+        private TextView inviteText;
+        private ImageView invitedColorBar;
 
         public CurrentEventsViewHolder(View itemView) {
             super(itemView);
@@ -258,6 +259,8 @@ public class EventDetailsFragments extends Fragment {
             message = (ImageView) itemView.findViewById(R.id.event_detail_message);
             leader_tag = (ImageView) itemView.findViewById(R.id.leader_ear);
             inviteIcon = (ImageView) itemView.findViewById(R.id.invite_icon);
+            inviteText = (TextView) itemView.findViewById(R.id.invite_text);
+            invitedColorBar = (ImageView) itemView.findViewById(R.id.invited_bar);
         }
     }
 
@@ -270,15 +273,18 @@ public class EventDetailsFragments extends Fragment {
     }
 
     @Override
-    public void onBindViewHolder(CurrentEventsViewHolder holder, final int position) {
+    public void onBindViewHolder(final CurrentEventsViewHolder holder, final int position) {
         String currPlayerId = null;
         if(playerLocal!=null) {
+            final RequestParams kickCancelReqPrams=new RequestParams();
             if(clanTag!=null && currentEvent!=null && currentEvent.getEventStatus()!=null && !currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)) {
                 clanTag.setVisibility(View.VISIBLE);
             }
             //setBanners();
 
             holder.inviteIcon.setVisibility(View.GONE);
+            holder.inviteText.setText(" ");
+            holder.invitedColorBar.setVisibility(View.GONE);
             if (position >= playerLocal.size() && getMaxPlayer() > playerLocal.size() ) {
                 holder.playerName.setText("searching...");
                 holder.playerName.setTextColor(getResources().getColor(R.color.trimbe_white));
@@ -286,18 +292,18 @@ public class EventDetailsFragments extends Fragment {
                 holder.playerProfile.setImageResource(R.drawable.img_profile_blank);
                 if(position==playerLocal.size()) {
                     if (checkUserIsPlayer()) {
-                        //todo hiding invite icon for web login and will enable with invite flow implementation
-//                        holder.inviteIcon.setVisibility(View.VISIBLE);
-//                        holder.inviteIcon.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                ((EventDetailActivity) getActivity()).showAnimatedInviteView();
-//                            }
-//                        });
+                        holder.inviteIcon.setVisibility(View.VISIBLE);
+                        holder.inviteIcon.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ((EventDetailActivity) getActivity()).showAnimatedInviteView();
+                            }
+                        });
                     }
                 }
             } else {
                 if (playerLocal.get(position) != null) {
+
                     if (playerLocal.get(position).getPlayerId() != null) {
                         currPlayerId = playerLocal.get(position).getPlayerId();
                     }
@@ -306,9 +312,10 @@ public class EventDetailsFragments extends Fragment {
 
                     holder.leader_tag.setVisibility(View.GONE);
 
-                    if (playerLocal.get(position).getPsnId() != null) {
+                    if (playerLocal.get(position).getPsnId() != null && playerLocal.get(position).getUserId()!=null) {
                         String name = playerLocal.get(position).getPsnId();
-                        if(ifPlayerisUserAndVerified(name)) {
+                        String userId = playerLocal.get(position).getUserId();
+                        if(ifPlayerisUserAndVerified(userId)) {
                             if (playerLocal.get(position).getClanTag() != null && !playerLocal.get(position).getClanTag().isEmpty()) {
                                 name = name + " [" + playerLocal.get(position).getClanTag() + "]";
                             }
@@ -319,52 +326,79 @@ public class EventDetailsFragments extends Fragment {
                         } else {
                             Util.picassoLoadIcon(((EventDetailActivity)getActivity()), holder.playerProfile, null,
                                     R.dimen.eventdetail_player_profile_hgt, R.dimen.eventdetail_player_profile_width, R.drawable.profile_image);
-
                         }
                         holder.playerName.setText(name);
-                        holder.playerName.setTextColor(getResources().getColor(R.color.activity_light_color));
 
                        if(decideLeaderTag(position, playerLocal.get(position).getPsnId())) {
                            holder.leader_tag.setVisibility(View.VISIBLE);
                        }
+
+                        if(playerLocal.get(position).getInvitedBy()!=null) {
+                            holder.invitedColorBar.setVisibility(View.VISIBLE);
+                            holder.playerName.setTextColor(getResources().getColor(R.color.invited_player_text));
+                            if (ifPlayerisUser(playerLocal.get(position).getInvitedBy())) {
+                                kickCancelReqPrams.put("eId", currentEvent.getEventId());
+                                kickCancelReqPrams.put("userId", playerLocal.get(position).getUserId());
+                                holder.inviteText.setText("Cancel");
+                            } else {
+                                holder.inviteText.setText("Invited");
+                            }
+                        } else {
+                            if(ifUserInvited(playerLocal, position)) {
+                                holder.invitedColorBar.setVisibility(View.VISIBLE);
+                            }
+                            if(!playerLocal.get(position).getActive()) {
+                                holder.playerName.setTextColor(getResources().getColor(R.color.invited_player_text));
+                                if (checkUserIsPlayer() && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL) && !ifPlayerisUser(playerLocal.get(position).getUserId())) {
+                                    kickCancelReqPrams.put("eId", currentEvent.getEventId());
+                                    kickCancelReqPrams.put("userId", playerLocal.get(position).getUserId());
+                                    holder.inviteText.setText("Kick");
+                                }
+                            }
+                            holder.playerName.setTextColor(getResources().getColor(R.color.activity_light_color));
+                        }
+
+                        final String kickCancelBtnText = holder.inviteText.getText().toString();
+
+                        holder.inviteText.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (kickCancelBtnText != null && !kickCancelBtnText.isEmpty()) {
+                                    if (kickCancelBtnText.equalsIgnoreCase("Cancel")) {
+                                        // call cancel api
+                                        if (kickCancelReqPrams != null) {
+                                            ((EventDetailActivity) getActivity()).showProgressBar();
+                                            mManager.postCancelPlayer((EventDetailActivity) getActivity(), kickCancelReqPrams);
+                                        }
+                                    } else if (kickCancelBtnText.equalsIgnoreCase("Kick")) {
+                                        // call kick api
+                                        if (kickCancelReqPrams != null) {
+                                            ((EventDetailActivity) getActivity()).showGenericError("KICK FOR INACTIVITY?", "Removing this Guardian will allow another to join instead.", "KICK", "Cancel", Constants.GENERAL_KICK, kickCancelReqPrams, false);
+                                        }
+                                    }
+                                }
+                            }
+                        });
                     }
-
-//                    if (checkUserIsCreator() && (!playerLocal.get(position).getPlayerId().equalsIgnoreCase(currentEvent.getCreatorData().getPlayerId()))) {
-//                        //holder.message.setVisibility(View.VISIBLE);
-//                    }
-//                    if ((checkUserIsPlayer() && !checkUserIsCreator()) && (playerLocal.get(position).getPlayerId().equalsIgnoreCase(currentEvent.getCreatorData().getPlayerId()))) {
-//                        //holder.message.setVisibility(View.VISIBLE);
-//                    }
-
-                    final String finalCurrPlayerId = currPlayerId;
-//                    holder.message.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            if (sendmsg_bckgrnd != null) {
-//                                sendmsg_bckgrnd.setVisibility(View.VISIBLE);
-//                                editMsgPlayer.setText(playerLocal.get(position).getPsnId());
-//                                showKeyboard();
-//                            }
-//
-//                            if (sendBtn != null) {
-//                                sendBtn.setOnClickListener(new View.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(View v) {
-//                                        //v.setEnabled(false);
-//                                        String s = getEditText();
-//                                        if (s != null) {
-//                                            sendMessage(finalCurrPlayerId, s);
-//                                        }
-//                                    }
-//                                });
-//                            }
-//                        }
-//                    });
                     holder.playerProfile.invalidate();
                 }
             }
         }
     }
+
+        private boolean ifUserInvited(ArrayList<PlayerData> playerLocal, int position) {
+            if(playerLocal!=null) {
+                String currentUserId = playerLocal.get(position).getUserId();
+                for(int i=0; i<playerLocal.size(); i++) {
+                    if(playerLocal.get(i)!=null && playerLocal.get(i).getInvitedBy()!=null) {
+                        if(currentUserId.equalsIgnoreCase(playerLocal.get(i).getInvitedBy())) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
 
         @Override
         public int getItemCount() {
@@ -418,8 +452,21 @@ public class EventDetailsFragments extends Fragment {
 //        }
         if(pId!=null && currentEvent!=null && this.currentEvent.getPlayerData()!=null) {
             for (int i = 0; i < currentEvent.getPlayerData().size(); i++) {
-                if (pId.equalsIgnoreCase(currentEvent.getPlayerData().get(i).getPsnId())) {
+                if (pId.equalsIgnoreCase(currentEvent.getPlayerData().get(i).getUserId())) {
                     if(currentEvent.getPlayerData().get(i).getPsnVerify()!=null && currentEvent.getPlayerData().get(i).getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean ifPlayerisUser(String id) {
+        if(id!=null && currentEvent!=null && this.currentEvent.getPlayerData()!=null) {
+            for (int i = 0; i < currentEvent.getPlayerData().size(); i++) {
+                if(user!=null && user.getUserId()!=null) {
+                    if (id.equalsIgnoreCase(user.getUserId())) {
                         return true;
                     }
                 }
@@ -495,9 +542,9 @@ public class EventDetailsFragments extends Fragment {
                                         rp.put("commentId", commentsLocal.get(position).getId());
                                     }
                                     if (mManager!=null && mManager.getUserData()!=null && mManager.getUserData().getMaxReported()) {
-                                        ((EventDetailActivity) getActivity()).showGenericError(getString(R.string.report_issue_header), getString(R.string.report_issue_next), "NEXT", Constants.REPORT_COMMENT_NEXT, rp, false);
+                                        ((EventDetailActivity) getActivity()).showGenericError(getString(R.string.report_issue_header), getString(R.string.report_issue_next), "NEXT", null, Constants.REPORT_COMMENT_NEXT, rp, false);
                                     } else {
-                                        ((EventDetailActivity) getActivity()).showGenericError(getString(R.string.report_issue_header), getString(R.string.report_issue), "REPORT", Constants.REPORT_COMMENT, rp, false);
+                                        ((EventDetailActivity) getActivity()).showGenericError(getString(R.string.report_issue_header), getString(R.string.report_issue), "REPORT", null, Constants.REPORT_COMMENT, rp, false);
                                     }
                                 }
                             }

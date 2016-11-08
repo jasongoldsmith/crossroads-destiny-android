@@ -1,6 +1,7 @@
 package co.crossroadsapp.destiny.network;
 
 import android.content.Context;
+import android.content.Entity;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
@@ -8,10 +9,12 @@ import co.crossroadsapp.destiny.ControlManager;
 import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.TravellerLog;
 import co.crossroadsapp.destiny.utils.Util;
+import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.cookie.Cookie;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.PersistentCookieStore;
 import com.loopj.android.http.RequestParams;
 
@@ -79,15 +82,23 @@ public class NetworkEngine {
         client.post(getAbsoluteUrl(url), responseHandler);
     }
 
+//    public void post(RequestParams params, AsyncHttpResponseHandler responseHandler){
+//        client.post(BASE_URL, params, responseHandler);
+//    }
+
     public void get(String url, AsyncHttpResponseHandler responseHandler) {
         client.get(getAbsoluteUrl(url), responseHandler);
     }
 
-    public void updateBugnieBaseUrlAndHeader(String csrf, String cookies) {
-        if(mManager!=null){
+    public void updateBugnieBaseUrlAndHeader(String csrf, String cookies, String url) {
+        if(mManager!=null && url!=null && csrf!=null){
             client = mManager.getBungieClient(csrf, cookies);
-            BASE_URL = mManager.getBungieCurrentUserUrl()!=null?mManager.getBungieCurrentUserUrl():Constants.BUGIE_CURRENT_USER;
+            BASE_URL = url;
         }
+    }
+
+    public void post(Context c, HttpEntity entity, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        client.post(c, BASE_URL, entity, "application/json", jsonHttpResponseHandler);
     }
 
 //    public String  performPostCall(String requestURL,

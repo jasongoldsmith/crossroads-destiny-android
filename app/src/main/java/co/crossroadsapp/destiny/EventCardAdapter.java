@@ -22,6 +22,7 @@ import java.util.Map;
 import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.CurrentEventDataHolder;
 import co.crossroadsapp.destiny.data.EventData;
+import co.crossroadsapp.destiny.data.PlayerData;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
@@ -416,7 +417,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                         setCardViewLayoutParams(holder.event_card_mainLayout, 165);
                     } else {
-                        updateJoinButton(holder, status, CreatorIn, CreatorIsPlayer);
+                        updateJoinButton(holder, status, CreatorIn, CreatorIsPlayer, ifUserIsInvited(currEvent.getPlayerData()));
                     }
 
                     holder.eventPlayerNames.setText(allNames);
@@ -469,6 +470,22 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
+    private boolean ifUserIsInvited(ArrayList<PlayerData> playerData) {
+        if(user!=null && user.getUserId()!=null) {
+            if(playerData!=null) {
+                for(int i=0;i<playerData.size();i++) {
+                    if(playerData.get(i)!=null && playerData.get(i).getUserId().equalsIgnoreCase(user.getUserId())) {
+                        if(playerData.get(i).getInvitedBy()!=null && !playerData.get(i).getInvitedBy().isEmpty()) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
     private void setCardViewLayoutParams(RelativeLayout event_card_mainLayout, int i) {
         int pix = Util.dpToPx(i, mContext);
         if(pix>0) {
@@ -477,15 +494,20 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    private void updateJoinButton(MyViewHolder holder, String status, boolean creatorIn, boolean creatorIsPlayer) {
+    private void updateJoinButton(MyViewHolder holder, String status, boolean creatorIn, boolean creatorIsPlayer, boolean playerIsInvited) {
         switch (status) {
             case "new":
                 if (creatorIsPlayer) {
                     holder.unjoinBtn.setVisibility(View.VISIBLE);
                     holder.joinBtn.setImageResource(R.drawable.btn_o_w_n_e_r);
                 } else if (creatorIn) {
-                    holder.unjoinBtn.setVisibility(View.VISIBLE);
-                    holder.joinBtn.setImageResource(R.drawable.btn_g_o_i_n_g);
+                    if(playerIsInvited) {
+                        holder.unjoinBtn.setVisibility(View.VISIBLE);
+                        holder.joinBtn.setImageResource(R.drawable.btn_i_n_v_i_t_e_d);
+                    }else {
+                        holder.unjoinBtn.setVisibility(View.VISIBLE);
+                        holder.joinBtn.setImageResource(R.drawable.btn_g_o_i_n_g);
+                    }
                 } else {
                     holder.unjoinBtn.setVisibility(View.GONE);
                     holder.joinBtn.setImageResource(R.drawable.btn_j_o_i_n);
@@ -496,8 +518,13 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     holder.unjoinBtn.setVisibility(View.VISIBLE);
                     holder.joinBtn.setImageResource(R.drawable.btn_o_w_n_e_r);
                 } else if (creatorIn) {
-                    holder.unjoinBtn.setVisibility(View.VISIBLE);
-                    holder.joinBtn.setImageResource(R.drawable.btn_g_o_i_n_g);
+                    if(playerIsInvited) {
+                        holder.unjoinBtn.setVisibility(View.VISIBLE);
+                        holder.joinBtn.setImageResource(R.drawable.btn_i_n_v_i_t_e_d);
+                    }else {
+                        holder.unjoinBtn.setVisibility(View.VISIBLE);
+                        holder.joinBtn.setImageResource(R.drawable.btn_g_o_i_n_g);
+                    }
                 } else {
                     holder.unjoinBtn.setVisibility(View.GONE);
                     holder.joinBtn.setImageResource(R.drawable.btn_j_o_i_n);
@@ -508,8 +535,13 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     holder.unjoinBtn.setVisibility(View.VISIBLE);
                     holder.joinBtn.setImageResource(R.drawable.btn_o_w_n_e_r);
                 } else if (creatorIn) {
-                    holder.unjoinBtn.setVisibility(View.VISIBLE);
-                    holder.joinBtn.setImageResource(R.drawable.btn_r_e_a_d_y);
+                    if(playerIsInvited) {
+                        holder.unjoinBtn.setVisibility(View.VISIBLE);
+                        holder.joinBtn.setImageResource(R.drawable.btn_i_n_v_i_t_e_d);
+                    }else {
+                        holder.unjoinBtn.setVisibility(View.VISIBLE);
+                        holder.joinBtn.setImageResource(R.drawable.btn_r_e_a_d_y);
+                    }
                 } else {
                     holder.unjoinBtn.setVisibility(View.GONE);
                     holder.joinBtn.setImageResource(R.drawable.btn_f_u_l_l);
@@ -520,8 +552,18 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     holder.unjoinBtn.setVisibility(View.VISIBLE);
                     holder.joinBtn.setImageResource(R.drawable.btn_o_w_n_e_r);
                 } else if (creatorIn) {
-                    holder.unjoinBtn.setVisibility(View.VISIBLE);
-                    holder.joinBtn.setImageResource(R.drawable.btn_g_o_i_n_g);
+                    if(playerIsInvited) {
+                        holder.unjoinBtn.setVisibility(View.VISIBLE);
+                        holder.joinBtn.setImageResource(R.drawable.btn_i_n_v_i_t_e_d);
+                    }else {
+                        if(playerIsInvited) {
+                            holder.unjoinBtn.setVisibility(View.VISIBLE);
+                            holder.joinBtn.setImageResource(R.drawable.btn_i_n_v_i_t_e_d);
+                        }else {
+                            holder.unjoinBtn.setVisibility(View.VISIBLE);
+                            holder.joinBtn.setImageResource(R.drawable.btn_g_o_i_n_g);
+                        }
+                    }
                 } else {
                     holder.unjoinBtn.setVisibility(View.GONE);
                     holder.joinBtn.setImageResource(R.drawable.btn_j_o_i_n);

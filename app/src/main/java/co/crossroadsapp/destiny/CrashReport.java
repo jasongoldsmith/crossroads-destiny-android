@@ -156,7 +156,7 @@ public class CrashReport extends BaseActivity implements Observer {
     public void update(Observable observable, Object data) {
         hideProgressBar();
         if(reportIssue) {
-            showGenericError(getString(R.string.report_submitted_header), getString(R.string.report_submitted), "OK", Constants.GENERAL_ERROR, null, false);
+            showGenericError(getString(R.string.report_submitted_header), getString(R.string.report_submitted), "OK", null, Constants.GENERAL_ERROR, null, false);
         } else {
             Intent intent = new Intent(getApplicationContext(),
                     MessageSent.class);

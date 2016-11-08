@@ -29,6 +29,7 @@ import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.network.ActivityListNetwork;
 import co.crossroadsapp.destiny.network.AddCommentNetwork;
 import co.crossroadsapp.destiny.network.AddNewConsoleNetwork;
+import co.crossroadsapp.destiny.network.BungieMessageNetwork;
 import co.crossroadsapp.destiny.network.BungieUserNetwork;
 import co.crossroadsapp.destiny.network.ChangeCurrentConsoleNetwork;
 import co.crossroadsapp.destiny.network.ConfigNetwork;
@@ -55,6 +56,7 @@ import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.ErrorShowDialog;
 import co.crossroadsapp.destiny.utils.TravellerDialogueHelper;
 import co.crossroadsapp.destiny.utils.Version;
+import cz.msebera.android.httpclient.entity.ByteArrayEntity;
 import cz.msebera.android.httpclient.entity.StringEntity;
 import cz.msebera.android.httpclient.message.BasicHeader;
 import cz.msebera.android.httpclient.protocol.HTTP;
@@ -65,6 +67,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.mixpanel.android.mpmetrics.MPConfig;
 import com.shaded.fasterxml.jackson.core.JsonGenerationException;
+import com.shaded.fasterxml.jackson.core.JsonParseException;
 import com.shaded.fasterxml.jackson.core.type.TypeReference;
 import com.shaded.fasterxml.jackson.databind.JsonMappingException;
 import com.shaded.fasterxml.jackson.databind.ObjectMapper;
@@ -134,6 +137,7 @@ public class ControlManager implements Observer{
     private String bungieCurrentUserUrl;
     private String psnURL;
     private String xboxURL;
+    private BungieMessageNetwork bungieMsgNtwrk;
 
     public ControlManager() {
     }
@@ -707,7 +711,7 @@ public class ControlManager implements Observer{
                             RequestParams rp = new RequestParams();
                             rp.put("bungieResponse", map);
                             rp.put("consoleType", platform);
-                            rp.put("bungieURL", Constants.BUGIE_CURRENT_USER);
+                            rp.put("bungieURL", getBungieCurrentUserUrl()!=null?getBungieCurrentUserUrl():Constants.BUGIE_CURRENT_USER);
                             if(mCurrentAct instanceof MainActivity) {
                                 loginNetwork = new LoginNetwork(mCurrentAct);
                                 loginNetwork.addObserver(this);
@@ -726,6 +730,22 @@ public class ControlManager implements Observer{
                     e.printStackTrace();
                 }
             }
+//        } else if(observable instanceof BungieMessageNetwork) {
+//            if(data!=null) {
+//                try {
+//                    RequestParams rp = new RequestParams();
+//                    if(((BungieMessageNetwork) observable).getId()!=null) {
+//                        rp.put("responseType", "sendBungieMessage");
+//                        HashMap<String,Object> map = new ObjectMapper().readValue(data.toString(), HashMap.class);
+//                        rp.put("gatewayResponse", map);
+//                        Map<String, String> map2 = new HashMap();
+//                        map2.put("pendingEventInvitationId", ((BungieMessageNetwork) observable).getId());
+//
+//                    }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
         }
     }
 
@@ -1042,7 +1062,7 @@ public class ControlManager implements Observer{
 
     public void getBungieCurrentUser(String csrf, String cookies, Context applicationContext) {
         try {
-            bugieGetUser = new BungieUserNetwork(csrf, cookies, applicationContext);
+            bugieGetUser = new BungieUserNetwork(csrf, cookies, applicationContext, getBungieCurrentUserUrl()!=null?getBungieCurrentUserUrl():Constants.BUGIE_CURRENT_USER);
             bugieGetUser.addObserver(this);
             bugieGetUser.getBungieCurrentUser();
         } catch (JSONException e) {
@@ -1130,5 +1150,44 @@ public class ControlManager implements Observer{
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void sendInviteBungieMsg(String msgUrl, String body, Context applicationContext, String id) {
+        try {
+            String csrf = Util.getDefaults("csrf", applicationContext);
+            String cookies = Util.getDefaults("cookie", applicationContext);
+
+            if(csrf!=null && !csrf.isEmpty() && cookies!=null && !cookies.isEmpty()) {
+                ByteArrayEntity entity = new ByteArrayEntity(body.getBytes("UTF-8"));
+                entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+
+                bungieMsgNtwrk = new BungieMessageNetwork(csrf, cookies, applicationContext, msgUrl);
+                bungieMsgNtwrk.addObserver(this);
+                bungieMsgNtwrk.postBungieMsg(entity, id);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void postAcceptInvite(EventDetailActivity activity, RequestParams rp) {
+        eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(activity);
+        eventRelationshipNtwrk.addObserver(activity);
+        eventRelationshipNtwrk.addObserver(this);
+        eventRelationshipNtwrk.postEventPlayerRelation(rp, Constants.ACCEPT_EVENT_URL);
+    }
+
+    public void postKickPlayer(EventDetailActivity activity, RequestParams requestParams) {
+        eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(activity);
+        eventRelationshipNtwrk.addObserver(activity);
+        eventRelationshipNtwrk.addObserver(this);
+        eventRelationshipNtwrk.postEventPlayerRelation(requestParams, Constants.KICK_PLAYER_URL);
+    }
+
+    public void postCancelPlayer(EventDetailActivity activity, RequestParams requestParams) {
+        eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(activity);
+        eventRelationshipNtwrk.addObserver(activity);
+        eventRelationshipNtwrk.addObserver(this);
+        eventRelationshipNtwrk.postEventPlayerRelation(requestParams, Constants.CANCEL_PLAYER_URL);
     }
 }

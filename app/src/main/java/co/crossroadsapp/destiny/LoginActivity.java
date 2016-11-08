@@ -347,7 +347,7 @@ public class LoginActivity extends BaseActivity implements Observer {
                 startActivity(intent);
             } else if(errorType.equalsIgnoreCase(Constants.BUNGIE_LEGACY_ERROR)) {
                 showGenericError("LEGACY CONSOLES", "In line with Rise of Iron, we now only support next-gen consoles. When you’ve upgraded your console, please come\n" +
-                        "back and join us!", "OK", Constants.GENERAL_ERROR, null, false);
+                        "back and join us!", "OK", null, Constants.GENERAL_ERROR, null, false);
             }
         } else {
             setErrText(err);

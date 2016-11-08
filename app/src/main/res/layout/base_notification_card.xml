@@ -18,7 +18,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:id="@+id/noti_icon"
-            android:src="@drawable/icon_alert"
+            android:src="@drawable/icon_ghost_default"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"/>

@@ -190,7 +190,7 @@ public class BaseActivity extends FragmentActivity {
 //        });
     }
 
-    public void showGenericError(String header, String msg, String text, final int errorType, final RequestParams rp, final boolean keyboardOpen) {
+    public void showGenericError(String header, String msg, String firstBtnText, String secondBtnText, final int errorType, final RequestParams rp, final boolean keyboardOpen) {
         final RelativeLayout deeplinkErrorG = (RelativeLayout) findViewById(R.id.deeplink_error);
         TextView errMsgG = (TextView) findViewById(R.id.msg);
         TextView btnTextG = (TextView) findViewById(R.id.btn_text);
@@ -269,10 +269,10 @@ public class BaseActivity extends FragmentActivity {
         if (msg != null && !msg.isEmpty()) {
             errMsgG.setText(msg);
         }
-        if (text != null && !text.isEmpty()) {
+        if (firstBtnText != null && !firstBtnText.isEmpty()) {
             btnTextG.setAllCaps(true);
             //btnTextG.setTextSize(Util.dpToPx(16, this));
-            btnTextG.setText(text);
+            btnTextG.setText(firstBtnText);
             btnTextG.setPadding(Util.dpToPx(88, this), Util.dpToPx(12, this),Util.dpToPx(88, this),Util.dpToPx(12, this));
         }
     }
@@ -437,22 +437,22 @@ public class BaseActivity extends FragmentActivity {
                         if(msngrConsoleId!=null) {
                             notiTopText.setText(msngrConsoleId);
                         }
-                        if(msngrImage!=null) {
-                            Picasso.with(getApplicationContext())
-                                    .load(msngrImage)
-                                    .placeholder(R.drawable.icon_alert)
-                                    .fit().centerCrop()
-                                    .into(msngrImageView);
-                        }
-                        grpImageView.setVisibility(View.GONE);
-                        msngrImageView.setVisibility(View.VISIBLE);
+//                        if(msngrImage!=null) {
+//                            Picasso.with(getApplicationContext())
+//                                    .load(msngrImage)
+//                                    .placeholder(R.drawable.icon_alert)
+//                                    .fit().centerCrop()
+//                                    .into(msngrImageView);
+//                        }
+//                        grpImageView.setVisibility(View.GONE);
+//                        msngrImageView.setVisibility(View.VISIBLE);
                         notiTopSubText.setVisibility(View.GONE);
                         if(msg!=null) {
                             notiEventText.setText(data.get(position).getMessage());
                         }
                     } else {
-                        grpImageView.setVisibility(View.VISIBLE);
-                        msngrImageView.setVisibility(View.GONE);
+//                        grpImageView.setVisibility(View.VISIBLE);
+//                        msngrImageView.setVisibility(View.GONE);
                         if (name!=null && !name.isEmpty()) {
                             notiTopSubText.setVisibility(View.VISIBLE);
                             notiTopSubText.setText(name.toUpperCase());
@@ -461,15 +461,15 @@ public class BaseActivity extends FragmentActivity {
                             String first = console +": "+ grpName;
                             notiTopText.setText(first);
                         }
-                        if(grpImage!=null && (!grpImage.isEmpty())) {
-                            if(getApplicationContext()!=null) {
-                                Picasso.with(getApplicationContext())
-                                        .load(grpImage)
-                                        .placeholder(R.drawable.icon_alert)
-                                        .fit().centerCrop()
-                                        .into(grpImageView);
-                            }
-                        }
+//                        if(grpImage!=null && (!grpImage.isEmpty())) {
+//                            if(getApplicationContext()!=null) {
+//                                Picasso.with(getApplicationContext())
+//                                        .load(grpImage)
+//                                        .placeholder(R.drawable.icon_alert)
+//                                        .fit().centerCrop()
+//                                        .into(grpImageView);
+//                            }
+//                        }
                     }
                     if(msg!=null) {
                         notiEventText.setText(data.get(position).getMessage());

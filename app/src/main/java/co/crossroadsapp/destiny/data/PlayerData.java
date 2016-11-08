@@ -19,6 +19,9 @@ public class PlayerData {
     private boolean maxReported = false;
     private int commentsReported;
     private String psnVerify=null;
+    private String invitedBy=null;
+    private String userId=null;
+    private boolean isActive = false;
 
     public void setPlayerId(String id) {
         playerId = id;
@@ -26,6 +29,14 @@ public class PlayerData {
 
     public String getPlayerId() {
         return this.playerId;
+    }
+
+    public void setInvitedBy(String eId) {
+        invitedBy = eId;
+    }
+
+    public String getInvitedBy() {
+        return this.invitedBy;
     }
 
     public void setUsername(String name) {
@@ -79,12 +90,28 @@ public class PlayerData {
         return this.maxReported;
     }
 
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public boolean getActive() {
+        return this.isActive;
+    }
+
     public void setPsnVerify(String psnVeri) {
         this.psnVerify = psnVeri;
     }
 
     public String getPsnVerify() {
         return psnVerify;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return this.userId;
     }
 
     public void toJson(JSONObject jsonobject) {
@@ -127,6 +154,16 @@ public class PlayerData {
                 }
                 if(jsonobject.has("_id") && !jsonobject.isNull("_id")) {
                     setPlayerId(jsonobject.getString("_id"));
+                }
+                if(jsonobject.has("isActive") && !jsonobject.isNull("isActive")) {
+                    setActive(jsonobject.getBoolean("isActive"));
+                }
+                if(jsonobject.has("invitedBy") && !jsonobject.isNull("invitedBy")) {
+                    setInvitedBy(jsonobject.getString("invitedBy"));
+                }
+                if (jsonobject.has("_id") && !jsonobject.isNull("_id")) {
+                    String uId = jsonobject.getString("_id");
+                    setUserId(uId);
                 }
                 if(jsonobject.has("imageUrl") && !jsonobject.isNull("imageUrl")) {
                     setPlayerImageUrl(jsonobject.getString("imageUrl"));

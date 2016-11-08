@@ -18,6 +18,8 @@
 
     <color name="home_new_msg">#02A6D6</color>
 
+    <color name="invited_player_text">#bebebe</color>
+
     <color name="bubble_color">#647378</color>
 
     <color name="theme_color">#FF00AE</color>

@@ -31,7 +31,6 @@ public class NotificationService extends Service {
             payload = extra.getString("payload");
         }
 
-
         JSONObject jsonObj = null;
         try {
             jsonObj = (payload != null && !payload.equals(""))?new JSONObject(payload): new JSONObject();

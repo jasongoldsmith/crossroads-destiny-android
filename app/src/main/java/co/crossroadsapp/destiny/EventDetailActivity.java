@@ -156,6 +156,9 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
     private String deepLinkUrl;
     private TextView inviteBtn;
     private TextView fullInviteeMsg;
+    private LinearLayout invitedLayout;
+    private TextView inviteLeaveBtn;
+    private TextView inviteConfirmBtn;
 //    private TextView errText;
 //    private ImageView close_err;
 
@@ -223,6 +226,9 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
 
         joinBtn = (TextView) findViewById(R.id.join_btn);
         leaveBtn = (TextView) findViewById(R.id.leave_btn);
+        invitedLayout = (LinearLayout) findViewById(R.id.invitee_layout);
+        inviteLeaveBtn = (TextView) findViewById(R.id.leave_invite_btn);
+        inviteConfirmBtn = (TextView) findViewById(R.id.confirm_invite_btn);
         msgallBtn = (TextView) findViewById(R.id.messageall_btn);
         bottomBtnLayout = (RelativeLayout) findViewById(R.id.detail_bottom_btn);
 
@@ -384,16 +390,28 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
         leaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                leaveEvent();
+            }
+        });
+
+        inviteLeaveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showGenericError("CAN’T MAKE IT?", "If you turn down this invite, another Guardian will take your spot. Are you sure you want to leave?", "YES, I WANT TO LEAVE", "No, I want to stay", Constants.GENERAL_LEAVE, null, false);
+                //leaveEvent();
+            }
+        });
+
+        inviteConfirmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //create request for confirming event acceptance
                 RequestParams rp = new RequestParams();
-                rp.put("eId", currEvent.getEventId());
-                rp.put("player", user.getUserId());
-                hideProgress();
-                showProgress();
-                //todo fix when fire base rules are in
-                if(currEvent.getPlayerData().size()==1){
-                    unregisterFirebase();
+                if(currEvent!=null && currEvent.getEventId()!=null && !currEvent.getEventId().isEmpty()) {
+                    showProgressBar();
+                    rp.put("eId", currEvent.getEventId());
+                    controlManager.postAcceptInvite(EventDetailActivity.this, rp);
                 }
-                controlManager.postUnJoinEvent(EventDetailActivity.this, rp);
             }
         });
 
@@ -497,9 +515,23 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
 
     }
 
+    private void leaveEvent() {
+        RequestParams rp = new RequestParams();
+        rp.put("eId", currEvent.getEventId());
+        rp.put("player", user.getUserId());
+        hideProgress();
+        showProgress();
+        //todo fix when fire base rules are in
+        if(currEvent.getPlayerData().size()==1){
+            unregisterFirebase();
+        }
+        controlManager.postUnJoinEvent(EventDetailActivity.this, rp);
+    }
+
     private void changeBottomButtomForComments() {
         if(checkUserIsPlayer()) {
             bottomBtnLayout.setVisibility(View.VISIBLE);
+            invitedLayout.setVisibility(View.GONE);
             joinBtn.setVisibility(View.GONE);
             leaveBtn.setVisibility(View.GONE);
             msgallBtn.setVisibility(View.GONE);
@@ -614,7 +646,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
                 Runnable myRunnable = new Runnable() {
                     @Override
                     public void run() {
-                        showGenericError("INVALID GAMERTAG", "Please enter a valid gamertag.","OK", Constants.GENERAL_ERROR, null, true);
+                        showGenericError("INVALID GAMERTAG", "Please enter a valid gamertag.","OK", null, Constants.GENERAL_ERROR, null, true);
                     }
                 };
                 _handler.post(myRunnable);
@@ -625,7 +657,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
     private void validateXboxGamertag(String gamertag) {
         if(gamertag!=null) {
             if(!gamertag.matches("^[A-Za-z][A-Za-z0-9]++(?: [a-zA-Z0-9]++)?$") || gamertag.length()>16 || gamertag.length()<1 || gamertag.startsWith(" ") || gamertag.endsWith(" ") || Character.isDigit(gamertag.charAt(0))){
-                showGenericError("INVALID GAMERTAG", "Please enter a valid gamertag.","OK", Constants.GENERAL_ERROR, null, true);
+                showGenericError("INVALID GAMERTAG", "Please enter a valid gamertag.","OK", null, Constants.GENERAL_ERROR, null, true);
                 //showError("Invalid gamertag");
             }
         }
@@ -1047,6 +1079,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
         if(p==1) {
             if(checkUserIsPlayer()) {
                 bottomBtnLayout.setVisibility(View.VISIBLE);
+                invitedLayout.setVisibility(View.GONE);
                 joinBtn.setVisibility(View.GONE);
                 leaveBtn.setVisibility(View.GONE);
                 msgallBtn.setVisibility(View.GONE);
@@ -1059,31 +1092,114 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
         }
     }
 
+    @Override
+    public void showGenericError(String header, String msg, String firstBtnText, String secondBtnText, final int errorType, final RequestParams rp, final boolean keyboardOpen) {
+        super.showGenericError(header, msg, firstBtnText, secondBtnText, errorType, rp, keyboardOpen);
+        final RelativeLayout deeplinkErrorG = (RelativeLayout) findViewById(R.id.deeplink_error);
+        TextView errMsgG = (TextView) findViewById(R.id.msg);
+        TextView btnTextG = (TextView) findViewById(R.id.btn_text);
+        CardView btnG = (CardView) findViewById(R.id.add_btn);
+        TextView titleG = (TextView) findViewById(R.id.eyesup_text);
+        deeplinkErrorG.setVisibility(View.VISIBLE);
+        ImageView closeG= (ImageView) findViewById(R.id.close);
+        TextView noBtn = (TextView) findViewById(R.id.no_thanks);
+
+        if(errorType==Constants.GENERAL_LEAVE) {
+            noBtn.setText(secondBtnText);
+            noBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deeplinkErrorG.setVisibility(View.GONE);
+                }
+            });
+
+            btnTextG.setText(firstBtnText);
+            btnG.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showProgressBar();
+                    deeplinkErrorG.setVisibility(View.GONE);
+                    leaveEvent();
+                }
+            });
+        } else if(errorType==Constants.GENERAL_KICK) {
+            noBtn.setText(secondBtnText);
+            noBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deeplinkErrorG.setVisibility(View.GONE);
+                }
+            });
+
+            btnTextG.setText(firstBtnText);
+            btnG.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(rp!=null) {
+                        showProgressBar();
+                        deeplinkErrorG.setVisibility(View.GONE);
+                        kickPlayer(rp);
+                    }
+                }
+            });
+        }
+    }
+
+    private void kickPlayer(RequestParams requestParams) {
+        controlManager.postKickPlayer(EventDetailActivity.this, requestParams);
+    }
+
     private void setBottomBtn() {
         commentLayout.setVisibility(View.GONE);
         if (checkUserIsCreator()) {
             if ((this.currEvent.getPlayerData() != null) && this.currEvent.getPlayerData().size() > 1) {
                 bottomBtnLayout.setVisibility(View.VISIBLE);
+                invitedLayout.setVisibility(View.GONE);
                 leaveBtn.setVisibility(View.VISIBLE);
                 joinBtn.setVisibility(View.GONE);
                 msgallBtn.setVisibility(View.GONE);
             } else {
                 bottomBtnLayout.setVisibility(View.VISIBLE);
                 leaveBtn.setVisibility(View.VISIBLE);
+                invitedLayout.setVisibility(View.GONE);
                 joinBtn.setVisibility(View.GONE);
                 msgallBtn.setVisibility(View.GONE);
             }
         } else if (checkUserIsPlayer()) {
-            bottomBtnLayout.setVisibility(View.VISIBLE);
-            leaveBtn.setVisibility(View.VISIBLE);
-            joinBtn.setVisibility(View.GONE);
-            msgallBtn.setVisibility(View.GONE);
+            if(ifPlayerIsInvited()) {
+                bottomBtnLayout.setVisibility(View.VISIBLE);
+                invitedLayout.setVisibility(View.VISIBLE);
+                leaveBtn.setVisibility(View.GONE);
+                joinBtn.setVisibility(View.GONE);
+                msgallBtn.setVisibility(View.GONE);
+            } else {
+                bottomBtnLayout.setVisibility(View.VISIBLE);
+                invitedLayout.setVisibility(View.GONE);
+                leaveBtn.setVisibility(View.VISIBLE);
+                joinBtn.setVisibility(View.GONE);
+                msgallBtn.setVisibility(View.GONE);
+            }
         } else if (!currEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)) {
             bottomBtnLayout.setVisibility(View.VISIBLE);
             leaveBtn.setVisibility(View.GONE);
+            invitedLayout.setVisibility(View.GONE);
             joinBtn.setVisibility(View.VISIBLE);
             msgallBtn.setVisibility(View.GONE);
         }
+    }
+
+    private boolean ifPlayerIsInvited() {
+        if(currEvent!=null && currEvent.getPlayerData()!=null) {
+            if(user!=null && user.getUserId()!=null) {
+                String id = user.getUserId();
+                for(int i=0; i<currEvent.getPlayerData().size(); i++) {
+                    if((id.equalsIgnoreCase(currEvent.getPlayerData().get(i).getUserId()) && currEvent.getPlayerData().get(i).getInvitedBy()!=null)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private void sendMsgToAll() {
@@ -1178,7 +1294,29 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
             } else if (observable instanceof InvitePlayerNetwork) {
                 hideAnimatedInviteView();
                 hideKeyboard();
+                if(data!=null) {
+                    sendInviteBungieMsg((JSONObject) data);
+                }
             }
+    }
+
+    private void sendInviteBungieMsg(JSONObject data) {
+        if(data.has("networkObject") && !data.isNull("networkObject")) {
+            try {
+                JSONObject ntwrk = (JSONObject) data.get("networkObject");
+                if (ntwrk.has("url") && !ntwrk.isNull("url")) {
+                        String msgUrl = ntwrk.getString("url");
+                        if (ntwrk.has("body") && !ntwrk.isNull("body")) {
+                            String body = ntwrk.get("body").toString();
+                            if(ntwrk.has("_id")  && !ntwrk.isNull("_id")) {
+                                controlManager.sendInviteBungieMsg(msgUrl, body, getApplicationContext(), ntwrk.getString("_id"));
+                            }
+                        }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void updateUserMaxReport() {

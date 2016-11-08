@@ -1208,7 +1208,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             b = getIntent().getExtras();
             if(b!=null && b.containsKey("reportIssue")) {
                 //pagerAdapter.
-                showGenericError(getString(R.string.report_submitted_header), getString(R.string.report_submitted), "OK", Constants.GENERAL_ERROR, null, false);
+                showGenericError(getString(R.string.report_submitted_header), getString(R.string.report_submitted), "OK", null, Constants.GENERAL_ERROR, null, false);
             }
         }
     }

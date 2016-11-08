@@ -47,12 +47,13 @@ public class MyGcmBroadcastReceiver extends BroadcastReceiver {
                 in.putExtra("payload", payload);
                 in.putExtra("message", alert);
                 in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                Thread t = new Thread(){
-                    public void run(){
-                        context.startService(in);
-                    }
-                };
-                t.start();
+                context.startService(in);
+//                Thread t = new Thread(){
+//                    public void run(){
+//                        context.startService(in);
+//                    }
+//                };
+//                t.start();
             } else {
 //                Intent i = new Intent(context, UpdateCacheService.class);
 //                i.putExtra("message", payload);

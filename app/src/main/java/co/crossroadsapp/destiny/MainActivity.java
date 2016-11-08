@@ -141,7 +141,7 @@ public class MainActivity extends BaseActivity implements Observer {
                 } else if(errorType.equalsIgnoreCase(Constants.BUNGIE_LEGACY_ERROR)) {
                     // continue with delete
                     Util.clearDefaults(getApplicationContext());
-                    showGenericError("LEGACY CONSOLES", getString(R.string.legacy_error), getString(R.string.ok_btn), Constants.GENERAL_ERROR, null, false);
+                    showGenericError("LEGACY CONSOLES", getString(R.string.legacy_error), getString(R.string.ok_btn), null, Constants.GENERAL_ERROR, null, false);
                 } else if(errorType.equalsIgnoreCase(Constants.BUNGIE_CONNECT_ERROR)) {
                     // continue with delete
                     RequestParams rp = new RequestParams();
@@ -282,7 +282,7 @@ public class MainActivity extends BaseActivity implements Observer {
 //            }
         }else {
             if(cookies==null && p!=null) {
-                showGenericError("CHANGES TO SIGN IN", "Good news! You can now sign in using your Xbox or PlayStation account (the same one you use for Bungie.net)", "OK", Constants.GENERAL_ERROR, null, false);
+                showGenericError("CHANGES TO SIGN IN", "Good news! You can now sign in using your Xbox or PlayStation account (the same one you use for Bungie.net)", "OK", null, Constants.GENERAL_ERROR, null, false);
             }
             if(u!=null && !u.isEmpty()) {
                 // continue with delete
@@ -715,7 +715,7 @@ public class MainActivity extends BaseActivity implements Observer {
         }else if(observable instanceof LogoutNetwork) {
             launchMainLayout();
             showGenericError("CHANGES TO SIGN IN", "Your gamertag now replaces your Crossroads username when logging in.\n" +
-                    "(your password is still the same)", "OK", Constants.GENERAL_ERROR, null, false);
+                    "(your password is still the same)", "OK", null, Constants.GENERAL_ERROR, null, false);
         } else if(observable instanceof EventListNetwork) {
             if(data!=null) {
                 horizontalAdapter.elistLocal.clear();

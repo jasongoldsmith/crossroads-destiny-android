@@ -38,7 +38,7 @@ public class InvitePlayerNetwork extends Observable {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     setChanged();
-                    notifyObservers();
+                    notifyObservers(response);
                 }
 
                 @Override

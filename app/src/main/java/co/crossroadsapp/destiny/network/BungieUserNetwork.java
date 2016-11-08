@@ -1,6 +1,7 @@
 package co.crossroadsapp.destiny.network;
 
 import android.content.Context;
+import android.content.Entity;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -15,6 +16,7 @@ import co.crossroadsapp.destiny.ControlManager;
 import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.ByteArrayEntity;
 
 /**
  * Created by sharmha on 10/26/16.
@@ -26,11 +28,11 @@ public class BungieUserNetwork extends Observable {
 
     private ControlManager mManager;
 
-    public BungieUserNetwork(String csrf, String cookies, Context c) {
+    public BungieUserNetwork(String csrf, String cookies, Context c, String url) {
         mContext = c;
         mManager = ControlManager.getmInstance();
         ntwrk = NetworkEngine.getmInstance(c);
-        ntwrk.updateBugnieBaseUrlAndHeader(csrf, cookies);
+        ntwrk.updateBugnieBaseUrlAndHeader(csrf, cookies, url);
     }
 
     public void getBungieCurrentUser() throws JSONException {
@@ -65,5 +67,4 @@ public class BungieUserNetwork extends Observable {
             Util.createNoNetworkDialogue(mContext);
         }
     }
-
 }

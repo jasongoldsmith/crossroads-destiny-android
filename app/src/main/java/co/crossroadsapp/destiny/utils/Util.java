@@ -40,6 +40,7 @@ import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -322,9 +323,12 @@ public class Util {
             cal2.add(Calendar.DAY_OF_YEAR, 1);
 
             Date date = format.parse(utcDate);
+            //DateTime date = new DateTime(utcDate);
             Calendar cal = Calendar.getInstance();
+            //cal.setTime(date.toLocalDate().toDate());
             cal.setTime(date);
             cal.setTimeInMillis(cal.getTimeInMillis() + offsetFromUTC);
+
             SimpleDateFormat formatDate = new SimpleDateFormat("EEEE 'at' h:mm a");
             SimpleDateFormat formatDate1 = new SimpleDateFormat("MMM d 'at' h:mm a");
             SimpleDateFormat formatDateToday = new SimpleDateFormat("'Today at' h:mm a");
@@ -344,20 +348,6 @@ public class Util {
             e.printStackTrace();
         }
         return "";
-
-
-        //
-//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-//        format.setTimeZone(TimeZone.getTimeZone("UTC"));
-//        Date newDate = null;
-//        try {
-//            newDate = format.parse(utcDate);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        format = new SimpleDateFormat("EEE, MMM d - h:mm a");
-//        String date = format.format(newDate);
-//        return date;
     }
 
     public static String updateLastReceivedDate(final String lastDate, Resources res) {
