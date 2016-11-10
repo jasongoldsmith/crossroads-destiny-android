@@ -69,8 +69,10 @@ public class PlayerData {
     }
 
     public String getClanTag() {
-        if(psnVerify!=null && psnVerify.equalsIgnoreCase(Constants.PSN_VERIFIED)) {
-            return playerClanTag;
+        if(psnVerify!=null) {
+            if(psnVerify.equalsIgnoreCase(Constants.PSN_VERIFIED) || psnVerify.equalsIgnoreCase(Constants.PSN_INVITED)) {
+                return playerClanTag;
+            }
         }
         return null;
     }
