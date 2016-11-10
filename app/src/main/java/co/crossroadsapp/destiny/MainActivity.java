@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import co.crossroadsapp.destiny.data.AppVersion;
 import co.crossroadsapp.destiny.data.EventData;
+import co.crossroadsapp.destiny.data.InvitationLoginData;
 import co.crossroadsapp.destiny.network.ConfigNetwork;
 import co.crossroadsapp.destiny.network.EventListNetwork;
 import co.crossroadsapp.destiny.network.GetVersion;
@@ -67,7 +68,7 @@ public class MainActivity extends BaseActivity implements Observer {
     private Runnable runnable;
     private Handler handler;
     private LinearLayoutManager horizontalLayoutManagaer;
-    private Serializable invitationRp;
+    private InvitationLoginData invitationRp;
     private RelativeLayout signin_xbox;
     private String cookies;
     private WebView webViewPS;
@@ -87,8 +88,11 @@ public class MainActivity extends BaseActivity implements Observer {
         console = Util.getDefaults("consoleType", getApplicationContext());
 
         Bundle b = getIntent().getExtras();
-        if(b!=null && b.containsKey("invitation")) {
-            invitationRp = b.getSerializable("invitation");
+
+        if(b!=null) {
+            if(b!=null && b.containsKey("invitation")) {
+                invitationRp = (InvitationLoginData)b.getSerializable("invitation");
+            }
         }
 
         userData = new UserData();
@@ -123,6 +127,13 @@ public class MainActivity extends BaseActivity implements Observer {
         mManager.getAndroidVersion(this);
         mManager.getConfig(MainActivity.this);
         TravellerLog.w(this, "MainActivity.onCreate ends...");
+    }
+
+    protected InvitationLoginData getInvitationObject() {
+        if(invitationRp!=null) {
+            return this.invitationRp;
+        }
+        return null;
     }
 
     public void showError(String err, String errorType) {
@@ -677,7 +688,7 @@ public class MainActivity extends BaseActivity implements Observer {
                         //save in preferrence
                         Util.setDefaults("user", ud.getUserId(), getApplicationContext());
 //                        Util.setDefaults("password", password, getApplicationContext());
-//                        Util.setDefaults("consoleType", console, getApplicationContext());
+                        Util.setDefaults("consoleType", console, getApplicationContext());
                     ud.setPassword(p);
                     mManager.setUserdata(ud);
                     Intent regIntent;
@@ -691,15 +702,11 @@ public class MainActivity extends BaseActivity implements Observer {
                             regIntent.putExtra("eventIntent", contentIntent);
                         }
 
-//                if (contentIntent != null) {
-//                    regIntent = new Intent(getApplicationContext(),
-//                            ListActivityFragment.class);
-//                    regIntent.putExtra("eventIntent", contentIntent);
-//                } else {
-//                    regIntent = new Intent(getApplicationContext(),
-//                            CreateNewEvent.class);
-//                }
-                    //regIntent.putExtra("userdata", ud);
+                        //clear invitation req params
+                        if(invitationRp!=null) {
+                            invitationRp.clearRp();
+                        }
+
                     startActivity(regIntent);
                     finish();
                 } else {

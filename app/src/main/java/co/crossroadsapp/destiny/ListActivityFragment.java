@@ -877,12 +877,16 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 //check and change if current active console or grp is different
                 checkToChangeConsoleGrp(console, clanId);
 
-                if((id!=null) && (!id.equalsIgnoreCase("null"))) {
-                    RequestParams param = new RequestParams();
-                    param.add("id", id);
-                    mManager.postEventById(this, param);
-                }
+                getEventById(id);
             }
+        }
+    }
+
+    protected void getEventById(String id) {
+        if((id!=null) && (!id.equalsIgnoreCase("null"))) {
+            RequestParams param = new RequestParams();
+            param.add("id", id);
+            mManager.postEventById(this, param);
         }
     }
 
@@ -1094,6 +1098,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     }
 
     private void launchPushEventDetail() {
+
         startEventDetail(pushEventObject);
     }
 
@@ -1109,7 +1114,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                             EventDetailActivity.class);
                     //regIntent.putExtra("userdata", user);
                     startActivity(regIntent);
-                    finish();
+                    //finish();
                 }
             }
         }
@@ -1489,6 +1494,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 Toast.makeText(this, "Verification Message Sent to Your Bungie.net Account",
                         Toast.LENGTH_LONG).show();
             } else if(observable instanceof EventByIdNetwork) {
+                hideProgressBar();
                 if(data!=null) {
                     if(pushEventObject!=null) {
                         pushEventObject = new EventData();

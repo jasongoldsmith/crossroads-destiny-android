@@ -714,6 +714,10 @@ public class ControlManager implements Observer{
                             rp.put("bungieURL", getBungieCurrentUserUrl()!=null?getBungieCurrentUserUrl():Constants.BUGIE_CURRENT_USER);
                             if(mCurrentAct instanceof MainActivity) {
                                 loginNetwork = new LoginNetwork(mCurrentAct);
+                                InvitationLoginData notificationObj = ((MainActivity) mCurrentAct).getInvitationObject();
+                                if(notificationObj!=null) {
+                                    rp.put("invitation", notificationObj.getRp());
+                                }
                                 loginNetwork.addObserver(this);
                                 loginNetwork.addObserver(((MainActivity) mCurrentAct));
                                 loginNetwork.doSignup(rp);

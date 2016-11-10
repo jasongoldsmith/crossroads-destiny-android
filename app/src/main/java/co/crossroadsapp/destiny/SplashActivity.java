@@ -36,7 +36,7 @@ import com.crashlytics.android.Crashlytics;
  * Created by sharmha on 2/19/16.
  */
 public class SplashActivity extends BaseActivity implements Observer {
-    private static final int SPLASH_DELAY = 1000;
+    private static final int SPLASH_DELAY = 500;
     private Handler mHandler;
     private RelativeLayout mLayout;
     private ControlManager cManager;

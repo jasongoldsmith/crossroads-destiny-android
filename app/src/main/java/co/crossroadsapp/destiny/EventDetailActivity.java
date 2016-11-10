@@ -197,7 +197,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
             @Override
             protected boolean keepObject(Person person, String mask) {
                 mask = mask.toLowerCase();
-                String console = Util.getDefaults("consoleType", EventDetailActivity.this);
+                String console = user.getConsoleType();
                 if(console.equalsIgnoreCase(Constants.CONSOLEXBOXONE)) {
                     validateXboxGamertag(mask);
                 } else if(console.equalsIgnoreCase(Constants.CONSOLEPS4)) {
@@ -531,11 +531,16 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
     private void changeBottomButtomForComments() {
         if(checkUserIsPlayer()) {
             bottomBtnLayout.setVisibility(View.VISIBLE);
-            invitedLayout.setVisibility(View.GONE);
+            if(ifPlayerIsInvited()) {
+                invitedLayout.setVisibility(View.VISIBLE);
+                commentLayout.setVisibility(View.GONE);
+            }else {
+                invitedLayout.setVisibility(View.GONE);
+                commentLayout.setVisibility(View.VISIBLE);
+            }
             joinBtn.setVisibility(View.GONE);
             leaveBtn.setVisibility(View.GONE);
             msgallBtn.setVisibility(View.GONE);
-            commentLayout.setVisibility(View.VISIBLE);
         } else {
             setBottomButtonSelection();
         }
@@ -657,8 +662,13 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
     private void validateXboxGamertag(String gamertag) {
         if(gamertag!=null) {
             if(!gamertag.matches("^[A-Za-z][A-Za-z0-9]++(?: [a-zA-Z0-9]++)?$") || gamertag.length()>16 || gamertag.length()<1 || gamertag.startsWith(" ") || gamertag.endsWith(" ") || Character.isDigit(gamertag.charAt(0))){
-                showGenericError("INVALID GAMERTAG", "Please enter a valid gamertag.","OK", null, Constants.GENERAL_ERROR, null, true);
-                //showError("Invalid gamertag");
+                Runnable myRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        showGenericError("INVALID GAMERTAG", "Please enter a valid gamertag.","OK", null, Constants.GENERAL_ERROR, null, true);
+                    }
+                };
+                _handler.post(myRunnable);
             }
         }
     }
@@ -1079,11 +1089,16 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
         if(p==1) {
             if(checkUserIsPlayer()) {
                 bottomBtnLayout.setVisibility(View.VISIBLE);
-                invitedLayout.setVisibility(View.GONE);
+                if(ifPlayerIsInvited()) {
+                    invitedLayout.setVisibility(View.VISIBLE);
+                    commentLayout.setVisibility(View.GONE);
+                }else {
+                    invitedLayout.setVisibility(View.GONE);
+                    commentLayout.setVisibility(View.VISIBLE);
+                }
                 joinBtn.setVisibility(View.GONE);
                 leaveBtn.setVisibility(View.GONE);
                 msgallBtn.setVisibility(View.GONE);
-                commentLayout.setVisibility(View.VISIBLE);
             }else {
                 setBottomBtn();
             }

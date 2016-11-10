@@ -22,6 +22,7 @@ public class PlayerData {
     private String invitedBy=null;
     private String userId=null;
     private boolean isActive = false;
+    private boolean isInvited = false;
 
     public void setPlayerId(String id) {
         playerId = id;
@@ -115,9 +116,9 @@ public class PlayerData {
     }
 
     public void toJson(JSONObject jsonobject) {
-        if (jsonobject!= null) {
+        if (jsonobject != null) {
             try {
-                if(jsonobject.has("consoles") && !jsonobject.isNull("consoles")) {
+                if (jsonobject.has("consoles") && !jsonobject.isNull("consoles")) {
                     JSONArray conArray = jsonobject.optJSONArray("consoles");
 //                if(conData.has("consoleType")) {
 //                    String cType = conData.getString("consoleType");
@@ -149,23 +150,27 @@ public class PlayerData {
 //                if (!jsonobject.isNull("psnId")) {
 //                    setPsnId(jsonobject.getString("psnId"));
 //                }
-                if(jsonobject.has("userName") && !jsonobject.isNull("userName")) {
+                if (jsonobject.has("userName") && !jsonobject.isNull("userName")) {
                     setUsername(jsonobject.getString("userName"));
                 }
-                if(jsonobject.has("_id") && !jsonobject.isNull("_id")) {
+                if (jsonobject.has("_id") && !jsonobject.isNull("_id")) {
                     setPlayerId(jsonobject.getString("_id"));
                 }
-                if(jsonobject.has("isActive") && !jsonobject.isNull("isActive")) {
+                if (jsonobject.has("isActive") && !jsonobject.isNull("isActive")) {
                     setActive(jsonobject.getBoolean("isActive"));
                 }
-                if(jsonobject.has("invitedBy") && !jsonobject.isNull("invitedBy")) {
+                if (jsonobject.has("invitedBy") && !jsonobject.isNull("invitedBy")) {
                     setInvitedBy(jsonobject.getString("invitedBy"));
                 }
                 if (jsonobject.has("_id") && !jsonobject.isNull("_id")) {
                     String uId = jsonobject.getString("_id");
                     setUserId(uId);
                 }
-                if(jsonobject.has("imageUrl") && !jsonobject.isNull("imageUrl")) {
+                if (jsonobject.has("isInvited") && !jsonobject.isNull("isInvited")) {
+                    boolean invited = jsonobject.getBoolean("isInvited");
+                    setIsInvited(invited);
+                }
+                if (jsonobject.has("imageUrl") && !jsonobject.isNull("imageUrl")) {
                     setPlayerImageUrl(jsonobject.getString("imageUrl"));
                 }
                 if (jsonobject.has("commentsReported") && !jsonobject.isNull("commentsReported")) {
@@ -184,5 +189,13 @@ public class PlayerData {
                 e.printStackTrace();
             }
         }
+    }
+
+    protected void setIsInvited(boolean isInvited) {
+        this.isInvited = isInvited;
+    }
+
+    public boolean getIsInvited() {
+        return isInvited;
     }
 }

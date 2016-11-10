@@ -344,8 +344,9 @@ public class BaseActivity extends FragmentActivity {
                 });
                 break;
             case 4:
-                errMsg.setText("You’ll need to be on "+deepLinkName+" to join that activity from "+deepLinkEvent+ ". Add another console to your account?");
-                btnText.setText("ADD MY "+deepLinkName);
+                errMsg.setText("You'll need a "+deepLinkName+" linked to your Bungie account to join that activity from "+deepLinkEvent+ ".");
+                btnText.setText(getString(R.string.ok_btn));
+                noBtn.setText("");
                 btnText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

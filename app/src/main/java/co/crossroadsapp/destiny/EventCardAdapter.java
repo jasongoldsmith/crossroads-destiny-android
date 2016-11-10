@@ -374,25 +374,30 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             @Override
                             public void onClick(View v) {
                                 if (currEvent != null) {
-                                    CurrentEventDataHolder ins = CurrentEventDataHolder.getInstance();
-                                    ins.setData(currEvent);
-                                    if (showJoin) {
-                                        ins.setJoinVisible(true);
-                                    } else {
-                                        ins.setJoinVisible(false);
+                                    if(currEvent.getEventId()!=null) {
+                                        ((ListActivityFragment) mContext).hideProgressBar();
+                                        ((ListActivityFragment) mContext).showProgressBar();
+                                        ((ListActivityFragment) mContext).getEventById(currEvent.getEventId());
                                     }
+//                                    CurrentEventDataHolder ins = CurrentEventDataHolder.getInstance();
+//                                    ins.setData(currEvent);
+//                                    if (showJoin) {
+//                                        ins.setJoinVisible(true);
+//                                    } else {
+//                                        ins.setJoinVisible(false);
+//                                    }
                                     //setCurrEventData(currEvent);
                                 }
-                                if (mContext != null) {
-                                    //start new activity for event
-                                    Intent regIntent = new Intent(mContext,
-                                            EventDetailActivity.class);
-                                    if (regIntent != null) {
-                                        //regIntent.putExtra("userdata", user);
-                                        mContext.startActivity(regIntent);
-                                        //mContext.finish();
-                                    }
-                                }
+//                                if (mContext != null) {
+//                                    //start new activity for event
+//                                    Intent regIntent = new Intent(mContext,
+//                                            EventDetailActivity.class);
+//                                    if (regIntent != null) {
+//                                        //regIntent.putExtra("userdata", user);
+//                                        mContext.startActivity(regIntent);
+//                                        //mContext.finish();
+//                                    }
+//                                }
                             }
                         });
                     }
@@ -475,7 +480,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             if(playerData!=null) {
                 for(int i=0;i<playerData.size();i++) {
                     if(playerData.get(i)!=null && playerData.get(i).getUserId().equalsIgnoreCase(user.getUserId())) {
-                        if(playerData.get(i).getInvitedBy()!=null && !playerData.get(i).getInvitedBy().isEmpty()) {
+                        if(playerData.get(i).getIsInvited()) {
                             return true;
                         }
                     }

@@ -281,7 +281,6 @@ public class EventDetailsFragments extends Fragment {
                 clanTag.setVisibility(View.VISIBLE);
             }
             //setBanners();
-
             holder.inviteIcon.setVisibility(View.GONE);
             holder.inviteText.setText(" ");
             holder.invitedColorBar.setVisibility(View.GONE);
@@ -291,7 +290,7 @@ public class EventDetailsFragments extends Fragment {
                 holder.message.setVisibility(View.GONE);
                 holder.playerProfile.setImageResource(R.drawable.img_profile_blank);
                 if(position==playerLocal.size()) {
-                    if (checkUserIsPlayer()) {
+                    if (checkUserIsPlayer() && !ifUserInvited(playerLocal)) {
                         holder.inviteIcon.setVisibility(View.VISIBLE);
                         holder.inviteIcon.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -303,11 +302,9 @@ public class EventDetailsFragments extends Fragment {
                 }
             } else {
                 if (playerLocal.get(position) != null) {
-
                     if (playerLocal.get(position).getPlayerId() != null) {
                         currPlayerId = playerLocal.get(position).getPlayerId();
                     }
-
                     holder.message.setVisibility(View.GONE);
 
                     holder.leader_tag.setVisibility(View.GONE);
@@ -392,6 +389,20 @@ public class EventDetailsFragments extends Fragment {
                 for(int i=0; i<playerLocal.size(); i++) {
                     if(playerLocal.get(i)!=null && playerLocal.get(i).getInvitedBy()!=null) {
                         if(currentUserId.equalsIgnoreCase(playerLocal.get(i).getInvitedBy())) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        private boolean ifUserInvited(ArrayList<PlayerData> playerLocal) {
+            if(playerLocal!=null && user!=null && user.getUserId()!=null) {
+                String currentUserId = user.getUserId();
+                for(int i=0; i<playerLocal.size(); i++) {
+                    if(playerLocal.get(i)!=null && playerLocal.get(i).getUserId()!=null) {
+                        if(currentUserId.equalsIgnoreCase(playerLocal.get(i).getUserId()) && playerLocal.get(i).getInvitedBy()!=null) {
                             return true;
                         }
                     }

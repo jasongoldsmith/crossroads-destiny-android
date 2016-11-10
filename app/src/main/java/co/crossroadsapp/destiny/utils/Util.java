@@ -59,7 +59,6 @@ import java.util.regex.Pattern;
  * Created by sharmha on 2/23/16.
  */
 public class Util {
-
     //To switch between production and development server links
     //where 1 points to development, 2 points to production and 3 points to Dev staging
     private static final int network_connection = 1;
