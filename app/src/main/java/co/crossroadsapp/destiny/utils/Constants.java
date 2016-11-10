@@ -60,6 +60,7 @@ public class Constants {
     public static String PSN_INITIATED = "INITIATED";
     public static String PSN_FAILED_INITIATED = "FAILED_INITIATION";
     public static String PSN_DELETED = "DELETED";
+    public static String PSN_INVITED = "INVITED";
 
     public static String CONSOLEXBOXONE = "XBOXONE";
     public static String CONSOLEXBOX360 = "XBOX360";
@@ -144,5 +145,4 @@ public class Constants {
     public static String KICK_PLAYER_URL = "api/v1/a/event/kick";
     public static String CANCEL_PLAYER_URL = "api/v1/a/event/invite/cancel";
     public static String ACCEPT_EVENT_URL = "api/v1/a/event/invite/accept";
-
 }

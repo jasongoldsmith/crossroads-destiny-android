@@ -661,16 +661,20 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
 
     private void validateXboxGamertag(String gamertag) {
         if(gamertag!=null) {
-            if(!gamertag.matches("^[A-Za-z][A-Za-z0-9]++(?: [a-zA-Z0-9]++)?$") || gamertag.length()>16 || gamertag.length()<1 || gamertag.startsWith(" ") || gamertag.endsWith(" ") || Character.isDigit(gamertag.charAt(0))){
-                Runnable myRunnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        showGenericError("INVALID GAMERTAG", "Please enter a valid gamertag.","OK", null, Constants.GENERAL_ERROR, null, true);
-                    }
-                };
-                _handler.post(myRunnable);
+            if(gamertag.matches(".*[^a-z^0-9^A-Z^ ].*") || gamertag.length()>16 || gamertag.length()<1 || gamertag.startsWith(" ") || gamertag.contains("  ") || Character.isDigit(gamertag.charAt(0))){
+                showInvalidGamertagPopup();
             }
         }
+    }
+
+    private void showInvalidGamertagPopup() {
+        Runnable myRunnable = new Runnable() {
+            @Override
+            public void run() {
+                showGenericError("INVALID GAMERTAG", "Please enter a valid gamertag.","OK", null, Constants.GENERAL_ERROR, null, true);
+            }
+        };
+        _handler.post(myRunnable);
     }
 
     @Override
@@ -1129,6 +1133,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
             });
 
             btnTextG.setText(firstBtnText);
+            btnTextG.setPadding(10, 10, 10, 10);
             btnG.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

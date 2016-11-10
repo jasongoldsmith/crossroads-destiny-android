@@ -457,16 +457,13 @@ public class EventDetailsFragments extends Fragment {
     }
 
     private boolean ifPlayerisUserAndVerified(String pId) {
-//        if(user!=null && user.getPsnId()!=null) {
-//            if(user.getPsnVerify()!=null && !user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
-//                return true;
-//            }
-//        }
         if(pId!=null && currentEvent!=null && this.currentEvent.getPlayerData()!=null) {
             for (int i = 0; i < currentEvent.getPlayerData().size(); i++) {
                 if (pId.equalsIgnoreCase(currentEvent.getPlayerData().get(i).getUserId())) {
-                    if(currentEvent.getPlayerData().get(i).getPsnVerify()!=null && currentEvent.getPlayerData().get(i).getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
-                        return true;
+                    if(currentEvent.getPlayerData().get(i).getPsnVerify()!=null) {
+                        if(currentEvent.getPlayerData().get(i).getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED) || currentEvent.getPlayerData().get(i).getPsnVerify().equalsIgnoreCase(Constants.PSN_INVITED)) {
+                            return true;
+                        }
                     }
                 }
             }
