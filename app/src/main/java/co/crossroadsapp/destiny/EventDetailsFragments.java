@@ -351,8 +351,9 @@ public class EventDetailsFragments extends Fragment {
                                     kickCancelReqPrams.put("userId", playerLocal.get(position).getUserId());
                                     holder.inviteText.setText("Kick");
                                 }
+                            } else {
+                                holder.playerName.setTextColor(getResources().getColor(R.color.activity_light_color));
                             }
-                            holder.playerName.setTextColor(getResources().getColor(R.color.activity_light_color));
                         }
 
                         final String kickCancelBtnText = holder.inviteText.getText().toString();
