@@ -41,6 +41,8 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -321,12 +323,18 @@ public class Util {
             Calendar cal2 = Calendar.getInstance();
             cal2.add(Calendar.DAY_OF_YEAR, 1);
 
-            Date date = format.parse(utcDate);
-            //DateTime date = new DateTime(utcDate);
+            //Date date = format.parse(utcDate);
+            DateTime date_joda = new DateTime(utcDate);
+            //Date date = date_joda.toLocalDate().toDate();
+
+            DateTimeFormatter dtf = DateTimeFormat.forPattern(Constants.DATE_FORMAT);
+
+            DateTime date = dtf.parseDateTime(date_joda.toLocalDateTime().toString());
+
             Calendar cal = Calendar.getInstance();
             //cal.setTime(date.toLocalDate().toDate());
-            cal.setTime(date);
-            cal.setTimeInMillis(cal.getTimeInMillis() + offsetFromUTC);
+            cal.setTime(date.toDate());
+            cal.setTimeInMillis(cal.getTimeInMillis());
 
             SimpleDateFormat formatDate = new SimpleDateFormat("EEEE 'at' h:mm a");
             SimpleDateFormat formatDate1 = new SimpleDateFormat("MMM d 'at' h:mm a");
