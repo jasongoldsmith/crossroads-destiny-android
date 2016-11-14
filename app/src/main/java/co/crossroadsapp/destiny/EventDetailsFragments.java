@@ -344,7 +344,7 @@ public class EventDetailsFragments extends Fragment {
                             if(ifUserInvited(playerLocal, position)) {
                                 holder.invitedColorBar.setVisibility(View.VISIBLE);
                             }
-                            if(!playerLocal.get(position).getActive()) {
+                            if(!playerLocal.get(position).getActive() && currentEvent.getLaunchEventStatus()!=null && currentEvent.getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_NOW)) {
                                 holder.playerName.setTextColor(getResources().getColor(R.color.invited_player_text));
                                 if (checkUserIsPlayer() && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL) && !ifPlayerisUser(playerLocal.get(position).getUserId())) {
                                     kickCancelReqPrams.put("eId", currentEvent.getEventId());

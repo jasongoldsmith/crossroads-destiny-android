@@ -273,7 +273,8 @@ public class BaseActivity extends FragmentActivity {
             btnTextG.setAllCaps(true);
             //btnTextG.setTextSize(Util.dpToPx(16, this));
             btnTextG.setText(firstBtnText);
-            btnTextG.setPadding(Util.dpToPx(88, this), Util.dpToPx(12, this),Util.dpToPx(88, this),Util.dpToPx(12, this));
+            btnTextG.setPadding(10, 10, 10, 10);
+            //btnTextG.setPadding(Util.dpToPx(88, this), Util.dpToPx(12, this),Util.dpToPx(88, this),Util.dpToPx(12, this));
         }
     }
 
@@ -303,6 +304,7 @@ public class BaseActivity extends FragmentActivity {
             case 2:
                 errMsg.setText("Sorry, that " +deepLinkEvent+ " is no longer available. Would you like to add one of your own?");
                 btnText.setText("ADD THIS ACTIVITY");
+                btnText.setPadding(10, 10, 10, 10);
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -317,6 +319,7 @@ public class BaseActivity extends FragmentActivity {
             case 1:
                 errMsg.setText("You’ll need to be in the " +deepLinkEvent+ " group to join " + deepLinkName+ ". Request to join?");
                 btnText.setText("VIEW GROUP ON BUNGIE.NET");
+                btnText.setPadding(10, 10, 10, 10);
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -332,6 +335,7 @@ public class BaseActivity extends FragmentActivity {
             case 3:
                 errMsg.setText(getResources().getString(R.string.deeplink_full_err));
                 btnText.setText("YES");
+                btnText.setPadding(10, 10, 10, 10);
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -346,6 +350,7 @@ public class BaseActivity extends FragmentActivity {
             case 4:
                 errMsg.setText("You'll need a "+deepLinkName+" linked to your Bungie account to join that activity from "+deepLinkEvent+ ".");
                 btnText.setText(getString(R.string.ok_btn));
+                btnText.setPadding(10, 10, 10, 10);
                 noBtn.setText("");
                 btnText.setOnClickListener(new View.OnClickListener() {
                 @Override
