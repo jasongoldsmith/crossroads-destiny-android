@@ -41,6 +41,8 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONException;
@@ -63,7 +65,7 @@ import java.util.regex.Pattern;
 public class Util {
     //To switch between production and development server links
     //where 1 points to development, 2 points to production and 3 points to Dev staging
-    private static final int network_connection = 1;
+    private static final int network_connection = 3;
 
     private static final String TAG = Util.class.getName();
     public static final String trimbleDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -310,45 +312,17 @@ public class Util {
     }
 
     public static String convertUTCtoReadable(String utcDate) {
-        //new time strings
-        //   "yyyy-MM-dd'T'HH:mm:ss.SSSZ",
-        SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
         try {
-            Calendar cal1 = Calendar.getInstance();
-            TimeZone tz = cal1.getTimeZone();
-            long msFromEpochGmt = cal1.getTimeInMillis();
-            long offsetFromUTC = tz.getOffset(msFromEpochGmt);
+            DateTime date = new DateTime(utcDate);
 
-            //tomorrow's date
-            Calendar cal2 = Calendar.getInstance();
-            cal2.add(Calendar.DAY_OF_YEAR, 1);
-
-            //Date date = format.parse(utcDate);
-            DateTime date_joda = new DateTime(utcDate);
-            //Date date = date_joda.toLocalDate().toDate();
-
-            DateTimeFormatter dtf = DateTimeFormat.forPattern(Constants.DATE_FORMAT);
-
-            DateTime date = dtf.parseDateTime(date_joda.toLocalDateTime().toString());
-
-            Calendar cal = Calendar.getInstance();
-            //cal.setTime(date.toLocalDate().toDate());
-            cal.setTime(date.toDate());
-            cal.setTimeInMillis(cal.getTimeInMillis());
-
-            SimpleDateFormat formatDate = new SimpleDateFormat("EEEE 'at' h:mm a");
-            SimpleDateFormat formatDate1 = new SimpleDateFormat("MMM d 'at' h:mm a");
-            SimpleDateFormat formatDateToday = new SimpleDateFormat("'Today at' h:mm a");
-            SimpleDateFormat formatDateTmrw = new SimpleDateFormat("'Tomorrow at' h:mm a");
-            if(DateUtils.isToday(cal.getTimeInMillis())) {
-                return formatDateToday.format(cal.getTime());
-            } else if(cal.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
-                    && cal.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)) {
-                return formatDateTmrw.format(cal.getTime());
-            } else if (cal.getTimeInMillis() - System.currentTimeMillis() > Constants.WEEK) {
-                return formatDate1.format(cal.getTime());
+            if(date.toLocalDate().isEqual(new LocalDate())) {
+                return date.toLocalDateTime().toString("'Today at' h:mm a");
+            } else if(date.toLocalDate().isEqual(new LocalDate().plusDays(1))) {
+                return date.toLocalDateTime().toString("'Tomorrow at' h:mm a");
+            } else if (date.toLocalDate().isBefore(new LocalDate().plusWeeks(1))) {
+                return date.toLocalDateTime().toString("EEEE 'at' h:mm a");
             } else {
-                return formatDate.format(cal.getTime());
+                return date.toLocalDateTime().toString("MMM d 'at' h:mm a");
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -360,10 +334,13 @@ public class Util {
     public static String updateLastReceivedDate(final String lastDate, Resources res) {
         String mTemp = null;
         Calendar cal = getCalendar(lastDate);
+
+        DateTime date = new DateTime(lastDate);
+        long millis = date.getMillis();
         if (cal == null) {
             return null;
         }
-        long timeDif = System.currentTimeMillis() - cal.getTimeInMillis();
+        long timeDif = System.currentTimeMillis() - millis;
 
         if (timeDif < Constants.TIME_MINUTE) {
             int seconds = (int) timeDif / Constants.TIME_SECOND;
@@ -375,7 +352,8 @@ public class Util {
             int hours = (int) timeDif / Constants.TIME_HOUR;
             mTemp = res.getQuantityString(R.plurals.hours_time, hours, hours);
         } else if (timeDif >= Constants.TIME_DAY) {
-            int days = (int) timeDif / Constants.TIME_DAY;
+            //int days = (int) timeDif / Constants.TIME_DAY;
+            int days = Days.daysBetween(date.toLocalDate(), new LocalDate()).getDays();
             mTemp = res.getQuantityString(R.plurals.days_time, days, days);
         }
 

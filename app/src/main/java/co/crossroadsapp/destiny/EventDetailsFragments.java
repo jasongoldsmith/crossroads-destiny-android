@@ -595,7 +595,8 @@ public class EventDetailsFragments extends Fragment {
                     if(commentsLocal.get(position).getPlayerId()!=null) {
                         if (!checkPlayerIsAvailable(commentsLocal.get(position).getPlayerId())) {
                             holder.playerNameComment.setTextColor(getResources().getColor(R.color.player_left_comment));
-                            holder.playerProfileComment.setImageDrawable(getResources().getDrawable(R.drawable.img_profile_blank));
+                            //holder.playerProfileComment.setImageDrawable(getResources().getDrawable(R.drawable.img_profile_blank));
+                            Util.picassoLoadImageWithoutMeasurement(getActivity(), holder.playerProfileComment, null, R.drawable.img_profile_blank);
                             holder.playerCommentText.setTextColor(getResources().getColor(R.color.player_left_comment));
                         }
                     }

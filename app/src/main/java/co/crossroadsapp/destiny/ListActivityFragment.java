@@ -1004,11 +1004,12 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                     UserData ud = new UserData();
                     String psnV = null;
                     if (snapshot.hasChild("value")) {
-                            JSONObject userObj = new JSONObject ((HashMap)snapshot.getValue());
-                            ud.toJson(userObj);
-                        mManager.setUserdata(ud);
-                        user = ud;
-                        updateUserProfileImage(user.getImageUrl()!=null?user.getImageUrl():null);
+                        JSONObject userObj = new JSONObject((HashMap) snapshot.getValue());
+                        ud.toJson(userObj);
+                        if (ud.getUserId() != null) {
+                            mManager.setUserdata(ud);
+                            user = ud;
+                            updateUserProfileImage(user.getImageUrl() != null ? user.getImageUrl() : null);
 //                            if(ud.getPsnVerify()!=null) {
 //                                psnV = ud.getPsnVerify();
 //                            }
@@ -1024,6 +1025,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 //                                    afterLogout();
 //                                }
 //                            }
+                        }
                     }
                 }
             }
