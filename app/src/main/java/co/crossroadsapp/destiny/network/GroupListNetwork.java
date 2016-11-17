@@ -6,6 +6,8 @@ import co.crossroadsapp.destiny.ControlManager;
 import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Util;
+
+import com.google.gson.Gson;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -94,15 +96,17 @@ public class GroupListNetwork extends Observable {
     }
 
     private void parseUserObj(JSONObject response) {
-        UserData user = new UserData();
+        //UserData user = new UserData();
+        Gson gson = new Gson();
+        UserData user = gson.fromJson(response.toString(), UserData.class);
         //todo debug change
 //        try {
-            user.toJson(response);
+//            user.toJson(response);
             //todo changing current controlmanager user obj and later userobject will change and only one parser will do that
             if (mManager.getUserData()!=null) {
                 UserData u = mManager.getUserData();
-                if(user!=null && user.getClanId()!=null) {
-                    u.setClanId(user.getClanId());
+                if(user!=null && user.getValue().getClanId()!=null) {
+                    u.getValue().setClanId(user.getValue().getClanId());
                 }
             }
 

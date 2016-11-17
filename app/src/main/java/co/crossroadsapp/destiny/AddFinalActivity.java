@@ -238,8 +238,8 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
                     hideProgressBar();
                     showProgressBar();
                     String dateTime = getCreateEventDateTime();
-                    if(finalAct.getId()!=null && user.getUserId()!=null) {
-                        mCntrlMngr.postCreateEvent(finalAct.getId(), user.getUserId(), finalAct.getMinPlayer(), finalAct.getMaxPlayer(), dateTime, AddFinalActivity.this);
+                    if(finalAct.getId()!=null && user.getValue().getId()!=null) {
+                        mCntrlMngr.postCreateEvent(finalAct.getId(), user.getValue().getId(), finalAct.getMinPlayer(), finalAct.getMaxPlayer(), dateTime, AddFinalActivity.this);
                     }
                 }
             }

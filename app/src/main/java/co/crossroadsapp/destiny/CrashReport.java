@@ -101,8 +101,8 @@ public class CrashReport extends BaseActivity implements Observer {
                             json.put("reportDetails", crash_text.getText().toString());
                             requestParams.put("formDetails", json);
                         } else {
-                            if (user != null && user.getUserId() != null) {
-                                requestParams.put("reporter", user.getUserId());
+                            if (user != null && user.getValue().getId() != null) {
+                                requestParams.put("reporter", user.getValue().getId());
                             }
                             requestParams.put("reporterEmail", email.getText().toString());
                             requestParams.put("reportDetails", crash_text.getText().toString());

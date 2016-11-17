@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import co.crossroadsapp.destiny.data.ActivityData;
+import co.crossroadsapp.destiny.data.Console;
 import co.crossroadsapp.destiny.data.ConsoleData;
 import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.PushNotification;
@@ -75,6 +76,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
@@ -231,9 +233,10 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         appIcon = (ImageView) findViewById(R.id.badge_icon);
 
         if (user!=null) {
-            updateUserProfileImage(user.getImageUrl());
-            if (user.getUser()!=null){
-                userNameDrawer.setText(user.getPsnId());
+            updateUserProfileImage(user.getValue().getImageUrl());
+            String psn = Util.getPrimaryConsoleId(user);
+            if (psn!=null){
+                userNameDrawer.setText(psn);
             }
         }
 
@@ -241,13 +244,13 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         userProfileDrawer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(user!=null && user.getPsnVerify()!=null) {
-                    if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
-                        showUnverifiedUserMsg();
-                    } else {
+                if(user!=null) {
+//                    if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+//                        showUnverifiedUserMsg();
+//                    } else {
                         findViewById(R.id.loadingImg).setVisibility(View.VISIBLE);
                         mManager.postHelmet(ListActivityFragment.this);
-                    }
+//                    }
                 }
             }
         });
@@ -555,17 +558,17 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
     private void checkPrivacyDialoge() {
         if(user!=null) {
-            if(user.getLegal()!=null) {
-                if( user.getLegal().getPrivacyNeedsUpdate() || user.getLegal().getTermsNeedsUpdate()) {
+            if(user.getValue().getLegal()!=null) {
+                if( user.getValue().getLegal().isPrivacyNeedsUpdate() || user.getValue().getLegal().isTermsNeedsUpdate()) {
                     //alert pop-up dailogue
                     final TextView message = new TextView(this);
-                    if(user.getLegal().getPrivacyNeedsUpdate() && user.getLegal().getTermsNeedsUpdate()) {
+                    if(user.getValue().getLegal().isPrivacyNeedsUpdate() && user.getValue().getLegal().isTermsNeedsUpdate()) {
                         message.setText(Html.fromHtml((getString(R.string.dialog_message))));
                         setTextViewHTML(message, (getString(R.string.dialog_message)));
-                    }else if (user.getLegal().getTermsNeedsUpdate()) {
+                    }else if (user.getValue().getLegal().isTermsNeedsUpdate()) {
                         message.setText(Html.fromHtml((getString(R.string.dialog_message_terms))));
                         setTextViewHTML(message, (getString(R.string.dialog_message_terms)));
-                    } else if(user.getLegal().getPrivacyNeedsUpdate()){
+                    } else if(user.getValue().getLegal().isPrivacyNeedsUpdate()){
                         message.setText(Html.fromHtml((getString(R.string.dialog_message_privacy))));
                         setTextViewHTML(message, (getString(R.string.dialog_message_privacy)));
                     }
@@ -774,10 +777,10 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     }
 
     private boolean checkIfConsolePresent(String consoleType) {
-        if(mManager.getUserData()!=null && mManager.getUserData().getConsoles()!=null) {
-            ArrayList<ConsoleData> localCon = mManager.getUserData().getConsoles();
+        if(mManager.getUserData()!=null && mManager.getUserData().getValue().getConsoles()!=null) {
+            List<Console> localCon = mManager.getUserData().getValue().getConsoles();
             for (int i = 0; i < localCon.size(); i++) {
-                if(consoleType.equalsIgnoreCase(localCon.get(i).getcType())) {
+                if(consoleType.equalsIgnoreCase(localCon.get(i).getConsoleType())) {
                     return true;
                 }
             }
@@ -788,11 +791,11 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     private void updateUserProfileImage(String url) {
         if((url!=null) || (!url.equalsIgnoreCase("null"))) {
             if(user!=null) {
-                if(user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                //if(user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
                     Util.picassoLoadIcon(this, userProfile, url, R.dimen.player_profile_hgt, R.dimen.player_profile_width, R.drawable.profile_image);
                     Util.picassoLoadIcon(this, userProfileDrawer, url, R.dimen.player_profile_drawer_hgt, R.dimen.player_profile_drawer_width, R.drawable.profile_image);
-                }
-                user.setImageUrl(url);
+                //}
+                user.getValue().setImageUrl(url);
             }
         }
     }
@@ -831,9 +834,9 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
     private void logout() {
         RequestParams rp = new RequestParams();
-        if (user!=null && user.getUser() != null) {
-            rp.put("userName", user.getPsnId());
-        }
+//        if (user!=null && user.getUser() != null) {
+//            rp.put("userName", user.getPsnId());
+//        }
         mManager.postLogout(ListActivityFragment.this, rp);
     }
 
@@ -848,25 +851,25 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
     private void checkUserPSNVerification() {
         if(user!=null) {
-            if (user.getPsnVerify() != null) {
-                if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
-                    //register user listener
-                    registerUserFirebase();
-//                    verify_username = (TextView) findViewById(R.id.top_text);
-//                    verify_user_bottom_text = (TextView) findViewById(R.id.verify_bottom_text);
-//                    verify_user_bottom_text.setText(Html.fromHtml((getString(R.string.verify_accnt_bottomtext))));
-//                    verify_user_bottom_text.setMovementMethod(LinkMovementMethod.getInstance());
-//                    verify_username.setText("Hi " + user.getUser() + "!");
-//                    unverifiedUserScreen.setVisibility(View.VISIBLE);
-                } else {
-                    if (unverifiedUserScreen != null) {
-                        unverifiedUserScreen.setVisibility(View.GONE);
-                        checkClanSet();
-                    }
-                    updateUserProfileImage(user.getImageUrl()!=null?user.getImageUrl():null);
-                    unregisterUserFirebase();
-                }
-            }
+//            if (user.getPsnVerify() != null) {
+//                if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+//                    //register user listener
+//                    registerUserFirebase();
+////                    verify_username = (TextView) findViewById(R.id.top_text);
+////                    verify_user_bottom_text = (TextView) findViewById(R.id.verify_bottom_text);
+////                    verify_user_bottom_text.setText(Html.fromHtml((getString(R.string.verify_accnt_bottomtext))));
+////                    verify_user_bottom_text.setMovementMethod(LinkMovementMethod.getInstance());
+////                    verify_username.setText("Hi " + user.getUser() + "!");
+////                    unverifiedUserScreen.setVisibility(View.VISIBLE);
+//                } else {
+//                    if (unverifiedUserScreen != null) {
+//                        unverifiedUserScreen.setVisibility(View.GONE);
+//                        checkClanSet();
+//                    }
+//                    updateUserProfileImage(user.getImageUrl()!=null?user.getImageUrl():null);
+//                    unregisterUserFirebase();
+//                }
+//            }
         }
     }
 
@@ -894,8 +897,9 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         if(mManager!=null && user!=null) {
             //check and change if current active console is different
             if (console != null) {
-                if(user.getConsoleType()!=null) {
-                    if (!console.equalsIgnoreCase(user.getConsoleType()) && checkIfConsolePresent(console)) {
+                String primaryConsole = user.getValue().getPrimaryConsoleType();
+                if(primaryConsole!=null) {
+                    if (!console.equalsIgnoreCase(primaryConsole) && checkIfConsolePresent(console)) {
                         changeToOtherConsole(console);
                     }
                 }
@@ -903,11 +907,11 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             //check and change if current active group is different
             if (clanId != null) {
                 if (mManager.getGroupObj(clanId) != null) {
-                    if (!clanId.equalsIgnoreCase(user.getClanId())) {
+                    if (!clanId.equalsIgnoreCase(user.getValue().getClanId())) {
                         GroupData grp = mManager.getGroupObj(clanId);
                         RequestParams params = new RequestParams();
-                        if (user.getUserId() != null) {
-                            params.add("id", user.getUserId());
+                        if (user.getValue().getId() != null) {
+                            params.add("id", user.getValue().getId());
                         }
                         params.add("clanId", grp.getGroupId());
                         params.add("clanName", grp.getGroupName());
@@ -921,22 +925,23 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
     private void checkClanSet() {
         if (user != null) {
-            if(user.getPsnVerify()!=null) {
-                if (user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
-                    if (user.getClanId() != null) {
-                        if (user.getAuthenticationId() == Constants.REGISTER) {
-                            openProfileDrawer(Gravity.RIGHT);
-                        }
+//            if(user.getPsnVerify()!=null) {
+//                if (user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+                    if (user.getValue().getClanId() != null) {
+//                        if (user.getAuthenticationId() == Constants.REGISTER) {
+                        // TODO: 11/16/16 do the logic for open group drawer for first time only
+//                            openProfileDrawer(Gravity.RIGHT);
+//                        }
                         setGroupImageUrl();
                     }
-                }
-            }
+//                }
+//            }
         }
     }
 
     private void setGroupImageUrl() {
-        if (user!=null && user.getClanId()!=null) {
-            GroupData gd = mManager.getGroupObj(user.getClanId());
+        if (user!=null && user.getValue().getClanId()!=null) {
+            GroupData gd = mManager.getGroupObj(user.getValue().getClanId());
             if (gd != null) {
                 String imageUrl = gd.getGroupImageUrl();
                 if (imageUrl != null) {
@@ -964,8 +969,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                 this.user = mManager.getUserData();
             }
         }
-        if(user!=null && user.getClanId()!=null) {
-            refFirebase = new Firebase(Util.getFirebaseUrl(this.user.getClanId(), null, Constants.EVENT_CHANNEL));
+        if(user!=null && user.getValue().getClanId()!=null) {
+            refFirebase = new Firebase(Util.getFirebaseUrl(this.user.getValue().getClanId(), null, Constants.EVENT_CHANNEL));
             if (listener != null) {
                 refFirebase.addValueEventListener(listener);
             }
@@ -979,9 +984,9 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     }
 
     private void registerUserFirebase() {
-        if(user.getUserId()!=null) {
+        if(user.getValue().getId()!=null) {
             setupUserListener();
-            refUFirebase = new Firebase(Util.getFirebaseUrl(this.user.getUserId(), null, Constants.USER_CHANNEL));
+            refUFirebase = new Firebase(Util.getFirebaseUrl(this.user.getValue().getId(), null, Constants.USER_CHANNEL));
             if (userListener != null) {
                 refUFirebase.addValueEventListener(userListener);
             }
@@ -1005,11 +1010,12 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                     String psnV = null;
                     if (snapshot.hasChild("value")) {
                         JSONObject userObj = new JSONObject((HashMap) snapshot.getValue());
-                        ud.toJson(userObj);
-                        if (ud.getUserId() != null) {
+                        //ud.toJson(userObj);
+//                        ud = snapshot.getValue();
+                        if (ud.getValue().getId() != null) {
                             mManager.setUserdata(ud);
                             user = ud;
-                            updateUserProfileImage(user.getImageUrl() != null ? user.getImageUrl() : null);
+                            updateUserProfileImage(user.getValue().getImageUrl() != null ? user.getValue().getImageUrl() : null);
 //                            if(ud.getPsnVerify()!=null) {
 //                                psnV = ud.getPsnVerify();
 //                            }
@@ -1550,9 +1556,9 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
     private void changeUserProfileBorderColor() {
         if(user!=null) {
-            if (user.getConsoleType() != null) {
-            if(user.getConsoles().size()>1) {
-                switch (user.getConsoleType()) {
+            if (user.getValue().getPrimaryConsoleType() != null) {
+            if(user.getValue().getConsoles().size()>1) {
+                switch (user.getValue().getPrimaryConsoleType()) {
                     case "PS3":
                         userProfileDrawer.setBorderColor(getResources().getColor(R.color.user_profile_border_playstation));
                         userProfile.setBorderColor(getResources().getColor(R.color.user_profile_border_playstation));
@@ -1605,7 +1611,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     @Override
     public void onBackPressed() {
         if(legalView.getVisibility()==View.VISIBLE) {
-            if(user.getLegal().getPrivacyNeedsUpdate()) {
+            if(user.getValue().getLegal().isPrivacyNeedsUpdate()) {
                 legalView.setVisibility(View.GONE);
                 checkPrivacyDialoge();
             }else {

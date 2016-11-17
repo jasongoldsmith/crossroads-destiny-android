@@ -384,15 +384,15 @@ public class LoginActivity extends BaseActivity implements Observer {
         //login_btn.setImageDrawable(getResources().getDrawable(R.drawable.img_login_btn));
         if (data!=null) {
             UserData ud = (UserData) data;
-            if (ud!=null && ud.getUserId()!=null) {
-                if(ud.getAuthenticationId() == Constants.LOGIN) {
+            if (ud!=null && ud.getValue().getId()!=null) {
+//                if(ud.getAuthenticationId() == Constants.LOGIN) {
                 //mManager.getEventList();
                 //save in preferrence
                     Util.setDefaults("user", username, getApplicationContext());
                     Util.setDefaults("password", password, getApplicationContext());
                     Util.setDefaults("consoleType", consoleType, getApplicationContext());
 
-                ud.setPassword(password);
+//                ud.setPassword(password);
                 mManager.setUserdata(ud);
                 //decide landing page based on push notification available or not
                 Intent regIntent;
@@ -406,7 +406,7 @@ public class LoginActivity extends BaseActivity implements Observer {
                     }
                 startActivity(regIntent);
                 finish();
-            }
+//            }
             }
         }
     }

@@ -20,6 +20,7 @@ import android.view.View;
 import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.ActivityList;
 import co.crossroadsapp.destiny.data.AppVersion;
+import co.crossroadsapp.destiny.data.Console;
 import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.EventList;
 import co.crossroadsapp.destiny.data.GroupData;
@@ -39,6 +40,7 @@ import co.crossroadsapp.destiny.network.EventRelationshipHandlerNetwork;
 import co.crossroadsapp.destiny.network.EventSendMessageNetwork;
 import co.crossroadsapp.destiny.network.ForgotPasswordNetwork;
 import co.crossroadsapp.destiny.network.GetVersion;
+import co.crossroadsapp.destiny.network.GitHubClient;
 import co.crossroadsapp.destiny.network.GroupListNetwork;
 import co.crossroadsapp.destiny.network.HelmetUpdateNetwork;
 import co.crossroadsapp.destiny.network.InvitePlayerNetwork;
@@ -47,6 +49,7 @@ import co.crossroadsapp.destiny.network.PrivacyLegalUpdateNetwork;
 import co.crossroadsapp.destiny.network.ReportCommentNetwork;
 import co.crossroadsapp.destiny.network.ReportCrashNetwork;
 import co.crossroadsapp.destiny.network.ResendBungieVerification;
+import co.crossroadsapp.destiny.network.ServiceGenerator;
 import co.crossroadsapp.destiny.network.TrackingNetwork;
 import co.crossroadsapp.destiny.network.VerifyConsoleIDNetwork;
 import co.crossroadsapp.destiny.network.postGcmNetwork;
@@ -60,6 +63,7 @@ import cz.msebera.android.httpclient.entity.ByteArrayEntity;
 import cz.msebera.android.httpclient.entity.StringEntity;
 import cz.msebera.android.httpclient.message.BasicHeader;
 import cz.msebera.android.httpclient.protocol.HTTP;
+import retrofit2.Call;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -78,6 +82,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
@@ -152,7 +157,7 @@ public class ControlManager implements Observer{
     }
 
     public void setUserdata(UserData ud) {
-        if(user!=null && user.getUser()!=null){
+        if(user!=null){
 
         }else {
             user = new UserData();
@@ -882,12 +887,13 @@ public class ControlManager implements Observer{
     public ArrayList<String> getConsoleList() {
         consoleList = new ArrayList<>();
         if(user!=null) {
-            if(user.getConsoleType()!=null) {
-                consoleList.add(user.getConsoleType());
-                for (int n = 0; n < user.getConsoles().size(); n++) {
-                    if (!user.getConsoles().get(n).getcType().equalsIgnoreCase(user.getConsoleType())) {
-                        consoleList.add(user.getConsoles().get(n).getcType());
-                    }
+            List<Console> consoleListLocal = user.getValue().getConsoles();
+            if(consoleListLocal!=null) {
+                //consoleList.add(user.getConsoleType());
+                for (int n = 0; n < consoleListLocal.size(); n++) {
+                    //if (!consoleListLocal.get(n).getcType().equalsIgnoreCase(user.getConsoleType())) {
+                        consoleList.add(consoleListLocal.get(n).getConsoleType());
+                    //}
                 }
             }
         }
@@ -1146,6 +1152,22 @@ public class ControlManager implements Observer{
     }
 
     public void getUserFromNetwork(MainActivity mainActivity, RequestParams rp) {
+                // Create a very simple REST adapter which points the GitHub API endpoint.
+        GitHubClient client = ServiceGenerator.createService(GitHubClient.class);
+
+        // Fetch and print a list of the contributors to this library.
+        Call<UserData> call =
+                client.createUser(rp);
+
+        try {
+            UserData user = call.execute().body();
+                System.out.println(
+                        "Hardik - user is from retrofit" + user.getValue().getId());
+        } catch (IOException e) {
+            // handle errors
+            System.out.println("Hardik - " + e);
+        }
+
         try {
         LoginNetwork getUserNtwrk = new LoginNetwork(mainActivity);
         getUserNtwrk.addObserver(this);

@@ -2,6 +2,7 @@ package co.crossroadsapp.destiny.network;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -50,10 +51,12 @@ public class PrivacyLegalUpdateNetwork extends Observable {
     }
 
     private void parseUser(JSONObject response) {
-        UserData user = new UserData();
-        user.toJson(response);
+        //UserData user = new UserData();
+        Gson gson = new Gson();
+        UserData user = gson.fromJson(response.toString(), UserData.class);
+        //user.toJson(response);
         if(user!=null) {
-            if(user.getUserId()!=null) {
+            if(user.getValue().getId()!=null) {
                 mManager.setUserdata(user);
             }
         }

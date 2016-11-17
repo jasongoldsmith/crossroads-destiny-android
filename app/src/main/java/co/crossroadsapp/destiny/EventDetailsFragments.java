@@ -399,8 +399,8 @@ public class EventDetailsFragments extends Fragment {
         }
 
         private boolean ifUserInvited(ArrayList<PlayerData> playerLocal) {
-            if(playerLocal!=null && user!=null && user.getUserId()!=null) {
-                String currentUserId = user.getUserId();
+            if(playerLocal!=null && user!=null && user.getValue().getId()!=null) {
+                String currentUserId = user.getValue().getId();
                 for(int i=0; i<playerLocal.size(); i++) {
                     if(playerLocal.get(i)!=null && playerLocal.get(i).getUserId()!=null) {
                         if(currentUserId.equalsIgnoreCase(playerLocal.get(i).getUserId()) && playerLocal.get(i).getInvitedBy()!=null) {
@@ -449,7 +449,7 @@ public class EventDetailsFragments extends Fragment {
 
     private boolean checkUserIsCreator() {
         if(this.currentEvent.getPlayerData()!=null) {
-            if (user.getUserId().equalsIgnoreCase(currentEvent.getCreatorData().getPlayerId())) {
+            if (user.getValue().getId().equalsIgnoreCase(currentEvent.getCreatorData().getPlayerId())) {
                 return true;
             }
         }
@@ -474,8 +474,8 @@ public class EventDetailsFragments extends Fragment {
     private boolean ifPlayerisUser(String id) {
         if(id!=null && currentEvent!=null && this.currentEvent.getPlayerData()!=null) {
             for (int i = 0; i < currentEvent.getPlayerData().size(); i++) {
-                if(user!=null && user.getUserId()!=null) {
-                    if (id.equalsIgnoreCase(user.getUserId())) {
+                if(user!=null && user.getValue().getId()!=null) {
+                    if (id.equalsIgnoreCase(user.getValue().getId())) {
                         return true;
                     }
                 }
@@ -498,7 +498,7 @@ public class EventDetailsFragments extends Fragment {
     private boolean checkUserIsPlayer(){
         if(this.currentEvent.getPlayerData()!=null) {
             for (int i = 0; i < currentEvent.getPlayerData().size(); i++) {
-                if (user.getUserId().equalsIgnoreCase(currentEvent.getPlayerData().get(i).getPlayerId())) {
+                if (user.getValue().getId().equalsIgnoreCase(currentEvent.getPlayerData().get(i).getPlayerId())) {
                     return true;
                 }
             }
@@ -550,7 +550,7 @@ public class EventDetailsFragments extends Fragment {
                                     if (commentsLocal.get(position).getId() != null && !commentsLocal.get(position).getId().isEmpty()) {
                                         rp.put("commentId", commentsLocal.get(position).getId());
                                     }
-                                    if (mManager!=null && mManager.getUserData()!=null && mManager.getUserData().getMaxReported()) {
+                                    if (mManager!=null && mManager.getUserData()!=null && mManager.getUserData().getValue().isHasReachedMaxReportedComments()) {
                                         ((EventDetailActivity) getActivity()).showGenericError(getString(R.string.report_issue_header), getString(R.string.report_issue_next), "NEXT", null, Constants.REPORT_COMMENT_NEXT, rp, false);
                                     } else {
                                         ((EventDetailActivity) getActivity()).showGenericError(getString(R.string.report_issue_header), getString(R.string.report_issue), "REPORT", null, Constants.REPORT_COMMENT, rp, false);

@@ -8,6 +8,8 @@ import co.crossroadsapp.destiny.MainActivity;
 import co.crossroadsapp.destiny.utils.Util;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
+
+import com.google.gson.Gson;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -111,17 +113,20 @@ public class LoginNetwork extends Observable {
     }
 
     private void parseSignInUser(JSONObject response) {
-        user = new UserData();
-        user.toJson(response);
-        user.setAuthenticationId(Constants.LOGIN);
+        //user = new UserData();
+        Gson gson = new Gson();
+        UserData user = gson.fromJson(response.toString(), UserData.class);
+
+        //user.toJson(response);
+        //user.setAuthenticationId(Constants.LOGIN);
         setChanged();
         notifyObservers(user);
     }
 
     private void parseSignUpUser(JSONObject response) {
         user = new UserData();
-        user.toJson(response);
-        user.setAuthenticationId(Constants.REGISTER);
+        //user.toJson(response);
+        //user.setAuthenticationId(Constants.REGISTER);
         setChanged();
         notifyObservers(user);
     }

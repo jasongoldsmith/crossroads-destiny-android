@@ -168,15 +168,15 @@ public class UpdateConsoleActivity extends BaseActivity implements AdapterView.O
 
     private String getConsoleId(String console) {
         if (console.equalsIgnoreCase(Constants.CONSOLEPS4)) {
-                for (int n=0;n<user.getConsoles().size();n++) {
-                    if(user.getConsoles().get(n).getcType().equalsIgnoreCase(Constants.CONSOLEPS3)) {
-                        return user.getConsoles().get(n).getcId();
+                for (int n=0;n<user.getValue().getConsoles().size();n++) {
+                    if(user.getValue().getConsoles().get(n).getConsoleType().equalsIgnoreCase(Constants.CONSOLEPS3)) {
+                        return user.getValue().getConsoles().get(n).getConsoleId();
                     }
                 }
         } else if(console.equalsIgnoreCase(Constants.CONSOLEXBOXONE)){
-                for (int n=0;n<user.getConsoles().size();n++) {
-                    if(user.getConsoles().get(n).getcType().equalsIgnoreCase(Constants.CONSOLEXBOX360)) {
-                        return user.getConsoles().get(n).getcId();
+                for (int n=0;n<user.getValue().getConsoles().size();n++) {
+                    if(user.getValue().getConsoles().get(n).getConsoleType().equalsIgnoreCase(Constants.CONSOLEXBOX360)) {
+                        return user.getValue().getConsoles().get(n).getConsoleId();
                     }
                 }
         }

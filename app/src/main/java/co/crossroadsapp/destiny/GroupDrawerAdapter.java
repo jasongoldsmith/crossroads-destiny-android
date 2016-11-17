@@ -118,7 +118,7 @@ public class GroupDrawerAdapter {
     }
 
     private void checkSignleGrpView() {
-        if(user!=null && user.getPsnVerify()!=null && user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+        if(user!=null ) {
             if (empty_group_layout != null) {
                 empty_group_layout.setVisibility(View.GONE);
             }
@@ -155,8 +155,8 @@ public class GroupDrawerAdapter {
     public void setSelectedGroup() {
         if(mCntrlMngr.getUserData()!=null) {
             user = mCntrlMngr.getUserData();
-            if (user.getClanId() != null) {
-                GroupData gd = mCntrlMngr.getGroupObj(user.getClanId());
+            if (user.getValue().getClanId() != null) {
+                GroupData gd = mCntrlMngr.getGroupObj(user.getValue().getClanId());
                 if (gd != null) {
                     if (gd.getGroupImageUrl() != null) {
                         int ge_num = gd.getEventCount();
@@ -208,8 +208,8 @@ public class GroupDrawerAdapter {
                 if (mCntrlMngr.getUserData()!=null) {
                     UserData u = mCntrlMngr.getUserData();
                     for (int i=0;i<localGroupList.size();i++) {
-                        if(u.getClanId()!=null && (!u.getClanId().equalsIgnoreCase(Constants.CLAN_NOT_SET))) {
-                            if(u.getClanId().equalsIgnoreCase(localGroupList.get(i).getGroupId())) {
+                        if(u.getValue().getClanId()!=null && (!u.getValue().getClanId().equalsIgnoreCase(Constants.CLAN_NOT_SET))) {
+                            if(u.getValue().getClanId().equalsIgnoreCase(localGroupList.get(i).getGroupId())) {
                                 localGroupList.get(i).setGroupSelected(true);
                                 localGroupList.remove(i);
 
@@ -309,9 +309,9 @@ public class GroupDrawerAdapter {
             if(glistLocal.size()>0) {
                 objGroup = glistLocal.get(position);
                 if (user != null) {
-                    if (user.getClanId()!=null) {
-                    if ((!user.getClanId().equalsIgnoreCase(Constants.CLAN_NOT_SET))) {
-                        if (!objGroup.getGroupId().equalsIgnoreCase(user.getClanId())) {
+                    if (user.getValue().getClanId()!=null) {
+                    if ((!user.getValue().getClanId().equalsIgnoreCase(Constants.CLAN_NOT_SET))) {
+                        if (!objGroup.getGroupId().equalsIgnoreCase(user.getValue().getClanId())) {
 
                             if ((objGroup.getGroupId().equalsIgnoreCase(Constants.FREELANCER_GROUP))) {
                                 holder.groupCardLayout.setBackgroundColor(c.getResources().getColor(R.color.freelancer_background));
@@ -431,8 +431,8 @@ public class GroupDrawerAdapter {
                                     if (mCntrlMngr != null) {
                                         if (mCntrlMngr.getUserData() != null) {
                                             UserData user = mCntrlMngr.getUserData();
-                                            if (user.getUserId() != null) {
-                                                params.add("id", user.getUserId());
+                                            if (user.getValue().getId() != null) {
+                                                params.add("id", user.getValue().getId());
                                             }
                                             params.add("clanId", glistLocal.get(position).getGroupId());
                                             params.add("clanName", glistLocal.get(position).getGroupName());

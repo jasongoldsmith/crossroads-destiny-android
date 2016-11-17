@@ -38,7 +38,7 @@ public class ReportCrashNetwork extends Observable {
     public void doCrashReport(RequestParams params, int type) throws JSONException {
         if (Util.isNetworkAvailable(mContext)) {
             String localUrl = urlUnsigned;
-            if(mManager!=null && mManager.getUserData()!=null && mManager.getUserData().getUserId()!=null) {
+            if(mManager!=null && mManager.getUserData()!=null && mManager.getUserData().getValue().getId()!=null) {
                 localUrl = url;
             }
             if(type == Constants.REPORT_COMMENT_NEXT) {

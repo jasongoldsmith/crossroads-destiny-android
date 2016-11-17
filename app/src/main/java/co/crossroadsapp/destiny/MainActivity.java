@@ -31,20 +31,26 @@ import co.crossroadsapp.destiny.data.InvitationLoginData;
 import co.crossroadsapp.destiny.network.ConfigNetwork;
 import co.crossroadsapp.destiny.network.EventListNetwork;
 import co.crossroadsapp.destiny.network.GetVersion;
+import co.crossroadsapp.destiny.network.GitHubClient;
 import co.crossroadsapp.destiny.network.LoginNetwork;
 import co.crossroadsapp.destiny.network.LogoutNetwork;
+import co.crossroadsapp.destiny.network.ServiceGenerator;
 import co.crossroadsapp.destiny.utils.TravellerLog;
 import co.crossroadsapp.destiny.utils.Util;
 import co.crossroadsapp.destiny.utils.Version;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
+import retrofit2.Call;
+
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
@@ -217,6 +223,25 @@ public class MainActivity extends BaseActivity implements Observer {
     }
 
     private void forwardAfterVersionCheck() {
+//        // Create a very simple REST adapter which points the GitHub API endpoint.
+//        GitHubClient client = ServiceGenerator.createService(GitHubClient.class);
+//
+//        // Fetch and print a list of the contributors to this library.
+//        Call<List<Contributor>> call =
+//                client.contributors();
+//
+//        try {
+//            List<Contributor> contributors = call.execute().body();
+//            for (Contributor contributor : contributors) {
+//                System.out.println(
+//                        "Hardik - " + contributor.value + " (" + contributor.contributions + ")");
+//            }
+//        } catch (IOException e) {
+//            // handle errors
+//            System.out.println("Hardik - " + e);
+//        }
+
+
         //if (u != null && p!= null && console!=null && !u.isEmpty() && !p.isEmpty() && !console.isEmpty()) {
         String isCookieValid = Util.getDefaults(Constants.COOKIE_VALID_KEY, getApplicationContext());
         if(cookies!=null && !cookies.isEmpty() && isCookieValid!=null && isCookieValid.equalsIgnoreCase("true")) {
@@ -683,13 +708,13 @@ public class MainActivity extends BaseActivity implements Observer {
             if (data!=null) {
                 TravellerLog.w(this, "Update observer for LoginNetwork network call response");
                 UserData ud = (UserData) data;
-                if (ud!=null && ud.getUserId()!=null) {
-                    if((ud.getAuthenticationId() == Constants.LOGIN)) {
+                if (ud!=null && ud.getValue().getId()!=null) {
+//                    if((ud.getAuthenticationId() == Constants.LOGIN)) {
                         //save in preferrence
-                        Util.setDefaults("user", ud.getUserId(), getApplicationContext());
+                        Util.setDefaults("user", ud.getValue().getId(), getApplicationContext());
 //                        Util.setDefaults("password", password, getApplicationContext());
                         Util.setDefaults("consoleType", console, getApplicationContext());
-                    ud.setPassword(p);
+                    //ud.setPassword(p);
                     mManager.setUserdata(ud);
                     Intent regIntent;
 
@@ -709,9 +734,9 @@ public class MainActivity extends BaseActivity implements Observer {
 
                     startActivity(regIntent);
                     finish();
-                } else {
-                        setContentView(R.layout.activity_main);
-                    }
+//                } else {
+//                        setContentView(R.layout.activity_main);
+//                    }
                 } else {
                     setContentView(R.layout.activity_main);
                 }

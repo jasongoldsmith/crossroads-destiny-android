@@ -26,13 +26,8 @@ import android.widget.Toast;
 
 import co.crossroadsapp.destiny.AddFinalActivity;
 import co.crossroadsapp.destiny.ControlManager;
-//import co.crossroadsapp.destiny.CreateNewEvent;
-import co.crossroadsapp.destiny.EventDetailActivity;
-import co.crossroadsapp.destiny.ListActivityFragment;
-import co.crossroadsapp.destiny.MainActivity;
 import co.crossroadsapp.destiny.R;
-import co.crossroadsapp.destiny.RegisterActivity;
-import co.crossroadsapp.destiny.SplashActivity;
+import co.crossroadsapp.destiny.data.Console;
 import co.crossroadsapp.destiny.data.UserData;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
@@ -43,8 +38,6 @@ import com.squareup.picasso.Picasso;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -55,6 +48,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
@@ -65,7 +59,7 @@ import java.util.regex.Pattern;
 public class Util {
     //To switch between production and development server links
     //where 1 points to development, 2 points to production and 3 points to Dev staging
-    private static final int network_connection = 3;
+    private static final int network_connection = 1;
 
     private static final String TAG = Util.class.getName();
     public static final String trimbleDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -145,8 +139,8 @@ public class Util {
 
     public static void storeUserData(UserData userData, String user, String pass) {
         if (userData!= null) {
-            userData.setUser(user);
-            userData.setPassword(pass);
+//            userData.setUser(user);
+//            userData.setPassword(pass);
         }
     }
 
@@ -186,7 +180,7 @@ public class Util {
 
     public static boolean checkUserObject(UserData ud) {
         if (ud!=null) {
-            if(ud.getUserId()==null || ud.getUser()==null || ud.getConsoleType()==null || ud.getClanId()==null || ud.getPsnVerify()==null || ud.getImageUrl()==null || ud.getMembershipId()==null || ud.getPsnId()==null) {
+            if(ud.getValue().getId()==null || ud.getValue().getClanName()==null || ud.getValue().getClanId()==null || ud.getValue().getImageUrl()==null || ud.getValue().getBungieMemberShipId()==null) {
                 return false;
             }
             return true;
@@ -701,5 +695,15 @@ public class Util {
 
     public final static boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+    }
+
+    public static String getPrimaryConsoleId(UserData user) {
+        List<Console> console = user.getValue().getConsoles();
+        for(int n=0; n<console.size(); n++) {
+            if(console.get(n).isIsPrimary()) {
+                return console.get(n).getConsoleId();
+            }
+        }
+        return null;
     }
 }

@@ -2,6 +2,7 @@ package co.crossroadsapp.destiny.network;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -54,10 +55,12 @@ public class AddNewConsoleNetwork extends Observable {
             //parse response
             UserData user = new UserData();
             if(response!=null) {
-                user.toJson(response);
+                Gson gson = new Gson();
+                user = gson.fromJson(response.toString(), UserData.class);
+                //user.toJson(response);
             }
         if(user!=null) {
-            if((user.getClanId()!=null) && (!user.getClanId().isEmpty())) {
+            if((user.getValue().getClanId()!=null) && (!user.getValue().getClanId().isEmpty())) {
                 mManager.setUserdata(user);
             }
             setChanged();
