@@ -215,7 +215,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         sendMsgAgain.setText(Html.fromHtml(getResources().getString(R.string.message_missing_tryagain)));
 
         //check user verification
-        checkUserPSNVerification();
+        //checkUserPSNVerification();
 
         progress = (RelativeLayout) findViewById(R.id.progress_bar_layout);
         userProfile = (CircularImageView) findViewById(R.id.userProfile);
@@ -1004,23 +1004,28 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                     UserData ud = new UserData();
                     String psnV = null;
                     if (snapshot.hasChild("value")) {
-                            JSONObject userObj = new JSONObject ((HashMap)snapshot.getValue());
-                            ud.toJson(userObj);
-                            if(ud.getPsnVerify()!=null) {
-                                psnV = ud.getPsnVerify();
-                            }
-                            if (psnV != null) {
-                                if (psnV.equalsIgnoreCase(Constants.PSN_VERIFIED)) {
-                                    if (mManager != null && mManager.getUserData() != null) {
-                                        UserData u = mManager.getUserData();
-                                        u.setPsnVerify(psnV);
-                                    }
-                                    checkUserPSNVerification();
-                                } else if(psnV.equalsIgnoreCase(Constants.PSN_DELETED)){
-                                    Util.clearDefaults(ListActivityFragment.this.getApplicationContext());
-                                    afterLogout();
-                                }
-                            }
+                        JSONObject userObj = new JSONObject((HashMap) snapshot.getValue());
+                        ud.toJson(userObj);
+                        if (ud.getUserId() != null) {
+                            mManager.setUserdata(ud);
+                            user = ud;
+                            updateUserProfileImage(user.getImageUrl() != null ? user.getImageUrl() : null);
+//                            if(ud.getPsnVerify()!=null) {
+//                                psnV = ud.getPsnVerify();
+//                            }
+//                            if (psnV != null) {
+//                                if (psnV.equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+//                                    if (mManager != null && mManager.getUserData() != null) {
+//                                        UserData u = mManager.getUserData();
+//                                        u.setPsnVerify(psnV);
+//                                    }
+//                                    //checkUserPSNVerification();
+//                                } else if(psnV.equalsIgnoreCase(Constants.PSN_DELETED)){
+//                                    Util.clearDefaults(ListActivityFragment.this.getApplicationContext());
+//                                    afterLogout();
+//                                }
+//                            }
+                        }
                     }
                 }
             }
@@ -1202,12 +1207,13 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             mManager.getEventList(this);
         }
         registerFirbase();
-        if (user!=null && user.getPsnVerify()!=null) {
-            if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
-                //register user listener
-                registerUserFirebase();
-            }
-        }
+        registerUserFirebase();
+//        if (user!=null && user.getPsnVerify()!=null) {
+//            if (!user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+//                //register user listener
+//                registerUserFirebase();
+//            }
+//        }
 
         if(getIntent()!=null && getIntent().getExtras()!=null) {
             b = getIntent().getExtras();
