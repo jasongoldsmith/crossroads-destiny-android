@@ -1,8 +1,10 @@
 package co.crossroadsapp.destiny;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.multidex.MultiDex;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -72,6 +74,12 @@ public class SplashActivity extends BaseActivity implements Observer {
         }
 
         intializeTrackingandForward();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(base);
     }
 
     private void intializeTrackingandForward() {

@@ -617,7 +617,6 @@ public class ControlManager implements Observer{
     }
     @Override
     public void update(Observable observable, Object data) {
-
         if (observable instanceof EventListNetwork) {
             eData = new ArrayList<EventData>();
             if (data instanceof EventListNetwork) {
