@@ -27,6 +27,7 @@ import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.GroupList;
 import co.crossroadsapp.destiny.data.InvitationLoginData;
 import co.crossroadsapp.destiny.data.UserData;
+import co.crossroadsapp.destiny.data.ValidateUserRequest;
 import co.crossroadsapp.destiny.network.ActivityListNetwork;
 import co.crossroadsapp.destiny.network.AddCommentNetwork;
 import co.crossroadsapp.destiny.network.AddNewConsoleNetwork;
@@ -64,6 +65,8 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 import cz.msebera.android.httpclient.message.BasicHeader;
 import cz.msebera.android.httpclient.protocol.HTTP;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -630,20 +633,20 @@ public class ControlManager implements Observer{
                 eData = eList.getEventList();
                 ActivityList adList = ((EventListNetwork) data).getActList();
                 adActivityData = adList.getActivityList();
-            }else {
+            } else {
                 EventList eList = (EventList) data;
                 eData = eList.getEventList();
             }
-        } else if (observable instanceof LogoutNetwork){
+        } else if (observable instanceof LogoutNetwork) {
             //mCurrentAct.finish();
         } else if (observable instanceof EventRelationshipHandlerNetwork) {
             EventData ed = (EventData) data;
-            boolean eventExist=true;
-            if (eData!= null) {
-                for (int i=0; i<eData.size();i++) {
+            boolean eventExist = true;
+            if (eData != null) {
+                for (int i = 0; i < eData.size(); i++) {
                     if (ed.getEventId().equalsIgnoreCase(eData.get(i).getEventId())) {
                         eventExist = false;
-                        if (ed.getMaxPlayer()>0) {
+                        if (ed.getMaxPlayer() > 0) {
                             eData.remove(i);
                             eData.add(i, ed);
                         } else {
@@ -652,20 +655,20 @@ public class ControlManager implements Observer{
                         break;
                     }
                 }
-                if(eventExist) {
+                if (eventExist) {
                     eData.add(ed);
                 }
             }
         } else if (observable instanceof ActivityListNetwork) {
-            updateActivityList(data!=null?data:null);
-        } else if(observable instanceof GetVersion) {
+            updateActivityList(data != null ? data : null);
+        } else if (observable instanceof GetVersion) {
             AppVersion ver = (AppVersion) data;
-            if (this.mCurrentAct!=null) {
+            if (this.mCurrentAct != null) {
                 String currVer = Util.getApplicationVersionCode(this.mCurrentAct);
                 String latestVer = ver.getVersion();
                 Version currVersion = new Version(currVer);
                 Version latestVersion = new Version(latestVer);
-                if (latestVersion.compareTo(currVersion)>0){
+                if (latestVersion.compareTo(currVersion) > 0) {
                     AlertDialog.Builder builder = TravellerDialogueHelper.createConfirmDialogBuilder(this.mCurrentAct, "New Version Available", "A new version of Crossroads is available for download", "Download", "Later", null);
 
                     builder.setPositiveButton(R.string.download_btn, new DialogInterface.OnClickListener() {
@@ -677,7 +680,7 @@ public class ControlManager implements Observer{
                     }).setNegativeButton(R.string.later_btn, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.dismiss();
-                            if(mCurrentAct instanceof MainActivity) {
+                            if (mCurrentAct instanceof MainActivity) {
                                 getAndroidVersion((MainActivity) mCurrentAct);
                             }
                         }
@@ -687,58 +690,100 @@ public class ControlManager implements Observer{
                 }
 
             }
-        } else if(observable instanceof GroupListNetwork) {
-            if(data instanceof UserData) {
+        } else if (observable instanceof GroupListNetwork) {
+            if (data instanceof UserData) {
                 setUserdata((UserData) data);
-            } else if(data instanceof GroupData) {
+            } else if (data instanceof GroupData) {
                 //
             } else {
-                if(gData!=null) {
+                if (gData != null) {
                     gData.clear();
                 } else {
                     gData = new ArrayList<GroupData>();
                 }
                 gData = (ArrayList<GroupData>) data;
             }
-        } else if(observable instanceof LoginNetwork) {
-            if (data!=null) {
+        } else if (observable instanceof LoginNetwork) {
+            if (data != null) {
                 getEventList();
                 getGroupList(null);
             }
-        } else if(observable instanceof BungieUserNetwork) {
-            if(data!=null) {
-                try {
-                    String platform = getCurrentPlatform();
-                    if(platform!=null) {
-                        try {
-                            HashMap<String,Object> map =
-                                    new ObjectMapper().readValue(data.toString(), HashMap.class);
-                            RequestParams rp = new RequestParams();
-                            rp.put("bungieResponse", map);
-                            rp.put("consoleType", platform);
-                            rp.put("bungieURL", getBungieCurrentUserUrl()!=null?getBungieCurrentUserUrl():Constants.BUGIE_CURRENT_USER);
-                            if(mCurrentAct instanceof MainActivity) {
-                                loginNetwork = new LoginNetwork(mCurrentAct);
-                                InvitationLoginData notificationObj = ((MainActivity) mCurrentAct).getInvitationObject();
-                                if(notificationObj!=null) {
-                                    rp.put("invitation", notificationObj.getRp());
-                                }
-                                loginNetwork.addObserver(this);
-                                loginNetwork.addObserver(((MainActivity) mCurrentAct));
-                                loginNetwork.doSignup(rp);
+        } else if (observable instanceof BungieUserNetwork) {
+            if (data != null) {
+//                try {
+                String platform = getCurrentPlatform();
+                if (platform != null) {
+////                        try {
+//                    HashMap<String, Object> map =
+//                            null;
+//                    try {
+//                        map = new ObjectMapper().readValue(data.toString(), HashMap.class);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    //RequestParams rp = new RequestParams();
+//                    //HashMap<String, String> rp = new HashMap<>();
+//                    Map<String, String> requestBody = new HashMap<>();
+//                    Map<String, JSONObject> rp = new HashMap<>();
+//                    rp.put("bungieResponse", (JSONObject) data);
+//                    requestBody.put("consoleType", platform);
+//                    requestBody.put("bungieURL", getBungieCurrentUserUrl() != null ? getBungieCurrentUserUrl() : Constants.BUGIE_CURRENT_USER);
+
+                    //create request body class
+                    ValidateUserRequest vUser = new ValidateUserRequest();
+                    vUser.setConsole("consoleType", platform);
+                    vUser.setUrl("bungieURL", getBungieCurrentUserUrl() != null ? getBungieCurrentUserUrl() : Constants.BUGIE_CURRENT_USER);
+                    vUser.setRp("bungieResponse", (JSONObject) data);
+                    if (mCurrentAct instanceof MainActivity) {
+                        // Create a very simple REST adapter which points the GitHub API endpoint.
+                        Call<UserData> client = ServiceGenerator.createService(GitHubClient.class).createUser(vUser);
+                        client.enqueue(new Callback<UserData>()  {
+                            @Override
+                            public void onResponse(Call<UserData> call, Response<UserData> response) {
+                                System.out.println("Hardik - user is from retrofit" + response.body().getValue().getId());
                             }
-                        } catch (JsonGenerationException e) {
-                            e.printStackTrace();
-                        } catch (JsonMappingException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+
+                            @Override
+                            public void onFailure(Call<UserData> call, Throwable t) {
+                                System.out.println("Hardik - " + t);
+                            }
+                        });
+
+                        // Fetch and print a list of the contributors to this library.
+//                                Call<UserData> call =
+//                                        client.createUser("auth/validateUserLogin", rp);
+//
+//                                try {
+//                                    user = call.execute().body();
+//                                    System.out.println(
+//                                            "Hardik - user is from retrofit" + user.getValue().getId());
+//                                } catch (IOException e) {
+//                                    // handle errors
+//                                    System.out.println("Hardik - " + e);
+//                                }
+
+
+//                                loginNetwork = new LoginNetwork(mCurrentAct);
+//                                InvitationLoginData notificationObj = ((MainActivity) mCurrentAct).getInvitationObject();
+//                                if(notificationObj!=null) {
+//                                    rp.put("invitation", notificationObj.getRp());
+//                                }
+//                                loginNetwork.addObserver(this);
+//                                loginNetwork.addObserver(((MainActivity) mCurrentAct));
+//                                loginNetwork.doSignup(rp);
+//                            }
+//                        } catch (JsonGenerationException e) {
+//                            e.printStackTrace();
+//                        } catch (JsonMappingException e) {
+//                            e.printStackTrace();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
                 }
-            }
 //        } else if(observable instanceof BungieMessageNetwork) {
 //            if(data!=null) {
 //                try {
@@ -755,6 +800,7 @@ public class ControlManager implements Observer{
 //                    e.printStackTrace();
 //                }
 //            }
+            }
         }
     }
 
@@ -1156,17 +1202,17 @@ public class ControlManager implements Observer{
         GitHubClient client = ServiceGenerator.createService(GitHubClient.class);
 
         // Fetch and print a list of the contributors to this library.
-        Call<UserData> call =
-                client.createUser(rp);
-
-        try {
-            UserData user = call.execute().body();
-                System.out.println(
-                        "Hardik - user is from retrofit" + user.getValue().getId());
-        } catch (IOException e) {
-            // handle errors
-            System.out.println("Hardik - " + e);
-        }
+//        Call<UserData> call =
+//                client.createUser("a/user/listById", rp);
+//
+//        try {
+//            UserData user = call.execute().body();
+//                System.out.println(
+//                        "Hardik - user is from retrofit" + user.getValue().getId());
+//        } catch (IOException e) {
+//            // handle errors
+//            System.out.println("Hardik - " + e);
+//        }
 
         try {
         LoginNetwork getUserNtwrk = new LoginNetwork(mainActivity);
