@@ -30,31 +30,33 @@ public class ServiceGenerator {
 
     private static HttpLoggingInterceptor logging = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
 
-    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
-        @Override
-        public Response intercept(Chain chain) throws IOException {
-            Request original = chain.request();
-//            ControlManager cm = ControlManager.getmInstance();
- //           if(cm.getCurrentActivity()!=null) {
-                //ConnectivityManager connManager = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
-                //NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-                //DisplayMetrics metrics = c.getResources().getDisplayMetrics();
-                Request request = original.newBuilder()
-                        .header("config_token", Constants.CONFIG_TOKEN)
-                        .header("$lib_version", MPConfig.VERSION)
-                        .header("$os", "Android")
-                        .header("$os_version", Build.VERSION.RELEASE == null ? "UNKNOWN" : Build.VERSION.RELEASE)
-                        .header("$manufacturer", Build.MANUFACTURER == null ? "UNKNOWN" : Build.MANUFACTURER)
-                        .header("$brand", Build.BRAND == null ? "UNKNOWN" : Build.BRAND)
-                        .header("$model", Build.MODEL == null ? "UNKNOWN" : Build.MODEL)
-                        .method(original.method(), original.body())
-                        .build();
+    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder().addInterceptor(logging);
 
-                return chain.proceed(request);
-//            }
-//            return null;
-        }
-    }).addInterceptor(logging);
+//    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
+//        @Override
+//        public Response intercept(Chain chain) throws IOException {
+//            Request original = chain.request();
+////            ControlManager cm = ControlManager.getmInstance();
+// //           if(cm.getCurrentActivity()!=null) {
+//                //ConnectivityManager connManager = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
+//                //NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+//                //DisplayMetrics metrics = c.getResources().getDisplayMetrics();
+//                Request request = original.newBuilder()
+//                        .header("config_token", Constants.CONFIG_TOKEN)
+//                        .header("$lib_version", MPConfig.VERSION)
+//                        .header("$os", "Android")
+//                        .header("$os_version", Build.VERSION.RELEASE == null ? "UNKNOWN" : Build.VERSION.RELEASE)
+//                        .header("$manufacturer", Build.MANUFACTURER == null ? "UNKNOWN" : Build.MANUFACTURER)
+//                        .header("$brand", Build.BRAND == null ? "UNKNOWN" : Build.BRAND)
+//                        .header("$model", Build.MODEL == null ? "UNKNOWN" : Build.MODEL)
+//                        .method(original.method(), original.body())
+//                        .build();
+//
+//                return chain.proceed(request);
+////            }
+////            return null;
+//        }
+//    });
 
     private static Retrofit.Builder builder =
             new Retrofit.Builder()

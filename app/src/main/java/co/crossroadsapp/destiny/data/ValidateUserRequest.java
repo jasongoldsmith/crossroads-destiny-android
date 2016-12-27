@@ -9,34 +9,31 @@ import java.util.Map;
  * Created by sharmha on 11/18/16.
  */
 public class ValidateUserRequest {
-    Map<String, String> console;
-    Map<String, JSONObject> rp;
-    Map<String, String> url;
+    String consoleType;
+    Object bungieResponse;
+    String bungieURL;
 
-    public void setConsole(String key, String value) {
-        console  = new HashMap<>();
-        console.put(key, value);
+    public void setConsoleType(String console) {
+        consoleType = console;
     }
 
-    public void setRp(String key, JSONObject value) {
-        rp  = new HashMap<>();
-        rp.put(key, value);
+    public String getConsoleType() {
+        return this.consoleType;
     }
 
-    public void setUrl(String key, String value) {
-        url = new HashMap<>();
-        url.put(key, value);
+    public void setBungieResponse(Object value) {
+        bungieResponse = value;
     }
 
-    public Map<String, String> getConsole() {
-        return this.console;
+    public Object getBungieResponse() {
+        return this.bungieResponse;
     }
 
-    public Map<String, JSONObject> getRp() {
-        return this.rp;
+    public void setBungieURL(String url) {
+        bungieURL = url;
     }
 
-    public Map<String, String> getUrl() {
-        return this.url;
+    public String getBungieURL() {
+        return this.bungieURL;
     }
 }

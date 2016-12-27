@@ -83,6 +83,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -731,9 +732,10 @@ public class ControlManager implements Observer{
 
                     //create request body class
                     ValidateUserRequest vUser = new ValidateUserRequest();
-                    vUser.setConsole("consoleType", platform);
-                    vUser.setUrl("bungieURL", getBungieCurrentUserUrl() != null ? getBungieCurrentUserUrl() : Constants.BUGIE_CURRENT_USER);
-                    vUser.setRp("bungieResponse", (JSONObject) data);
+                    vUser.setConsoleType(platform);
+                    vUser.setBungieURL(getBungieCurrentUserUrl() != null ? getBungieCurrentUserUrl() : Constants.BUGIE_CURRENT_USER);
+                    vUser.setBungieResponse(data);
+
                     if (mCurrentAct instanceof MainActivity) {
                         // Create a very simple REST adapter which points the GitHub API endpoint.
                         Call<UserData> client = ServiceGenerator.createService(GitHubClient.class).createUser(vUser);
