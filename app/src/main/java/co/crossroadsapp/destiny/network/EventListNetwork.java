@@ -12,6 +12,7 @@ import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.EventList;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.PersistentCookieStore;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,10 +54,13 @@ public class EventListNetwork extends Observable{
     public void getEvents(int feed) throws JSONException {
         if (Util.isNetworkAvailable(mContext)) {
             String localUrl = url;
+            RequestParams requestParams = new RequestParams();
             if(feed== Constants.PUBLIC_EVENT_FEED) {
                 localUrl = publicFeedUrl;
+            } else if(feed==Constants.EVENT_FEED){
+                requestParams.put("myEvents", "true");
             }
-            ntwrk.get(localUrl, new JsonHttpResponseHandler() {
+            ntwrk.get(localUrl, requestParams, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     parseFeed(response);
