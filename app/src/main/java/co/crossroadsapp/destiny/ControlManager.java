@@ -20,6 +20,7 @@ import android.view.View;
 import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.ActivityList;
 import co.crossroadsapp.destiny.data.AppVersion;
+import co.crossroadsapp.destiny.data.BungieResponseData;
 import co.crossroadsapp.destiny.data.Console;
 import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.EventList;
@@ -77,8 +78,14 @@ import com.shaded.fasterxml.jackson.core.JsonGenerationException;
 import com.shaded.fasterxml.jackson.core.JsonParseException;
 import com.shaded.fasterxml.jackson.core.type.TypeReference;
 import com.shaded.fasterxml.jackson.databind.JsonMappingException;
+import com.shaded.fasterxml.jackson.databind.JsonNode;
 import com.shaded.fasterxml.jackson.databind.ObjectMapper;
+import com.shaded.fasterxml.jackson.databind.node.ArrayNode;
+import com.shaded.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.shaded.fasterxml.jackson.databind.node.ObjectNode;
+import com.shaded.fasterxml.jackson.databind.node.TreeTraversingParser;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -86,6 +93,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -734,12 +742,22 @@ public class ControlManager implements Observer{
                     ValidateUserRequest vUser = new ValidateUserRequest();
                     vUser.setConsoleType(platform);
                     vUser.setBungieURL(getBungieCurrentUserUrl() != null ? getBungieCurrentUserUrl() : Constants.BUGIE_CURRENT_USER);
-                    vUser.setBungieResponse(data);
+                    JsonNode jsonNode = convertJsonFormat((JSONObject) data);
+                    ObjectMapper mapper = new ObjectMapper();
+                    BungieResponseData myPojo = null;
+                    try {
+                        myPojo = mapper.readValue(new TreeTraversingParser(jsonNode), BungieResponseData.class);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    vUser.setBungieResponse(myPojo);
+
+                    //parsing jsonObj to pojo
 
                     if (mCurrentAct instanceof MainActivity) {
                         // Create a very simple REST adapter which points the GitHub API endpoint.
                         Call<UserData> client = ServiceGenerator.createService(GitHubClient.class).createUser(vUser);
-                        client.enqueue(new Callback<UserData>()  {
+                        client.enqueue(new Callback<UserData>() {
                             @Override
                             public void onResponse(Call<UserData> call, Response<UserData> response) {
                                 System.out.println("Hardik - user is from retrofit" + response.body().getValue().getId());
@@ -804,6 +822,109 @@ public class ControlManager implements Observer{
 //            }
             }
         }
+    }
+
+    private void getUserObject(BungieResponseData data) {
+        String platform = getCurrentPlatform();
+        if (platform != null) {
+            //create request body class
+            ValidateUserRequest vUser = new ValidateUserRequest();
+            vUser.setConsoleType(platform);
+            vUser.setBungieURL(getBungieCurrentUserUrl() != null ? getBungieCurrentUserUrl() : Constants.BUGIE_CURRENT_USER);
+            //JsonNode jsonNode = convertJsonFormat((JSONObject) data);
+//        ObjectMapper mapper = new ObjectMapper();
+//        BungieResponseData myPojo = null;
+//        try {
+//            myPojo = mapper.readValue(new TreeTraversingParser(jsonNode), BungieResponseData.class);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+            vUser.setBungieResponse(data);
+
+            //parsing jsonObj to pojo
+
+            if (mCurrentAct instanceof MainActivity) {
+                // Create a very simple REST adapter which points the GitHub API endpoint.
+                Call<UserData> client = ServiceGenerator.createService(GitHubClient.class).createUser(vUser);
+                client.enqueue(new Callback<UserData>() {
+                    @Override
+                    public void onResponse(Call<UserData> call, Response<UserData> response) {
+                        System.out.println("Hardik - user is from retrofit" + response.body().getValue().getId());
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserData> call, Throwable t) {
+                        System.out.println("Hardik - " + t);
+                    }
+                });
+            }
+        }
+    }
+
+    private JsonNode convertJsonFormat(JSONObject json) {
+        ObjectNode ret = JsonNodeFactory.instance.objectNode();
+
+        @SuppressWarnings("unchecked")
+        Iterator<String> iterator = json.keys();
+        for (; iterator.hasNext();) {
+            String key = iterator.next();
+            Object value;
+            try {
+                value = json.get(key);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            if (json.isNull(key))
+                ret.putNull(key);
+            else if (value instanceof String)
+                ret.put(key, (String) value);
+            else if (value instanceof Integer)
+                ret.put(key, (Integer) value);
+            else if (value instanceof Long)
+                ret.put(key, (Long) value);
+            else if (value instanceof Double)
+                ret.put(key, (Double) value);
+            else if (value instanceof Boolean)
+                ret.put(key, (Boolean) value);
+            else if (value instanceof JSONObject)
+                ret.put(key, convertJsonFormat((JSONObject) value));
+            else if (value instanceof JSONArray)
+                ret.put(key, convertJsonFormat((JSONArray) value));
+            else
+                throw new RuntimeException("not prepared for converting instance of class " + value.getClass());
+        }
+        return ret;
+    }
+
+    private JsonNode convertJsonFormat(JSONArray json) {
+        ArrayNode ret = JsonNodeFactory.instance.arrayNode();
+        for (int i = 0; i < json.length(); i++) {
+            Object value;
+            try {
+                value = json.get(i);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            if (json.isNull(i))
+                ret.addNull();
+            else if (value instanceof String)
+                ret.add((String) value);
+            else if (value instanceof Integer)
+                ret.add((Integer) value);
+            else if (value instanceof Long)
+                ret.add((Long) value);
+            else if (value instanceof Double)
+                ret.add((Double) value);
+            else if (value instanceof Boolean)
+                ret.add((Boolean) value);
+            else if (value instanceof JSONObject)
+                ret.add(convertJsonFormat((JSONObject) value));
+            else if (value instanceof JSONArray)
+                ret.add(convertJsonFormat((JSONArray) value));
+            else
+                throw new RuntimeException("not prepared for converting instance of class " + value.getClass());
+        }
+        return ret;
     }
 
     public void updateActivityList(Object data) {
@@ -1119,13 +1240,27 @@ public class ControlManager implements Observer{
     }
 
     public void getBungieCurrentUser(String csrf, String cookies, Context applicationContext) {
-        try {
+        //try {
             bugieGetUser = new BungieUserNetwork(csrf, cookies, applicationContext, getBungieCurrentUserUrl()!=null?getBungieCurrentUserUrl():Constants.BUGIE_CURRENT_USER);
-            bugieGetUser.addObserver(this);
-            bugieGetUser.getBungieCurrentUser();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            // Create a very simple REST adapter which points the GitHub API endpoint.
+            Call<BungieResponseData> client = ServiceGenerator.createService(GitHubClient.class).getBungieUser(csrf, cookies, "f091c8d36c3c4a17b559c21cd489bec0");
+            client.enqueue(new Callback<BungieResponseData>() {
+                @Override
+                public void onResponse(Call<BungieResponseData> call, Response<BungieResponseData> response) {
+                    System.out.println("Hardik - user is from retrofit" + response.body());
+                    getUserObject(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<BungieResponseData> call, Throwable t) {
+                    System.out.println("Hardik - " + t);
+                }
+            });
+            //bugieGetUser.addObserver(this);
+            //bugieGetUser.getBungieCurrentUser();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public String getCurrentPlatform() {

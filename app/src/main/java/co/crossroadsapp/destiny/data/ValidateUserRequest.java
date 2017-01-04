@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class ValidateUserRequest {
     String consoleType;
-    Object bungieResponse;
+    BungieResponseData bungieResponse;
     String bungieURL;
 
     public void setConsoleType(String console) {
@@ -21,7 +21,7 @@ public class ValidateUserRequest {
         return this.consoleType;
     }
 
-    public void setBungieResponse(Object value) {
+    public void setBungieResponse(BungieResponseData value) {
         bungieResponse = value;
     }
 
