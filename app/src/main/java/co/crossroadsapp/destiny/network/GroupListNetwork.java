@@ -105,8 +105,8 @@ public class GroupListNetwork extends Observable {
             //todo changing current controlmanager user obj and later userobject will change and only one parser will do that
             if (mManager.getUserData()!=null) {
                 UserData u = mManager.getUserData();
-                if(user!=null && user.getValue().getClanId()!=null) {
-                    u.getValue().setClanId(user.getValue().getClanId());
+                if(user!=null && user.getClanId()!=null) {
+                    u.setClanId(user.getClanId());
                 }
             }
 

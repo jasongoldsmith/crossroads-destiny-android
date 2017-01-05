@@ -197,7 +197,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
             @Override
             protected boolean keepObject(Person person, String mask) {
                 mask = mask.toLowerCase();
-                String console = user.getValue().getPrimaryConsoleType();
+                String console = user.getConsoleType();
                 if(console.equalsIgnoreCase(Constants.CONSOLEXBOXONE)) {
                     validateXboxGamertag(mask);
                 } else if(console.equalsIgnoreCase(Constants.CONSOLEPS4)) {
@@ -380,7 +380,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
             public void onClick(View v) {
                 RequestParams rp = new RequestParams();
                 rp.put("eId", currEvent.getEventId());
-                rp.put("player", user.getValue().getId());
+                rp.put("player", user.getUserId());
                 hideProgress();
                 showProgress();
                 controlManager.postJoinEvent(EventDetailActivity.this, rp);
@@ -518,7 +518,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
     private void leaveEvent() {
         RequestParams rp = new RequestParams();
         rp.put("eId", currEvent.getEventId());
-        rp.put("player", user.getValue().getId());
+        rp.put("player", user.getUserId());
         hideProgress();
         showProgress();
         //todo fix when fire base rules are in
@@ -867,8 +867,8 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
 
     private String getDeepLinkConsoleType() {
         String s= "";
-        if(user!=null && user.getValue().getPrimaryConsoleType()!=null) {
-            switch (user.getValue().getPrimaryConsoleType()) {
+        if(user!=null && user.getConsoleType()!=null) {
+            switch (user.getConsoleType()) {
                 case "XBOX360":
                     s = "360";
                     break;
@@ -876,7 +876,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
                     s = "XB1";
                     break;
                 default:
-                    s = user.getValue().getPrimaryConsoleType();
+                    s = user.getConsoleType();
                     break;
             }
         }
@@ -986,7 +986,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
                 this.user = controlManager.getUserData();
             }
         }
-        if(user!=null && user.getValue().getClanId()!=null) {
+        if(user!=null && user.getClanId()!=null) {
             if(currEvent!=null && currEvent.getEventId()!=null && currEvent.getClanId()!=null) {
                 refFirebase = new Firebase(Util.getFirebaseUrl(currEvent.getClanId(), currEvent.getEventId(), Constants.EVENT_CHANNEL));
                 refCFirebase = new Firebase(Util.getFirebaseUrl(currEvent.getClanId(), currEvent.getEventId(), Constants.EVENT_COMMENT_CHANNEL));
@@ -1216,8 +1216,8 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
 
     private boolean ifPlayerIsInvited() {
         if(currEvent!=null && currEvent.getPlayerData()!=null) {
-            if(user!=null && user.getValue().getId()!=null) {
-                String id = user.getValue().getId();
+            if(user!=null && user.getUserId()!=null) {
+                String id = user.getUserId();
                 for(int i=0; i<currEvent.getPlayerData().size(); i++) {
                     if((id.equalsIgnoreCase(currEvent.getPlayerData().get(i).getUserId()) && currEvent.getPlayerData().get(i).getInvitedBy()!=null)) {
                         return true;
@@ -1249,7 +1249,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
                                 if (i == 0) {
                                     msg = getEditText();
                                 }
-                                if (!user.getValue().getId().equalsIgnoreCase(currEvent.getPlayerData().get(i).getPlayerId())) {
+                                if (!user.getUserId().equalsIgnoreCase(currEvent.getPlayerData().get(i).getPlayerId())) {
                                     //v.setEnabled(false);
                                     if (msg != null) {
                                         sendMessage(currEvent.getPlayerData().get(i).getPlayerId(), msg);
@@ -1349,8 +1349,8 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
         if(currEvent!=null) {
             if (this.currEvent.getPlayerData() != null) {
                 for (int i = 0; i < currEvent.getPlayerData().size(); i++) {
-                    if (user.getValue().getId().equalsIgnoreCase(currEvent.getPlayerData().get(i).getPlayerId())) {
-                        user.getValue().setHasReachedMaxReportedComments(currEvent.getPlayerData().get(i).getMaxReported());
+                    if (user.getUserId().equalsIgnoreCase(currEvent.getPlayerData().get(i).getPlayerId())) {
+                        user.setMaxReported(currEvent.getPlayerData().get(i).getMaxReported());
                     }
                 }
             }
@@ -1372,7 +1372,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
         if(currEvent!=null) {
             if (this.currEvent.getPlayerData() != null) {
                 for (int i = 0; i < currEvent.getPlayerData().size(); i++) {
-                    if (user.getValue().getId().equalsIgnoreCase(currEvent.getPlayerData().get(i).getPlayerId())) {
+                    if (user.getUserId().equalsIgnoreCase(currEvent.getPlayerData().get(i).getPlayerId())) {
                         return true;
                     }
                 }
@@ -1394,8 +1394,8 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
     private boolean checkUserIsCreator() {
         if(currEvent!=null) {
             if (this.currEvent.getCreatorData() != null && currEvent.getCreatorData().getPlayerId()!=null) {
-                if(user!=null && user.getValue().getId()!=null) {
-                    if (user.getValue().getId().equalsIgnoreCase(currEvent.getCreatorData().getPlayerId())) {
+                if(user!=null && user.getUserId()!=null) {
+                    if (user.getUserId().equalsIgnoreCase(currEvent.getCreatorData().getPlayerId())) {
                         return true;
                     }
                 }
@@ -1417,9 +1417,9 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
     }
 
     private void registerUserFirebase() {
-        if(user.getValue().getId()!=null) {
+        if(user.getUserId()!=null) {
             setupUserListener();
-            refUFirebase = new Firebase(Util.getFirebaseUrl(this.user.getValue().getId(), null, Constants.USER_CHANNEL));
+            refUFirebase = new Firebase(Util.getFirebaseUrl(this.user.getUserId(), null, Constants.USER_CHANNEL));
             if (userListener != null) {
                 refUFirebase.addValueEventListener(userListener);
             }
@@ -1445,7 +1445,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
                         Gson gson = new Gson();
                         ud = gson.fromJson(snapshot.toString(), UserData.class);
                         //ud.toJson(userObj);
-                        if(ud.getValue().getId()!=null){
+                        if(ud.getUserId()!=null){
                             user = ud;
                             controlManager.setUserdata(user);
                         }
@@ -1475,9 +1475,9 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
     }
 
     public String getGroupName() {
-        if(user!=null && user.getValue().getClanId()!=null) {
+        if(user!=null && user.getClanId()!=null) {
             if(controlManager!=null) {
-                GroupData grp = controlManager.getGroupObj(user.getValue().getClanId());
+                GroupData grp = controlManager.getGroupObj(user.getClanId());
                 if(grp!=null && grp.getGroupName()!=null) {
                     return grp.getGroupName();
                 }
@@ -1487,10 +1487,10 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
     }
 
     private boolean ifPlayerisUserAndVerified(String pId) {
-        if(user!=null && user.getValue().getPrimaryConsoleId().equalsIgnoreCase(pId)) {
-            //if(user.getPsnVerify()!=null && !user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
+        if(user!=null && user.getPsnId()!=null && user.getPsnId().equalsIgnoreCase(pId)) {
+            if(user.getPsnVerify()!=null && !user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
                 return true;
-            //}
+            }
         }
         return false;
     }

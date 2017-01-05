@@ -229,8 +229,8 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         setCardViewLayoutParams(holder.event_card_mainLayout, 137);
                     }
                     if (creatorId != null) {
-                        if (user != null && user.getValue().getId() != null) {
-                            if (creatorId.equalsIgnoreCase(user.getValue().getId())) {
+                        if (user != null && user.getUserId() != null) {
+                            if (creatorId.equalsIgnoreCase(user.getUserId())) {
                                 CreatorIn = true;
                                 CreatorIsPlayer = true;
                             }
@@ -285,8 +285,8 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         String verifyStatus = this.elistLocal.get(position).getPlayerData().get(y).getPsnVerify();
                         String profileUrl = this.elistLocal.get(position).getPlayerData().get(y).getPlayerImageUrl();
                         String pId = this.elistLocal.get(position).getPlayerData().get(y).getPlayerId();
-                        if (user != null && user.getValue().getId()!= null) {
-                            if (user.getValue().getId().equalsIgnoreCase(pId)) {
+                        if (user != null && user.getUserId()!= null) {
+                            if (user.getUserId().equalsIgnoreCase(pId)) {
                                 CreatorIn = true;
 //                                if(user.getPsnVerify()!=null && !user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
 //                                    thisIsUnverifiedUser = true;
@@ -331,7 +331,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                     public void onClick(View v) {
                                         RequestParams rp = new RequestParams();
                                         rp.put("eId", eId);
-                                        rp.put("player", user.getValue().getId());
+                                        rp.put("player", user.getUserId());
                                         if (mContext != null) {
                                             ((ListActivityFragment) mContext).hideProgress();
                                             ((ListActivityFragment) mContext).showProgress();
@@ -346,7 +346,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                     public void onClick(View v) {
                                         RequestParams rp = new RequestParams();
                                         rp.put("eId", eId);
-                                        rp.put("player", user.getValue().getId());
+                                        rp.put("player", user.getUserId());
                                         if (mContext != null) {
                                             ((ListActivityFragment) mContext).hideProgress();
                                             ((ListActivityFragment) mContext).showProgress();
@@ -476,10 +476,10 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private boolean ifUserIsInvited(ArrayList<PlayerData> playerData) {
-        if(user!=null && user.getValue().getId()!=null) {
+        if(user!=null && user.getUserId()!=null) {
             if(playerData!=null) {
                 for(int i=0;i<playerData.size();i++) {
-                    if(playerData.get(i)!=null && playerData.get(i).getUserId().equalsIgnoreCase(user.getValue().getId())) {
+                    if(playerData.get(i)!=null && playerData.get(i).getUserId().equalsIgnoreCase(user.getUserId())) {
                         if(playerData.get(i).getIsInvited()) {
                             return true;
                         }

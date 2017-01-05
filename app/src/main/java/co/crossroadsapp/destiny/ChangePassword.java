@@ -74,7 +74,7 @@ public class ChangePassword extends BaseActivity implements Observer {
 
         if(mManager!=null && mManager.getUserData()!=null) {
             UserData ud = mManager.getUserData();
-            userId = ud.getValue().getId();
+            userId = ud.getUserId();
         }
 
         setPswrd.setOnClickListener(new View.OnClickListener() {

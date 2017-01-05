@@ -56,7 +56,7 @@ public class PrivacyLegalUpdateNetwork extends Observable {
         UserData user = gson.fromJson(response.toString(), UserData.class);
         //user.toJson(response);
         if(user!=null) {
-            if(user.getValue().getId()!=null) {
+            if(user.getUserId()!=null) {
                 mManager.setUserdata(user);
             }
         }

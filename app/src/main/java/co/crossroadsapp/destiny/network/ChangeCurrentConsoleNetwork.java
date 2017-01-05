@@ -59,7 +59,7 @@ public class ChangeCurrentConsoleNetwork extends Observable {
             //user.toJson(response);
         }
         if(user!=null) {
-            if((user.getValue().getClanId()!=null) && (!user.getValue().getClanId().isEmpty())) {
+            if((user.getClanId()!=null) && (!user.getClanId().isEmpty())) {
                 mManager.setUserdata(user);
             }
         }

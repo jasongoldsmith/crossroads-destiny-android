@@ -22,12 +22,14 @@ import co.crossroadsapp.destiny.data.ActivityList;
 import co.crossroadsapp.destiny.data.AppVersion;
 import co.crossroadsapp.destiny.data.BungieResponseData;
 import co.crossroadsapp.destiny.data.Console;
+import co.crossroadsapp.destiny.data.ConsoleData;
 import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.EventList;
 import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.GroupList;
 import co.crossroadsapp.destiny.data.InvitationLoginData;
 import co.crossroadsapp.destiny.data.UserData;
+import co.crossroadsapp.destiny.data.UserDataNetwork;
 import co.crossroadsapp.destiny.data.ValidateUserRequest;
 import co.crossroadsapp.destiny.network.ActivityListNetwork;
 import co.crossroadsapp.destiny.network.AddCommentNetwork;
@@ -118,7 +120,7 @@ public class ControlManager implements Observer{
 
     private Version checkVersion;
 
-    private Activity mCurrentAct;
+    private static Activity mCurrentAct;
 
     private static final String TAG = ControlManager.class.getSimpleName();
 
@@ -622,8 +624,8 @@ public class ControlManager implements Observer{
         return regIntent;
     }
 
-    public void setCurrentActivity(Activity act) {
-        this.mCurrentAct = act;
+    public static void setCurrentActivity(Activity act) {
+        mCurrentAct = act;
     }
 
     public Context getCurrentActivity() {
@@ -739,35 +741,35 @@ public class ControlManager implements Observer{
 //                    requestBody.put("bungieURL", getBungieCurrentUserUrl() != null ? getBungieCurrentUserUrl() : Constants.BUGIE_CURRENT_USER);
 
                     //create request body class
-                    ValidateUserRequest vUser = new ValidateUserRequest();
-                    vUser.setConsoleType(platform);
-                    vUser.setBungieURL(getBungieCurrentUserUrl() != null ? getBungieCurrentUserUrl() : Constants.BUGIE_CURRENT_USER);
-                    JsonNode jsonNode = convertJsonFormat((JSONObject) data);
-                    ObjectMapper mapper = new ObjectMapper();
-                    BungieResponseData myPojo = null;
-                    try {
-                        myPojo = mapper.readValue(new TreeTraversingParser(jsonNode), BungieResponseData.class);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    vUser.setBungieResponse(myPojo);
-
-                    //parsing jsonObj to pojo
-
-                    if (mCurrentAct instanceof MainActivity) {
-                        // Create a very simple REST adapter which points the GitHub API endpoint.
-                        Call<UserData> client = ServiceGenerator.createService(GitHubClient.class).createUser(vUser);
-                        client.enqueue(new Callback<UserData>() {
-                            @Override
-                            public void onResponse(Call<UserData> call, Response<UserData> response) {
-                                System.out.println("Hardik - user is from retrofit" + response.body().getValue().getId());
-                            }
-
-                            @Override
-                            public void onFailure(Call<UserData> call, Throwable t) {
-                                System.out.println("Hardik - " + t);
-                            }
-                        });
+//                    ValidateUserRequest vUser = new ValidateUserRequest();
+//                    vUser.setConsoleType(platform);
+//                    vUser.setBungieURL(getBungieCurrentUserUrl() != null ? getBungieCurrentUserUrl() : Constants.BUGIE_CURRENT_USER);
+//                    JsonNode jsonNode = convertJsonFormat((JSONObject) data);
+//                    ObjectMapper mapper = new ObjectMapper();
+//                    BungieResponseData myPojo = null;
+//                    try {
+//                        myPojo = mapper.readValue(new TreeTraversingParser(jsonNode), BungieResponseData.class);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    vUser.setBungieResponse(myPojo);
+//
+//                    //parsing jsonObj to pojo
+//
+//                    if (mCurrentAct instanceof MainActivity) {
+//                        // Create a very simple REST adapter which points the GitHub API endpoint.
+//                        Call<UserData> client = ServiceGenerator.createService(GitHubClient.class).createUser(vUser);
+//                        client.enqueue(new Callback<UserData>() {
+//                            @Override
+//                            public void onResponse(Call<UserData> call, Response<UserData> response) {
+//                                System.out.println("Hardik - user is from retrofit" + response.body().getValue().getId());
+//                            }
+//
+//                            @Override
+//                            public void onFailure(Call<UserData> call, Throwable t) {
+//                                System.out.println("Hardik - " + t);
+//                            }
+//                        });
 
                         // Fetch and print a list of the contributors to this library.
 //                                Call<UserData> call =
@@ -799,7 +801,7 @@ public class ControlManager implements Observer{
 //                        } catch (IOException e) {
 //                            e.printStackTrace();
 //                        }
-                    }
+                    //}
 //                } catch (JSONException e) {
 //                    e.printStackTrace();
 //                }
@@ -845,16 +847,22 @@ public class ControlManager implements Observer{
 
             if (mCurrentAct instanceof MainActivity) {
                 // Create a very simple REST adapter which points the GitHub API endpoint.
-                Call<UserData> client = ServiceGenerator.createService(GitHubClient.class).createUser(vUser);
-                client.enqueue(new Callback<UserData>() {
+                Call<UserDataNetwork> client = ServiceGenerator.createService(GitHubClient.class).createUser(vUser);
+                client.enqueue(new Callback<UserDataNetwork>() {
                     @Override
-                    public void onResponse(Call<UserData> call, Response<UserData> response) {
-                        System.out.println("Hardik - user is from retrofit" + response.body().getValue().getId());
+                    public void onResponse(Call<UserDataNetwork> call, Response<UserDataNetwork> response) {
+                        if(user==null) {
+                            user = new UserData();
+                        }
+                        user.setUserData(response.body());
+                        setUserdata(user);
+                        ((MainActivity) mCurrentAct).postLogin(user);
+                        //System.out.println("Hardik - user is from retrofit" + response.body().getValue().getId());
                     }
 
                     @Override
-                    public void onFailure(Call<UserData> call, Throwable t) {
-                        System.out.println("Hardik - " + t);
+                    public void onFailure(Call<UserDataNetwork> call, Throwable t) {
+                        //System.out.println("Hardik - " + t);
                     }
                 });
             }
@@ -1056,12 +1064,12 @@ public class ControlManager implements Observer{
     public ArrayList<String> getConsoleList() {
         consoleList = new ArrayList<>();
         if(user!=null) {
-            List<Console> consoleListLocal = user.getValue().getConsoles();
+            ArrayList<ConsoleData> consoleListLocal = user.getConsoles();
             if(consoleListLocal!=null) {
                 //consoleList.add(user.getConsoleType());
                 for (int n = 0; n < consoleListLocal.size(); n++) {
                     //if (!consoleListLocal.get(n).getcType().equalsIgnoreCase(user.getConsoleType())) {
-                        consoleList.add(consoleListLocal.get(n).getConsoleType());
+                        consoleList.add(consoleListLocal.get(n).getcType());
                     //}
                 }
             }

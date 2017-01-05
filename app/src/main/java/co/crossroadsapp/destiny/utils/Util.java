@@ -28,6 +28,7 @@ import co.crossroadsapp.destiny.AddFinalActivity;
 import co.crossroadsapp.destiny.ControlManager;
 import co.crossroadsapp.destiny.R;
 import co.crossroadsapp.destiny.data.Console;
+import co.crossroadsapp.destiny.data.ConsoleData;
 import co.crossroadsapp.destiny.data.UserData;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
@@ -180,7 +181,7 @@ public class Util {
 
     public static boolean checkUserObject(UserData ud) {
         if (ud!=null) {
-            if(ud.getValue().getId()==null || ud.getValue().getClanName()==null || ud.getValue().getClanId()==null || ud.getValue().getImageUrl()==null || ud.getValue().getBungieMemberShipId()==null) {
+            if(ud.getUserId()==null || ud.getClanId()==null || ud.getImageUrl()==null || ud.getMembershipId()==null) {
                 return false;
             }
             return true;
@@ -698,10 +699,10 @@ public class Util {
     }
 
     public static String getPrimaryConsoleId(UserData user) {
-        List<Console> console = user.getValue().getConsoles();
+        ArrayList<ConsoleData> console = user.getConsoles();
         for(int n=0; n<console.size(); n++) {
-            if(console.get(n).isIsPrimary()) {
-                return console.get(n).getConsoleId();
+            if(console.get(n).getPrimary()) {
+                return console.get(n).getcId();
             }
         }
         return null;

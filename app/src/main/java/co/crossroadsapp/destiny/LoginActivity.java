@@ -384,7 +384,7 @@ public class LoginActivity extends BaseActivity implements Observer {
         //login_btn.setImageDrawable(getResources().getDrawable(R.drawable.img_login_btn));
         if (data!=null) {
             UserData ud = (UserData) data;
-            if (ud!=null && ud.getValue().getId()!=null) {
+            if (ud!=null && ud.getUserId()!=null) {
 //                if(ud.getAuthenticationId() == Constants.LOGIN) {
                 //mManager.getEventList();
                 //save in preferrence

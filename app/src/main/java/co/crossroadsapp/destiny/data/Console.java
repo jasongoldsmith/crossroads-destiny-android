@@ -4,6 +4,9 @@ package co.crossroadsapp.destiny.data;
  * Created by sharmha on 11/16/16.
  */
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Generated;
@@ -11,13 +14,29 @@ import javax.annotation.Generated;
 @Generated("org.jsonschema2pojo")
 public class Console {
 
+    @SerializedName("clanTag")
+    @Expose
     private String clanTag;
+    @SerializedName("destinyMembershipId")
+    @Expose
     private String destinyMembershipId;
+    @SerializedName("consoleType")
+    @Expose
     private String consoleType;
+    @SerializedName("consoleId")
+    @Expose
     private String consoleId;
+    @SerializedName("imageUrl")
+    @Expose
     private String imageUrl;
+    @SerializedName("_id")
+    @Expose
     private String id;
-    private boolean isPrimary;
+    @SerializedName("isPrimary")
+    @Expose
+    private Boolean isPrimary;
+    @SerializedName("verifyStatus")
+    @Expose
     private String verifyStatus;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 

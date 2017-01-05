@@ -309,7 +309,7 @@ public class RegisterActivity extends BaseActivity implements Observer {
         if(data!=null) {
             UserData ud = (UserData) data;
 
-            if (ud != null && ud.getValue().getId()!=null) {
+            if (ud != null && ud.getUserId()!=null) {
 //                if(ud.getAuthenticationId() == Constants.REGISTER) {
                 //save in preferrence
                 Util.clearDefaults(getApplicationContext());

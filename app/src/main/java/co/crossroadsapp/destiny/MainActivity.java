@@ -708,10 +708,10 @@ public class MainActivity extends BaseActivity implements Observer {
             if (data!=null) {
                 TravellerLog.w(this, "Update observer for LoginNetwork network call response");
                 UserData ud = (UserData) data;
-                if (ud!=null && ud.getValue().getId()!=null) {
+                if (ud!=null && ud.getUserId()!=null) {
 //                    if((ud.getAuthenticationId() == Constants.LOGIN)) {
                         //save in preferrence
-                        Util.setDefaults("user", ud.getValue().getId(), getApplicationContext());
+                        Util.setDefaults("user", ud.getUserId(), getApplicationContext());
 //                        Util.setDefaults("password", password, getApplicationContext());
                         Util.setDefaults("consoleType", console, getApplicationContext());
                     //ud.setPassword(p);
@@ -762,6 +762,43 @@ public class MainActivity extends BaseActivity implements Observer {
                 }
                 forwardAfterVersionCheck();
             }
+        }
+    }
+
+    public void postLogin(UserData data) {
+        TravellerLog.w(this, "Update observer for LoginNetwork network call response");
+        UserData ud = data;
+        if (ud!=null && ud.getClanId()!=null) {
+//                    if((ud.getAuthenticationId() == Constants.LOGIN)) {
+            //save in preferrence
+            Util.setDefaults("user", ud.getUserId(), getApplicationContext());
+//                        Util.setDefaults("password", password, getApplicationContext());
+            Util.setDefaults("consoleType", console, getApplicationContext());
+            //ud.setPassword(p);
+            mManager.setUserdata(ud);
+            Intent regIntent;
+
+            //decide for activity
+            //regIntent = mManager.decideToOpenActivity(contentIntent);
+
+            regIntent = new Intent(getApplicationContext(),
+                    ListActivityFragment.class);
+            if (contentIntent != null ) {
+                regIntent.putExtra("eventIntent", contentIntent);
+            }
+
+            //clear invitation req params
+            if(invitationRp!=null) {
+                invitationRp.clearRp();
+            }
+
+            startActivity(regIntent);
+            finish();
+//                } else {
+//                        setContentView(R.layout.activity_main);
+//                    }
+        } else {
+            setContentView(R.layout.activity_main);
         }
     }
 

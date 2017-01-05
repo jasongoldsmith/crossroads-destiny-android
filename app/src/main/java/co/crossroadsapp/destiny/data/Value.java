@@ -3,6 +3,9 @@ package co.crossroadsapp.destiny.data;
 /**
  * Created by sharmha on 11/16/16.
  */
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,29 +15,72 @@ import javax.annotation.Generated;
 @Generated("org.jsonschema2pojo")
 public class Value {
 
+    @SerializedName("_id")
+    @Expose
     private String id;
+    @SerializedName("date")
+    @Expose
     private String date;
+    @SerializedName("uDate")
+    @Expose
     private String uDate;
+    @SerializedName("mpDistinctId")
+    @Expose
     private String mpDistinctId;
+    @SerializedName("bungieMemberShipId")
+    @Expose
     private String bungieMemberShipId;
+    @SerializedName("imageUrl")
+    @Expose
     private String imageUrl;
+    @SerializedName("clanName")
+    @Expose
     private String clanName;
-    private int v;
+    @SerializedName("__v")
+    @Expose
+    private Integer v;
+    @SerializedName("clanImageUrl")
+    @Expose
     private String clanImageUrl;
-    private boolean isInvited;
-    private boolean mpDistinctIdRefreshed;
+    @SerializedName("isInvited")
+    @Expose
+    private Boolean isInvited;
+    @SerializedName("mpDistinctIdRefreshed")
+    @Expose
+    private Boolean mpDistinctIdRefreshed;
+    @SerializedName("stats")
+    @Expose
     private Stats stats;
+    @SerializedName("legal")
+    @Expose
     private Legal legal;
-    private boolean hasReachedMaxReportedComments;
-    private int commentsReported;
-    private List<Object> notifStatus = new ArrayList<Object>();
-    private boolean isLoggedIn;
+    @SerializedName("hasReachedMaxReportedComments")
+    @Expose
+    private Boolean hasReachedMaxReportedComments;
+    @SerializedName("commentsReported")
+    @Expose
+    private Integer commentsReported;
+    @SerializedName("notifStatus")
+    @Expose
+    private List<Object> notifStatus = null;
+    @SerializedName("isLoggedIn")
+    @Expose
+    private Boolean isLoggedIn;
+    @SerializedName("lastActiveTime")
+    @Expose
     private String lastActiveTime;
-    private List<Group> groups = new ArrayList<Group>();
+    @SerializedName("groups")
+    @Expose
+    private List<Group> groups = null;
+    @SerializedName("clanId")
+    @Expose
     private String clanId;
-    private List<Console> consoles = new ArrayList<Console>();
+    @SerializedName("consoles")
+    @Expose
+    private List<Console> consoles = null;
+    @SerializedName("verifyStatus")
+    @Expose
     private String verifyStatus;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      *
@@ -432,13 +478,13 @@ public class Value {
         this.verifyStatus = verifyStatus;
     }
 
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
+//    public Map<String, Object> getAdditionalProperties() {
+//        return this.additionalProperties;
+//    }
+//
+//    public void setAdditionalProperty(String name, Object value) {
+//        this.additionalProperties.put(name, value);
+//    }
 
     public String getPrimaryConsoleType() {
         if(consoles!=null){
