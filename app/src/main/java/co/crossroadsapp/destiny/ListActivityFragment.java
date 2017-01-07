@@ -1256,6 +1256,9 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     @Override
     public void onStop() {
         super.onStop();
+        if (mManager.getCurrentActivity() instanceof ListActivityFragment) {
+            mManager.setCurrentActivity(null);
+        }
         unregisterFirebase();
         //unregisterUserFirebase();
         //unregisterReceiver(ReceivefromDeeplink);

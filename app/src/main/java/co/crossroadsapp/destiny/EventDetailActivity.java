@@ -975,6 +975,9 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
     @Override
     public void onStop() {
         super.onStop();
+        if(controlManager!=null && controlManager.getCurrentActivity() instanceof EventDetailActivity) {
+            controlManager.setCurrentActivity(null);
+        }
         unregisterReceiver(ReceivefromService);
     }
 

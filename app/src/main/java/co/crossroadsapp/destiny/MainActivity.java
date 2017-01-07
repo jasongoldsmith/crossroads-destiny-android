@@ -634,6 +634,9 @@ public class MainActivity extends BaseActivity implements Observer {
 
     @Override
     public void onStop() {
+        if(mManager!=null && mManager.getCurrentActivity()!=null && mManager.getCurrentActivity() instanceof MainActivity) {
+            mManager.setCurrentActivity(null);
+        }
         stopSpinner();
         TravellerLog.w(this, "Unregistering ReceivefromBackpressService ");
         unregisterReceiver(ReceivefromBackpressService);

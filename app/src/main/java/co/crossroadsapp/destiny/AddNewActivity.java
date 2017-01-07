@@ -238,6 +238,14 @@ public class AddNewActivity extends BaseActivity implements Observer {
     }
 
     @Override
+    public void onStop() {
+        if(mCntrlMngr!=null && mCntrlMngr.getCurrentActivity()!=null && mCntrlMngr.getCurrentActivity() instanceof AddNewActivity) {
+            mCntrlMngr.setCurrentActivity(null);
+        }
+        super.onStop();
+    }
+
+    @Override
     public void onBackPressed() {
         launchListActivityAndFinish();
     }
