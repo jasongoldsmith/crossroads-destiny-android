@@ -340,15 +340,14 @@ public class ControlManager implements Observer{
         }
     }
 
-    public void postGetActivityList(Activity c, RequestParams params) {
+    public void postGetActivityList(RequestParams params) {
         try {
             if(mCurrentAct.get()!=null) {
+                activityListNetwork = new ActivityListNetwork(mCurrentAct.get());
                 if (mCurrentAct.get() instanceof AddNewActivity) {
-                    activityListNetwork = new ActivityListNetwork(mCurrentAct.get());
                     //activityListNetwork.addObserver(this);
                     activityListNetwork.addObserver((AddNewActivity) mCurrentAct.get());
                 } else if (mCurrentAct.get() instanceof ListActivityFragment) {
-                    activityListNetwork = new ActivityListNetwork(mCurrentAct.get());
                     //activityListNetwork.addObserver(this);
                     activityListNetwork.addObserver((ListActivityFragment) mCurrentAct.get());
                 }
@@ -534,7 +533,7 @@ public class ControlManager implements Observer{
         }
     }
 
-    public void postEventById(Activity listActivityFragment, RequestParams param) {
+    public void postEventById(RequestParams param) {
         try {
             if(mCurrentAct!=null && mCurrentAct.get() != null) {
                 eventById = new EventByIdNetwork(mCurrentAct.get());

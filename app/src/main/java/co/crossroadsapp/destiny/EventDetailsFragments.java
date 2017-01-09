@@ -190,7 +190,7 @@ public class EventDetailsFragments extends Fragment {
             String id = currentEvent.getEventId();
             RequestParams param = new RequestParams();
             param.add("id", id);
-            mManager.postEventById(((EventDetailActivity)getActivity()), param);
+            mManager.postEventById(param);
         }
     }
 

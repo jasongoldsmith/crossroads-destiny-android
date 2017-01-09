@@ -1025,7 +1025,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
                                 String id = currEvent.getEventId();
                                 RequestParams param = new RequestParams();
                                 param.add("id", id);
-                                controlManager.postEventById(EventDetailActivity.this, param);
+                                controlManager.postEventById(param);
                             }
                 } else {
                     finish();
@@ -1044,7 +1044,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
                     String id = currEvent.getEventId();
                     RequestParams param = new RequestParams();
                     param.add("id", id);
-                    controlManager.postEventById(EventDetailActivity.this, param);
+                    controlManager.postEventById(param);
                 }
             }
             @Override

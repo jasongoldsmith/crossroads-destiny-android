@@ -174,7 +174,7 @@ public class AddNewActivity extends BaseActivity implements Observer {
         RequestParams rp = new RequestParams();
         rp.add("aType", type);
         rp.add("includeTags", "true");
-        mCntrlMngr.postGetActivityList(AddNewActivity.this, rp);
+        mCntrlMngr.postGetActivityList(rp);
     }
 
     private void checkIfAdFlow(boolean ads, String adP) {

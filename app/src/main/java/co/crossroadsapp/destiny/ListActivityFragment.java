@@ -747,7 +747,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             if(mManager.getDeepLinkEvent()!=null) {
                 RequestParams param = new RequestParams();
                 param.add("id", mManager.getDeepLinkEvent());
-                mManager.postEventById(ListActivityFragment.this, param);
+                mManager.postEventById(param);
             }
         }
     }
@@ -886,7 +886,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         if((id!=null) && (!id.equalsIgnoreCase("null"))) {
             RequestParams param = new RequestParams();
             param.add("id", id);
-            mManager.postEventById(this, param);
+            mManager.postEventById(param);
         }
     }
 
@@ -1090,7 +1090,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                         } else {
                             RequestParams param = new RequestParams();
                             param.add("id", id);
-                            mManager.postEventById(this, param);
+                            mManager.postEventById(param);
                         }
                     }
                 }
@@ -1249,7 +1249,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             String eId = intent.getStringExtra("eventId");
             RequestParams param = new RequestParams();
             param.add("id", eId);
-            mManager.postEventById(ListActivityFragment.this, param);
+            mManager.postEventById(param);
         }
     };
 

@@ -459,7 +459,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             RequestParams rp = new RequestParams();
                             rp.add("aType", adList.get(position - elistLocal.size()).getActivityType());
                             rp.add("includeTags", "true");
-                            mManager.postGetActivityList(mContext, rp);
+                            mManager.postGetActivityList(rp);
 
                             //tracking adcard click
                             Map<String, String> json = new HashMap<String, String>();
