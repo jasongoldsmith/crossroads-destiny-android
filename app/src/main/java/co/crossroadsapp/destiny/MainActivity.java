@@ -159,7 +159,7 @@ public class MainActivity extends BaseActivity implements Observer {
                     if(u!=null && !u.isEmpty()) {
                         rp.put("userName", u);
                     }
-                    mManager.postLogout(MainActivity.this, rp);
+                    mManager.postLogout(rp);
                     Util.clearDefaults(getApplicationContext());
                 }
             } else {
@@ -299,7 +299,7 @@ public class MainActivity extends BaseActivity implements Observer {
                 // continue with delete
                 RequestParams rp = new RequestParams();
                 rp.put("userName", u);
-                mManager.postLogout(MainActivity.this, rp);
+                mManager.postLogout(rp);
             } else {
                 Util.clearDefaults(getApplicationContext());
             }
