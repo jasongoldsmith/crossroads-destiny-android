@@ -335,7 +335,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                         if (mContext != null) {
                                             ((ListActivityFragment) mContext).hideProgress();
                                             ((ListActivityFragment) mContext).showProgress();
-                                            mManager.postJoinEvent(mContext, rp);
+                                            mManager.postJoinEvent(rp);
                                             holder.joinBtn.setClickable(false);
                                         }
                                     }
@@ -350,7 +350,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                         if (mContext != null) {
                                             ((ListActivityFragment) mContext).hideProgress();
                                             ((ListActivityFragment) mContext).showProgress();
-                                            mManager.postUnJoinEvent((ListActivityFragment) mContext, rp);
+                                            mManager.postUnJoinEvent(rp);
                                             holder.unjoinBtn.setClickable(false);
                                         }
                                     }

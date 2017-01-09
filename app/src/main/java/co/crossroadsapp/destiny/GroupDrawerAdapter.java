@@ -53,7 +53,7 @@ public class GroupDrawerAdapter {
         c = act;
 
         mCntrlMngr = ControlManager.getmInstance();
-        mCntrlMngr.getGroupList(act);
+        mCntrlMngr.getGroupList();
         if(mCntrlMngr.getUserData()!=null) {
             user = mCntrlMngr.getUserData();
         }
@@ -145,7 +145,7 @@ public class GroupDrawerAdapter {
                         } else {
                             muteParams.add("muteNotification", "true");
                         }
-                        mCntrlMngr.postMuteNoti((ListActivityFragment) c, muteParams);
+                        mCntrlMngr.postMuteNoti(muteParams);
                     }
                 }
             });
@@ -439,7 +439,7 @@ public class GroupDrawerAdapter {
                                             params.add("clanImage", glistLocal.get(position).getGroupImageUrl());
                                             ((ListActivityFragment) c).hideProgress();
                                             ((ListActivityFragment) c).showProgress();
-                                            mCntrlMngr.postSetGroup((ListActivityFragment) c, params);
+                                            mCntrlMngr.postSetGroup(params);
                                         }
                                     }
                                 }

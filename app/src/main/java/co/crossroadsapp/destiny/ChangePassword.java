@@ -93,7 +93,7 @@ public class ChangePassword extends BaseActivity implements Observer {
                             dialog.show();
                             dialog.setCancelable(false);
                             dialog.setCanceledOnTouchOutside(false);
-                            mManager.postChangePassword(ChangePassword.this, params);
+                            mManager.postChangePassword(params);
                         } else {
                             showError(getResources().getString(R.string.password_short));
                         }

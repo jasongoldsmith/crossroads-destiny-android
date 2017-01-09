@@ -107,7 +107,7 @@ public class CrashReport extends BaseActivity implements Observer {
                             requestParams.put("reporterEmail", email.getText().toString());
                             requestParams.put("reportDetails", crash_text.getText().toString());
                         }
-                        controlManager.postCrash(CrashReport.this, requestParams, reportIssue?Constants.REPORT_COMMENT_NEXT:Constants.GENERAL_ERROR);
+                        controlManager.postCrash(requestParams, reportIssue?Constants.REPORT_COMMENT_NEXT:Constants.GENERAL_ERROR);
                         //showToastAndClose();
                     } else {
                         showError(getString(R.string.invalid_email));

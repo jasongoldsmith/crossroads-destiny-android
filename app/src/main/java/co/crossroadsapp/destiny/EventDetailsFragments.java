@@ -366,7 +366,7 @@ public class EventDetailsFragments extends Fragment {
                                         // call cancel api
                                         if (kickCancelReqPrams != null) {
                                             ((EventDetailActivity) getActivity()).showProgressBar();
-                                            mManager.postCancelPlayer((EventDetailActivity) getActivity(), kickCancelReqPrams);
+                                            mManager.postCancelPlayer(kickCancelReqPrams);
                                         }
                                     } else if (kickCancelBtnText.equalsIgnoreCase("Kick")) {
                                         // call kick api
