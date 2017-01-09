@@ -234,6 +234,7 @@ public class AddNewActivity extends BaseActivity implements Observer {
     @Override
     public void onResume() {
         super.onResume();
+        mCntrlMngr.setCurrentActivity(this);
         setButtonDefaultStates();
     }
 

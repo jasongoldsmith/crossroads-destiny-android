@@ -220,9 +220,9 @@ public class ControlManager implements Observer{
                 resendBungieMsg.addObserver((ListActivityFragment)mCurrentAct.get());
                 resendBungieMsg.resendBungieMsgVerify();
             }
-    } catch (JSONException e) {
-        e.printStackTrace();
-    }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void getEventList() {
@@ -250,15 +250,12 @@ public class ControlManager implements Observer{
 
     public void getGroupList(ListActivityFragment act) {
         try {
-            if(mCurrentAct.get()!=null && mCurrentAct.get() instanceof ListActivityFragment) {
-                if (act != null) {
-                    groupListNtwrk = new GroupListNetwork(mCurrentAct.get());
-                    groupListNtwrk.addObserver(this);
-                    groupListNtwrk.addObserver((ListActivityFragment)mCurrentAct.get());
-                } else {
-                    groupListNtwrk = new GroupListNetwork(mCurrentAct.get());
-                    groupListNtwrk.addObserver(this);
+            if(mCurrentAct.get()!=null) {
+                groupListNtwrk = new GroupListNetwork(mCurrentAct.get());
+                if(mCurrentAct.get() instanceof ListActivityFragment) {
+                    groupListNtwrk.addObserver((ListActivityFragment) mCurrentAct.get());
                 }
+                groupListNtwrk.addObserver(this);
                 groupListNtwrk.getGroups();
             }
         } catch (JSONException e) {
@@ -274,9 +271,9 @@ public class ControlManager implements Observer{
                 groupListNtwrk.addObserver((ListActivityFragment)mCurrentAct.get());
                 groupListNtwrk.postSelectGroup(params);
             }
-    } catch (JSONException e) {
-        e.printStackTrace();
-    }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void postMuteNoti(ListActivityFragment act, RequestParams params) {
@@ -307,20 +304,21 @@ public class ControlManager implements Observer{
                 }
             }
         }
-
         return null;
     }
 
     public void postJoinEvent(Activity activity, RequestParams params) {
         try {
-            eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(mCurrentAct.get());
-            if (activity instanceof EventDetailActivity){
-                eventRelationshipNtwrk.addObserver((EventDetailActivity)activity);
-            } else if(mCurrentAct.get()!=null && mCurrentAct.get() instanceof ListActivityFragment) {
-                eventRelationshipNtwrk.addObserver((ListActivityFragment)mCurrentAct.get());
+            if(mCurrentAct!=null) {
+                eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(mCurrentAct.get());
+                if (mCurrentAct.get() != null && mCurrentAct.get() instanceof EventDetailActivity) {
+                    eventRelationshipNtwrk.addObserver((EventDetailActivity) mCurrentAct.get());
+                } else if (mCurrentAct.get() != null && mCurrentAct.get() instanceof ListActivityFragment) {
+                    eventRelationshipNtwrk.addObserver((ListActivityFragment) mCurrentAct.get());
+                }
+                eventRelationshipNtwrk.addObserver(this);
+                eventRelationshipNtwrk.postJoin(params);
             }
-            eventRelationshipNtwrk.addObserver(this);
-            eventRelationshipNtwrk.postJoin(params);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -329,13 +327,15 @@ public class ControlManager implements Observer{
     public void postEventMessage(EventDetailActivity ea, String msg, String id, String eventId){
 
         try {
-            eventSendMsgNetwork = new EventSendMessageNetwork(ea);
-            eventSendMsgNetwork.addObserver(ea);
-            RequestParams rp = new RequestParams();
-            rp.put("id", id);
-            rp.put("message", msg);
-            rp.put("eId", eventId);
-            eventSendMsgNetwork.postEventMsg(rp);
+            if (mCurrentAct.get() != null && mCurrentAct.get() instanceof ListActivityFragment) {
+                eventSendMsgNetwork = new EventSendMessageNetwork(mCurrentAct.get());
+                eventSendMsgNetwork.addObserver((EventDetailActivity)mCurrentAct.get());
+                RequestParams rp = new RequestParams();
+                rp.put("id", id);
+                rp.put("message", msg);
+                rp.put("eId", eventId);
+                eventSendMsgNetwork.postEventMsg(rp);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -388,10 +388,12 @@ public class ControlManager implements Observer{
 
     public void postUnJoinEvent(EventDetailActivity activity, RequestParams params) {
         try {
-            eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(activity);
-            eventRelationshipNtwrk.addObserver(activity);
-            eventRelationshipNtwrk.addObserver(this);
-            eventRelationshipNtwrk.postUnJoin(params);
+            if (mCurrentAct.get() != null && mCurrentAct.get() instanceof ListActivityFragment) {
+                eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(mCurrentAct.get());
+                eventRelationshipNtwrk.addObserver((EventDetailActivity)mCurrentAct.get());
+                eventRelationshipNtwrk.addObserver(this);
+                eventRelationshipNtwrk.postUnJoin(params);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -467,9 +469,11 @@ public class ControlManager implements Observer{
 
     public void verifyBungieId(ConsoleSelectionActivity activity, RequestParams params) {
         try {
-            verifyConsoleNetwork = new VerifyConsoleIDNetwork(activity);
-            verifyConsoleNetwork.addObserver(activity);
-            verifyConsoleNetwork.doVerifyConsoleId(params);
+            if (mCurrentAct.get() != null && mCurrentAct.get() instanceof ConsoleSelectionActivity) {
+                verifyConsoleNetwork = new VerifyConsoleIDNetwork(mCurrentAct.get());
+                verifyConsoleNetwork.addObserver((ConsoleSelectionActivity)mCurrentAct.get());
+                verifyConsoleNetwork.doVerifyConsoleId(params);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -525,13 +529,15 @@ public class ControlManager implements Observer{
 
     public void postEventById(Activity listActivityFragment, RequestParams param) {
         try {
-            eventById = new EventByIdNetwork(mCurrentAct.get());
-            if(mCurrentAct.get()!=null && mCurrentAct.get() instanceof ListActivityFragment) {
-                eventById.addObserver((ListActivityFragment)mCurrentAct.get());
-            } else if(listActivityFragment instanceof EventDetailActivity) {
-                eventById.addObserver((EventDetailActivity)listActivityFragment);
+            if(mCurrentAct!=null && mCurrentAct.get() != null) {
+                eventById = new EventByIdNetwork(mCurrentAct.get());
+                if (mCurrentAct.get() instanceof ListActivityFragment) {
+                    eventById.addObserver((ListActivityFragment) mCurrentAct.get());
+                } else if (mCurrentAct.get() instanceof EventDetailActivity) {
+                    eventById.addObserver((EventDetailActivity) mCurrentAct.get());
+                }
+                eventById.getEventById(param);
             }
-            eventById.getEventById(param);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -861,9 +867,11 @@ public class ControlManager implements Observer{
 
     public void postCrash(CrashReport c, RequestParams requestParams, int report_type) {
         try {
-            crashReportNetwork = new ReportCrashNetwork(c);
-            crashReportNetwork.addObserver(c);
-            crashReportNetwork.doCrashReport(requestParams, report_type);
+            if(mCurrentAct.get()!=null && mCurrentAct.get() instanceof CrashReport) {
+                crashReportNetwork = new ReportCrashNetwork(mCurrentAct.get());
+                crashReportNetwork.addObserver((CrashReport)mCurrentAct.get());
+                crashReportNetwork.doCrashReport(requestParams, report_type);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -883,10 +891,11 @@ public class ControlManager implements Observer{
 
     public void postComments(EventDetailActivity activity, RequestParams params) {
         try {
-            addCommentsNetwork = new AddCommentNetwork(activity);
-            addCommentsNetwork.addObserver(activity);
-            addCommentsNetwork.postComments(params);
-
+            if(mCurrentAct.get()!=null && mCurrentAct.get() instanceof EventDetailActivity) {
+                addCommentsNetwork = new AddCommentNetwork(mCurrentAct.get());
+                addCommentsNetwork.addObserver((EventDetailActivity)mCurrentAct.get());
+                addCommentsNetwork.postComments(params);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -922,9 +931,11 @@ public class ControlManager implements Observer{
 
     public void addOtherConsole(UpdateConsoleActivity activity, RequestParams rp_console) {
         try {
-            addConsoleNetwork = new AddNewConsoleNetwork(activity);
-            addConsoleNetwork.addObserver(activity);
-            addConsoleNetwork.doAddConsole(rp_console);
+            if (mCurrentAct.get() != null && mCurrentAct.get() instanceof UpdateConsoleActivity) {
+                addConsoleNetwork = new AddNewConsoleNetwork(mCurrentAct.get());
+                addConsoleNetwork.addObserver((UpdateConsoleActivity)mCurrentAct.get());
+                addConsoleNetwork.doAddConsole(rp_console);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -944,9 +955,11 @@ public class ControlManager implements Observer{
 
     public void invitePlayers(EventDetailActivity activity, RequestParams rp) {
         try {
-            invitePlayersNetwork = new InvitePlayerNetwork(activity);
-            invitePlayersNetwork.addObserver(activity);
-            invitePlayersNetwork.postInvitedList(rp);
+            if(mCurrentAct.get()!=null && mCurrentAct.get() instanceof EventDetailActivity) {
+                invitePlayersNetwork = new InvitePlayerNetwork(mCurrentAct.get());
+                invitePlayersNetwork.addObserver((EventDetailActivity)mCurrentAct.get());
+                invitePlayersNetwork.postInvitedList(rp);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1086,9 +1099,11 @@ public class ControlManager implements Observer{
 
     public void postCommentReporting(RequestParams requestParams) {
         try {
-            reportCommentNetwork = new ReportCommentNetwork(mCurrentAct.get());
-            reportCommentNetwork.addObserver((EventDetailActivity)mCurrentAct.get());
-            reportCommentNetwork.doCommentReporting(requestParams);
+            if(mCurrentAct.get()!=null && mCurrentAct.get() instanceof EventDetailActivity) {
+                reportCommentNetwork = new ReportCommentNetwork(mCurrentAct.get());
+                reportCommentNetwork.addObserver((EventDetailActivity) mCurrentAct.get());
+                reportCommentNetwork.doCommentReporting(requestParams);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1209,23 +1224,29 @@ public class ControlManager implements Observer{
     }
 
     public void postAcceptInvite(EventDetailActivity activity, RequestParams rp) {
-        eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(activity);
-        eventRelationshipNtwrk.addObserver(activity);
-        eventRelationshipNtwrk.addObserver(this);
-        eventRelationshipNtwrk.postEventPlayerRelation(rp, Constants.ACCEPT_EVENT_URL);
+        if(mCurrentAct.get()!=null && mCurrentAct.get() instanceof EventDetailActivity) {
+            eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(mCurrentAct.get());
+            eventRelationshipNtwrk.addObserver((EventDetailActivity)mCurrentAct.get());
+            eventRelationshipNtwrk.addObserver(this);
+            eventRelationshipNtwrk.postEventPlayerRelation(rp, Constants.ACCEPT_EVENT_URL);
+        }
     }
 
     public void postKickPlayer(EventDetailActivity activity, RequestParams requestParams) {
-        eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(activity);
-        eventRelationshipNtwrk.addObserver(activity);
-        eventRelationshipNtwrk.addObserver(this);
-        eventRelationshipNtwrk.postEventPlayerRelation(requestParams, Constants.KICK_PLAYER_URL);
+        if(mCurrentAct.get()!=null && mCurrentAct.get() instanceof EventDetailActivity) {
+            eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(mCurrentAct.get());
+            eventRelationshipNtwrk.addObserver((EventDetailActivity)mCurrentAct.get());
+            eventRelationshipNtwrk.addObserver(this);
+            eventRelationshipNtwrk.postEventPlayerRelation(requestParams, Constants.KICK_PLAYER_URL);
+        }
     }
 
     public void postCancelPlayer(EventDetailActivity activity, RequestParams requestParams) {
-        eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(activity);
-        eventRelationshipNtwrk.addObserver(activity);
-        eventRelationshipNtwrk.addObserver(this);
-        eventRelationshipNtwrk.postEventPlayerRelation(requestParams, Constants.CANCEL_PLAYER_URL);
+        if(mCurrentAct.get()!=null && mCurrentAct.get() instanceof EventDetailActivity) {
+            eventRelationshipNtwrk = new EventRelationshipHandlerNetwork(mCurrentAct.get());
+            eventRelationshipNtwrk.addObserver((EventDetailActivity)mCurrentAct.get());
+            eventRelationshipNtwrk.addObserver(this);
+            eventRelationshipNtwrk.postEventPlayerRelation(requestParams, Constants.CANCEL_PLAYER_URL);
+        }
     }
 }
