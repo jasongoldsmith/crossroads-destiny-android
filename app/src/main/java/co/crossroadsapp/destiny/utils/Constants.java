@@ -32,11 +32,51 @@ public class Constants {
     public static final String LICENCE = "https://www.crossroadsapp.co/license"; //"http://68.140.240.194:3000/license"
     public static final String TERMS_OF_SERVICE = "https://www.crossroadsapp.co/terms";
     public static final String PRIVACY_POLICY = "https://www.crossroadsapp.co/privacy";
-    public static final String NONE = "(none)";
-    public static final String PLAYSTATION = "PlayStation";
-    public static final String XBOX = "Xbox";
-    public static final String COOKIE_VALID_KEY = "isCookieValid";
+    public static final String ADD_COMMENT_URL = "api/v1/a/event/addComment";
+    public static final String ADD_CONSOLE_URL = "api/v1/a/user/addConsole";
+    public static final String CHANGE_CONSOLE_URL = "api/v1/a/user/changePrimaryConsole";
+    public static final String GET_CONFIG_URL = "api/v1/config";
+    public static final String EVENT_BY_ID_URL = "api/v1/a/event/listById";
+    public static final String EVENT_FEED_URL = "api/v1/a/feed/get";
+    public static final String EVENT_FEED_URL_PUBLIC = "api/v1/feed/public";
+    public static final String EVENT_JOIN_URL = "api/v1/a/event/join";
+    public static final String EVENT_LEAVE_URL = "api/v1/a/event/leave";
+    public static final String EVENT_CREATE_URL = "api/v1/a/event/create";
+    public static final String EVENT_INVITE_ACCEPT_URL = "api/v1/a/event/invite/accept";
+    public static final String EVENT_SEND_MESSAGE_URL = "api/v1/a/messages/send";
+    public static final String RESET_PASSWORD_URL = "api/v1/auth/request/resetPassword";
+    public static final String UPDATE_PASSWORD_URL = "api/v1/a/user/updatePassword";
+    public static final String ANDROID_VERSION_URL = "api/v1/appVersion/android";
+    public static final String GROUP_LIST_URL = "api/v1/a/account/group/list";
+    public static final String UPDATE_GROUP_URL = "api/v1/a/user/updateGroup";
+    public static final String MUTE_GROUP_URL = "api/v1/a/account/group/mute";
+    public static final String UPDATE_HELMET_URL = "api/v1/a/account/group/mute";
+    public static final String INVITE_PLAYER_URL = "api/v1/a/event/invite";
+    public static final String VALIDATE_USERLOGIN_URL = "api/v1/auth/validateUserLogin";
+    public static final String REGISTRATION_URL = "api/v1/auth/register";
+    public static final String USER_BY_ID_URL = "api/v1/a/user/listById";
+    public static final String LOGOUT_URL = "api/v1/auth/logout";
+    public static final String ANDROID_INSTALLATION_URL = "api/v1/a/installation/android";
+    public static final String ACCEPT_LEGAL_URL = "api/v1/a/user/acceptLegal";
+    public static final String SIGNED_CRASH_REPORT_URL = "api/v1/a/report/create";
+    public static final String UNSIGNED_CRASH_REPORT_URL = "api/v2/report/create";
+    public static final String RESEND_BUNGIE_MSG_URL = "api/v1/a/account/group/resendBungieMessage";
+    public static final String MIXPANEL_TRACK_URL = "api/v2/mixpanel/track";
+    public static final String CHECK_BUNGIE_ACCOUNT_URL = "api/v1/auth/checkBungieAccount";
+    //getCurrentUser bungie
+    public static String BUGIE_CURRENT_USER = "https://www.bungie.net/Platform/User/GetCurrentBungieAccount";
 
+    public static String BUNGIE_PSN_LOGIN = "https://www.bungie.net/en/User/SignIn/Psnid";
+    public static String BUNGIE_XBOX_LOGIN = "https://www.bungie.net/en/User/SignIn/Xuid";
+
+    //api url
+    public static String REPORT_COMMENT_URL = "api/v1/a/event/reportComment";
+    public static String BUNGIE_RESPONSE_URL = "api/v1/gatewayResponse";
+    public static String KICK_PLAYER_URL = "api/v1/a/event/kick";
+    public static String CANCEL_PLAYER_URL = "api/v1/a/event/invite/cancel";
+    public static String ACCEPT_EVENT_URL = "api/v1/a/event/invite/accept";
+
+    public static final String ACTIVITY_LIST_URL = "api/v1/activity/list";
 
     public static String NOTIFICATION_INTENT_CHANNEL = "com.example.sharmha.notificationintent";
     public static int INTENT_ID = 9999;
@@ -53,6 +93,11 @@ public class Constants {
     //app download links
     public static String DOWNLOAD_DEV_BUILD = "https://goo.gl/6vQpFn";
     public static String DOWNLOAD_PROD_BUILD = "https://goo.gl/GSLxIW";
+
+    public static final String NONE = "(none)";
+    public static final String PLAYSTATION = "PlayStation";
+    public static final String XBOX = "Xbox";
+    public static final String COOKIE_VALID_KEY = "isCookieValid";
 
     //PSN verified keys
     public static String PSN_VERIFIED = "VERIFIED";
@@ -132,17 +177,4 @@ public class Constants {
     public static int GENERAL_KICK =4;
 
     public static String CONFIG_TOKEN = "780bc576-9d37-40f6-a922-befe877b2c56";
-
-    //getCurrentUser bungie
-    public static String BUGIE_CURRENT_USER = "https://www.bungie.net/Platform/User/GetCurrentBungieAccount";
-
-    public static String BUNGIE_PSN_LOGIN = "https://www.bungie.net/en/User/SignIn/Psnid";
-    public static String BUNGIE_XBOX_LOGIN = "https://www.bungie.net/en/User/SignIn/Xuid";
-
-    //api url
-    public static String REPORT_COMMENT_URL = "api/v1/a/event/reportComment";
-    public static String BUNGIE_RESPONSE_URL = "api/v1/gatewayResponse";
-    public static String KICK_PLAYER_URL = "api/v1/a/event/kick";
-    public static String CANCEL_PLAYER_URL = "api/v1/a/event/invite/cancel";
-    public static String ACCEPT_EVENT_URL = "api/v1/a/event/invite/accept";
 }

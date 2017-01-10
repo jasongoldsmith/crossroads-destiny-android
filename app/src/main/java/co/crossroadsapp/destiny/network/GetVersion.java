@@ -3,6 +3,7 @@ package co.crossroadsapp.destiny.network;
 import android.content.Context;
 
 import co.crossroadsapp.destiny.data.AppVersion;
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -20,7 +21,7 @@ import cz.msebera.android.httpclient.Header;
 public class GetVersion extends Observable {
 
     private NetworkEngine ntwrk;
-    private String url = "api/v1/appVersion/android";
+    private String url = Constants.ANDROID_VERSION_URL;
     private Context mContext;
 
     public GetVersion(Context c) {

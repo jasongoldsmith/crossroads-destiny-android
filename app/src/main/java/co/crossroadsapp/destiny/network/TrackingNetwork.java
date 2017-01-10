@@ -24,7 +24,7 @@ public class TrackingNetwork extends Observable {
     private final Context mContext;
     private final ControlManager mManager;
     private NetworkEngine ntwrk;
-    private String url = "api/v2/mixpanel/track";
+    private String url = Constants.MIXPANEL_TRACK_URL;
 
     public TrackingNetwork(Context c) {
         mContext = c;

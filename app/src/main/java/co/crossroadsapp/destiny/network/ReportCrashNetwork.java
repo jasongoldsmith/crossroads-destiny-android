@@ -25,8 +25,8 @@ public class ReportCrashNetwork extends Observable {
 
     private final ControlManager mManager;
     private NetworkEngine ntwrk;
-    private String url = "api/v1/a/report/create";
-    private String urlUnsigned = "api/v2/report/create";
+    private String url = Constants.SIGNED_CRASH_REPORT_URL;
+    private String urlUnsigned = Constants.UNSIGNED_CRASH_REPORT_URL;
     private Context mContext;
 
     public ReportCrashNetwork(Context c) {

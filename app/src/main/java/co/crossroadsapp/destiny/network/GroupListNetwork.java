@@ -5,6 +5,7 @@ import android.content.Context;
 import co.crossroadsapp.destiny.ControlManager;
 import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.UserData;
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -25,9 +26,9 @@ public class GroupListNetwork extends Observable {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "api/v1/a/account/group/list";
-    private String selectedGroupUrl = "api/v1/a/user/updateGroup";
-    private String groupMuteUrl = "api/v1/a/account/group/mute";
+    private String url = Constants.GROUP_LIST_URL;
+    private String selectedGroupUrl = Constants.UPDATE_GROUP_URL;
+    private String groupMuteUrl = Constants.MUTE_GROUP_URL;
     private ArrayList<GroupData> groupList;
 
     //private EventList eventList;

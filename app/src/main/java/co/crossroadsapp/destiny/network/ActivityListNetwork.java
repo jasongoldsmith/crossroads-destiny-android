@@ -5,6 +5,7 @@ import android.content.Context;
 import co.crossroadsapp.destiny.ControlManager;
 import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.ActivityList;
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -22,7 +23,7 @@ import cz.msebera.android.httpclient.Header;
  */
 public class ActivityListNetwork extends Observable {
     private NetworkEngine ntwrk;
-    private String url = "api/v1/activity/list";
+    private String url = Constants.ACTIVITY_LIST_URL;
     private Context mContext;
     private ControlManager mManager;
 

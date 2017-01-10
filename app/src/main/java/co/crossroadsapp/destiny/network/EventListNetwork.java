@@ -28,8 +28,8 @@ public class EventListNetwork extends Observable{
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "api/v1/a/feed/get";
-    private String publicFeedUrl = "api/v1/feed/public";
+    private String url = Constants.EVENT_FEED_URL;
+    private String publicFeedUrl = Constants.EVENT_FEED_URL_PUBLIC;
 
     private EventList eventList;
     private ActivityList actList;

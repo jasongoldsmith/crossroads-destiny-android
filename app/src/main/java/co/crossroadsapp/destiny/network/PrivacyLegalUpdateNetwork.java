@@ -23,7 +23,7 @@ public class PrivacyLegalUpdateNetwork extends Observable {
     private ControlManager mManager;
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "api/v1/a/user/acceptLegal";
+    private String url = Constants.ACCEPT_LEGAL_URL;
 
     public PrivacyLegalUpdateNetwork(Context c) {
         mContext = c;

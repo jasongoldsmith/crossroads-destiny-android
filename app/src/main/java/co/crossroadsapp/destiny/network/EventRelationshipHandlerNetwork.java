@@ -5,6 +5,7 @@ import android.content.Context;
 import co.crossroadsapp.destiny.AddFinalActivity;
 import co.crossroadsapp.destiny.ControlManager;
 import co.crossroadsapp.destiny.data.EventData;
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -25,10 +26,10 @@ public class EventRelationshipHandlerNetwork extends Observable{
     private Context mContext;
     private NetworkEngine ntwrk;
     private ControlManager mManager;
-    private String url = "api/v1/a/event/join";
-    private String leaveUrl = "api/v1/a/event/leave";
-    private String createEventUrl = "api/v1/a/event/create";
-    private String acceptUrl = "api/v1/a/event/invite/accept";
+    private String url = Constants.EVENT_JOIN_URL;
+    private String leaveUrl = Constants.EVENT_LEAVE_URL;
+    private String createEventUrl = Constants.EVENT_CREATE_URL;
+    private String acceptUrl = Constants.EVENT_INVITE_ACCEPT_URL;
 
     public EventRelationshipHandlerNetwork(Context c) {
         this.mContext = c;

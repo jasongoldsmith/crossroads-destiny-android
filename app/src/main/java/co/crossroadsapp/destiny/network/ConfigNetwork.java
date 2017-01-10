@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import java.util.Observable;
 
 import co.crossroadsapp.destiny.ControlManager;
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import cz.msebera.android.httpclient.Header;
 
@@ -21,7 +22,7 @@ public class ConfigNetwork extends Observable {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "api/v1/config";
+    private String url = Constants.GET_CONFIG_URL;
     private ControlManager mManager;
 
     public ConfigNetwork(Context c) {

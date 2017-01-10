@@ -3,6 +3,7 @@ package co.crossroadsapp.destiny.network;
 import android.content.Context;
 
 import co.crossroadsapp.destiny.ControlManager;
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -20,8 +21,8 @@ import cz.msebera.android.httpclient.Header;
 public class ForgotPasswordNetwork extends Observable {
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "api/v1/auth/request/resetPassword";
-    private String changePswrdUrl = "api/v1/a/user/updatePassword";
+    private String url = Constants.RESET_PASSWORD_URL;
+    private String changePswrdUrl = Constants.UPDATE_PASSWORD_URL;
     private ControlManager mManager;
 
     public ForgotPasswordNetwork(Context c) {

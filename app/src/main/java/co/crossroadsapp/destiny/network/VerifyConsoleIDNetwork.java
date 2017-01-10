@@ -12,6 +12,7 @@ import java.util.Observable;
 
 import co.crossroadsapp.destiny.ControlManager;
 import co.crossroadsapp.destiny.data.ConsoleData;
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import cz.msebera.android.httpclient.Header;
 
@@ -22,7 +23,7 @@ public class VerifyConsoleIDNetwork extends Observable {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "api/v1/auth/checkBungieAccount";
+    private String url = Constants.CHECK_BUNGIE_ACCOUNT_URL;
     private ControlManager mManager;
 
     public VerifyConsoleIDNetwork(Context c) {
