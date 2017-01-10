@@ -190,7 +190,7 @@ public class EventDetailsFragments extends Fragment {
             String id = currentEvent.getEventId();
             RequestParams param = new RequestParams();
             param.add("id", id);
-            mManager.postEventById(((EventDetailActivity)getActivity()), param);
+            mManager.postEventById(param);
         }
     }
 
@@ -366,7 +366,7 @@ public class EventDetailsFragments extends Fragment {
                                         // call cancel api
                                         if (kickCancelReqPrams != null) {
                                             ((EventDetailActivity) getActivity()).showProgressBar();
-                                            mManager.postCancelPlayer((EventDetailActivity) getActivity(), kickCancelReqPrams);
+                                            mManager.postCancelPlayer(kickCancelReqPrams);
                                         }
                                     } else if (kickCancelBtnText.equalsIgnoreCase("Kick")) {
                                         // call kick api

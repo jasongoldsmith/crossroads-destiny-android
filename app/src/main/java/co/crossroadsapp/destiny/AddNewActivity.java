@@ -174,7 +174,7 @@ public class AddNewActivity extends BaseActivity implements Observer {
         RequestParams rp = new RequestParams();
         rp.add("aType", type);
         rp.add("includeTags", "true");
-        mCntrlMngr.postGetActivityList(AddNewActivity.this, rp);
+        mCntrlMngr.postGetActivityList(rp);
     }
 
     private void checkIfAdFlow(boolean ads, String adP) {
@@ -234,7 +234,16 @@ public class AddNewActivity extends BaseActivity implements Observer {
     @Override
     public void onResume() {
         super.onResume();
+        mCntrlMngr.setCurrentActivity(this);
         setButtonDefaultStates();
+    }
+
+    @Override
+    public void onStop() {
+        if(mCntrlMngr!=null && mCntrlMngr.getCurrentActivity()!=null && mCntrlMngr.getCurrentActivity() instanceof AddNewActivity) {
+            mCntrlMngr.setCurrentActivity(null);
+        }
+        super.onStop();
     }
 
     @Override

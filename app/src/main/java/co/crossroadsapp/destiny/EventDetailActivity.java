@@ -383,7 +383,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
                 rp.put("player", user.getUserId());
                 hideProgress();
                 showProgress();
-                controlManager.postJoinEvent(EventDetailActivity.this, rp);
+                controlManager.postJoinEvent(rp);
             }
         });
 
@@ -410,7 +410,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
                 if(currEvent!=null && currEvent.getEventId()!=null && !currEvent.getEventId().isEmpty()) {
                     showProgressBar();
                     rp.put("eId", currEvent.getEventId());
-                    controlManager.postAcceptInvite(EventDetailActivity.this, rp);
+                    controlManager.postAcceptInvite(rp);
                 }
             }
         });
@@ -525,7 +525,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
         if(currEvent.getPlayerData().size()==1){
             unregisterFirebase();
         }
-        controlManager.postUnJoinEvent(EventDetailActivity.this, rp);
+        controlManager.postUnJoinEvent(rp);
     }
 
     private void changeBottomButtomForComments() {
@@ -933,7 +933,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
                     rp.put("invitees", invitedList);
                     rp.put("invitationLink", url);
                     showProgressBar();
-                    controlManager.invitePlayers(EventDetailActivity.this, rp);
+                    controlManager.invitePlayers(rp);
                 }
             }
         }
@@ -975,6 +975,9 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
     @Override
     public void onStop() {
         super.onStop();
+        if(controlManager!=null && controlManager.getCurrentActivity() instanceof EventDetailActivity) {
+            controlManager.setCurrentActivity(null);
+        }
         unregisterReceiver(ReceivefromService);
     }
 
@@ -1022,7 +1025,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
                                 String id = currEvent.getEventId();
                                 RequestParams param = new RequestParams();
                                 param.add("id", id);
-                                controlManager.postEventById(EventDetailActivity.this, param);
+                                controlManager.postEventById(param);
                             }
                 } else {
                     finish();
@@ -1041,7 +1044,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
                     String id = currEvent.getEventId();
                     RequestParams param = new RequestParams();
                     param.add("id", id);
-                    controlManager.postEventById(EventDetailActivity.this, param);
+                    controlManager.postEventById(param);
                 }
             }
             @Override
@@ -1166,7 +1169,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
     }
 
     private void kickPlayer(RequestParams requestParams) {
-        controlManager.postKickPlayer(EventDetailActivity.this, requestParams);
+        controlManager.postKickPlayer(requestParams);
     }
 
     private void setBottomBtn() {
@@ -1679,7 +1682,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
                     RequestParams params = new RequestParams();
                     params.put("eId", currEvent.getEventId());
                     params.put("text", msg);
-                    controlManager.postComments(EventDetailActivity.this, params);
+                    controlManager.postComments(params);
                 }
             }
         }
@@ -1695,7 +1698,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
 //                        _handler.postDelayed(new Runnable() {
 //                            @Override
 //                            public void run() {
-                                controlManager.postEventMessage(EventDetailActivity.this, msg, currentPlayerId, currEvent.getEventId());
+                                controlManager.postEventMessage(msg, currentPlayerId, currEvent.getEventId());
                         hideSendMsgBckground();
 //                            }
 //                            //hideSendMsgBckground();

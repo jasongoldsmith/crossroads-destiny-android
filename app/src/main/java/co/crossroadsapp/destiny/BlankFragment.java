@@ -97,7 +97,7 @@ public class BlankFragment extends Fragment {
         //Util.updateCurrEventOnTime(currentEventList.get(0).getLaunchDate());
         // Load items
         // ...
-        mManager.getEventList(mContext);
+        mManager.getEventList();
 
         // Stop refresh animation
         mSwipeRefreshLayout.setRefreshing(false);

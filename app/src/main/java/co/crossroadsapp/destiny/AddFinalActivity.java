@@ -256,6 +256,14 @@ public class AddFinalActivity extends BaseActivity implements Observer, AdapterV
         }
     }
 
+    @Override
+    public void onStop() {
+        if(mCntrlMngr!=null && mCntrlMngr.getCurrentActivity()!=null && mCntrlMngr.getCurrentActivity() instanceof AddFinalActivity) {
+            mCntrlMngr.setCurrentActivity(null);
+        }
+        super.onStop();
+    }
+
     private void createAds() {
         if(ads) {
             ad= mCntrlMngr.getAdsActivity(adP);

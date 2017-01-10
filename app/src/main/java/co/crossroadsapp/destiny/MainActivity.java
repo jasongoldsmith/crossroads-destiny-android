@@ -125,7 +125,7 @@ public class MainActivity extends BaseActivity implements Observer {
 
         //check android version for dev builds
         mManager.getAndroidVersion(this);
-        mManager.getConfig(MainActivity.this);
+        mManager.getConfig();
         TravellerLog.w(this, "MainActivity.onCreate ends...");
     }
 
@@ -159,7 +159,7 @@ public class MainActivity extends BaseActivity implements Observer {
                     if(u!=null && !u.isEmpty()) {
                         rp.put("userName", u);
                     }
-                    mManager.postLogout(MainActivity.this, rp);
+                    mManager.postLogout(rp);
                     Util.clearDefaults(getApplicationContext());
                 }
             } else {
@@ -226,7 +226,7 @@ public class MainActivity extends BaseActivity implements Observer {
             if(u!=null && !u.isEmpty()) {
                 RequestParams rp = new RequestParams();
                 rp.put("id", u);
-                mManager.getUserFromNetwork(MainActivity.this, rp);
+                mManager.getUserFromNetwork(rp);
             }
 
             Thread t = new Thread(){
@@ -299,7 +299,7 @@ public class MainActivity extends BaseActivity implements Observer {
                 // continue with delete
                 RequestParams rp = new RequestParams();
                 rp.put("userName", u);
-                mManager.postLogout(MainActivity.this, rp);
+                mManager.postLogout(rp);
             } else {
                 Util.clearDefaults(getApplicationContext());
             }
@@ -311,7 +311,7 @@ public class MainActivity extends BaseActivity implements Observer {
         TravellerLog.w(this, "Show main activity layout as user data not available");
         setContentView(R.layout.activity_main);
 
-        mManager.getPublicEventList(MainActivity.this);
+        mManager.getPublicEventList();
 
         privacyTerms = (TextView) findViewById(R.id.privacy_terms);
 
@@ -634,6 +634,9 @@ public class MainActivity extends BaseActivity implements Observer {
 
     @Override
     public void onStop() {
+        if(mManager!=null && mManager.getCurrentActivity()!=null && mManager.getCurrentActivity() instanceof MainActivity) {
+            mManager.setCurrentActivity(null);
+        }
         stopSpinner();
         TravellerLog.w(this, "Unregistering ReceivefromBackpressService ");
         unregisterReceiver(ReceivefromBackpressService);

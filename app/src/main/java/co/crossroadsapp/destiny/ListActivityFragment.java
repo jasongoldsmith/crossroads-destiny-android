@@ -193,10 +193,10 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
         if(mManager.getCurrentGroupList()!=null) {
             if(mManager.getCurrentGroupList().isEmpty()) {
-                mManager.getGroupList(this);
+                mManager.getGroupList();
             }
         }else {
-            mManager.getGroupList(this);
+            mManager.getGroupList();
         }
 
 
@@ -246,7 +246,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                         showUnverifiedUserMsg();
                     } else {
                         findViewById(R.id.loadingImg).setVisibility(View.VISIBLE);
-                        mManager.postHelmet(ListActivityFragment.this);
+                        mManager.postHelmet();
                     }
                 }
             }
@@ -354,7 +354,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             public void onClick(View v) {
                 hideProgress();
                 showProgress();
-                mManager.resendBungieMsg(ListActivityFragment.this);
+                mManager.resendBungieMsg();
             }
         });
 
@@ -577,7 +577,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                             .setCancelable(false)
                             .setPositiveButton(R.string.ok_btn, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    mManager.legalPrivacyDone(ListActivityFragment.this);
+                                    mManager.legalPrivacyDone();
                                 }
                             })
                             .setView(message);
@@ -747,7 +747,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             if(mManager.getDeepLinkEvent()!=null) {
                 RequestParams param = new RequestParams();
                 param.add("id", mManager.getDeepLinkEvent());
-                mManager.postEventById(ListActivityFragment.this, param);
+                mManager.postEventById(param);
             }
         }
     }
@@ -834,7 +834,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         if (user!=null && user.getUser() != null) {
             rp.put("userName", user.getPsnId());
         }
-        mManager.postLogout(ListActivityFragment.this, rp);
+        mManager.postLogout(rp);
     }
 
     private void showLegalWebView(final String service) {
@@ -886,7 +886,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         if((id!=null) && (!id.equalsIgnoreCase("null"))) {
             RequestParams param = new RequestParams();
             param.add("id", id);
-            mManager.postEventById(this, param);
+            mManager.postEventById(param);
         }
     }
 
@@ -912,7 +912,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                         params.add("clanId", grp.getGroupId());
                         params.add("clanName", grp.getGroupName());
                         params.add("clanImage", grp.getGroupImageUrl());
-                        mManager.postSetGroup(ListActivityFragment.this, params);
+                        mManager.postSetGroup(params);
                     }
                 }
             }
@@ -1051,7 +1051,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         listener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                mManager.getEventList(ListActivityFragment.this);
+                mManager.getEventList();
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
@@ -1090,7 +1090,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                         } else {
                             RequestParams param = new RequestParams();
                             param.add("id", id);
-                            mManager.postEventById(this, param);
+                            mManager.postEventById(param);
                         }
                     }
                 }
@@ -1140,7 +1140,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         if(gravity==Gravity.RIGHT || gravity==Gravity.LEFT ) {
             if (gravity == Gravity.RIGHT && gpAct != null) {
                 gpAct.setSelectedGroup();
-                mManager.getGroupList(this);
+                mManager.getGroupList();
             } else if(gravity == Gravity.LEFT && gpAct != null) {
                 updateConsoleListUserDrawer();
             }
@@ -1204,7 +1204,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             mManager.setCurrentActivity(this);
             updateConsoleListUserDrawer();
             getExistingList();
-            mManager.getEventList(this);
+            mManager.getEventList();
         }
         registerFirbase();
         registerUserFirebase();
@@ -1249,13 +1249,16 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             String eId = intent.getStringExtra("eventId");
             RequestParams param = new RequestParams();
             param.add("id", eId);
-            mManager.postEventById(ListActivityFragment.this, param);
+            mManager.postEventById(param);
         }
     };
 
     @Override
     public void onStop() {
         super.onStop();
+        if (mManager.getCurrentActivity() instanceof ListActivityFragment) {
+            mManager.setCurrentActivity(null);
+        }
         unregisterFirebase();
         //unregisterUserFirebase();
         //unregisterReceiver(ReceivefromDeeplink);
@@ -1334,7 +1337,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         showProgressBar();
         RequestParams rp_console = new RequestParams();
         rp_console.add("consoleType", console);
-        mManager.changeToOtherConsole(ListActivityFragment.this, rp_console);
+        mManager.changeToOtherConsole(rp_console);
     }
 
     @Override
@@ -1475,7 +1478,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                     if (data instanceof UserData) {
                         unregisterFirebase();
                         registerFirbase();
-                        mManager.getEventList(this);
+                        mManager.getEventList();
                         hideProgress();
                         closeProfileDrawer(Gravity.RIGHT);
                         //mManager.getGroupList(this);
@@ -1527,8 +1530,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                     user = mManager.getUserData();
                 }
                 changeUserProfileBorderColor();
-                mManager.getEventList(this);
-                mManager.getGroupList(this);
+                mManager.getEventList();
+                mManager.getGroupList();
             } else if(observable instanceof PrivacyLegalUpdateNetwork) {
                 if(dialogPrivacy!=null) {
                     dialogPrivacy.dismiss();
