@@ -25,6 +25,7 @@ import co.crossroadsapp.destiny.data.EventList;
 import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.GroupList;
 import co.crossroadsapp.destiny.data.InvitationLoginData;
+import co.crossroadsapp.destiny.data.ReviewCardData;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.network.ActivityListNetwork;
 import co.crossroadsapp.destiny.network.AddCommentNetwork;
@@ -47,6 +48,7 @@ import co.crossroadsapp.destiny.network.PrivacyLegalUpdateNetwork;
 import co.crossroadsapp.destiny.network.ReportCommentNetwork;
 import co.crossroadsapp.destiny.network.ReportCrashNetwork;
 import co.crossroadsapp.destiny.network.ResendBungieVerification;
+import co.crossroadsapp.destiny.network.ReviewCardUpdate;
 import co.crossroadsapp.destiny.network.TrackingNetwork;
 import co.crossroadsapp.destiny.network.VerifyConsoleIDNetwork;
 import co.crossroadsapp.destiny.network.postGcmNetwork;
@@ -139,6 +141,8 @@ public class ControlManager implements Observer{
     private String psnURL;
     private String xboxURL;
     private BungieMessageNetwork bungieMsgNtwrk;
+    private ReviewCardData reviewCard;
+    private ReviewCardUpdate reviewCardUpdate;
 
     public ControlManager() {
     }
@@ -1255,4 +1259,27 @@ public class ControlManager implements Observer{
             eventRelationshipNtwrk.postEventPlayerRelation(requestParams, Constants.CANCEL_PLAYER_URL);
         }
     }
+
+    public void postReviewUpdate(RequestParams requestParams) {
+        if(mCurrentAct.get()!=null) {
+            reviewCardUpdate = new ReviewCardUpdate(mCurrentAct.get());
+            try {
+                reviewCardUpdate.postReviewUpdate(requestParams);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void setReviewCard(ReviewCardData reviewCard) {
+        if(reviewCard==null) {
+            reviewCard = new ReviewCardData();
+        }
+        this.reviewCard = reviewCard;
+    }
+
+    public ReviewCardData getReviewCard() {
+        return reviewCard;
+    }
+
 }

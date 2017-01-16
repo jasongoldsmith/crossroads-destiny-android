@@ -1,5 +1,7 @@
 package co.crossroadsapp.destiny.utils;
 
+import android.app.Activity;
+
 /**
  * Created by sharmha on 3/4/16.
  */
@@ -63,6 +65,9 @@ public class Constants {
     public static final String RESEND_BUNGIE_MSG_URL = "api/v1/a/account/group/resendBungieMessage";
     public static final String MIXPANEL_TRACK_URL = "api/v2/mixpanel/track";
     public static final String CHECK_BUNGIE_ACCOUNT_URL = "api/v1/auth/checkBungieAccount";
+    public static final String UPDATE_REVIEW_CARD = "api/v1/a/user/updateReviewPromptCardStatus";
+    public static final int REVIEW_CARD_PRESENT = 1;
+
     //getCurrentUser bungie
     public static String BUGIE_CURRENT_USER = "https://www.bungie.net/Platform/User/GetCurrentBungieAccount";
 

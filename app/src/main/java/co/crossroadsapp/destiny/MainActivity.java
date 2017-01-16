@@ -341,7 +341,7 @@ public class MainActivity extends BaseActivity implements Observer {
         if(mManager.getEventListCurrent()!=null) {
             horizontalList = mManager.getEventListCurrent();
         }
-        horizontalAdapter=new EventCardAdapter(horizontalList, null, MainActivity.this, mManager, Constants.PUBLIC_EVENT_FEED);
+        horizontalAdapter=new EventCardAdapter(horizontalList, null, null, MainActivity.this, mManager, Constants.PUBLIC_EVENT_FEED);
         horizontalLayoutManagaer
                 = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
         horizontal_recycler_view.setLayoutManager(horizontalLayoutManagaer);
@@ -692,12 +692,12 @@ public class MainActivity extends BaseActivity implements Observer {
                         Util.setDefaults("user", ud.getUserId(), getApplicationContext());
 //                        Util.setDefaults("password", password, getApplicationContext());
                         Util.setDefaults("consoleType", console, getApplicationContext());
-                    ud.setPassword(p);
-                    mManager.setUserdata(ud);
-                    Intent regIntent;
+                        ud.setPassword(p);
+                        mManager.setUserdata(ud);
+                        Intent regIntent;
 
-                    //decide for activity
-                    //regIntent = mManager.decideToOpenActivity(contentIntent);
+                        //decide for activity
+                        //regIntent = mManager.decideToOpenActivity(contentIntent);
 
                         regIntent = new Intent(getApplicationContext(),
                                 ListActivityFragment.class);
@@ -709,10 +709,9 @@ public class MainActivity extends BaseActivity implements Observer {
                         if(invitationRp!=null) {
                             invitationRp.clearRp();
                         }
-
-                    startActivity(regIntent);
-                    finish();
-                } else {
+                        startActivity(regIntent);
+                        finish();
+                    } else {
                         setContentView(R.layout.activity_main);
                     }
                 } else {
@@ -729,7 +728,7 @@ public class MainActivity extends BaseActivity implements Observer {
         } else if(observable instanceof EventListNetwork) {
             if(data!=null) {
                 horizontalAdapter.elistLocal.clear();
-                horizontalAdapter.addItem(mManager.getEventListCurrent(), null);
+                horizontalAdapter.addItem(mManager.getEventListCurrent(), null, null);
                 horizontalAdapter.notifyDataSetChanged();
                 startSpinner();
             }

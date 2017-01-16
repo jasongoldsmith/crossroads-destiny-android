@@ -239,150 +239,156 @@ public class EventDetailsFragments extends Fragment {
             playerLocal = new ArrayList<PlayerData>();
             playerLocal = playerData;
         }
-    public class CurrentEventsViewHolder extends RecyclerView.ViewHolder {
-        private CircularImageView playerProfile;
-        private TextView playerName;
-        private CardView playerCard;
-        private ImageView message;
-        private ImageView leader_tag;
-        private ImageView inviteIcon;
-        private TextView inviteText;
-        private ImageView invitedColorBar;
+        public class CurrentEventsViewHolder extends RecyclerView.ViewHolder {
+            private CircularImageView playerProfile;
+            private TextView playerName;
+            private CardView playerCard;
+            private ImageView message;
+            private ImageView leader_tag;
+            private ImageView inviteIcon;
+            private TextView inviteText;
+            private ImageView invitedColorBar;
 
-        public CurrentEventsViewHolder(View itemView) {
-            super(itemView);
-            view = itemView;
+            public CurrentEventsViewHolder(View itemView) {
+                super(itemView);
+                view = itemView;
 
-            playerProfile = (CircularImageView) itemView.findViewById(R.id.event_detail_player_profile);
-            playerName = (TextView) itemView.findViewById(R.id.player_name);
-            playerCard = (CardView) itemView.findViewById(R.id.activity_card);
-            message = (ImageView) itemView.findViewById(R.id.event_detail_message);
-            leader_tag = (ImageView) itemView.findViewById(R.id.leader_ear);
-            inviteIcon = (ImageView) itemView.findViewById(R.id.invite_icon);
-            inviteText = (TextView) itemView.findViewById(R.id.invite_text);
-            invitedColorBar = (ImageView) itemView.findViewById(R.id.invited_bar);
-        }
-    }
-
-    @Override
-    public CurrentEventsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder vh = null;
-        view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_eventdetail_playercard, null);
-        return new CurrentEventsViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(final CurrentEventsViewHolder holder, final int position) {
-        String currPlayerId = null;
-        if(playerLocal!=null) {
-            final RequestParams kickCancelReqPrams=new RequestParams();
-            if(clanTag!=null && currentEvent!=null && currentEvent.getEventStatus()!=null && !currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)) {
-                clanTag.setVisibility(View.VISIBLE);
+                playerProfile = (CircularImageView) itemView.findViewById(R.id.event_detail_player_profile);
+                playerName = (TextView) itemView.findViewById(R.id.player_name);
+                playerCard = (CardView) itemView.findViewById(R.id.activity_card);
+                message = (ImageView) itemView.findViewById(R.id.event_detail_message);
+                leader_tag = (ImageView) itemView.findViewById(R.id.leader_ear);
+                inviteIcon = (ImageView) itemView.findViewById(R.id.invite_icon);
+                inviteText = (TextView) itemView.findViewById(R.id.invite_text);
+                invitedColorBar = (ImageView) itemView.findViewById(R.id.invited_bar);
             }
-            //setBanners();
-            holder.inviteIcon.setVisibility(View.GONE);
-            holder.inviteText.setText(" ");
-            holder.invitedColorBar.setVisibility(View.GONE);
-            if (position >= playerLocal.size() && getMaxPlayer() > playerLocal.size() ) {
-                holder.playerName.setText("searching...");
-                holder.playerName.setTextColor(getResources().getColor(R.color.trimbe_white));
-                holder.message.setVisibility(View.GONE);
-                holder.playerProfile.setImageResource(R.drawable.img_profile_blank);
-                if(position==playerLocal.size()) {
-                    if (checkUserIsPlayer() && !ifUserInvited(playerLocal)) {
-                        holder.inviteIcon.setVisibility(View.VISIBLE);
-                        holder.inviteIcon.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ((EventDetailActivity) getActivity()).showAnimatedInviteView();
-                            }
-                        });
-                    }
+        }
+
+        @Override
+        public CurrentEventsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            RecyclerView.ViewHolder vh = null;
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.fragment_eventdetail_playercard, null);
+            return new CurrentEventsViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(final CurrentEventsViewHolder holder, final int position) {
+            String currPlayerId = null;
+            if(playerLocal!=null) {
+                final RequestParams kickCancelReqPrams=new RequestParams();
+                if(clanTag!=null && currentEvent!=null && currentEvent.getEventStatus()!=null && !currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)) {
+                    clanTag.setVisibility(View.VISIBLE);
                 }
-            } else {
-                if (playerLocal.get(position) != null) {
-                    if (playerLocal.get(position).getPlayerId() != null) {
-                        currPlayerId = playerLocal.get(position).getPlayerId();
-                    }
+                //setBanners();
+                holder.inviteIcon.setVisibility(View.GONE);
+                holder.inviteText.setText(" ");
+                holder.invitedColorBar.setVisibility(View.GONE);
+                holder.leader_tag.setVisibility(View.GONE);
+                if(position==0) {
+                    holder.leader_tag.setVisibility(View.VISIBLE);
+                }
+
+                if (position >= playerLocal.size() && getMaxPlayer() > playerLocal.size() ) {
+                    holder.playerName.setText(getString(R.string.searching));
+                    holder.playerName.setTextColor(getResources().getColor(R.color.trimbe_white));
                     holder.message.setVisibility(View.GONE);
-
-                    holder.leader_tag.setVisibility(View.GONE);
-
-                    if (playerLocal.get(position).getPsnId() != null && playerLocal.get(position).getUserId()!=null) {
-                        String name = playerLocal.get(position).getPsnId();
-                        String userId = playerLocal.get(position).getUserId();
-                        if(ifPlayerisUserAndVerified(userId)) {
-                            if (playerLocal.get(position).getClanTag() != null && !playerLocal.get(position).getClanTag().isEmpty()) {
-                                name = name + " [" + playerLocal.get(position).getClanTag() + "]";
-                            }
-                            if (playerLocal.get(position).getPlayerImageUrl() != null) {
-                                Util.picassoLoadIcon(((EventDetailActivity)getActivity()), holder.playerProfile, playerLocal.get(position).getPlayerImageUrl(),
-                                        R.dimen.eventdetail_player_profile_hgt, R.dimen.eventdetail_player_profile_width, R.drawable.profile_image);
-                            }
-                        } else {
-                            Util.picassoLoadIcon(((EventDetailActivity)getActivity()), holder.playerProfile, null,
-                                    R.dimen.eventdetail_player_profile_hgt, R.dimen.eventdetail_player_profile_width, R.drawable.profile_image);
+                    holder.playerProfile.setImageResource(R.drawable.img_profile_blank);
+                    if(position==playerLocal.size()) {
+                        if (checkUserIsPlayer() && !ifUserInvited(playerLocal)) {
+                            holder.inviteIcon.setVisibility(View.VISIBLE);
+                            holder.playerName.setText(getString(R.string.searching_friend));
+                            holder.inviteIcon.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    ((EventDetailActivity) getActivity()).showAnimatedInviteView();
+                                }
+                            });
                         }
-                        holder.playerName.setText(name);
+                    }
+                } else {
+                    if (playerLocal.get(position) != null) {
+                        if (playerLocal.get(position).getPlayerId() != null) {
+                            currPlayerId = playerLocal.get(position).getPlayerId();
+                        }
+                        holder.message.setVisibility(View.GONE);
 
-                       if(decideLeaderTag(position, playerLocal.get(position).getPsnId())) {
-                           holder.leader_tag.setVisibility(View.VISIBLE);
-                       }
+                        //holder.leader_tag.setVisibility(View.GONE);
 
-                        if(playerLocal.get(position).getInvitedBy()!=null) {
-                            holder.invitedColorBar.setVisibility(View.VISIBLE);
-                            holder.playerName.setTextColor(getResources().getColor(R.color.invited_player_text));
-                            if (ifPlayerisUser(playerLocal.get(position).getInvitedBy())) {
-                                kickCancelReqPrams.put("eId", currentEvent.getEventId());
-                                kickCancelReqPrams.put("userId", playerLocal.get(position).getUserId());
-                                holder.inviteText.setText("Cancel");
-                            } else {
-                                holder.inviteText.setText("Invited");
-                            }
-                        } else {
-                            if(ifUserInvited(playerLocal, position)) {
-                                holder.invitedColorBar.setVisibility(View.VISIBLE);
-                            }
-                            if(!playerLocal.get(position).getActive() && currentEvent.getLaunchEventStatus()!=null && currentEvent.getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_NOW)) {
-                                holder.playerName.setTextColor(getResources().getColor(R.color.invited_player_text));
-                                if (checkUserIsPlayer() && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL) && !ifPlayerisUser(playerLocal.get(position).getUserId())) {
-                                    kickCancelReqPrams.put("eId", currentEvent.getEventId());
-                                    kickCancelReqPrams.put("userId", playerLocal.get(position).getUserId());
-                                    holder.inviteText.setText("Kick");
+                        if (playerLocal.get(position).getPsnId() != null && playerLocal.get(position).getUserId()!=null) {
+                            String name = playerLocal.get(position).getPsnId();
+                            String userId = playerLocal.get(position).getUserId();
+                            if(ifPlayerisUserAndVerified(userId)) {
+                                if (playerLocal.get(position).getClanTag() != null && !playerLocal.get(position).getClanTag().isEmpty()) {
+                                    name = name + " [" + playerLocal.get(position).getClanTag() + "]";
+                                }
+                                if (playerLocal.get(position).getPlayerImageUrl() != null) {
+                                    Util.picassoLoadIcon(((EventDetailActivity)getActivity()), holder.playerProfile, playerLocal.get(position).getPlayerImageUrl(),
+                                            R.dimen.eventdetail_player_profile_hgt, R.dimen.eventdetail_player_profile_width, R.drawable.profile_image);
                                 }
                             } else {
-                                holder.playerName.setTextColor(getResources().getColor(R.color.activity_light_color));
+                                Util.picassoLoadIcon(((EventDetailActivity)getActivity()), holder.playerProfile, null,
+                                        R.dimen.eventdetail_player_profile_hgt, R.dimen.eventdetail_player_profile_width, R.drawable.profile_image);
                             }
-                        }
+                            holder.playerName.setText(name);
 
-                        final String kickCancelBtnText = holder.inviteText.getText().toString();
+//                            if(decideLeaderTag(position, playerLocal.get(position).getPsnId())) {
+//                                holder.leader_tag.setVisibility(View.VISIBLE);
+//                            }
 
-                        holder.inviteText.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (kickCancelBtnText != null && !kickCancelBtnText.isEmpty()) {
-                                    if (kickCancelBtnText.equalsIgnoreCase("Cancel")) {
-                                        // call cancel api
-                                        if (kickCancelReqPrams != null) {
-                                            ((EventDetailActivity) getActivity()).showProgressBar();
-                                            mManager.postCancelPlayer(kickCancelReqPrams);
-                                        }
-                                    } else if (kickCancelBtnText.equalsIgnoreCase("Kick")) {
-                                        // call kick api
-                                        if (kickCancelReqPrams != null) {
-                                            ((EventDetailActivity) getActivity()).showGenericError("KICK FOR INACTIVITY?", "Removing this Guardian will allow another to join instead.", "KICK", "Cancel", Constants.GENERAL_KICK, kickCancelReqPrams, false);
+                            if(playerLocal.get(position).getInvitedBy()!=null) {
+                                holder.invitedColorBar.setVisibility(View.VISIBLE);
+                                holder.playerName.setTextColor(getResources().getColor(R.color.invited_player_text));
+                                if (ifPlayerisUser(playerLocal.get(position).getInvitedBy())) {
+                                    kickCancelReqPrams.put("eId", currentEvent.getEventId());
+                                    kickCancelReqPrams.put("userId", playerLocal.get(position).getUserId());
+                                    holder.inviteText.setText("Cancel");
+                                } else {
+                                    holder.inviteText.setText("Invited");
+                                }
+                            } else {
+                                if(ifUserInvited(playerLocal, position)) {
+                                    holder.invitedColorBar.setVisibility(View.VISIBLE);
+                                }
+                                if(!playerLocal.get(position).getActive() && currentEvent.getLaunchEventStatus()!=null && currentEvent.getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_NOW)) {
+                                    holder.playerName.setTextColor(getResources().getColor(R.color.invited_player_text));
+                                    if (checkUserIsPlayer() && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL) && !ifPlayerisUser(playerLocal.get(position).getUserId())) {
+                                        kickCancelReqPrams.put("eId", currentEvent.getEventId());
+                                        kickCancelReqPrams.put("userId", playerLocal.get(position).getUserId());
+                                        holder.inviteText.setText("Kick");
+                                    }
+                                } else {
+                                    holder.playerName.setTextColor(getResources().getColor(R.color.activity_light_color));
+                                }
+                            }
+
+                            final String kickCancelBtnText = holder.inviteText.getText().toString();
+
+                            holder.inviteText.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (kickCancelBtnText != null && !kickCancelBtnText.isEmpty()) {
+                                        if (kickCancelBtnText.equalsIgnoreCase("Cancel")) {
+                                            // call cancel api
+                                            if (kickCancelReqPrams != null) {
+                                                ((EventDetailActivity) getActivity()).showProgressBar();
+                                                mManager.postCancelPlayer(kickCancelReqPrams);
+                                            }
+                                        } else if (kickCancelBtnText.equalsIgnoreCase("Kick")) {
+                                            // call kick api
+                                            if (kickCancelReqPrams != null) {
+                                                ((EventDetailActivity) getActivity()).showGenericError("KICK FOR INACTIVITY?", "Removing this Guardian will allow another to join instead.", "KICK", "Cancel", Constants.GENERAL_KICK, kickCancelReqPrams, false);
+                                            }
                                         }
                                     }
                                 }
-                            }
-                        });
+                            });
+                        }
+                        holder.playerProfile.invalidate();
                     }
-                    holder.playerProfile.invalidate();
                 }
             }
         }
-    }
 
         private boolean ifUserInvited(ArrayList<PlayerData> playerLocal, int position) {
             if(playerLocal!=null) {
@@ -414,8 +420,8 @@ public class EventDetailsFragments extends Fragment {
 
         @Override
         public int getItemCount() {
-        return getMaxPlayer();
-    }
+            return getMaxPlayer();
+        }
 
         @Override
         public void onAttachedToRecyclerView(RecyclerView recyclerView) {
@@ -536,6 +542,9 @@ public class EventDetailsFragments extends Fragment {
                     }
                     boolean reported = commentsLocal.get(position).getReported();
                     holder.leader_comment_tag.setVisibility(View.GONE);
+                    if(position==0) {
+                        holder.leader_comment_tag.setVisibility(View.VISIBLE);
+                    }
                     if(reported) {
                         holder.playerNameComment.setVisibility(View.GONE);
                         holder.playerProfileComment.setImageDrawable(getResources().getDrawable(R.drawable.img_profile_blank));
@@ -545,18 +554,18 @@ public class EventDetailsFragments extends Fragment {
                             public void onClick(View v) {
                                 if (!commentsLocal.get(position).getReported()) {
                                     RequestParams rp = new RequestParams();
-                                if (currentEvent != null && currentEvent.getEventId() != null && !currentEvent.getEventId().isEmpty()) {
-                                    rp.put("eId", currentEvent.getEventId());
-                                    if (commentsLocal.get(position).getId() != null && !commentsLocal.get(position).getId().isEmpty()) {
-                                        rp.put("commentId", commentsLocal.get(position).getId());
-                                    }
-                                    if (mManager!=null && mManager.getUserData()!=null && mManager.getUserData().getMaxReported()) {
-                                        ((EventDetailActivity) getActivity()).showGenericError(getString(R.string.report_issue_header), getString(R.string.report_issue_next), "NEXT", null, Constants.REPORT_COMMENT_NEXT, rp, false);
-                                    } else {
-                                        ((EventDetailActivity) getActivity()).showGenericError(getString(R.string.report_issue_header), getString(R.string.report_issue), "REPORT", null, Constants.REPORT_COMMENT, rp, false);
+                                    if (currentEvent != null && currentEvent.getEventId() != null && !currentEvent.getEventId().isEmpty()) {
+                                        rp.put("eId", currentEvent.getEventId());
+                                        if (commentsLocal.get(position).getId() != null && !commentsLocal.get(position).getId().isEmpty()) {
+                                            rp.put("commentId", commentsLocal.get(position).getId());
+                                        }
+                                        if (mManager!=null && mManager.getUserData()!=null && mManager.getUserData().getMaxReported()) {
+                                            ((EventDetailActivity) getActivity()).showGenericError(getString(R.string.report_issue_header), getString(R.string.report_issue_next), "NEXT", null, Constants.REPORT_COMMENT_NEXT, rp, false);
+                                        } else {
+                                            ((EventDetailActivity) getActivity()).showGenericError(getString(R.string.report_issue_header), getString(R.string.report_issue), "REPORT", null, Constants.REPORT_COMMENT, rp, false);
+                                        }
                                     }
                                 }
-                            }
                             }
                         });
                         if (commentsLocal.get(position).getPsnId() != null) {
@@ -576,9 +585,9 @@ public class EventDetailsFragments extends Fragment {
                             holder.playerNameComment.setText(name);
                             holder.playerNameComment.setTextColor(getResources().getColor(R.color.activity_light_color));
 
-                            if(decideLeaderTag(position, commentsLocal.get(position).getPsnId())){
-                                holder.leader_comment_tag.setVisibility(View.VISIBLE);
-                            }
+//                            if(decideLeaderTag(position, commentsLocal.get(position).getPsnId())){
+//                                holder.leader_comment_tag.setVisibility(View.VISIBLE);
+//                            }
                         }
                     }
 

@@ -23,6 +23,7 @@ import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.CurrentEventDataHolder;
 import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.PlayerData;
+import co.crossroadsapp.destiny.data.ReviewCardData;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
@@ -31,6 +32,7 @@ import co.crossroadsapp.destiny.utils.Util;
  * Created by sharmha on 9/9/16.
  */
 public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private ReviewCardData reviewCardData;
     private ControlManager mManager;
     private View view;
     protected ArrayList<EventData> elistLocal;
@@ -40,9 +42,11 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     UserData user;
     Activity mContext;
 
-    public EventCardAdapter(ArrayList<EventData> currentEventList, ArrayList<ActivityData> currentAdList, Activity act, ControlManager manager, int feed) {
+    public EventCardAdapter(ArrayList<EventData> currentEventList, ArrayList<ActivityData> currentAdList, ReviewCardData reviewCard, Activity act, ControlManager manager, int feed) {
         elistLocal = new ArrayList<EventData>();
         adList = new ArrayList<ActivityData>();
+        reviewCardData = new ReviewCardData();
+
         mManager = manager!=null?manager:null;
         if(mManager!=null && mManager.getUserData()!=null) {
             user = mManager.getUserData();
@@ -60,6 +64,9 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
         if(currentAdList !=null) {
             adList = currentAdList;
+        }
+        if(reviewCard!=null && reviewCard.getmCardText()!=null) {
+            reviewCardData = reviewCard;
         }
         checkFullEventPreview();
     }
@@ -79,12 +86,15 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    protected void addItem(ArrayList<EventData> a, ArrayList<ActivityData> ad) {
+    protected void addItem(ArrayList<EventData> a, ArrayList<ActivityData> ad, ReviewCardData reviewData) {
         if(a!=null) {
             this.elistLocal.addAll(a);
         }
         if(ad!=null) {
             this.adList.addAll(ad);
+        }
+        if(reviewData!=null) {
+            this.reviewCardData = mManager.getReviewCard();
         }
         checkFullEventPreview();
     }
@@ -155,17 +165,60 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
+    //Viewholder for ad cards
+    public class MyViewHolder3 extends RecyclerView.ViewHolder {
+        private ImageView reviewCardImg;
+        protected TextView reviewText;
+        protected TextView reviewButtonText;
+        protected ImageView reviewCancel;
+        protected RelativeLayout reviewBtnLayout;
+
+        public MyViewHolder3(View v) {
+            super(v);
+            view = v;
+            reviewCardImg = (ImageView) v.findViewById(R.id.reviewcard_img);
+            reviewBtnLayout = (RelativeLayout) v.findViewById(R.id.review_btn);
+            reviewText = (TextView) v.findViewById(R.id.review_text);
+            reviewButtonText = (TextView) v.findViewById(R.id.review_btn_text);
+            reviewCancel = (ImageView) v.findViewById(R.id.noreview_btn);
+        }
+    }
+
     @Override
     public int getItemViewType(int position) {
         // Just as an example, return 0 or 2 depending on position
         // Note that unlike in ListView adapters, types don't have to be contiguous
-        if(position==0 && elistLocal.size()==0) {
+        if(position==0 && reviewCardData!=null && reviewCardData.getmName()!=null) {
+            return 4;
+        } else if (elistLocal.size() == 0) {
+        //if (position == 0 && elistLocal.size() == 0) {
             return 2;
-        }else if(position<elistLocal.size()) {
-            return 0;
         } else {
+            if(reviewCardData!=null && reviewCardData.getmName()!=null) {
+                if(position <= elistLocal.size()) {
+                    return 0;
+                }
+            } else if (position < elistLocal.size()){
+                return 0;
+            }
             return 2;
         }
+//        if(position==0 && reviewCardData!=null && reviewCardData.getmName()!=null) {
+//            return 4;
+//        } else if (elistLocal.size() > 0) {
+//            if (reviewCardData.getmName()!=null && position <= elistLocal.size()) {
+//                return 0;
+//            } else if(position<elistLocal.size()) {
+//                return 2;
+//            }
+//        } else if (position <= elistLocal.size()) {
+//            if(reviewCardData.getmName()!=null) {
+//                return 0;
+//            }
+//            return 2;
+//        } else {
+//            return 2;
+//        }
     }
 
     // Create new views (invoked by the layout manager)
@@ -183,6 +236,10 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.fragment_adevent, null);
                 return new MyViewHolder2(view);
+            case 4:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.fragment_reviewcard, null);
+                return new MyViewHolder3(view);
         }
         //return new MyViewHolder(view);
         return null;
@@ -191,7 +248,6 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
         switch (viewHolder.getItemViewType()) {
-
             case 0:
                 final MyViewHolder holder = (MyViewHolder) viewHolder;
                 if (this.elistLocal.size() > 0) {
@@ -202,21 +258,28 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     String checkpoint = "";
                     String tag = "";
                     String clanT = "";
-                    final EventData currEvent = elistLocal.get(position);
-                    final String eId = this.elistLocal.get(position).getEventId();
-                    String s = this.elistLocal.get(position).getActivityData().getActivitySubtype();
-                    int l = this.elistLocal.get(position).getActivityData().getActivityLight();
-                    String url = this.elistLocal.get(position).getActivityData().getActivityIconUrl();
-                    int reqPlayer = this.elistLocal.get(position).getActivityData().getMaxPlayer() - this.elistLocal.get(position).getPlayerData().size();
-                    // get players
-                    int i = this.elistLocal.get(position).getPlayerData().size();
-                    int level = this.elistLocal.get(position).getActivityData().getActivityLevel();
-                    String creatorId = this.elistLocal.get(position).getCreatorData().getPlayerId();
-                    final String status = this.elistLocal.get(position).getEventStatus();
-                    if(!publicEventCard) {
-                        tag = this.elistLocal.get(position).getActivityData().getTag();
+                    final EventData currEvent;
+                    int eventPosition=0;
+                    if(reviewCardData!=null && reviewCardData.getmCardText()!=null) {
+                        eventPosition = position-1;
+                    } else {
+                        eventPosition = position;
                     }
-                    checkpoint = this.elistLocal.get(position).getActivityData().getActivityCheckpoint();
+                    currEvent = elistLocal.get(eventPosition);
+                    final String eId = this.elistLocal.get(eventPosition).getEventId();
+                    String s = this.elistLocal.get(eventPosition).getActivityData().getActivitySubtype();
+                    int l = this.elistLocal.get(eventPosition).getActivityData().getActivityLight();
+                    String url = this.elistLocal.get(eventPosition).getActivityData().getActivityIconUrl();
+                    int reqPlayer = this.elistLocal.get(eventPosition).getActivityData().getMaxPlayer() - this.elistLocal.get(eventPosition).getPlayerData().size();
+                    // get players
+                    int i = this.elistLocal.get(eventPosition).getPlayerData().size();
+                    int level = this.elistLocal.get(eventPosition).getActivityData().getActivityLevel();
+                    String creatorId = this.elistLocal.get(eventPosition).getCreatorData().getPlayerId();
+                    final String status = this.elistLocal.get(eventPosition).getEventStatus();
+                    if(!publicEventCard) {
+                        tag = this.elistLocal.get(eventPosition).getActivityData().getTag();
+                    }
+                    checkpoint = this.elistLocal.get(eventPosition).getActivityData().getActivityCheckpoint();
                     holder.checkpointText.setVisibility(View.GONE);
                     holder.eventDate.setVisibility(View.GONE);
                     holder.tagText.setVisibility(View.GONE);
@@ -236,9 +299,9 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             }
                         }
                     }
-                    if (elistLocal.get(position).getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING) || (checkpoint != null)) {
-                        if (elistLocal.get(position).getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING)) {
-                            String date = Util.convertUTCtoReadable(elistLocal.get(position).getLaunchDate());
+                    if (elistLocal.get(eventPosition).getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING) || (checkpoint != null)) {
+                        if (elistLocal.get(eventPosition).getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_UPCOMING)) {
+                            String date = Util.convertUTCtoReadable(elistLocal.get(eventPosition).getLaunchDate());
                             if (date != null) {
                                 holder.eventDate.setVisibility(View.VISIBLE);
                                 holder.eventDate.setText(date);
@@ -281,10 +344,10 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                     for (int y = 0; y < i; y++) {
                         boolean thisIsUnverifiedUser = false;
-                        String n = this.elistLocal.get(position).getPlayerData().get(y).getPsnId();
-                        String verifyStatus = this.elistLocal.get(position).getPlayerData().get(y).getPsnVerify();
-                        String profileUrl = this.elistLocal.get(position).getPlayerData().get(y).getPlayerImageUrl();
-                        String pId = this.elistLocal.get(position).getPlayerData().get(y).getPlayerId();
+                        String n = this.elistLocal.get(eventPosition).getPlayerData().get(y).getPsnId();
+                        String verifyStatus = this.elistLocal.get(eventPosition).getPlayerData().get(y).getPsnVerify();
+                        String profileUrl = this.elistLocal.get(eventPosition).getPlayerData().get(y).getPlayerImageUrl();
+                        String pId = this.elistLocal.get(eventPosition).getPlayerData().get(y).getPlayerId();
                         if (user != null && user.getUserId() != null) {
                             if (user.getUserId().equalsIgnoreCase(pId)) {
                                 CreatorIn = true;
@@ -303,7 +366,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         }
                     }
 
-                    allNames = this.elistLocal.get(position).getCreatorData().getPsnId();
+                    allNames = this.elistLocal.get(eventPosition).getCreatorData().getPsnId();
 
 //                    if(CreatorIsPlayer) {
 //                        if(user!=null && user.getPsnVerify()!=null && user.getPsnVerify().equalsIgnoreCase(Constants.PSN_VERIFIED)) {
@@ -313,8 +376,8 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 //                        clanT = this.elistLocal.get(position).getCreatorData().getClanTag()!=null?this.elistLocal.get(position).getCreatorData().getClanTag():"";
 //                    }
 
-                    if (this.elistLocal.get(position).getCreatorData().getClanTag() != null) {
-                        clanT = this.elistLocal.get(position).getCreatorData().getClanTag();
+                    if (this.elistLocal.get(eventPosition).getCreatorData().getClanTag() != null) {
+                        clanT = this.elistLocal.get(eventPosition).getCreatorData().getClanTag();
                         if (clanT!=null && !clanT.isEmpty()) {
                             allNames = allNames + " [" + clanT + "]";
                         }
@@ -402,7 +465,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         });
                     }
 
-                    String feed = this.elistLocal.get(position).getActivityData().getaFeedMode()!=null?this.elistLocal.get(position).getActivityData().getaFeedMode():"";
+                    String feed = this.elistLocal.get(eventPosition).getActivityData().getaFeedMode()!=null?this.elistLocal.get(eventPosition).getActivityData().getaFeedMode():"";
                     holder.eventaLight.setText(feed.toUpperCase());
 //                        if (l > 0) {
 //                            // unicode to show star
@@ -436,10 +499,19 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 break;
             case 2:
                 MyViewHolder2 adHolder = (MyViewHolder2) viewHolder;
-                adHolder.eventadHeader.setText(adList.get(position-elistLocal.size()).getAdCardData().getAdCardHeader());
-                adHolder.eventAdSubheader.setText(adList.get(position-elistLocal.size()).getAdCardData().getAdCardSubHeader());
-                String cardBackgroundImageUrl = adList.get(position-elistLocal.size()).getAdCardData().getAdCardBaseUrl() + adList.get(position-elistLocal.size()).getAdCardData().getAdCardImagePath();
-                String iconImageUrl = adList.get(position-elistLocal.size()).getActivityIconUrl();
+                int adcardPosition=0;
+                if(reviewCardData!=null && reviewCardData.getmCardText()!=null) {
+                    adcardPosition = position-elistLocal.size()-1;
+                } else {
+                    adcardPosition = position-elistLocal.size();
+                }
+
+                final String adId = adList.get(adcardPosition).getId();
+                final String adActivityType = adList.get(adcardPosition).getActivityType();
+                adHolder.eventadHeader.setText(adList.get(adcardPosition).getAdCardData().getAdCardHeader());
+                adHolder.eventAdSubheader.setText(adList.get(adcardPosition).getAdCardData().getAdCardSubHeader());
+                String cardBackgroundImageUrl = adList.get(adcardPosition).getAdCardData().getAdCardBaseUrl() + adList.get(adcardPosition).getAdCardData().getAdCardImagePath();
+                String iconImageUrl = adList.get(adcardPosition).getActivityIconUrl();
                 Util.picassoLoadIcon(mContext, adHolder.eventAdIcon, iconImageUrl, R.dimen.activity_icon_hgt, R.dimen.activity_icon_width, R.drawable.icon_ghost_default);
                 //Util.picassoLoadIcon(mContext, adHolder.adCardImg, cardBackgroundImageUrl, R.dimen.ad_hgt, R.dimen.ad_width, R.drawable.img_adcard_raid_golgoroth);
                 if(mContext!=null) {
@@ -455,20 +527,70 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     public void onClick(View v) {
                         if (mContext != null && mContext instanceof ListActivityFragment) {
                             ((ListActivityFragment) mContext).showProgressBar();
-                            ((ListActivityFragment) mContext).setAdCardPosition(adList.get(position - elistLocal.size()).getId());
+                            ((ListActivityFragment) mContext).setAdCardPosition(adId);
                             RequestParams rp = new RequestParams();
-                            rp.add("aType", adList.get(position - elistLocal.size()).getActivityType());
+                            rp.add("aType", adActivityType);
                             rp.add("includeTags", "true");
                             mManager.postGetActivityList(rp);
 
                             //tracking adcard click
                             Map<String, String> json = new HashMap<String, String>();
-                            if (adList.get(position - elistLocal.size()).getId() != null && !adList.get(position - elistLocal.size()).getId().isEmpty()) {
-                                json.put("activityId", adList.get(position - elistLocal.size()).getId().toString());
+                            if (adId != null) {
+                                json.put("activityId", adId.toString());
                                 Util.postTracking(json, mContext, mManager, Constants.APP_ADCARD);
                             }
                             //mManager.postCreateEvent(adList.get(position-elistLocal.size()).getId(), user.getUserId(), adList.get(position-elistLocal.size()).getMinPlayer(), adList.get(position-elistLocal.size()).getMaxPlayer(), null, mContext);
                         }
+                    }
+                });
+                break;
+            case 4:
+                MyViewHolder3 reviewHolder = (MyViewHolder3) viewHolder;
+                String cardBackground = reviewCardData.getmImageUrl();
+                String btnText = reviewCardData.getmButtonText();
+                String cardText = reviewCardData.getmCardText();
+                if(mContext!=null) {
+                    Picasso.with(mContext)
+                            .load(cardBackground)
+                            .placeholder(null)
+                            .fit().centerCrop()
+                            .into(reviewHolder.reviewCardImg);
+                }
+                if(btnText!=null) {
+                    reviewHolder.reviewButtonText.setText(btnText);
+                }
+                if(cardText!=null) {
+                    reviewHolder.reviewText.setText(cardText);
+                }
+
+                reviewHolder.reviewCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //update backend
+                        RequestParams params = new RequestParams();
+                        params.put("reviewPromptCardStatus", "REFUSED");
+                        mManager.postReviewUpdate(params);
+
+                        Intent regIntent = new Intent(mContext,
+                                CrashReport.class);
+                        //regIntent.putExtra("userdata", user);
+                        mContext.startActivity(regIntent);
+
+                        reviewCardData = null;
+                    }
+                });
+
+                reviewHolder.reviewBtnLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //update backend
+                        RequestParams params = new RequestParams();
+                        params.put("reviewPromptCardStatus", "COMPLETED");
+                        mManager.postReviewUpdate(params);
+
+                        Util.openPlayStore(mManager.getCurrentActivity());
+
+                        reviewCardData = null;
                     }
                 });
                 break;
@@ -608,6 +730,9 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public int getItemCount() {
         if(elistLocal!=null && adList!=null) {
+            if(reviewCardData!=null && reviewCardData.getmId()!=null) {
+                return this.elistLocal.size()+this.adList.size()+1;
+            }
             return this.elistLocal.size()+this.adList.size();
         }
         return 0;

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.CurrentEventDataHolder;
 import co.crossroadsapp.destiny.data.EventData;
+import co.crossroadsapp.destiny.data.ReviewCardData;
 import co.crossroadsapp.destiny.data.UserData;
 import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
@@ -38,6 +39,7 @@ public class BlankFragment extends Fragment {
     private ArrayList<EventData> currentEventList;
     private ArrayList<EventData> fragmentCurrentEventList;
     private ArrayList<EventData> fragmentupcomingEventList;
+    private ReviewCardData reviewCardData;
     EventCardAdapter adapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ArrayList<ActivityData> currentAdList;
@@ -46,16 +48,20 @@ public class BlankFragment extends Fragment {
     }
 
     @SuppressLint("ValidFragment")
-    public BlankFragment(ListActivityFragment act, ArrayList<EventData> eData, ArrayList<ActivityData> adData) {
+    public BlankFragment(ListActivityFragment act, ArrayList<EventData> eData, ArrayList<ActivityData> adData, ReviewCardData reviewData) {
         // Required empty public constructor
         mContext = act;
         currentEventList = new ArrayList<EventData>();
         currentAdList = new ArrayList<ActivityData>();
+        reviewCardData = new ReviewCardData();
         currentEventList = eData;
         if(adData!=null) {
             currentAdList = adData;
         } else {
             //adData.clear();
+        }
+        if (reviewData!=null && reviewData.getmName()!=null) {
+            reviewCardData = reviewData;
         }
     }
 
@@ -84,7 +90,7 @@ public class BlankFragment extends Fragment {
         RecyclerView rv = (RecyclerView) rootView.findViewById(R.id.event_view);
         rv.setHasFixedSize(true);
 
-        adapter = new EventCardAdapter(currentEventList, currentAdList, mContext, mManager, Constants.EVENT_FEED);
+        adapter = new EventCardAdapter(currentEventList, currentAdList, reviewCardData, mContext, mManager, Constants.EVENT_FEED);
         rv.setAdapter(adapter);
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
@@ -113,16 +119,17 @@ public class BlankFragment extends Fragment {
         return false;
     }
 
-    public void updateCurrListAdapter(ArrayList<EventData> eData, ArrayList<ActivityData> adActivityData){
+    public void updateCurrListAdapter(ArrayList<EventData> eData, ArrayList<ActivityData> adActivityData, ReviewCardData reviewCardData){
         currentEventList = eData;
         currentAdList = new ArrayList<ActivityData>();
+
         if (adActivityData!=null) {
             currentAdList = adActivityData;
         }
         if (adapter!=null){
             adapter.elistLocal.clear();
             adapter.adList.clear();
-            adapter.addItem(currentEventList, currentAdList);
+            adapter.addItem(currentEventList, currentAdList, reviewCardData);
             adapter.notifyDataSetChanged();
         }
     }
