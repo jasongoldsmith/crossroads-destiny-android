@@ -16,6 +16,7 @@ import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.ConsoleData;
 import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.PushNotification;
+import co.crossroadsapp.destiny.data.ReviewCardData;
 import co.crossroadsapp.destiny.network.ActivityListNetwork;
 import co.crossroadsapp.destiny.network.ChangeCurrentConsoleNetwork;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
@@ -263,7 +264,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLogoutDialog();
+                //showLogoutDialog();
+                showAlertDialog(Constants.LOGOUT, getResources().getString(R.string.logout_popup_msg), getResources().getString(R.string.ok_btn), getResources().getString(R.string.cancel_btn));
             }
         });
 
@@ -345,7 +347,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         verify_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLogoutDialog();
+                //showLogoutDialog();
+                showAlertDialog(Constants.LOGOUT, getResources().getString(R.string.logout_popup_msg), getResources().getString(R.string.ok_btn), getResources().getString(R.string.cancel_btn));
             }
         });
 
@@ -809,19 +812,54 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         }
     }
 
-    private void showLogoutDialog() {
+//    private void showLogoutDialog() {
+//        // alert dailogue
+//        new AlertDialog.Builder(ListActivityFragment.this)
+//                .setMessage(getResources().getString(R.string.logout_popup_msg))
+//                .setPositiveButton(getResources().getString(R.string.ok_btn), new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        closeProfileDrawer(Gravity.LEFT);
+//                        showProgress();
+//                        // continue with delete
+//                        logout();
+//                    }
+//                })
+//                .setNegativeButton(getResources().getString(R.string.cancel_btn), new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        // do nothing
+//                    }
+//                })
+//                .show();
+//    }
+
+    protected void showAlertDialog(final int type, String popupText, String okText, String cancelText) {
         // alert dailogue
         new AlertDialog.Builder(ListActivityFragment.this)
-                .setMessage(getResources().getString(R.string.logout_popup_msg))
-                .setPositiveButton(getResources().getString(R.string.ok_btn), new DialogInterface.OnClickListener() {
+                .setMessage(popupText)
+                .setPositiveButton(okText, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        closeProfileDrawer(Gravity.LEFT);
-                        showProgress();
+                        if(type==Constants.CANCEL_REVIEW){
+                            Intent regIntent = new Intent(ListActivityFragment.this,
+                                    CrashReport.class);
+                            //regIntent.putExtra("userdata", user);
+                            ListActivityFragment.this.startActivity(regIntent);
+                        } else if(type==Constants.OK_REVIEW) {
+                            //update backend
+                            RequestParams params = new RequestParams();
+                            params.put("reviewPromptCardStatus", "COMPLETED");
+                            mManager.postReviewUpdate(params);
+                            mManager.setReviewCard(new ReviewCardData());
+                            Util.openPlayStore(mManager.getCurrentActivity());
+                        } else if(type==Constants.LOGOUT) {
+                            showProgress();
+                            closeProfileDrawer(Gravity.LEFT);
+                            // continue with delete
+                            logout();
+                        }
                         // continue with delete
-                        logout();
                     }
                 })
-                .setNegativeButton(getResources().getString(R.string.cancel_btn), new DialogInterface.OnClickListener() {
+                .setNegativeButton(cancelText, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // do nothing
                     }

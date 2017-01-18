@@ -182,4 +182,8 @@ public class Constants {
     public static int GENERAL_KICK =4;
 
     public static String CONFIG_TOKEN = "780bc576-9d37-40f6-a922-befe877b2c56";
+
+    public static int CANCEL_REVIEW=1;
+    public static int OK_REVIEW=2;
+    public static int LOGOUT=3;
 }

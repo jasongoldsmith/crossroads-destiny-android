@@ -66,7 +66,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             adList = currentAdList;
         }
         if(reviewCard!=null && reviewCard.getmCardText()!=null) {
-            reviewCardData = reviewCard;
+            reviewCardData = mManager.getReviewCard();
         }
         checkFullEventPreview();
     }
@@ -566,31 +566,29 @@ public class EventCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 reviewHolder.reviewCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        ((ListActivityFragment) mContext).showAlertDialog(Constants.CANCEL_REVIEW, mContext.getString(R.string.cancel_review_text), "Definitely", "Cancel");
                         //update backend
                         RequestParams params = new RequestParams();
                         params.put("reviewPromptCardStatus", "REFUSED");
                         mManager.postReviewUpdate(params);
 
-                        Intent regIntent = new Intent(mContext,
-                                CrashReport.class);
-                        //regIntent.putExtra("userdata", user);
-                        mContext.startActivity(regIntent);
-
                         reviewCardData = null;
+                        mManager.setReviewCard(new ReviewCardData());
                     }
                 });
 
                 reviewHolder.reviewBtnLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //update backend
-                        RequestParams params = new RequestParams();
-                        params.put("reviewPromptCardStatus", "COMPLETED");
-                        mManager.postReviewUpdate(params);
+                        ((ListActivityFragment) mContext).showAlertDialog(Constants.OK_REVIEW, mContext.getString(R.string.ok_review_text), "Rate Us", "Cancel");
+//                        //update backend
+//                        RequestParams params = new RequestParams();
+//                        params.put("reviewPromptCardStatus", "COMPLETED");
+//                        mManager.postReviewUpdate(params);
+//
+//                        Util.openPlayStore(mManager.getCurrentActivity());
 
-                        Util.openPlayStore(mManager.getCurrentActivity());
-
-                        reviewCardData = null;
+                        //reviewCardData = null;
                     }
                 });
                 break;
