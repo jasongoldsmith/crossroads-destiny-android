@@ -153,6 +153,6 @@
     <string name="legacy_error">In line with Rise of Iron, we now only support next-gen consoles. When you’ve upgraded your console, please come back and join us!</string>
     <string name="searching">searching...</string>
     <string name="searching_friend">Invite a Friend</string>
-    <string name="cancel_review_text">\"Do you have time to explain?\" -The Exo Stranger</string>
-    <string name="ok_review_text">\"Tick tock. Get rolling.\" -Lord Shaxx</string>
+    <string name="cancel_review_text">\"Do you have time to explain?\" \n-The Exo Stranger</string>
+    <string name="ok_review_text">\"Tick tock. Get rolling.\" \n-Lord Shaxx</string>
 </resources>
