@@ -491,7 +491,7 @@ public class EventDetailsFragments extends Fragment {
     }
 
     private boolean decideLeaderTag(int position, String playerId) {
-        if(currentEvent!=null && currentEvent.getEventStatus()!=null && currentEvent.getEventStatus().equalsIgnoreCase(Constants.STATUS_FULL)) {
+        if(currentEvent!=null && currentEvent.getEventStatus()!=null) {
             if(playerId!=null) {
                 if(currentEvent.getCreatorData()!=null && currentEvent.getCreatorData().getPsnId()!=null && currentEvent.getCreatorData().getPsnId().equalsIgnoreCase(playerId)) {
                     return true;
@@ -542,9 +542,9 @@ public class EventDetailsFragments extends Fragment {
                     }
                     boolean reported = commentsLocal.get(position).getReported();
                     holder.leader_comment_tag.setVisibility(View.GONE);
-                    if(position==0) {
-                        holder.leader_comment_tag.setVisibility(View.VISIBLE);
-                    }
+//                    if(position==0) {
+//                        holder.leader_comment_tag.setVisibility(View.VISIBLE);
+//                    }
                     if(reported) {
                         holder.playerNameComment.setVisibility(View.GONE);
                         holder.playerProfileComment.setImageDrawable(getResources().getDrawable(R.drawable.img_profile_blank));
@@ -585,9 +585,9 @@ public class EventDetailsFragments extends Fragment {
                             holder.playerNameComment.setText(name);
                             holder.playerNameComment.setTextColor(getResources().getColor(R.color.activity_light_color));
 
-//                            if(decideLeaderTag(position, commentsLocal.get(position).getPsnId())){
-//                                holder.leader_comment_tag.setVisibility(View.VISIBLE);
-//                            }
+                            if(decideLeaderTag(position, commentsLocal.get(position).getPsnId())){
+                                holder.leader_comment_tag.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
 
