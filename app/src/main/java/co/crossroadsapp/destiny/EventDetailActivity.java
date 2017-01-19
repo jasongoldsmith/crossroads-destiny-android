@@ -1209,7 +1209,7 @@ public class EventDetailActivity extends BaseActivity implements Observer, Token
             joinBtn.setVisibility(View.VISIBLE);
             msgallBtn.setVisibility(View.GONE);
         } else {
-            bottomBtnLayout.setVisibility(View.VISIBLE);
+            bottomBtnLayout.setVisibility(View.GONE);
             leaveBtn.setVisibility(View.GONE);
             invitedLayout.setVisibility(View.GONE);
             joinBtn.setVisibility(View.GONE);

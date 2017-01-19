@@ -29,13 +29,7 @@ import android.widget.Toast;
 
 import co.crossroadsapp.destiny.AddFinalActivity;
 import co.crossroadsapp.destiny.ControlManager;
-//import co.crossroadsapp.destiny.CreateNewEvent;
-import co.crossroadsapp.destiny.EventDetailActivity;
-import co.crossroadsapp.destiny.ListActivityFragment;
-import co.crossroadsapp.destiny.MainActivity;
 import co.crossroadsapp.destiny.R;
-import co.crossroadsapp.destiny.RegisterActivity;
-import co.crossroadsapp.destiny.SplashActivity;
 import co.crossroadsapp.destiny.data.UserData;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
@@ -46,8 +40,6 @@ import com.squareup.picasso.Picasso;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -68,7 +60,7 @@ import java.util.regex.Pattern;
 public class Util {
     //To switch between production and development server links
     //where 1 points to development, 2 points to production and 3 points to Dev staging
-    private static final int network_connection = 1;
+    private static final int network_connection = 2;
 
     private static final String TAG = Util.class.getName();
     public static final String trimbleDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
