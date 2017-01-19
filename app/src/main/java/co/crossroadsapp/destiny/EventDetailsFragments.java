@@ -608,6 +608,9 @@ public class EventDetailsFragments extends Fragment {
                             Util.picassoLoadImageWithoutMeasurement(getActivity(), holder.playerProfileComment, null, R.drawable.img_profile_blank);
                             holder.playerCommentText.setTextColor(getResources().getColor(R.color.player_left_comment));
                         }
+                        if(!commentsLocal.get(position).getActive()) {
+                            holder.playerNameComment.setTextColor(getResources().getColor(R.color.player_left_comment));
+                        }
                     }
 
                     if (commentsLocal.get(position).getCreated() != null) {
