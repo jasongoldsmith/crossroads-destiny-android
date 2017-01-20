@@ -453,6 +453,19 @@ public class EventDetailsFragments extends Fragment {
         return false;
     }
 
+    private boolean checkPlayerisActive(String id) {
+            if(id!=null) {
+                if(currentEvent!=null && currentEvent.getPlayerData()!=null) {
+                    for(int i=0; i<currentEvent.getPlayerData().size();i++) {
+                        if (id.equalsIgnoreCase(currentEvent.getPlayerData().get(i).getPlayerId())) {
+                            return currentEvent.getPlayerData().get(i).getActive();
+                        }
+                    }
+                }
+            }
+            return false;
+    }
+
     private boolean checkUserIsCreator() {
         if(this.currentEvent.getPlayerData()!=null) {
             if (user.getUserId().equalsIgnoreCase(currentEvent.getCreatorData().getPlayerId())) {
@@ -608,7 +621,7 @@ public class EventDetailsFragments extends Fragment {
                             Util.picassoLoadImageWithoutMeasurement(getActivity(), holder.playerProfileComment, null, R.drawable.img_profile_blank);
                             holder.playerCommentText.setTextColor(getResources().getColor(R.color.player_left_comment));
                         }
-                        if(!commentsLocal.get(position).getActive()) {
+                        if(currentEvent.getLaunchEventStatus()!=null && currentEvent.getLaunchEventStatus().equalsIgnoreCase(Constants.LAUNCH_STATUS_NOW) && (!checkPlayerisActive(commentsLocal.get(position).getPlayerId()))) {
                             holder.playerNameComment.setTextColor(getResources().getColor(R.color.player_left_comment));
                         }
                     }
