@@ -14,6 +14,7 @@ import java.util.Observable;
 import co.crossroadsapp.destiny.ControlManager;
 import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.EventList;
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import cz.msebera.android.httpclient.Header;
 
@@ -24,7 +25,7 @@ public class EventByIdNetwork extends Observable {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "api/v1/a/event/listById";
+    private String url = Constants.EVENT_BY_ID_URL;
 
     private ControlManager mManager;
 

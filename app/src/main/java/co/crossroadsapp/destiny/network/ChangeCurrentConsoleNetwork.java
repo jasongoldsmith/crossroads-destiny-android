@@ -12,6 +12,7 @@ import java.util.Observable;
 
 import co.crossroadsapp.destiny.ControlManager;
 import co.crossroadsapp.destiny.data.UserData;
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import cz.msebera.android.httpclient.Header;
 
@@ -22,7 +23,7 @@ public class ChangeCurrentConsoleNetwork extends Observable {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "api/v1/a/user/changePrimaryConsole";
+    private String url = Constants.CHANGE_CONSOLE_URL;
     private ControlManager mManager;
 
     public ChangeCurrentConsoleNetwork(Context c) {

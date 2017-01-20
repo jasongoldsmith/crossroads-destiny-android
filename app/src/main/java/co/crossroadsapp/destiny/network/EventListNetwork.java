@@ -6,6 +6,7 @@ import co.crossroadsapp.destiny.ControlManager;
 import co.crossroadsapp.destiny.MainActivity;
 import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.ActivityList;
+import co.crossroadsapp.destiny.data.ReviewCardData;
 import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import co.crossroadsapp.destiny.data.EventData;
@@ -28,8 +29,8 @@ public class EventListNetwork extends Observable{
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "api/v1/a/feed/get";
-    private String publicFeedUrl = "api/v1/feed/public";
+    private String url = Constants.EVENT_FEED_URL;
+    private String publicFeedUrl = Constants.EVENT_FEED_URL_PUBLIC;
 
     private EventList eventList;
     private ActivityList actList;
@@ -87,6 +88,8 @@ public class EventListNetwork extends Observable{
     }
 
     private void parseFeed(JSONObject response) {
+        ReviewCardData review = new ReviewCardData();
+
         //according to new complete feed
         if (response.has("currentEvents")) {
             JSONArray currArray = response.optJSONArray("currentEvents");
@@ -118,6 +121,13 @@ public class EventListNetwork extends Observable{
                 }
             }
         }
+        if (response.has("reviewPromptCard")){
+            JSONObject reviewObj = response.optJSONObject("reviewPromptCard");
+            if (reviewObj != null) {
+                review.toJson(reviewObj);
+            }
+        }
+
         if (response.has("totalUsers") && !response.isNull("totalUsers")) {
             if(mContext instanceof MainActivity) {
                 try {
@@ -130,6 +140,7 @@ public class EventListNetwork extends Observable{
 
         mManager.setEventList(eventList);
         mManager.setadList(actList);
+        mManager.setReviewCard(review);
 
         setChanged();
         notifyObservers(this);

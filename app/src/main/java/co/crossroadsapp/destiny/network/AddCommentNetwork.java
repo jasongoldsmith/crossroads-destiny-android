@@ -13,6 +13,7 @@ import java.util.Observable;
 
 import co.crossroadsapp.destiny.ControlManager;
 import co.crossroadsapp.destiny.data.EventData;
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import cz.msebera.android.httpclient.Header;
 
@@ -23,7 +24,7 @@ public class AddCommentNetwork extends Observable {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "api/v1/a/event/addComment";
+    private String url = Constants.ADD_COMMENT_URL;
 
     private ControlManager mManager;
 

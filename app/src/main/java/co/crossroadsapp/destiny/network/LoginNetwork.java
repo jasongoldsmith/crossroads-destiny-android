@@ -25,9 +25,9 @@ public class LoginNetwork extends Observable {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "api/v1/auth/validateUserLogin";//"api/v1/auth/login";
-    private String url_reg = "api/v1/auth/register";
-    private String urlUser = "api/v1/a/user/listById";
+    private String url = Constants.VALIDATE_USERLOGIN_URL;
+    private String url_reg = Constants.REGISTRATION_URL;
+    private String urlUser = Constants.USER_BY_ID_URL;
     private UserData user;
     private ControlManager mManager;
 

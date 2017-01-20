@@ -161,7 +161,7 @@ public class UpdateConsoleActivity extends BaseActivity implements AdapterView.O
                 RequestParams rp_console = new RequestParams();
                 rp_console.add("consoleId", conId);
                 rp_console.add("consoleType", console);
-                mManager.addOtherConsole(UpdateConsoleActivity.this, rp_console);
+                mManager.addOtherConsole(rp_console);
             }
         }
     }

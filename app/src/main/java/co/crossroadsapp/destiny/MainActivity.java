@@ -125,7 +125,7 @@ public class MainActivity extends BaseActivity implements Observer {
 
         //check android version for dev builds
         mManager.getAndroidVersion(this);
-        mManager.getConfig(MainActivity.this);
+        mManager.getConfig();
         TravellerLog.w(this, "MainActivity.onCreate ends...");
     }
 
@@ -159,7 +159,7 @@ public class MainActivity extends BaseActivity implements Observer {
                     if(u!=null && !u.isEmpty()) {
                         rp.put("userName", u);
                     }
-                    mManager.postLogout(MainActivity.this, rp);
+                    mManager.postLogout(rp);
                     Util.clearDefaults(getApplicationContext());
                 }
             } else {
@@ -226,7 +226,7 @@ public class MainActivity extends BaseActivity implements Observer {
             if(u!=null && !u.isEmpty()) {
                 RequestParams rp = new RequestParams();
                 rp.put("id", u);
-                mManager.getUserFromNetwork(MainActivity.this, rp);
+                mManager.getUserFromNetwork(rp);
             }
 
             Thread t = new Thread(){
@@ -299,7 +299,7 @@ public class MainActivity extends BaseActivity implements Observer {
                 // continue with delete
                 RequestParams rp = new RequestParams();
                 rp.put("userName", u);
-                mManager.postLogout(MainActivity.this, rp);
+                mManager.postLogout(rp);
             } else {
                 Util.clearDefaults(getApplicationContext());
             }
@@ -311,7 +311,7 @@ public class MainActivity extends BaseActivity implements Observer {
         TravellerLog.w(this, "Show main activity layout as user data not available");
         setContentView(R.layout.activity_main);
 
-        mManager.getPublicEventList(MainActivity.this);
+        mManager.getPublicEventList();
 
         privacyTerms = (TextView) findViewById(R.id.privacy_terms);
 
@@ -341,7 +341,7 @@ public class MainActivity extends BaseActivity implements Observer {
         if(mManager.getEventListCurrent()!=null) {
             horizontalList = mManager.getEventListCurrent();
         }
-        horizontalAdapter=new EventCardAdapter(horizontalList, null, MainActivity.this, mManager, Constants.PUBLIC_EVENT_FEED);
+        horizontalAdapter=new EventCardAdapter(horizontalList, null, null, MainActivity.this, mManager, Constants.PUBLIC_EVENT_FEED);
         horizontalLayoutManagaer
                 = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
         horizontal_recycler_view.setLayoutManager(horizontalLayoutManagaer);
@@ -634,6 +634,9 @@ public class MainActivity extends BaseActivity implements Observer {
 
     @Override
     public void onStop() {
+        if(mManager!=null && mManager.getCurrentActivity()!=null && mManager.getCurrentActivity() instanceof MainActivity) {
+            mManager.setCurrentActivity(null);
+        }
         stopSpinner();
         TravellerLog.w(this, "Unregistering ReceivefromBackpressService ");
         unregisterReceiver(ReceivefromBackpressService);
@@ -689,12 +692,12 @@ public class MainActivity extends BaseActivity implements Observer {
                         Util.setDefaults("user", ud.getUserId(), getApplicationContext());
 //                        Util.setDefaults("password", password, getApplicationContext());
                         Util.setDefaults("consoleType", console, getApplicationContext());
-                    ud.setPassword(p);
-                    mManager.setUserdata(ud);
-                    Intent regIntent;
+                        ud.setPassword(p);
+                        mManager.setUserdata(ud);
+                        Intent regIntent;
 
-                    //decide for activity
-                    //regIntent = mManager.decideToOpenActivity(contentIntent);
+                        //decide for activity
+                        //regIntent = mManager.decideToOpenActivity(contentIntent);
 
                         regIntent = new Intent(getApplicationContext(),
                                 ListActivityFragment.class);
@@ -706,10 +709,9 @@ public class MainActivity extends BaseActivity implements Observer {
                         if(invitationRp!=null) {
                             invitationRp.clearRp();
                         }
-
-                    startActivity(regIntent);
-                    finish();
-                } else {
+                        startActivity(regIntent);
+                        finish();
+                    } else {
                         setContentView(R.layout.activity_main);
                     }
                 } else {
@@ -726,7 +728,7 @@ public class MainActivity extends BaseActivity implements Observer {
         } else if(observable instanceof EventListNetwork) {
             if(data!=null) {
                 horizontalAdapter.elistLocal.clear();
-                horizontalAdapter.addItem(mManager.getEventListCurrent(), null);
+                horizontalAdapter.addItem(mManager.getEventListCurrent(), null, null);
                 horizontalAdapter.notifyDataSetChanged();
                 startSpinner();
             }

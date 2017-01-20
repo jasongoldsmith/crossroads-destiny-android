@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import java.util.Observable;
 
 import co.crossroadsapp.destiny.ControlManager;
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import cz.msebera.android.httpclient.Header;
 
@@ -22,7 +23,7 @@ public class InvitePlayerNetwork extends Observable {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "api/v1/a/event/invite";
+    private String url = Constants.INVITE_PLAYER_URL;
 
     private ControlManager mManager;
 

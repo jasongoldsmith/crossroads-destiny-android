@@ -16,6 +16,7 @@ import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.ConsoleData;
 import co.crossroadsapp.destiny.data.GroupData;
 import co.crossroadsapp.destiny.data.PushNotification;
+import co.crossroadsapp.destiny.data.ReviewCardData;
 import co.crossroadsapp.destiny.network.ActivityListNetwork;
 import co.crossroadsapp.destiny.network.ChangeCurrentConsoleNetwork;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
@@ -193,10 +194,10 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
         if(mManager.getCurrentGroupList()!=null) {
             if(mManager.getCurrentGroupList().isEmpty()) {
-                mManager.getGroupList(this);
+                mManager.getGroupList();
             }
         }else {
-            mManager.getGroupList(this);
+            mManager.getGroupList();
         }
 
 
@@ -246,7 +247,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                         showUnverifiedUserMsg();
                     } else {
                         findViewById(R.id.loadingImg).setVisibility(View.VISIBLE);
-                        mManager.postHelmet(ListActivityFragment.this);
+                        mManager.postHelmet();
                     }
                 }
             }
@@ -263,7 +264,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLogoutDialog();
+                //showLogoutDialog();
+                showAlertDialog(Constants.LOGOUT, getResources().getString(R.string.logout_popup_msg), getResources().getString(R.string.ok_btn), getResources().getString(R.string.cancel_btn));
             }
         });
 
@@ -345,7 +347,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         verify_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLogoutDialog();
+                //showLogoutDialog();
+                showAlertDialog(Constants.LOGOUT, getResources().getString(R.string.logout_popup_msg), getResources().getString(R.string.ok_btn), getResources().getString(R.string.cancel_btn));
             }
         });
 
@@ -354,7 +357,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             public void onClick(View v) {
                 hideProgress();
                 showProgress();
-                mManager.resendBungieMsg(ListActivityFragment.this);
+                mManager.resendBungieMsg();
             }
         });
 
@@ -577,7 +580,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                             .setCancelable(false)
                             .setPositiveButton(R.string.ok_btn, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    mManager.legalPrivacyDone(ListActivityFragment.this);
+                                    mManager.legalPrivacyDone();
                                 }
                             })
                             .setView(message);
@@ -712,20 +715,20 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             card.setVisibility(View.VISIBLE);
         }
         if(consoleItems.contains("Add Console")) {
-        if (position == consoleItems.size() - 1) {
-            addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_add_consolex));
-            card.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            if (position == consoleItems.size() - 1) {
+                addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_add_consolex));
+                card.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                    //start new activity for event
-                    Intent regIntent = new Intent(ListActivityFragment.this,
-                            UpdateConsoleActivity.class);
-                    //regIntent.putExtra("userdata", user);
-                    startActivity(regIntent);
-                }
-            });
-        }
+                        //start new activity for event
+                        Intent regIntent = new Intent(ListActivityFragment.this,
+                                UpdateConsoleActivity.class);
+                        //regIntent.putExtra("userdata", user);
+                        startActivity(regIntent);
+                    }
+                });
+            }
         }
         if(consoleItems.get(position).equalsIgnoreCase("PlayStation 4") || consoleItems.get(position).equalsIgnoreCase("PlayStation 3")){
             addSymbol.setImageDrawable(getResources().getDrawable(R.drawable.icon_psn_consolex));
@@ -747,7 +750,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             if(mManager.getDeepLinkEvent()!=null) {
                 RequestParams param = new RequestParams();
                 param.add("id", mManager.getDeepLinkEvent());
-                mManager.postEventById(ListActivityFragment.this, param);
+                mManager.postEventById(param);
             }
         }
     }
@@ -809,19 +812,54 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         }
     }
 
-    private void showLogoutDialog() {
+//    private void showLogoutDialog() {
+//        // alert dailogue
+//        new AlertDialog.Builder(ListActivityFragment.this)
+//                .setMessage(getResources().getString(R.string.logout_popup_msg))
+//                .setPositiveButton(getResources().getString(R.string.ok_btn), new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        closeProfileDrawer(Gravity.LEFT);
+//                        showProgress();
+//                        // continue with delete
+//                        logout();
+//                    }
+//                })
+//                .setNegativeButton(getResources().getString(R.string.cancel_btn), new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        // do nothing
+//                    }
+//                })
+//                .show();
+//    }
+
+    protected void showAlertDialog(final int type, String popupText, String okText, String cancelText) {
         // alert dailogue
         new AlertDialog.Builder(ListActivityFragment.this)
-                .setMessage(getResources().getString(R.string.logout_popup_msg))
-                .setPositiveButton(getResources().getString(R.string.ok_btn), new DialogInterface.OnClickListener() {
+                .setMessage(popupText)
+                .setPositiveButton(okText, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        closeProfileDrawer(Gravity.LEFT);
-                        showProgress();
+                        if(type==Constants.CANCEL_REVIEW){
+                            Intent regIntent = new Intent(ListActivityFragment.this,
+                                    CrashReport.class);
+                            //regIntent.putExtra("userdata", user);
+                            ListActivityFragment.this.startActivity(regIntent);
+                        } else if(type==Constants.OK_REVIEW) {
+                            //update backend
+                            RequestParams params = new RequestParams();
+                            params.put("reviewPromptCardStatus", "COMPLETED");
+                            mManager.postReviewUpdate(params);
+                            mManager.setReviewCard(new ReviewCardData());
+                            Util.openPlayStore(mManager.getCurrentActivity());
+                        } else if(type==Constants.LOGOUT) {
+                            showProgress();
+                            closeProfileDrawer(Gravity.LEFT);
+                            // continue with delete
+                            logout();
+                        }
                         // continue with delete
-                        logout();
                     }
                 })
-                .setNegativeButton(getResources().getString(R.string.cancel_btn), new DialogInterface.OnClickListener() {
+                .setNegativeButton(cancelText, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // do nothing
                     }
@@ -834,16 +872,16 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         if (user!=null && user.getUser() != null) {
             rp.put("userName", user.getPsnId());
         }
-        mManager.postLogout(ListActivityFragment.this, rp);
+        mManager.postLogout(rp);
     }
 
     private void showLegalWebView(final String service) {
-                if(legalView!=null) {
-                    closeProfileDrawer(Gravity.LEFT);
-                    legalView.setVisibility(View.VISIBLE);
-                    legalView.setWebViewClient(new WebViewClient());
-                    legalView.loadUrl(service);
-                }
+        if(legalView!=null) {
+            closeProfileDrawer(Gravity.LEFT);
+            legalView.setVisibility(View.VISIBLE);
+            legalView.setWebViewClient(new WebViewClient());
+            legalView.loadUrl(service);
+        }
     }
 
     private void checkUserPSNVerification() {
@@ -886,7 +924,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         if((id!=null) && (!id.equalsIgnoreCase("null"))) {
             RequestParams param = new RequestParams();
             param.add("id", id);
-            mManager.postEventById(this, param);
+            mManager.postEventById(param);
         }
     }
 
@@ -912,7 +950,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                         params.add("clanId", grp.getGroupId());
                         params.add("clanName", grp.getGroupName());
                         params.add("clanImage", grp.getGroupImageUrl());
-                        mManager.postSetGroup(ListActivityFragment.this, params);
+                        mManager.postSetGroup(params);
                     }
                 }
             }
@@ -1051,7 +1089,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         listener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                mManager.getEventList(ListActivityFragment.this);
+                mManager.getEventList();
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
@@ -1090,7 +1128,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
                         } else {
                             RequestParams param = new RequestParams();
                             param.add("id", id);
-                            mManager.postEventById(this, param);
+                            mManager.postEventById(param);
                         }
                     }
                 }
@@ -1140,7 +1178,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         if(gravity==Gravity.RIGHT || gravity==Gravity.LEFT ) {
             if (gravity == Gravity.RIGHT && gpAct != null) {
                 gpAct.setSelectedGroup();
-                mManager.getGroupList(this);
+                mManager.getGroupList();
             } else if(gravity == Gravity.LEFT && gpAct != null) {
                 updateConsoleListUserDrawer();
             }
@@ -1204,7 +1242,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             mManager.setCurrentActivity(this);
             updateConsoleListUserDrawer();
             getExistingList();
-            mManager.getEventList(this);
+            mManager.getEventList();
         }
         registerFirbase();
         registerUserFirebase();
@@ -1249,13 +1287,16 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
             String eId = intent.getStringExtra("eventId");
             RequestParams param = new RequestParams();
             param.add("id", eId);
-            mManager.postEventById(ListActivityFragment.this, param);
+            mManager.postEventById(param);
         }
     };
 
     @Override
     public void onStop() {
         super.onStop();
+        if (mManager.getCurrentActivity() instanceof ListActivityFragment) {
+            mManager.setCurrentActivity(null);
+        }
         unregisterFirebase();
         //unregisterUserFirebase();
         //unregisterReceiver(ReceivefromDeeplink);
@@ -1334,7 +1375,7 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         showProgressBar();
         RequestParams rp_console = new RequestParams();
         rp_console.add("consoleType", console);
-        mManager.changeToOtherConsole(ListActivityFragment.this, rp_console);
+        mManager.changeToOtherConsole(rp_console);
     }
 
     @Override
@@ -1363,9 +1404,9 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
             switch (position) {
                 case 0:
-                    return new BlankFragment(ListActivityFragment.this, fragmentCurrentEventList, adActivityData);
+                    return new BlankFragment(ListActivityFragment.this, fragmentCurrentEventList, adActivityData, mManager.getReviewCard());
                 case 1:
-                    return new BlankFragment(ListActivityFragment.this, fragmentupcomingEventList, null);
+                    return new BlankFragment(ListActivityFragment.this, fragmentupcomingEventList, null, null);
             }
 
             return null;
@@ -1398,12 +1439,12 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
     private void updateCurrentFrag() {
         Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 0);
         if(page!=null) {
-            ((BlankFragment) page).updateCurrListAdapter(fragmentCurrentEventList, adActivityData);
+            ((BlankFragment) page).updateCurrListAdapter(fragmentCurrentEventList, adActivityData, mManager.getReviewCard());
         }
 
         page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 1);
         if(page!=null){
-            ((BlankFragment)page).updateCurrListAdapter(fragmentupcomingEventList, null);
+            ((BlankFragment)page).updateCurrListAdapter(fragmentupcomingEventList, null, null);
         }
 
         //
@@ -1419,158 +1460,158 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 
     @Override
     public void update(Observable observable, Object data) {
-            if (observable instanceof EventListNetwork) {
-                if (data != null) {
- //                   if(data instanceof EventListNetwork) {
- //                       EventList eList = ((EventListNetwork) data).getEventList();
-                    eData = new ArrayList<EventData>();
+        if (observable instanceof EventListNetwork) {
+            if (data != null) {
+                //                   if(data instanceof EventListNetwork) {
+                //                       EventList eList = ((EventListNetwork) data).getEventList();
+                eData = new ArrayList<EventData>();
 
-                    adActivityData = new ArrayList<ActivityData>();
+                adActivityData = new ArrayList<ActivityData>();
 
-                        eData = mManager.getEventListCurrent();
- //                       ActivityList adList = ((EventListNetwork) data).getActList();
-                        adActivityData = mManager.getAdsActivityList();
- //                   }
+                eData = mManager.getEventListCurrent();
+                //                       ActivityList adList = ((EventListNetwork) data).getActList();
+                adActivityData = mManager.getAdsActivityList();
+                //                   }
 //                    eList = (EventList) data;
 //                    if (eData != null) {
 //                        eData.clear();
 //                    }
 //                    eData = eList.getEventList();
-                    createUpcomingCurrentList(eData);
-                    //Checking if current launch happened due to push notification click
-                    checkEventIntent();
-                    if (pushEventObject != null) {
-                        launchPushEventDetail();
-                        pushEventObject = null;
-                    }
-                    updateCurrentFrag();
+                createUpcomingCurrentList(eData);
+                //Checking if current launch happened due to push notification click
+                checkEventIntent();
+                if (pushEventObject != null) {
+                    launchPushEventDetail();
+                    pushEventObject = null;
                 }
-            } else if (observable instanceof EventRelationshipHandlerNetwork) {
-                if (data != null) {
-                    EventData ed = new EventData();
-                    ed = (EventData) data;
-                    if (this.eData != null) {
-                        for (int i = 0; i < this.eData.size(); i++) {
-                            if (ed.getEventId().equalsIgnoreCase(this.eData.get(i).getEventId())) {
-                                if (ed.getMaxPlayer() > 0) {
-                                    this.eData.remove(i);
-                                    this.eData.add(i, ed);
-                                } else {
-                                    this.eData.remove(i);
-                                }
-                                createUpcomingCurrentList(eData);
-                                updateCurrentFrag();
-                                break;
+                updateCurrentFrag();
+            }
+        } else if (observable instanceof EventRelationshipHandlerNetwork) {
+            if (data != null) {
+                EventData ed = new EventData();
+                ed = (EventData) data;
+                if (this.eData != null) {
+                    for (int i = 0; i < this.eData.size(); i++) {
+                        if (ed.getEventId().equalsIgnoreCase(this.eData.get(i).getEventId())) {
+                            if (ed.getMaxPlayer() > 0) {
+                                this.eData.remove(i);
+                                this.eData.add(i, ed);
+                            } else {
+                                this.eData.remove(i);
                             }
+                            createUpcomingCurrentList(eData);
+                            updateCurrentFrag();
+                            break;
                         }
                     }
-                    hideProgress();
-                    //to update all lists in the background
-                    //mManager.getEventList(ListActivityFragment.this);
                 }
-            } else if(observable instanceof GroupListNetwork) {
                 hideProgress();
-                if (data != null) {
-                    setGroupImageUrl();
-                    if (data instanceof UserData) {
-                        unregisterFirebase();
-                        registerFirbase();
-                        mManager.getEventList(this);
-                        hideProgress();
-                        closeProfileDrawer(Gravity.RIGHT);
-                        //mManager.getGroupList(this);
-                        //gpAct.setSelectedGroup();
-                    } else if(data instanceof GroupData) {
-                        if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
-                            gpAct.updateGrpData(data);
-                        }
-                        //setGroupImageUrl();
-                    } else {
-                        //setGroupImageUrl();
-                        if(gpAct!=null) {
-                            gpAct.update(data);
-                        }
+                //to update all lists in the background
+                //mManager.getEventList(ListActivityFragment.this);
+            }
+        } else if(observable instanceof GroupListNetwork) {
+            hideProgress();
+            if (data != null) {
+                setGroupImageUrl();
+                if (data instanceof UserData) {
+                    unregisterFirebase();
+                    registerFirbase();
+                    mManager.getEventList();
+                    hideProgress();
+                    closeProfileDrawer(Gravity.RIGHT);
+                    //mManager.getGroupList(this);
+                    //gpAct.setSelectedGroup();
+                } else if(data instanceof GroupData) {
+                    if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+                        gpAct.updateGrpData(data);
+                    }
+                    //setGroupImageUrl();
+                } else {
+                    //setGroupImageUrl();
+                    if(gpAct!=null) {
+                        gpAct.update(data);
+                    }
 //                        if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
 //                            gpAct.update(data);
 //                        }
-                    }
-                }
-            } else if(observable instanceof ResendBungieVerification) {
-                hideProgress();
-                Toast.makeText(this, "Verification Message Sent to Your Bungie.net Account",
-                        Toast.LENGTH_LONG).show();
-            } else if(observable instanceof EventByIdNetwork) {
-                hideProgressBar();
-                if(data!=null) {
-                    if(pushEventObject!=null) {
-                        pushEventObject = new EventData();
-                        pushEventObject = (EventData) data;
-                        startEventDetail(pushEventObject);
-                        pushEventObject = null;
-                    } else if(mManager.getDeepLinkEvent()!=null && (!mManager.getDeepLinkEvent().isEmpty())){
-                        updateExternalDeepLink((EventData) data);
-                    } else {
-                        startEventDetail((EventData) data);
-                    }
-                }
-            } else if(observable instanceof LogoutNetwork) {
-                afterLogout();
-            } else if(observable instanceof HelmetUpdateNetwork) {
-                findViewById(R.id.loadingImg).setVisibility(View.GONE);
-                if(data!=null) {
-                    updateUserProfileImage(data.toString());
-                    //mManager.getEventList(this);
-                }
-            } else if( observable instanceof ChangeCurrentConsoleNetwork) {
-                hideProgressBar();
-                if(data!=null) {
-                    user = mManager.getUserData();
-                }
-                changeUserProfileBorderColor();
-                mManager.getEventList(this);
-                mManager.getGroupList(this);
-            } else if(observable instanceof PrivacyLegalUpdateNetwork) {
-                if(dialogPrivacy!=null) {
-                    dialogPrivacy.dismiss();
-                }
-            } else if(observable instanceof ActivityListNetwork) {
-                hideProgressBar();
-                if(mManager.getCurrentActivityList()!=null && !mManager.getCurrentActivityList().isEmpty()) {
-                    //start new activity for add event creation
-                    Intent regIntent = new Intent(ListActivityFragment.this,
-                            AddFinalActivity.class);
-                    //regIntent.putExtra("userdata", user);
-                    regIntent.putExtra("adcard", true);
-                    regIntent.putExtra("adCardId", adCardPosition);
-                    startActivity(regIntent);
-                    finish();
                 }
             }
+        } else if(observable instanceof ResendBungieVerification) {
+            hideProgress();
+            Toast.makeText(this, "Verification Message Sent to Your Bungie.net Account",
+                    Toast.LENGTH_LONG).show();
+        } else if(observable instanceof EventByIdNetwork) {
+            hideProgressBar();
+            if(data!=null) {
+                if(pushEventObject!=null) {
+                    pushEventObject = new EventData();
+                    pushEventObject = (EventData) data;
+                    startEventDetail(pushEventObject);
+                    pushEventObject = null;
+                } else if(mManager.getDeepLinkEvent()!=null && (!mManager.getDeepLinkEvent().isEmpty())){
+                    updateExternalDeepLink((EventData) data);
+                } else {
+                    startEventDetail((EventData) data);
+                }
+            }
+        } else if(observable instanceof LogoutNetwork) {
+            afterLogout();
+        } else if(observable instanceof HelmetUpdateNetwork) {
+            findViewById(R.id.loadingImg).setVisibility(View.GONE);
+            if(data!=null) {
+                updateUserProfileImage(data.toString());
+                //mManager.getEventList(this);
+            }
+        } else if( observable instanceof ChangeCurrentConsoleNetwork) {
+            hideProgressBar();
+            if(data!=null) {
+                user = mManager.getUserData();
+            }
+            changeUserProfileBorderColor();
+            mManager.getEventList();
+            mManager.getGroupList();
+        } else if(observable instanceof PrivacyLegalUpdateNetwork) {
+            if(dialogPrivacy!=null) {
+                dialogPrivacy.dismiss();
+            }
+        } else if(observable instanceof ActivityListNetwork) {
+            hideProgressBar();
+            if(mManager.getCurrentActivityList()!=null && !mManager.getCurrentActivityList().isEmpty()) {
+                //start new activity for add event creation
+                Intent regIntent = new Intent(ListActivityFragment.this,
+                        AddFinalActivity.class);
+                //regIntent.putExtra("userdata", user);
+                regIntent.putExtra("adcard", true);
+                regIntent.putExtra("adCardId", adCardPosition);
+                startActivity(regIntent);
+                finish();
+            }
+        }
     }
 
     private void changeUserProfileBorderColor() {
         if(user!=null) {
             if (user.getConsoleType() != null) {
-            if(user.getConsoles().size()>1) {
-                switch (user.getConsoleType()) {
-                    case "PS3":
-                        userProfileDrawer.setBorderColor(getResources().getColor(R.color.user_profile_border_playstation));
-                        userProfile.setBorderColor(getResources().getColor(R.color.user_profile_border_playstation));
-                        break;
-                    case "PS4":
-                        userProfileDrawer.setBorderColor(getResources().getColor(R.color.user_profile_border_playstation));
-                        userProfile.setBorderColor(getResources().getColor(R.color.user_profile_border_playstation));
-                        break;
-                    case "XBOX360":
-                        userProfileDrawer.setBorderColor(getResources().getColor(R.color.user_profile_border_xbox));
-                        userProfile.setBorderColor(getResources().getColor(R.color.user_profile_border_xbox));
-                        break;
-                    case "XBOXONE":
-                        userProfileDrawer.setBorderColor(getResources().getColor(R.color.user_profile_border_xbox));
-                        userProfile.setBorderColor(getResources().getColor(R.color.user_profile_border_xbox));
-                        break;
+                if(user.getConsoles().size()>1) {
+                    switch (user.getConsoleType()) {
+                        case "PS3":
+                            userProfileDrawer.setBorderColor(getResources().getColor(R.color.user_profile_border_playstation));
+                            userProfile.setBorderColor(getResources().getColor(R.color.user_profile_border_playstation));
+                            break;
+                        case "PS4":
+                            userProfileDrawer.setBorderColor(getResources().getColor(R.color.user_profile_border_playstation));
+                            userProfile.setBorderColor(getResources().getColor(R.color.user_profile_border_playstation));
+                            break;
+                        case "XBOX360":
+                            userProfileDrawer.setBorderColor(getResources().getColor(R.color.user_profile_border_xbox));
+                            userProfile.setBorderColor(getResources().getColor(R.color.user_profile_border_xbox));
+                            break;
+                        case "XBOXONE":
+                            userProfileDrawer.setBorderColor(getResources().getColor(R.color.user_profile_border_xbox));
+                            userProfile.setBorderColor(getResources().getColor(R.color.user_profile_border_xbox));
+                            break;
+                    }
                 }
-            }
             }
         }
     }
@@ -1638,8 +1679,8 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
 //                getEventNotification(((EventDetailActivity)c).currEvent);
 //            }
 //        }
-            //cardStack = null;
-            //cardStack = (SwipeDeck) findViewById(R.id.swipe_deck);
+        //cardStack = null;
+        //cardStack = (SwipeDeck) findViewById(R.id.swipe_deck);
         if(notiList!=null && (!notiList.isEmpty())) {
             if(cardStackLayout!=null) {
                 cardStackLayout.setVisibility(View.VISIBLE);
@@ -1649,55 +1690,55 @@ public class ListActivityFragment extends BaseActivity implements Observer, Adap
         ArrayList<PushNotification> localNoti = new ArrayList<PushNotification>();
         if(n==0) {
             if(notiList!=null && (!notiList.isEmpty())){
-            localNoti.add(notiList.get(notiList.size()-1));
-            n++;}
+                localNoti.add(notiList.get(notiList.size()-1));
+                n++;}
         }else {
             if(notiList!=null && (!notiList.isEmpty())) {
                 localNoti = notiList;
             }
         }
-            if(adapter != null) {
-                adapter = null;
+        if(adapter != null) {
+            adapter = null;
+        }
+        if (notiList==null) {
+            notiList = new ArrayList<PushNotification>();
+        }
+        adapter = new SwipeStackAdapter(localNoti, this);
+        cardStack.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+        cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
+            @Override
+            public void cardSwipedLeft(int position) {
+                checkAndRemoveNoti(ListActivityFragment.this, position, adapter);
+                //notiList.remove(position);
+
             }
-            if (notiList==null) {
-                notiList = new ArrayList<PushNotification>();
+
+            @Override
+            public void cardSwipedRight(int position) {
+                checkAndRemoveNoti(ListActivityFragment.this, position, adapter);
             }
-            adapter = new SwipeStackAdapter(localNoti, this);
-            cardStack.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
 
-            cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
-                @Override
-                public void cardSwipedLeft(int position) {
-                    checkAndRemoveNoti(ListActivityFragment.this, position, adapter);
-                    //notiList.remove(position);
-
+            @Override
+            public void cardsDepleted() {
+                if (notiList.size()>0) {
+                    showNotifications();
+                } else {
+                    cardStackLayout.setVisibility(View.GONE);
                 }
+                //removeNotifyLayout();
+            }
 
-                @Override
-                public void cardSwipedRight(int position) {
-                    checkAndRemoveNoti(ListActivityFragment.this, position, adapter);
-                }
+            @Override
+            public void cardActionDown() {
 
-                @Override
-                public void cardsDepleted() {
-                    if (notiList.size()>0) {
-                        showNotifications();
-                    } else {
-                        cardStackLayout.setVisibility(View.GONE);
-                    }
-                    //removeNotifyLayout();
-                }
+            }
 
-                @Override
-                public void cardActionDown() {
+            @Override
+            public void cardActionUp() {
 
-                }
-
-                @Override
-                public void cardActionUp() {
-
-                }
-            });
+            }
+        });
     }
 }

@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import java.util.Observable;
 
 import co.crossroadsapp.destiny.ControlManager;
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import cz.msebera.android.httpclient.Header;
 
@@ -21,7 +22,7 @@ public class ResendBungieVerification extends Observable {
 
     private final ControlManager mManager;
     private NetworkEngine ntwrk;
-    private String url = "api/v1/a/account/group/resendBungieMessage";
+    private String url = Constants.RESEND_BUNGIE_MSG_URL;
     private Context mContext;
 
     public ResendBungieVerification(Context c) {

@@ -5,6 +5,7 @@ import android.content.Context;
 import co.crossroadsapp.destiny.ControlManager;
 import co.crossroadsapp.destiny.data.EventList;
 import co.crossroadsapp.destiny.data.UserData;
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -23,7 +24,7 @@ public class LogoutNetwork extends Observable {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "api/v1/auth/logout";
+    private String url = Constants.LOGOUT_URL;
     private UserData user;
     private ControlManager mManager;
 

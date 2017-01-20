@@ -2,6 +2,7 @@ package co.crossroadsapp.destiny.network;
 
 import android.content.Context;
 
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -19,7 +20,7 @@ public class postGcmNetwork {
 
     private Context mContext;
     private NetworkEngine ntwrk;
-    private String url = "api/v1/a/installation/android";
+    private String url = Constants.ANDROID_INSTALLATION_URL;
 
     public postGcmNetwork(Context context) {
         mContext = context;

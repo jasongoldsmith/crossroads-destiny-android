@@ -3,6 +3,7 @@ package co.crossroadsapp.destiny.network;
 import android.content.Context;
 
 import co.crossroadsapp.destiny.ControlManager;
+import co.crossroadsapp.destiny.utils.Constants;
 import co.crossroadsapp.destiny.utils.Util;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -22,7 +23,7 @@ public class EventSendMessageNetwork extends Observable {
     private Context mContext;
     private NetworkEngine ntwrk;
     private ControlManager mManager;
-    private String url = "api/v1/a/messages/send";
+    private String url = Constants.EVENT_SEND_MESSAGE_URL;
 
     public EventSendMessageNetwork(Context c) {
         this.mContext = c;

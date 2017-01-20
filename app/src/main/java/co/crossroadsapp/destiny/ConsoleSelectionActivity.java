@@ -81,7 +81,7 @@ public class ConsoleSelectionActivity extends BaseActivity implements AdapterVie
                     RequestParams rp_console = new RequestParams();
                     rp_console.add("consoleId", conId);
                     rp_console.add("consoleType", console);
-                    mManager.verifyBungieId(ConsoleSelectionActivity.this, rp_console);
+                    mManager.verifyBungieId(rp_console);
                 }
             }
         });

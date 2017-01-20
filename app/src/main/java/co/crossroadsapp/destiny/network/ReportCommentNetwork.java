@@ -24,7 +24,7 @@ public class ReportCommentNetwork extends Observable{
 
     private final ControlManager mManager;
     private NetworkEngine ntwrk;
-    private String url = "api/v1/a/event/reportComment";
+    private String url = Constants.REPORT_COMMENT_URL;
     private Context mContext;
 
     public ReportCommentNetwork(Context c) {
