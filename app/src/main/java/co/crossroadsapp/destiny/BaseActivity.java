@@ -63,11 +63,11 @@ public class BaseActivity extends FragmentActivity {
     @Override
     public void onStart() {
         super.onStart();
-        if(appBackground) {
+        if(mManager!=null && mManager.getAppBackground()) {
             //tracking resume
             Map<String, String> json = new HashMap<String, String>();
             Util.postTracking(json, null, mManager, Constants.APP_RESUME);
-            appBackground = false;
+            mManager.setAppBackground(false);
         }
     }
 
@@ -78,7 +78,7 @@ public class BaseActivity extends FragmentActivity {
         List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
         ComponentName componentInfo = taskInfo.get(0).topActivity;
         if(!componentInfo.getPackageName().equalsIgnoreCase(getApplicationContext().getPackageName())){
-            appBackground = true;
+            mManager.setAppBackground(true);
         }
     }
 

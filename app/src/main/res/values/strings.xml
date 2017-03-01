@@ -54,7 +54,7 @@
     <string name="group_other_text">YOUR BUNGIE.NET GROUPS: (SELECT ONE)</string>
     <string name="change_password">Change Password</string>
     <string name="nogroup_text">It looks like you are not a member of any groups. Feel free to freelance with us or head to <![CDATA[<a href="http://www.bungie.net">Bungie.net</a>]]> to join a group and fully experience the Crossroads for Destiny app.</string>
-    <string name="copyright_string">&#169; Catalyst Foundry 2016</string>
+    <string name="copyright_string">&#169; Catalyst Foundry 2017</string>
 
     <string name="terms_conditions">By signing in, I have read and agree to the Crossroads <![CDATA[<a href="https://www.crossroadsapp.co/terms">Terms of Service</a>]]> and <![CDATA[<a href="https://www.crossroadsapp.co/privacy">Privacy Policy</a>]]>. &#169; Catalyst Foundry 2016</string>
     <string name="terms_string"><u>Terms of Service</u>  |</string>

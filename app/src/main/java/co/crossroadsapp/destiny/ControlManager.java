@@ -143,6 +143,7 @@ public class ControlManager implements Observer{
     private BungieMessageNetwork bungieMsgNtwrk;
     private ReviewCardData reviewCard;
     private ReviewCardUpdate reviewCardUpdate;
+    private boolean appInBackground;
 
     public ControlManager() {
     }
@@ -1279,6 +1280,14 @@ public class ControlManager implements Observer{
 
     public ReviewCardData getReviewCard() {
         return reviewCard;
+    }
+
+    protected void setAppBackground(boolean value) {
+        this.appInBackground = value;
+    }
+
+    protected boolean getAppBackground() {
+        return appInBackground;
     }
 
 }

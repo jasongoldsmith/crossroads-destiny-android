@@ -76,7 +76,7 @@ public class SplashActivity extends BaseActivity implements Observer {
 
         intializeTrackingandForward();
     }
-    
+
     //fix for kitkat
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
