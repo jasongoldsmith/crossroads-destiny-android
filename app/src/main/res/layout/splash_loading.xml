@@ -40,6 +40,7 @@
         android:layout_marginBottom="5dp"
         android:textColor="@color/copyright_text"
         android:textSize="12sp"
+        android:visibility="gone"
         android:layout_centerHorizontal="true"
         android:text="@string/copyright_string"/>
 

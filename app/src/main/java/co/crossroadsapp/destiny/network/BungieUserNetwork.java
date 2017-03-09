@@ -60,7 +60,7 @@ public class BungieUserNetwork extends Observable {
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                     //set cookie validation
                     Util.setDefaults(Constants.COOKIE_VALID_KEY, "false", mContext);
-                    mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
+                    //mManager.showErrorDialogue(Util.getErrorMessage(errorResponse));
                 }
             });
         }else {
