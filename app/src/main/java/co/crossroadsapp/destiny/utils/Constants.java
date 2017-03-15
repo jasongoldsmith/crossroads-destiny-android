@@ -71,6 +71,8 @@ public class Constants {
     //getCurrentUser bungie
     public static String BUGIE_CURRENT_USER = "https://www.bungie.net/Platform/User/GetCurrentBungieAccount";
 
+    public static String BUNGIE_NETUSER = "https://www.bungie.net/Platform/User/GetBungieNetUser";
+
     public static String BUNGIE_PSN_LOGIN = "https://www.bungie.net/en/User/SignIn/Psnid";
     public static String BUNGIE_XBOX_LOGIN = "https://www.bungie.net/en/User/SignIn/Xuid";
 
@@ -82,6 +84,7 @@ public class Constants {
     public static String ACCEPT_EVENT_URL = "api/v1/a/event/invite/accept";
 
     public static final String ACTIVITY_LIST_URL = "api/v1/activity/list";
+    public static final String BUNGIE_CURRENT_USER = "api/v1/a/user/bungieCurrentUser";
 
     public static String NOTIFICATION_INTENT_CHANNEL = "com.example.sharmha.notificationintent";
     public static int INTENT_ID = 9999;
@@ -103,6 +106,7 @@ public class Constants {
     public static final String PLAYSTATION = "PlayStation";
     public static final String XBOX = "Xbox";
     public static final String COOKIE_VALID_KEY = "isCookieValid";
+    public static final String USER_EMAIL_SEND = "isEmailSend";
 
     //PSN verified keys
     public static String PSN_VERIFIED = "VERIFIED";
