@@ -78,7 +78,9 @@ public class BaseActivity extends FragmentActivity {
         List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
         ComponentName componentInfo = taskInfo.get(0).topActivity;
         if(!componentInfo.getPackageName().equalsIgnoreCase(getApplicationContext().getPackageName())){
-            mManager.setAppBackground(true);
+            if(mManager!=null) {
+                mManager.setAppBackground(true);
+            }
         }
     }
 

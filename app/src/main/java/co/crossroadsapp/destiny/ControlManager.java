@@ -31,6 +31,7 @@ import co.crossroadsapp.destiny.network.ActivityListNetwork;
 import co.crossroadsapp.destiny.network.AddCommentNetwork;
 import co.crossroadsapp.destiny.network.AddNewConsoleNetwork;
 import co.crossroadsapp.destiny.network.BungieMessageNetwork;
+import co.crossroadsapp.destiny.network.BungieNetUserNetwork;
 import co.crossroadsapp.destiny.network.BungieUserNetwork;
 import co.crossroadsapp.destiny.network.ChangeCurrentConsoleNetwork;
 import co.crossroadsapp.destiny.network.ConfigNetwork;
@@ -144,6 +145,7 @@ public class ControlManager implements Observer{
     private ReviewCardData reviewCard;
     private ReviewCardUpdate reviewCardUpdate;
     private boolean appInBackground;
+    private BungieNetUserNetwork bugieGetNetUser;
 
     public ControlManager() {
     }
@@ -742,36 +744,42 @@ public class ControlManager implements Observer{
             }
         } else if(observable instanceof BungieUserNetwork) {
             if(data!=null) {
-                try {
-                    String platform = getCurrentPlatform();
-                    if(platform!=null) {
-                        try {
-                            HashMap<String,Object> map =
-                                    new ObjectMapper().readValue(data.toString(), HashMap.class);
-                            RequestParams rp = new RequestParams();
-                            rp.put("bungieResponse", map);
-                            rp.put("consoleType", platform);
-                            rp.put("bungieURL", getBungieCurrentUserUrl()!=null?getBungieCurrentUserUrl():Constants.BUGIE_CURRENT_USER);
-                            if(mCurrentAct.get() instanceof MainActivity) {
-                                loginNetwork = new LoginNetwork(mCurrentAct.get());
-                                InvitationLoginData notificationObj = ((MainActivity) mCurrentAct.get()).getInvitationObject();
-                                if(notificationObj!=null) {
-                                    rp.put("invitation", notificationObj.getRp());
+                if(data instanceof RequestParams) {
+                    bugieGetNetUser = new BungieNetUserNetwork(mCurrentAct.get());
+                    bugieGetNetUser.postNetUser((RequestParams) data);
+                } else {
+                    try {
+                        String platform = getCurrentPlatform();
+                        if (platform != null) {
+                            try {
+                                HashMap<String, Object> map =
+                                        new ObjectMapper().readValue(data.toString(), HashMap.class);
+                                RequestParams rp = new RequestParams();
+                                rp.put("bungieResponse", map);
+                                rp.put("consoleType", platform);
+                                rp.put("bungieURL", getBungieCurrentUserUrl() != null ? getBungieCurrentUserUrl() : Constants.BUGIE_CURRENT_USER);
+                                if (mCurrentAct.get() instanceof MainActivity) {
+                                    loginNetwork = new LoginNetwork(mCurrentAct.get());
+                                    InvitationLoginData notificationObj = ((MainActivity) mCurrentAct.get()).getInvitationObject();
+                                    if (notificationObj != null) {
+                                        rp.put("invitation", notificationObj.getRp());
+                                    }
+                                    loginNetwork.addObserver(this);
+                                    loginNetwork.addObserver(((MainActivity) mCurrentAct.get()));
+                                    loginNetwork.doSignup(rp);
                                 }
-                                loginNetwork.addObserver(this);
-                                loginNetwork.addObserver(((MainActivity) mCurrentAct.get()));
-                                loginNetwork.doSignup(rp);
+                            } catch (JsonGenerationException e) {
+                                e.printStackTrace();
+                            } catch (JsonMappingException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JsonGenerationException e) {
-                            e.printStackTrace();
-                        } catch (JsonMappingException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    getBungieNetUser();
                 }
             }
 //        } else if(observable instanceof BungieMessageNetwork) {
@@ -1129,6 +1137,28 @@ public class ControlManager implements Observer{
         }
     }
 
+    public void getBungieNetUser() {
+        String n  = Util.getDefaults(Constants.USER_EMAIL_SEND, mCurrentAct.get());
+        String url = Util.getDefaults("bungieAccountURL", mCurrentAct.get());
+        if(n==null || n.equalsIgnoreCase("false")) {
+            if(url!=null && !url.isEmpty()) {
+                if (mCurrentAct != null && mCurrentAct.get() != null) {
+                    String csrf = Util.getDefaults("csrf", mCurrentAct.get());
+                    String cookies = Util.getDefaults("cookie", mCurrentAct.get());
+                    if (csrf != null && cookies != null) {
+                        try {
+                            bugieGetUser = new BungieUserNetwork(csrf, cookies, mCurrentAct.get(), url);
+                            bugieGetUser.addObserver(this);
+                            bugieGetUser.getBungieNetUser();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public String getCurrentPlatform() {
         String c = Util.getDefaults("cookie", mCurrentAct.get());
         String[] pair = c.split(";");
@@ -1182,6 +1212,12 @@ public class ControlManager implements Observer{
                 if(!data.getString("playerDetailsURL").isEmpty()) {
                     bungieCurrentUserUrl = data.getString("playerDetailsURL");
                     Util.setDefaults("playerDetailsURL", bungieCurrentUserUrl, mCurrentAct.get());
+                }
+            }
+            if(data.has("bungieAccountURL") && !data.isNull("bungieAccountURL")) {
+                if(!data.getString("bungieAccountURL").isEmpty()) {
+                    String bungieCurrentNetUserUrl = data.getString("bungieAccountURL");
+                    Util.setDefaults("bungieAccountURL", bungieCurrentNetUserUrl, mCurrentAct.get());
                 }
             }
             if(data.has("psnLoginURL") && !data.isNull("psnLoginURL")) {
