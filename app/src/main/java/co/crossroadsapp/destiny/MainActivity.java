@@ -385,40 +385,56 @@ public class MainActivity extends BaseActivity implements Observer {
 //            mManager.getPublicEventList(MainActivity.this);
 //        }
         //register_layout = findViewById(R.id.register);
-        signin_playstation = (RelativeLayout) findViewById(R.id.playstation);
-        signin_xbox = (RelativeLayout) findViewById(R.id.xbox);
-//            register_layout.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    //tracking signup initiation
-//                    Map<String, String> json = new HashMap<String, String>();
-//                    Util.postTracking(json, MainActivity.this, mManager, Constants.APP_SIGNUP);
-//                    TravellerLog.w(this, "Launch console selection page activity");
-//                    Intent regIntent = new Intent(getApplicationContext(),
-//                            ConsoleSelectionActivity.class);
-//                    //regIntent.putExtra("userdata", userData);
-//                    startActivity(regIntent);
-//                    finish();
-//                }
-//            });
-        signin_playstation.setOnClickListener(new View.OnClickListener() {
+        TextView login = (TextView) findViewById(R.id.login_btn);
+        TextView signup = (TextView) findViewById(R.id.signup_btn);
+
+        login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TravellerLog.w(this, "Launch login page activity");
-                console = Constants.PLAYSTATION;
-                launchLogin();
-                //finish();
+
             }
         });
-        signin_xbox.setOnClickListener(new View.OnClickListener() {
+
+        signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TravellerLog.w(this, "Launch login page activity");
-                console = Constants.XBOX;
-                launchLogin();
-                //finish();
+
             }
         });
+//        signin_playstation = (RelativeLayout) findViewById(R.id.playstation);
+//        signin_xbox = (RelativeLayout) findViewById(R.id.xbox);
+////            register_layout.setOnClickListener(new View.OnClickListener() {
+////                @Override
+////                public void onClick(View v) {
+////                    //tracking signup initiation
+////                    Map<String, String> json = new HashMap<String, String>();
+////                    Util.postTracking(json, MainActivity.this, mManager, Constants.APP_SIGNUP);
+////                    TravellerLog.w(this, "Launch console selection page activity");
+////                    Intent regIntent = new Intent(getApplicationContext(),
+////                            ConsoleSelectionActivity.class);
+////                    //regIntent.putExtra("userdata", userData);
+////                    startActivity(regIntent);
+////                    finish();
+////                }
+////            });
+//        signin_playstation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                TravellerLog.w(this, "Launch login page activity");
+//                console = Constants.PLAYSTATION;
+//                launchLogin();
+//                //finish();
+//            }
+//        });
+//        signin_xbox.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                TravellerLog.w(this, "Launch login page activity");
+//                console = Constants.XBOX;
+//                launchLogin();
+//                //finish();
+//            }
+//        });
     }
 
     private void intializeLoginWebViews() {
