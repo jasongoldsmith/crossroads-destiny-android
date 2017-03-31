@@ -129,6 +129,32 @@ public class MainActivity extends BaseActivity implements Observer {
         TravellerLog.w(this, "MainActivity.onCreate ends...");
     }
 
+    private void launchTutorial() {
+        setContentView(R.layout.activity_tutorial);
+
+        final RecyclerView horizontal_tutorial_view = (RecyclerView) findViewById(R.id.horizontal_tutorial_recycler_view);
+
+        TextView doneWithTutorial = (TextView) findViewById(R.id.done_tutorial);
+        doneWithTutorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchMainLayout();
+            }
+        });
+//        ImageView skip = (ImageView) findViewById(R.id.skip_btn);
+//        skip.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                launchMainLayout();
+//            }
+//        });
+        TutorialCardAdapter horizontalTutorialAdapter = new TutorialCardAdapter(MainActivity.this, mManager);
+        CenterZoomLayoutManager horizontalLayoutManagaerTutorial
+                = new CenterZoomLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        horizontal_tutorial_view.setLayoutManager(horizontalLayoutManagaerTutorial);
+        horizontal_tutorial_view.setAdapter(horizontalTutorialAdapter);
+    }
+
     protected InvitationLoginData getInvitationObject() {
         if(invitationRp!=null) {
             return this.invitationRp;
@@ -314,6 +340,15 @@ public class MainActivity extends BaseActivity implements Observer {
         mManager.getPublicEventList();
 
         privacyTerms = (TextView) findViewById(R.id.privacy_terms);
+
+        TextView startTutorial = (TextView) findViewById(R.id.start_tutorial);
+
+        startTutorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchTutorial();
+            }
+        });
 
         countText = (TextView) findViewById(R.id.player_count);
 
@@ -747,5 +782,9 @@ public class MainActivity extends BaseActivity implements Observer {
             countText.setVisibility(View.VISIBLE);
             countText.setText(userCount);
         }
+    }
+
+    public void performSkip() {
+        launchMainLayout();
     }
 }

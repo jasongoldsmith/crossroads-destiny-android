@@ -20,6 +20,7 @@ import android.view.View;
 import co.crossroadsapp.destiny.data.ActivityData;
 import co.crossroadsapp.destiny.data.ActivityList;
 import co.crossroadsapp.destiny.data.AppVersion;
+import co.crossroadsapp.destiny.data.ConfigData;
 import co.crossroadsapp.destiny.data.EventData;
 import co.crossroadsapp.destiny.data.EventList;
 import co.crossroadsapp.destiny.data.GroupData;
@@ -34,6 +35,7 @@ import co.crossroadsapp.destiny.network.BungieMessageNetwork;
 import co.crossroadsapp.destiny.network.BungieNetUserNetwork;
 import co.crossroadsapp.destiny.network.BungieUserNetwork;
 import co.crossroadsapp.destiny.network.ChangeCurrentConsoleNetwork;
+import co.crossroadsapp.destiny.network.CompletedOnBoardingNetwork;
 import co.crossroadsapp.destiny.network.ConfigNetwork;
 import co.crossroadsapp.destiny.network.EventByIdNetwork;
 import co.crossroadsapp.destiny.network.EventListNetwork;
@@ -146,6 +148,7 @@ public class ControlManager implements Observer{
     private ReviewCardUpdate reviewCardUpdate;
     private boolean appInBackground;
     private BungieNetUserNetwork bugieGetNetUser;
+    private ConfigData mConfigData;
 
     public ControlManager() {
     }
@@ -1206,8 +1209,15 @@ public class ControlManager implements Observer{
         return Util.getDefaults("xboxLoginURL", mCurrentAct.get());
     }
 
+    public ConfigData getmConfigData() {
+        return mConfigData;
+    }
+
     public void parseAndSaveConfigUrls(JSONObject data) {
         try {
+            mConfigData = new ConfigData();
+            mConfigData.parseData(data);
+
             if(data.has("playerDetailsURL") && !data.isNull("playerDetailsURL")) {
                 if(!data.getString("playerDetailsURL").isEmpty()) {
                     bungieCurrentUserUrl = data.getString("playerDetailsURL");
@@ -1326,4 +1336,16 @@ public class ControlManager implements Observer{
         return appInBackground;
     }
 
+    public void postTutorialDone(TutorialActivity activity) {
+        if(mConfigData!=null && mConfigData.getOnBoardingScreens()!=null && mConfigData.getOnBoardingScreens().getRequired()!=null && mConfigData.getOnBoardingScreens().getRequired().get(0)!=null && mConfigData.getOnBoardingScreens().getRequired().get(0).getLanguage()!=null) {
+            String lang = mConfigData.getOnBoardingScreens().getRequired().get(0).getLanguage();
+            if(!lang.isEmpty()) {
+                RequestParams params = new RequestParams();
+                params.put("lang_code", lang);
+                CompletedOnBoardingNetwork onBoardingNetwork = new CompletedOnBoardingNetwork(activity);
+                onBoardingNetwork.addObserver(activity);
+                onBoardingNetwork.postOnBoardingCompleted(params);
+            }
+        }
+    }
 }

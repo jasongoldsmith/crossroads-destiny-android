@@ -83,7 +83,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/guardian_text_layout"
-        android:layout_marginTop="29dp"
+        android:layout_marginTop="19dp"
         android:gravity="center"
         android:layout_below="@+id/traveller_bdg">
         <TextView
@@ -117,14 +117,24 @@
         android:text="Sign in with PlayStation or Xbox:"/>
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/start_tutorial"
+        android:text="How Crossroads Works"
+        android:layout_marginTop="180dp"
+        android:textColor="@color/trimbe_white"
+        android:layout_below="@+id/guardian_text_layout"
+        android:gravity="center"/>
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:id="@+id/privacy_terms"
         android:textColorLink="@color/app_theme_color"
-        android:layout_below="@+id/guardian_text_layout"
+        android:layout_below="@+id/start_tutorial"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="169dp"
+        android:layout_marginTop="2dp"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
         android:textColor="@color/trimbe_white"
